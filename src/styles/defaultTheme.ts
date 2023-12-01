@@ -1,6 +1,6 @@
 import { StyleTypes } from "@types";
 
-const defaultThemeLight: StyleTypes.ColorType = {
+const defaultThemeLight: StyleTypes.ColorTheme = {
   primary: "#375CA8",
   onPrimary: "#FFFFFF",
   primaryContainer: "#D9E2FF",

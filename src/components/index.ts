@@ -1,3 +1,4 @@
-import AppHead from "./AppHead";
+import AppHead from "./AppHead/AppHead";
+import ChatMain from "./ChatMain/ChatMain";
 
-export { AppHead };
+export { AppHead, ChatMain };

@@ -1,4 +1,4 @@
-export type ColorType = {
+export type ColorTheme = {
   primary: string;
   onPrimary: string;
   primaryContainer: string;
@@ -49,3 +49,5 @@ export type ColorType = {
   surfaceBright: string;
   surfaceDim: string;
 };
+
+export type ColorKeys = keyof ColorTheme;

@@ -1,4 +1,3 @@
-import "@/styles/globals.css";
 import GlobalStyle from "src/styles/GlobalStyle";
 import { defaultThemeLight } from "src/styles/defaultTheme";
 import type { AppProps } from "next/app";
