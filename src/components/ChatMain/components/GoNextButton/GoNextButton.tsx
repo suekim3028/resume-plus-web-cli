@@ -23,6 +23,7 @@ const GoNextButton = ({
         ph={30}
         rounded={10}
         alignItems="center"
+        hoverBgColor={canGoNext ? "onPrimaryContainer" : undefined}
       >
         <Font.Body
           type={"16_medium_single"}

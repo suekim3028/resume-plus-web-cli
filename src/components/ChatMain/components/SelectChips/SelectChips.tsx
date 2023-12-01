@@ -22,6 +22,7 @@ const SelectChips = <T,>({
               ml={idx === 0 ? 0 : 10}
               rounded={20}
               bgColor={selected ? "inverseSurface" : "inverseOnSurface"}
+              hoverBgColor={selected || !selectable ? undefined : "surfaceDim"}
               outline={"inverseSurface"}
               onClick={() => {
                 if (!selectable) return;
@@ -32,6 +33,7 @@ const SelectChips = <T,>({
               <Font.Body
                 type={"14_medium_single"}
                 color={selected ? "inverseOnSurface" : "inverseSurface"}
+                hoverColor="onSurface"
               >
                 {option.text}
               </Font.Body>

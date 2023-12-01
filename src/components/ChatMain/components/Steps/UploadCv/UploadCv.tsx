@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
 import { InterviewTypes } from "@types";
 import GoNextButton from "../../GoNextButton/GoNextButton";
+import * as S from "./UploadCv.styles";
 
 const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
   INTERVIEW_CONSTS;
@@ -18,7 +19,7 @@ const Intro = () => {
   const visible = isAfterStep(CV_STEP);
   const isCurrentStep = step === CV_STEP;
 
-  const [chipsVisible, setChipsVisible] = useState(false);
+  const [textAnimEnd, setTextAnimEnd] = useState(false);
 
   if (!visible) return <></>;
 
@@ -27,18 +28,23 @@ const Intro = () => {
       <Bubble
         content={FIXED_CONVO[CV_STEP].ENG}
         isMine={false}
-        onEndTextAnim={() => setChipsVisible(true)}
+        onEndTextAnim={() => setTextAnimEnd(true)}
       />
-      {chipsVisible && (
-        <SelectChips<InterviewTypes.Position>
-          options={POSITION_OPTIONS.map((value) => ({
-            value,
-            text: POSITION_OPTION_LABEL[value],
-          }))}
-          onSelect={setPosition}
-          selectable={isCurrentStep}
-        />
+      {textAnimEnd && (
+        <L.FlexCol w={"100%"}>
+          <SelectChips<InterviewTypes.Position>
+            options={POSITION_OPTIONS.map((value) => ({
+              value,
+              text: POSITION_OPTION_LABEL[value],
+            }))}
+            onSelect={setPosition}
+            selectable={isCurrentStep}
+          />
+
+          <S.PdfFileInput type={"file"} accept=".pdf" id="image_uploads" />
+        </L.FlexCol>
       )}
+
       {isCurrentStep && (
         <GoNextButton onClick={goNext} canGoNext={!!position} />
       )}
