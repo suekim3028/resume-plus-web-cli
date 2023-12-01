@@ -1,16 +1,17 @@
+import { ChatMain } from "@components";
 import { Layout as L } from "@design-system";
 import TopBar from "src/components/TopBar/TopBar";
 
 const Main = () => {
   return (
     <L.FlexCol flex={1} h={"100%"} style={{ height: "100vh" }}>
-      <TopBar />
-      <L.FlexRow
-        w="100%"
-        h={"100%"}
-        bgColor="surface"
-        outline={"error"}
-      ></L.FlexRow>
+      <L.FlexRow w="100%" h={"100%"} bgColor="surface">
+        <L.FlexCol w={300} bgColor="surfaceDim" h={"100%"}></L.FlexCol>
+        <L.FlexCol h={"100%"} flex={1} w={"100%"}>
+          <TopBar />
+          <ChatMain />
+        </L.FlexCol>
+      </L.FlexRow>
     </L.FlexCol>
   );
 };

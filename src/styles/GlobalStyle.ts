@@ -89,6 +89,15 @@ const GlobalStyle = createGlobalStyle`
         line-height: 30%;
         -webkit-tap-highlight-color: transparent;
     }
+
+    input {
+        all: unset;
+    }
+
+    textarea{
+        all: unset;
+        background-color: white;
+    }
 `;
 
 export default GlobalStyle;
