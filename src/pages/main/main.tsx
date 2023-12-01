@@ -3,8 +3,14 @@ import TopBar from "src/components/TopBar/TopBar";
 
 const Main = () => {
   return (
-    <L.FlexCol w={"100%"} bgColor="primaryContainer" h={100}>
+    <L.FlexCol flex={1} h={"100%"} style={{ height: "100vh" }}>
       <TopBar />
+      <L.FlexRow
+        w="100%"
+        h={"100%"}
+        bgColor="surface"
+        outline={"error"}
+      ></L.FlexRow>
     </L.FlexCol>
   );
 };

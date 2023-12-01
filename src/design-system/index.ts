@@ -1,3 +1,4 @@
-import * as Layout from "./Layout";
-import { Font } from "./Font/Font";
-export { Layout, Font };
+import * as Layout from "./layouts";
+import Font from "./Font/Font";
+import { Icons } from "./Icons";
+export { Layout, Font, Icons };
