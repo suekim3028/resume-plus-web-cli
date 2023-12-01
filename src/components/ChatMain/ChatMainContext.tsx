@@ -18,6 +18,7 @@ type ChatMainContextValue = {
   isAfterStep: (isAfter: InterviewTypes.Step) => boolean;
   setPosition: (position: InterviewTypes.Position | null) => void;
   position: InterviewTypes.Position | null;
+  setLocalPdfFile: (file: File | null) => void;
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -29,8 +30,10 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const [position, setPosition] = useState<InterviewTypes.Position | null>(
     null
   );
+  const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
+  console.log(localPdfFile);
   const goNext = useCallback(() => {
     if (stepIdx === STEPS.length - 1) return;
 
@@ -55,6 +58,7 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     setLanguage: setLang,
     isLoadingNext,
     position,
+    setLocalPdfFile,
     isAfterStep,
   };
 
