@@ -3,6 +3,7 @@ import { defaultThemeLight } from "src/styles/defaultTheme";
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { IconContext } from "react-icons";
+import "../styles/global.style.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -14,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
           defaultThemeLight
         }
       >
-        <IconContext.Provider value={{ size: "20px" }}>
+        <IconContext.Provider
+          value={{ size: "20px", style: { verticalAlign: "middle" } }}
+        >
           <Component {...pageProps} />
         </IconContext.Provider>
       </ThemeProvider>

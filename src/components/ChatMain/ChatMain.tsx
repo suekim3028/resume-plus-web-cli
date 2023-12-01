@@ -13,7 +13,9 @@ const ChatMain = () => {
 
   return (
     <L.FlexCol w={"100%"} h={"100%"}>
-      <S.Container>{step <= STEPS.INTRO && <Intro />}</S.Container>
+      <S.Container>
+        {step <= STEPS.INTRO && <Intro isCurrentStep={step === STEPS.INTRO} />}
+      </S.Container>
       <TextInput />
     </L.FlexCol>
   );

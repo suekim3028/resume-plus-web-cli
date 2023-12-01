@@ -42,45 +42,7 @@ const GlobalStyle = createGlobalStyle`
         user-select: none;
     }
 
-  @font-face {
-        font-family: Pretendard;
-        font-weight: 800;
-        src: url('/fonts/Pretendard-Black.otf') format('otf');
-        src: url('/fonts/Pretendard-Black.woff') format('woff');
-        src: url('/fonts/Pretendard-Black.woff2') format('woff2');
-    }
-
-    @font-face {
-        font-family: Pretendard;
-        font-weight: 700;
-        src: url('/fonts/Pretendard-Bold.otf') format('otf');
-        src: url('/fonts/Pretendard-Bold.woff') format('woff');
-        src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
-    }
-
-    @font-face {
-        font-family: Pretendard;
-        font-weight: 600;
-        src: url('/fonts/Pretendard-SemiBold.otf') format('otf');
-        src: url('/fonts/Pretendard-SemiBold.woff') format('woff');
-        src: url('/fonts/Pretendard-SemiBold.woff2') format('woff2');
-    }
-
-    @font-face {
-        font-family: Pretendard;
-        font-weight: 500;
-        src: url('/fonts/Pretendard-Regular.otf') format('otf');
-        src: url('/fonts/Pretendard-Regular.woff') format('woff');
-        src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
-    }
-
-    @font-face {
-        font-family: Pretendard;
-        font-weight: 400;
-        src: url('/fonts/Pretendard-Medium.otf') format('otf');
-        src: url('/fonts/Pretendard-Medium.woff') format('woff');
-        src: url('/fonts/Pretendard-Medium.woff2') format('woff2');
-    }
+  
     * {
         box-sizing: border-box;
         font-family:  Pretendard !important;
