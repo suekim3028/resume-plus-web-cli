@@ -1,3 +1,3 @@
-import * as WebsiteTypes from './website.types';
-
-export { WebsiteTypes };
+import * as WebsiteTypes from "./website.types";
+import * as StyleTypes from "./style.types";
+export { WebsiteTypes, StyleTypes };
