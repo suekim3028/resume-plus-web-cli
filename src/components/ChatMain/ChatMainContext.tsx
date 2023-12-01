@@ -12,18 +12,24 @@ const { STEPS } = INTERVIEW_CONSTS;
 type ChatMainContextValue = {
   step: InterviewTypes.Step;
   goNext: () => void;
-  setLanguage: (lang: InterviewTypes.Lang) => void;
+  language: InterviewTypes.Lang | null;
+  setLanguage: (lang: InterviewTypes.Lang | null) => void;
   isLoadingNext: boolean;
   isAfterStep: (isAfter: InterviewTypes.Step) => boolean;
+  setPosition: (position: InterviewTypes.Position | null) => void;
+  position: InterviewTypes.Position | null;
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
 
 const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
-  const [step, setStep] = useState(STEPS[0]);
-  const [lang, setLang] = useState<InterviewTypes.Lang>("ENG");
+  const [stepIdx, setStepIdx] = useState(0);
+  const step = STEPS[stepIdx];
+  const [lang, setLang] = useState<InterviewTypes.Lang | null>(null);
+  const [position, setPosition] = useState<InterviewTypes.Position | null>(
+    null
+  );
   const [isLoadingNext, setIsLoadingNext] = useState(false);
-  const stepIdx = STEPS.findIndex((s) => s === step);
 
   const goNext = useCallback(() => {
     if (stepIdx === STEPS.length - 1) return;
@@ -35,6 +41,7 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
       default:
         break;
     }
+    setStepIdx((i) => i + 1);
   }, [step]);
 
   const isAfterStep = (isAfter: InterviewTypes.Step) =>
@@ -43,8 +50,11 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const value: ChatMainContextValue = {
     step,
     goNext,
+    language: lang,
+    setPosition,
     setLanguage: setLang,
     isLoadingNext,
+    position,
     isAfterStep,
   };
 

@@ -7,15 +7,16 @@ import { useChatMainContext } from "../../../ChatMainContext";
 import { InterviewTypes } from "@types";
 import GoNextButton from "../../GoNextButton/GoNextButton";
 
-const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
+const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
+  INTERVIEW_CONSTS;
 
-const INTRO_STEP: InterviewTypes.Step = "INTRO";
+const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
 const Intro = () => {
-  const { step, isAfterStep, goNext, setLanguage, language } =
+  const { step, isAfterStep, goNext, setPosition, position } =
     useChatMainContext();
-  const visible = isAfterStep(INTRO_STEP);
-  const isCurrentStep = step === INTRO_STEP;
+  const visible = isAfterStep(CV_STEP);
+  const isCurrentStep = step === CV_STEP;
 
   const [chipsVisible, setChipsVisible] = useState(false);
 
@@ -24,22 +25,22 @@ const Intro = () => {
   return (
     <L.FlexCol w={"100%"}>
       <Bubble
-        content={FIXED_CONVO[INTRO_STEP].ENG}
+        content={FIXED_CONVO[CV_STEP].ENG}
         isMine={false}
         onEndTextAnim={() => setChipsVisible(true)}
       />
       {chipsVisible && (
-        <SelectChips<InterviewTypes.Lang>
-          options={LANG_OPTIONS.map((value) => ({
+        <SelectChips<InterviewTypes.Position>
+          options={POSITION_OPTIONS.map((value) => ({
             value,
-            text: LANG_OPTION_LABEL[value],
+            text: POSITION_OPTION_LABEL[value],
           }))}
-          onSelect={setLanguage}
+          onSelect={setPosition}
           selectable={isCurrentStep}
         />
       )}
       {isCurrentStep && (
-        <GoNextButton onClick={goNext} canGoNext={!!language} />
+        <GoNextButton onClick={goNext} canGoNext={!!position} />
       )}
     </L.FlexCol>
   );
