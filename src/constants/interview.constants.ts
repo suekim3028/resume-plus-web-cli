@@ -19,12 +19,17 @@ export const FIXED_CONVO: Record<
   },
 };
 
-export const FIXED_CONVO_OPTIONS: Record<InterviewTypes.FixedStep, string[]> = {
-  INTRO: ["KOREAN", "ENGLISH"],
-  UPLOAD_CV: ["AI/ML", "Frontend", "Backend", "Mobile"],
-};
+export const LANG_OPTIONS = ["ENG", "KOR"] as const;
 
-export const INTERVIEW_LANG_OPTIONS: Record<InterviewTypes.Lang, string> = {
+export const LANG_OPTION_LABEL: Record<InterviewTypes.Lang, string> = {
   ENG: "English",
   KOR: "Korean",
+};
+
+export const POSITION_OPTIONS = ["AI/ML", "Frontend", "Backend", "Mobile"];
+export const POSITION_OPTION_LABEL: Record<InterviewTypes.Position, string> = {
+  "AI/ML": "AI/ML",
+  Backend: "Backend",
+  Frontend: "FrontEnd",
+  Mobile: "Mobile",
 };

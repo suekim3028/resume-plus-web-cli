@@ -6,16 +6,21 @@ import React, { useState } from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
 import { InterviewTypes } from "@types";
 
-const { FIXED_CONVO, FIXED_CONVO_OPTIONS } = INTERVIEW_CONSTS;
+const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
 
 const INTRO_STEP: InterviewTypes.Step = "INTRO";
 
 const Intro = () => {
-  const { step, isAfterStep, goNext } = useChatMainContext();
+  const { step, isAfterStep, goNext, setLanguage } = useChatMainContext();
   const visible = isAfterStep(INTRO_STEP);
   const isCurrentStep = step === INTRO_STEP;
 
   const [chipsVisible, setChipsVisible] = useState(false);
+
+  const onSelect = (lang: InterviewTypes.Lang) => {
+    setLanguage(lang);
+    goNext();
+  };
 
   if (!visible) return <></>;
 
@@ -26,10 +31,13 @@ const Intro = () => {
         isMine={false}
         onEndTextAnim={() => setChipsVisible(true)}
       />
-      {chipsVisible && (
+      {chipsVisible && isCurrentStep && (
         <SelectChips
-          options={FIXED_CONVO_OPTIONS[INTRO_STEP]}
-          onSelect={goNext}
+          options={LANG_OPTIONS.map((value) => ({
+            value,
+            text: LANG_OPTION_LABEL[value],
+          }))}
+          onSelect={onSelect}
         />
       )}
     </L.FlexCol>

@@ -17,7 +17,7 @@ const SelectChips = ({ options, onSelect }: SelectChipsProps) => {
             <L.FlexRow
               pv={8}
               ph={12}
-              key={option}
+              key={option.text}
               ml={idx === 0 ? 0 : 10}
               rounded={20}
               bgColor={selected ? "inverseSurface" : "inverseOnSurface"}
@@ -28,7 +28,7 @@ const SelectChips = ({ options, onSelect }: SelectChipsProps) => {
                 type={"14_medium_single"}
                 color={selected ? "inverseOnSurface" : "inverseSurface"}
               >
-                {option}
+                {option.text}
               </Font.Body>
             </L.FlexRow>
           );
@@ -42,6 +42,9 @@ const SelectChips = ({ options, onSelect }: SelectChipsProps) => {
         pt={40}
       >
         <L.LayoutBase
+          onClick={
+            canGoNext ? () => onSelect(options[selectedIdx].value) : undefined
+          }
           bgColor={canGoNext ? "primary" : "secondaryContainer"}
           pv={15}
           w={"80%"}
@@ -62,9 +65,9 @@ const SelectChips = ({ options, onSelect }: SelectChipsProps) => {
   );
 };
 
-type SelectChipsProps = {
-  options: string[];
-  onSelect: (option: string) => void;
+type SelectChipsProps<T = any> = {
+  options: { value: T; text: string }[];
+  onSelect: (option: T) => void;
 };
 
 export default React.memo(SelectChips);

@@ -27,7 +27,15 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
 
   const goNext = useCallback(() => {
     if (stepIdx === STEPS.length - 1) return;
-  }, [stepIdx]);
+
+    switch (step) {
+      case "INTRO":
+        break;
+
+      default:
+        break;
+    }
+  }, [step]);
 
   const isAfterStep = (isAfter: InterviewTypes.Step) =>
     stepIdx >= STEPS.findIndex((s) => s === isAfter);

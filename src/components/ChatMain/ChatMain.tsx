@@ -1,11 +1,9 @@
-import { Layout as L } from "@design-system";
-import { useState } from "react";
-import Bubble from "./components/Bubble/Bubble";
-import * as S from "./ChatMain.styles";
-import TextInput from "./components/TextInput/TextInput";
 import { INTERVIEW_CONSTS } from "@constants";
-import Intro from "./components/Steps/Intro/Intro";
+import { Layout as L } from "@design-system";
+import * as S from "./ChatMain.styles";
 import ChatMainContextProvider from "./ChatMainContext";
+import Intro from "./components/Steps/Intro/Intro";
+import TextInput from "./components/TextInput/TextInput";
 
 const { STEPS } = INTERVIEW_CONSTS;
 
