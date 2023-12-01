@@ -12,13 +12,12 @@ const { STEPS } = INTERVIEW_CONSTS;
 type ChatMainContextValue = {
   step: InterviewTypes.Step;
   goNext: () => void;
-  language: InterviewTypes.Lang | null;
   setLanguage: (lang: InterviewTypes.Lang | null) => void;
   isLoadingNext: boolean;
   isAfterStep: (isAfter: InterviewTypes.Step) => boolean;
   setPosition: (position: InterviewTypes.Position | null) => void;
-  position: InterviewTypes.Position | null;
   setLocalPdfFile: (file: File | null) => void;
+  canGoNext: boolean;
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -33,7 +32,18 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  console.log(localPdfFile);
+  const canGoNext = (() => {
+    switch (step) {
+      case "INTRO":
+        return !!lang;
+      case "UPLOAD_CV":
+        return !!position && !!localPdfFile;
+
+      default:
+        return true;
+    }
+  })();
+
   const goNext = useCallback(() => {
     if (stepIdx === STEPS.length - 1) return;
 
@@ -53,12 +63,11 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const value: ChatMainContextValue = {
     step,
     goNext,
-    language: lang,
     setPosition,
     setLanguage: setLang,
     isLoadingNext,
-    position,
     setLocalPdfFile,
+    canGoNext,
     isAfterStep,
   };
 

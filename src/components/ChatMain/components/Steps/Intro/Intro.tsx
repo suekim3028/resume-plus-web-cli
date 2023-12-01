@@ -12,7 +12,7 @@ const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
 const INTRO_STEP: InterviewTypes.Step = "INTRO";
 
 const Intro = () => {
-  const { step, isAfterStep, goNext, setLanguage, language } =
+  const { step, isAfterStep, goNext, setLanguage, canGoNext } =
     useChatMainContext();
   const visible = isAfterStep(INTRO_STEP);
   const isCurrentStep = step === INTRO_STEP;
@@ -38,9 +38,7 @@ const Intro = () => {
           selectable={isCurrentStep}
         />
       )}
-      {isCurrentStep && (
-        <GoNextButton onClick={goNext} canGoNext={!!language} />
-      )}
+      {isCurrentStep && <GoNextButton onClick={goNext} canGoNext={canGoNext} />}
     </L.FlexCol>
   );
 };

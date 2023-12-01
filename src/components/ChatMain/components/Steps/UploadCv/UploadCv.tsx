@@ -14,7 +14,7 @@ const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
 const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
 const Intro = () => {
-  const { step, isAfterStep, goNext, setPosition, setLocalPdfFile, position } =
+  const { step, isAfterStep, goNext, setPosition, setLocalPdfFile, canGoNext } =
     useChatMainContext();
   const visible = isAfterStep(CV_STEP);
   const isCurrentStep = step === CV_STEP;
@@ -64,9 +64,7 @@ const Intro = () => {
         </L.FlexCol>
       )}
 
-      {isCurrentStep && (
-        <GoNextButton onClick={goNext} canGoNext={!!position} />
-      )}
+      {isCurrentStep && <GoNextButton onClick={goNext} canGoNext={canGoNext} />}
     </L.FlexCol>
   );
 };

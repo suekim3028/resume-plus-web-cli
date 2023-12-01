@@ -1,5 +1,5 @@
 import { Font, Icons, Layout as L } from "@design-system";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useTheme } from "styled-components";
 
 const SelectChips = <T,>({
@@ -26,8 +26,16 @@ const SelectChips = <T,>({
               outline={"inverseSurface"}
               onClick={() => {
                 if (!selectable) return;
-                setSelectedIdx((p) => (p === idx ? null : idx));
-                onSelect(option.value);
+                let isNull = false;
+                setSelectedIdx((p) => {
+                  if (p === idx) {
+                    isNull = true;
+                    return null;
+                  }
+
+                  return idx;
+                });
+                onSelect(isNull ? null : option.value);
               }}
             >
               <Font.Body
