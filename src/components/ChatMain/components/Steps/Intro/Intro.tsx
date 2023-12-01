@@ -3,24 +3,33 @@ import Bubble from "../../Bubble/Bubble";
 import { Layout as L } from "@design-system";
 import SelectChips from "../../SelectChips/SelectChips";
 import React, { useState } from "react";
+import { useChatMainContext } from "../../../ChatMainContext";
+import { InterviewTypes } from "@types";
 
-const { STEPS, FIXED_CONVO, FIXED_CONVO_OPTIONS } = INTERVIEW_CONSTS;
+const { FIXED_CONVO, FIXED_CONVO_OPTIONS } = INTERVIEW_CONSTS;
 
-const Intro = ({ isCurrentStep }: { isCurrentStep: boolean }) => {
+const INTRO_STEP: InterviewTypes.Step = "INTRO";
+
+const Intro = () => {
+  const { step, isAfterStep, goNext } = useChatMainContext();
+  const visible = isAfterStep(INTRO_STEP);
+  const isCurrentStep = step === INTRO_STEP;
+
   const [chipsVisible, setChipsVisible] = useState(false);
-  console.log("????");
+
+  if (!visible) return <></>;
 
   return (
     <L.FlexCol w={"100%"}>
       <Bubble
-        content={FIXED_CONVO[STEPS.INTRO].ENG}
+        content={FIXED_CONVO[INTRO_STEP].ENG}
         isMine={false}
         onEndTextAnim={() => setChipsVisible(true)}
       />
       {chipsVisible && (
         <SelectChips
-          options={FIXED_CONVO_OPTIONS[STEPS.INTRO]}
-          onSelect={() => {}}
+          options={FIXED_CONVO_OPTIONS[INTRO_STEP]}
+          onSelect={goNext}
         />
       )}
     </L.FlexCol>
