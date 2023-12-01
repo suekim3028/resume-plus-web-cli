@@ -1,3 +1,3 @@
-import * as Layouts from "./layouts";
-
-export { Layouts };
+import * as Layout from "./Layout";
+import { Font } from "./Font/Font";
+export { Layout, Font };

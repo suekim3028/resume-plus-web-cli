@@ -1,11 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-    :root {
-        min-width: 350px;
-    }
-    
-
   html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
@@ -23,11 +18,13 @@ const GlobalStyle = createGlobalStyle`
         font-size: 100%;
         font: inherit;
         vertical-align: baseline;
+        padding:0;
     }
 
     html{
-        background-color: gray;
+        background-color: white;
         overflow: hidden;
+        
     }
 
     /* HTML5 display-role reset for older browsers */
