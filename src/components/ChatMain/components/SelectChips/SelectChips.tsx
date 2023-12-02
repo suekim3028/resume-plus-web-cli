@@ -10,7 +10,7 @@ const SelectChips = <T,>({
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   return (
-    <L.FlexCol w={"100%"} mb={30}>
+    <L.FlexCol w={"100%"} pv={5}>
       <L.FlexRow>
         {options.map((option, idx) => {
           const selected = selectedIdx === idx;

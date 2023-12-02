@@ -36,7 +36,7 @@ const UploadCv = () => {
   if (!visible) return <></>;
 
   return (
-    <L.FlexCol w={"100%"}>
+    <L.FlexCol w={"100%"} mt={20}>
       <Bubble
         content={FIXED_CONVO[CV_STEP].ENG}
         isMine={false}

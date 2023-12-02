@@ -12,7 +12,7 @@ const Bubble = ({ isMine, content, onEndTextAnim }: BubbleProps) => {
       interval = setInterval(() => {
         if (textRef.current.length === 0 && interval) {
           clearInterval(interval);
-          onEndTextAnim();
+          if (onEndTextAnim) onEndTextAnim();
           return;
         }
 
@@ -35,7 +35,7 @@ const Bubble = ({ isMine, content, onEndTextAnim }: BubbleProps) => {
     <L.FlexRow
       w="100%"
       justifyContent={isMine ? "flex-end" : "flex-start"}
-      pb={10}
+      pv={5}
     >
       <L.FlexRow
         style={{ maxWidth: "90%" }}
@@ -64,7 +64,7 @@ type BubbleProps = {
     }
   | {
       isMine: false;
-      onEndTextAnim: () => void;
+      onEndTextAnim?: () => void;
     }
 );
 
