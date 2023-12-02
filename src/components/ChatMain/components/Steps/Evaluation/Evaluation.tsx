@@ -2,6 +2,7 @@ import { Layout as L } from "@design-system";
 import { InterviewTypes } from "@types";
 import React from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
+import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 
 const EvaluationStep: InterviewTypes.Step = "EVALUATION";
 
@@ -15,7 +16,9 @@ const Evaluation = () => {
 
   return (
     <L.FlexCol w={"100%"} mt={20}>
-      {isLoading && isCurrentStep && <>피드백 생성중 ~</>}
+      {isLoading && isCurrentStep && (
+        <LoadingIndicator indicator="Analyzing your responses for feedback..." />
+      )}
       {!isLoading && <></>}
     </L.FlexCol>
   );

@@ -3,6 +3,7 @@ import { InterviewTypes } from "@types";
 import React from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
 import Bubble from "../../Bubble/Bubble";
+import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 
 const CommonQStep: InterviewTypes.Step = "COMMON_Q";
 const PersonalQStep: InterviewTypes.Step = "PERSONAL_Q";
@@ -21,7 +22,9 @@ const CommonQ = () => {
       {questionBubbles.map(({ isMine, text }, idx) => (
         <Bubble key={idx} content={text} isMine={isMine} />
       ))}
-      {isLoading && isCurrentStep && <>질문 불러오는 중</>}
+      {isLoading && isCurrentStep && (
+        <LoadingIndicator indicator="・ ・ ・ Generating questions" />
+      )}
     </L.FlexCol>
   );
 };
