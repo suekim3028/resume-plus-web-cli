@@ -24,6 +24,7 @@ type ChatMainContextValue = {
   canGoNext: boolean;
   answer: (text: string) => void;
   questionBubbles: { isMine: boolean; text: string }[];
+  getFeedback: () => InterviewTypes.Feedback[];
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -45,7 +46,7 @@ const ChatMainContextProvider = ({
   const currentQIdx = useRef(-1);
 
   const unevaluatedQs = useRef<number[]>([]);
-  const evaluations = useRef<Record<number, InterviewTypes.Evaluation[]>>({});
+  const feedbackObj = useRef<Record<number, InterviewTypes.Feedback>>({});
 
   const feedbackResolver = useRef<null | ((value: null) => void)>(null);
 
@@ -112,6 +113,13 @@ const ChatMainContextProvider = ({
     }
   };
 
+  const getFeedback = () => {
+    return questions.current.flatMap(({ id }) => {
+      const feedback = feedbackObj.current[id];
+      return feedback ? [feedback] : [];
+    });
+  };
+
   const goNext = async () => {
     if (stepIdx === STEPS.length - 1) return;
     setStepIdx((i) => i + 1);
@@ -166,7 +174,7 @@ const ChatMainContextProvider = ({
 
       case "COMMON_Q": {
         console.log("next....feedback....");
-        console.log({ evaluations, unevaluatedQs });
+        console.log({ feedbackObj, unevaluatedQs });
         setIsLoading(true);
 
         const { personalQuestions } = await interviewApis.getPersonalQ();
@@ -183,7 +191,7 @@ const ChatMainContextProvider = ({
 
       case "PERSONAL_Q": {
         console.log("next....feedback....");
-        console.log({ evaluations, unevaluatedQs });
+        console.log({ feedbackObj, unevaluatedQs });
         if (!unevaluatedQs.current.length) break;
 
         setIsLoading(true);
@@ -208,43 +216,22 @@ const ChatMainContextProvider = ({
 
     const { id: questionId, type } = currentQ;
 
-    switch (type) {
-      case "behav_q": {
-        const { evaluation } = await interviewApis.answerBehavQ({
-          questionId,
-          answer,
-        });
+    const answerFn =
+      type === "behav_q"
+        ? interviewApis.answerBehavQ
+        : type === "tech_q"
+        ? interviewApis.answerTechQ
+        : interviewApis.answerPersonalQ;
 
-        evaluations.current = {
-          ...evaluations.current,
-          [questionId]: [evaluation],
-        };
-        break;
-      }
-      case "tech_q": {
-        const { evaluation } = await interviewApis.answerTechQ({
-          questionId,
-          answer,
-        });
-        evaluations.current = {
-          ...evaluations.current,
-          [questionId]: [evaluation],
-        };
-        break;
-      }
-      case "personal_q": {
-        const { evaluation } = await interviewApis.answerPersonalQ({
-          questionId,
-          answer,
-        });
+    const res = await answerFn({
+      questionId,
+      answer,
+    });
 
-        evaluations.current = {
-          ...evaluations.current,
-          [questionId]: evaluation.evaluation,
-        };
-        break;
-      }
-    }
+    feedbackObj.current = {
+      ...feedbackObj.current,
+      [questionId]: res,
+    };
 
     checkEvaluatedQ(questionId);
   };
@@ -281,6 +268,7 @@ const ChatMainContextProvider = ({
     canGoNext,
     isAfterStep,
     answer,
+    getFeedback,
   };
 
   return (

@@ -11,13 +11,11 @@ export type QuestionType = "behav_q" | "tech_q" | "personal_q";
 
 export type Evaluation = { criteria: string; score: number; rationale: string };
 
-export type Feedback<T extends QuestionType> = {
-  type: T;
+export type Feedback = {
+  type: QuestionType;
   question: string;
   user_answer: string;
-  evaluation: T extends "personal_q"
-    ? { evaluation: Evaluation[] }
-    : Evaluation;
+  evaluation: Evaluation[];
 };
 
 export type Question = {

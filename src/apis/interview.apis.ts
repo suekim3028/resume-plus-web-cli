@@ -1,5 +1,6 @@
 import { ApiTypes, InterviewTypes } from "@types";
 import API from "./API";
+import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES } from "react";
 
 /**
  * CV 업로드
@@ -87,50 +88,71 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
+type AnswerTechQResponse = Omit<InterviewTypes.Feedback, "evaluation"> & {
+  evaluation: { evaluation: InterviewTypes.Evaluation[] };
+};
+
 export const answerTechQ = async ({
   questionId,
   answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback<"tech_q">> => {
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
+  // const {evaluation: {evaluation}, ...res} = await API.post<AnswerTechQResponse>(
+  //   `/submit_tech_answer/${questionId}`,
+  //   answer
+  // );
+
+  // return {
+  //   ...res,
+  //   evaluation
+  // }
+
   return {
     type: "tech_q",
     question: `tech_q_${questionId}`,
     user_answer: answer,
-    evaluation: {
-      criteria: `${questionId} criteria`,
-      rationale: `평가평가평가`,
-      score: Math.floor(Math.random() * 5),
-    },
+    evaluation: [
+      {
+        criteria: `${questionId} criteria`,
+        rationale: `평가평가평가`,
+        score: Math.floor(Math.random() * 5),
+      },
+    ],
   };
 };
-// API.post<InterviewTypes.Evaluation<"tech_q">>(
-//   `/submit_tech_answer/${questionId}`,
-//   answer
-// );
+
+type AnswerBehavQResponse = Omit<InterviewTypes.Feedback, "evaluation"> & {
+  evaluation: InterviewTypes.Evaluation;
+};
 
 export const answerBehavQ = async ({
   questionId,
   answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback<"behav_q">> => {
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
+  // const { evaluation, ...res } = await API.post<AnswerBehavQResponse>(
+  //   `/submit_behav_answer/${questionId}`,
+  //   answer
+  // );
+
+  // return { ...res, evaluation: [evaluation] };
+
   return {
     type: "behav_q",
     question: `behav_q_${questionId}`,
     user_answer: answer,
-    evaluation: {
-      criteria: `${questionId} criteria`,
-      rationale: `평가평가평가`,
-      score: Math.floor(Math.random() * 5),
-    },
+    evaluation: [
+      {
+        criteria: `${questionId} criteria`,
+        rationale: `평가평가평가`,
+        score: Math.floor(Math.random() * 5),
+      },
+    ],
   };
 };
-// =>
-//   API.post<InterviewTypes.Evaluation<"behav_q">>(
-//     `/submit_behav_answer/${questionId}`,
-//     answer
-// );
+
 export const answerPersonalQ = async ({
   questionId,
   answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback<"personal_q">> => {
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve(null);
@@ -142,26 +164,24 @@ export const answerPersonalQ = async ({
     type: "personal_q",
     question: `behav_q_${questionId}`,
     user_answer: answer,
-    evaluation: {
-      evaluation: [
-        {
-          criteria: `${questionId} criteria_ 1번`,
-          rationale: `평가평가평가`,
-          score: Math.floor(Math.random() * 5),
-        },
-        {
-          criteria: `${questionId} criteria_ 2번`,
-          rationale: `평가평가평가`,
-          score: Math.floor(Math.random() * 5),
-        },
+    evaluation: [
+      {
+        criteria: `${questionId} criteria_ 1번`,
+        rationale: `평가평가평가`,
+        score: Math.floor(Math.random() * 5),
+      },
+      {
+        criteria: `${questionId} criteria_ 2번`,
+        rationale: `평가평가평가`,
+        score: Math.floor(Math.random() * 5),
+      },
 
-        {
-          criteria: `${questionId} criteria_ 3번`,
-          rationale: `평가평가평가`,
-          score: Math.floor(Math.random() * 5),
-        },
-      ],
-    },
+      {
+        criteria: `${questionId} criteria_ 3번`,
+        rationale: `평가평가평가`,
+        score: Math.floor(Math.random() * 5),
+      },
+    ],
   };
 };
 // =>
