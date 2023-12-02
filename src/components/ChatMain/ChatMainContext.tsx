@@ -20,6 +20,8 @@ type ChatMainContextValue = {
   setPosition: (position: InterviewTypes.Position | null) => void;
   setLocalPdfFile: (file: File | null) => void;
   canGoNext: boolean;
+  answerCommonQ: (text: string) => void;
+  commonQBubbles: { isMine: boolean; text: string }[];
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -34,7 +36,12 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [commonQs, setCommonQs] = useState<InterviewTypes.Question[]>([]);
+  const commonQs = useRef<InterviewTypes.Question[]>([]);
+  const commonQIdx = useRef(0);
+
+  const [commonQBubbles, setCommonQBubbles] = useState<
+    { isMine: boolean; text: string }[]
+  >([]);
 
   const cvTextRef = useRef("");
 
@@ -48,6 +55,15 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
         return true;
     }
   })();
+
+  const askNextCommonQ = () => {
+    console.log("ASK NEXT COMMON Q");
+    console.log(commonQs.current[commonQIdx.current].question);
+    setCommonQBubbles((prev) => [
+      ...prev,
+      { isMine: false, text: commonQs.current[commonQIdx.current].question },
+    ]);
+  };
 
   const goNext = () => {
     if (stepIdx === STEPS.length - 1) return;
@@ -99,8 +115,10 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
             ...techQuestions,
           ].toSorted((_a, _b) => Math.random() - 0.5);
 
-          setCommonQs(commonQuestions);
+          console.log(commonQuestions);
 
+          commonQs.current = commonQuestions;
+          askNextCommonQ();
           setIsLoading(false);
         })();
       }
@@ -111,18 +129,22 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     setStepIdx((i) => i + 1);
   };
 
+  const answerCommonQ = (text: string) => {};
+
   const isAfterStep = (isAfter: InterviewTypes.Step) =>
     stepIdx >= STEPS.findIndex((s) => s === isAfter);
 
   const value: ChatMainContextValue = {
     step,
     goNext,
+    commonQBubbles,
     setPosition,
     setLanguage: setLang,
     isLoading,
     setLocalPdfFile,
     canGoNext,
     isAfterStep,
+    answerCommonQ,
   };
 
   return (
