@@ -7,11 +7,18 @@ export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 export type Lang = (typeof INTERVIEW_CONSTS.LANG_OPTIONS)[number];
 export type Position = (typeof INTERVIEW_CONSTS.POSITION_OPTIONS)[number];
 
-export type Question = "behav_q" | "tech_q" | "personal_q";
-export type Feedback<T extends Question> = {
+export type QuestionType = "behav_q" | "tech_q" | "personal_q";
+
+export type Feedback<T extends QuestionType> = {
   type: T;
   question: string;
   user_answer: string;
   criteria: string;
   evaluation: string;
+};
+
+export type Question = {
+  type: QuestionType;
+  question: string;
+  id: number;
 };

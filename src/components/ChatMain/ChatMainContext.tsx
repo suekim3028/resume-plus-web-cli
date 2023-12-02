@@ -4,13 +4,12 @@ import { InterviewTypes } from "@types";
 import {
   PropsWithChildren,
   createContext,
-  useCallback,
   useContext,
   useRef,
   useState,
 } from "react";
-const { STEPS } = INTERVIEW_CONSTS;
 import { pdfjs } from "react-pdf";
+const { STEPS } = INTERVIEW_CONSTS;
 
 type ChatMainContextValue = {
   step: InterviewTypes.Step;
@@ -34,6 +33,8 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   );
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [commonQs, setCommonQs] = useState<InterviewTypes.Question[]>([]);
 
   const cvTextRef = useRef("");
 
@@ -80,6 +81,26 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
             content: cvTextRef.current,
             position,
           });
+
+          const {
+            behavQuestions: _behavQuestions,
+            techQuestions: _techQuestions,
+          } = await interviewApis.getCommonQ();
+
+          const behavQuestions: InterviewTypes.Question[] = _behavQuestions.map(
+            (obj) => ({ ...obj, type: "behav_q" })
+          );
+          const techQuestions: InterviewTypes.Question[] = _techQuestions.map(
+            (obj) => ({ ...obj, type: "tech_q" })
+          );
+
+          const commonQuestions = [
+            ...behavQuestions,
+            ...techQuestions,
+          ].toSorted((_a, _b) => Math.random() - 0.5);
+
+          setCommonQs(commonQuestions);
+
           setIsLoading(false);
         })();
       }
