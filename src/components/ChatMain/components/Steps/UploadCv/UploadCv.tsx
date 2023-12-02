@@ -13,7 +13,7 @@ const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
 
 const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
-const Intro = () => {
+const UploadCv = () => {
   const { step, isAfterStep, goNext, setPosition, setLocalPdfFile, canGoNext } =
     useChatMainContext();
   const visible = isAfterStep(CV_STEP);
@@ -69,4 +69,4 @@ const Intro = () => {
   );
 };
 
-export default React.memo(Intro);
+export default React.memo(UploadCv);

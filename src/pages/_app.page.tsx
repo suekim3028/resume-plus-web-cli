@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { IconContext } from "react-icons";
 import "../styles/global.style.css";
+import { API } from "@apis";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -24,3 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+API.initInstance({
+  baseURL: process.env.NEXT_PUBLIC_FAST_API_SERVER,
+});

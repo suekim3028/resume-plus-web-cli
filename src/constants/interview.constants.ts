@@ -26,10 +26,10 @@ export const LANG_OPTION_LABEL: Record<InterviewTypes.Lang, string> = {
   KOR: "Korean",
 };
 
-export const POSITION_OPTIONS = ["AI/ML", "Frontend", "Backend", "Mobile"];
+export const POSITION_OPTIONS = ["ai", "be", "fe", "mobile"];
 export const POSITION_OPTION_LABEL: Record<InterviewTypes.Position, string> = {
-  "AI/ML": "AI/ML",
-  Backend: "Backend",
-  Frontend: "FrontEnd",
-  Mobile: "Mobile",
+  ai: "AI/ML",
+  be: "Backend",
+  fe: "FrontEnd",
+  mobile: "Mobile",
 };

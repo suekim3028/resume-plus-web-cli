@@ -38,3 +38,4 @@ next-env.d.ts
 .env
 public/fonts
 src/design-system
+src/apis/API.ts
