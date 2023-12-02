@@ -25,6 +25,7 @@ type ChatMainContextValue = {
   answer: (text: string) => void;
   questionBubbles: { isMine: boolean; text: string }[];
   getFeedback: () => InterviewTypes.Feedback[];
+  scrollToBottom: () => void;
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -67,6 +68,17 @@ const ChatMainContextProvider = ({
     }
   })();
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 200);
+  };
+
   const askNextQ = async () => {
     await new Promise((resolve) => {
       setTimeout(() => {
@@ -82,14 +94,7 @@ const ChatMainContextProvider = ({
       { isMine: false, text: questions.current[currentQIdx.current].question },
     ]);
 
-    setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTo({
-          top: scrollRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }
-    }, 200);
+    scrollToBottom();
   };
 
   const addQuestions = (newQ: InterviewTypes.Question[]) => {
@@ -244,14 +249,7 @@ const ChatMainContextProvider = ({
       ? goNext()
       : askNextQ();
 
-    setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTo({
-          top: scrollRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }
-    }, 200);
+    scrollToBottom();
   };
 
   const isAfterStep = (isAfter: InterviewTypes.Step) =>
@@ -268,6 +266,7 @@ const ChatMainContextProvider = ({
     canGoNext,
     isAfterStep,
     answer,
+    scrollToBottom,
     getFeedback,
   };
 

@@ -3,6 +3,7 @@ import { InterviewTypes } from "@types";
 import React from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
 import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
+import Feedback from "../../Feedback/Feedback";
 
 const EvaluationStep: InterviewTypes.Step = "EVALUATION";
 
@@ -19,7 +20,7 @@ const Evaluation = () => {
       {isLoading && isCurrentStep && (
         <LoadingIndicator indicator="Analyzing your responses for feedback..." />
       )}
-      {!isLoading && <></>}
+      {!isLoading && <Feedback />}
     </L.FlexCol>
   );
 };
