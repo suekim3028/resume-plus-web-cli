@@ -40,13 +40,13 @@ const Bubble = ({ isMine, content, onEndTextAnim }: BubbleProps) => {
       <L.FlexRow
         style={{ maxWidth: "90%" }}
         rounded={20}
-        bgColor={isMine ? "primary" : "secondary"}
+        bgColor={isMine ? "PRIMARY_500" : "BASIC_WHITE"}
         ph={20}
         pv={10}
       >
         <Font.Body
-          type={"14_medium_multi"}
-          color={isMine ? "onPrimary" : "onSecondary"}
+          type={"16_medium_multi"}
+          color={isMine ? "BASIC_WHITE" : "GRAY_900"}
         >
           {text}
         </Font.Body>

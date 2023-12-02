@@ -10,7 +10,7 @@ export const Input = styled.textarea`
   min-height: 70px;
   display: flex;
   flex: 1;
-  background-color: ${({ theme }) => theme.surfaceContainerLow};
-  border: 1px solid ${({ theme }) => theme.outlineVariant};
+  background-color: ${({ theme }) => theme.onSurface};
+
   max-height: 150px;
 `;

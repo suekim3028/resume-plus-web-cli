@@ -102,7 +102,7 @@ export const answerTechQ = async ({
     },
   };
 };
-// API.post<InterviewTypes.Feedback<"tech_q">>(
+// API.post<InterviewTypes.Evaluation<"tech_q">>(
 //   `/submit_tech_answer/${questionId}`,
 //   answer
 // );
@@ -123,7 +123,7 @@ export const answerBehavQ = async ({
   };
 };
 // =>
-//   API.post<InterviewTypes.Feedback<"behav_q">>(
+//   API.post<InterviewTypes.Evaluation<"behav_q">>(
 //     `/submit_behav_answer/${questionId}`,
 //     answer
 // );
@@ -165,7 +165,7 @@ export const answerPersonalQ = async ({
   };
 };
 // =>
-//   API.post<InterviewTypes.Feedback<"personal_q">>(
+//   API.post<InterviewTypes.Evaluation<"personal_q">>(
 //     `/submit_personal_answer/${questionId}`,
 //     answer
 //   );

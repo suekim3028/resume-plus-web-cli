@@ -20,6 +20,7 @@ const ChatMain = () => {
           width: "100%",
           overflowY: "scroll",
         }}
+        bgColor="GRAY_200"
         ref={chatDivRef}
       >
         <S.Container>
@@ -29,6 +30,7 @@ const ChatMain = () => {
           <Evaluation />
         </S.Container>
       </L.FlexCol>
+
       <TextInput />
     </ChatMainContextProvider>
   );

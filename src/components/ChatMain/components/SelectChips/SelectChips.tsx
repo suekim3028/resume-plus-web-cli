@@ -21,9 +21,9 @@ const SelectChips = <T,>({
               key={option.text}
               ml={idx === 0 ? 0 : 10}
               rounded={20}
-              bgColor={selected ? "inverseSurface" : "inverseOnSurface"}
-              hoverBgColor={selected || !selectable ? undefined : "surfaceDim"}
-              outline={"inverseSurface"}
+              bgColor={selected ? "PRIMARY_300" : "BASIC_WHITE"}
+              hoverBgColor={selected || !selectable ? undefined : "PRIMARY_100"}
+              outline={"GRAY_400"}
               onClick={() => {
                 if (!selectable) return;
                 let isNull = false;
@@ -39,9 +39,8 @@ const SelectChips = <T,>({
               }}
             >
               <Font.Body
-                type={"14_medium_single"}
-                color={selected ? "inverseOnSurface" : "inverseSurface"}
-                hoverColor="onSurface"
+                type={"16_medium_single"}
+                color={selected ? "BASIC_WHITE" : "GRAY_800"}
               >
                 {option.text}
               </Font.Body>

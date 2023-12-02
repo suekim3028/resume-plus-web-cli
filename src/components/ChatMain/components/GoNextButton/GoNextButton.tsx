@@ -1,4 +1,4 @@
-import { Font, Layout as L } from "@design-system";
+import { Font, Icons, Layout as L } from "@design-system";
 
 const GoNextButton = ({
   canGoNext,
@@ -11,28 +11,29 @@ const GoNextButton = ({
     <L.FlexRow
       alignItems="center"
       w={"100%"}
-      justifyContent="center"
+      justifyContent="flex-end"
       gap={10}
       pt={40}
     >
-      <L.LayoutBase
+      <L.FlexRow
         onClick={canGoNext ? onClick : undefined}
-        bgColor={canGoNext ? "primary" : "secondaryContainer"}
+        bgColor={canGoNext ? "PRIMARY_400" : "PRIMARY_100"}
         pv={15}
-        w={"80%"}
+        // w={"70%"}
         ph={30}
-        rounded={10}
+        rounded={50}
         alignItems="center"
-        hoverBgColor={canGoNext ? "onPrimaryContainer" : undefined}
+        justifyContent="center"
+        hoverBgColor={canGoNext ? "PRIMARY_500" : undefined}
       >
-        <Font.Body
-          type={"16_medium_single"}
-          ml={2}
-          color={canGoNext ? "onPrimary" : "onSecondaryContainer"}
-        >
+        <Icons.FiArrowRight
+          color={"white"}
+          style={{ marginTop: 1, marginLeft: -2 }}
+        />
+        <Font.Body type={"16_semibold_single"} ml={2} color={"BASIC_WHITE"}>
           continue
         </Font.Body>
-      </L.LayoutBase>
+      </L.FlexRow>
     </L.FlexRow>
   );
 };

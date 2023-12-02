@@ -7,5 +7,5 @@ export const Container = styled.div`
   width: 100%;
   flex: 1;
   padding: 10px 20px;
-  background-color: ${({ theme }) => theme.surface};
+  background-color: ${({ theme }) => theme.surfaceBright};
 `;
