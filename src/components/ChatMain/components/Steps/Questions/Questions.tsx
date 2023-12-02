@@ -5,12 +5,14 @@ import { useChatMainContext } from "../../../ChatMainContext";
 import Bubble from "../../Bubble/Bubble";
 
 const CommonQStep: InterviewTypes.Step = "COMMON_Q";
+const PersonalQStep: InterviewTypes.Step = "PERSONAL_Q";
 
 const CommonQ = () => {
-  const { step, isAfterStep, questionBubbles } = useChatMainContext();
+  const { step, isAfterStep, questionBubbles, isLoading } =
+    useChatMainContext();
 
   const visible = isAfterStep(CommonQStep);
-  const isCurrentStep = step === CommonQStep;
+  const isCurrentStep = step === CommonQStep || step === PersonalQStep;
 
   if (!visible) return <></>;
 
@@ -19,6 +21,7 @@ const CommonQ = () => {
       {questionBubbles.map(({ isMine, text }, idx) => (
         <Bubble key={idx} content={text} isMine={isMine} />
       ))}
+      {isLoading && isCurrentStep && <>질문 불러오는 중</>}
     </L.FlexCol>
   );
 };

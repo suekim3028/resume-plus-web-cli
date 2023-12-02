@@ -1,7 +1,7 @@
 import { InterviewTypes } from "@types";
 
 export const FIXED_STEPS = ["INTRO", "UPLOAD_CV"] as const;
-export const VARIANT_STEPS = ["COMMON_Q", "PERSONAL_Q", "FEEDBACK"] as const;
+export const VARIANT_STEPS = ["COMMON_Q", "PERSONAL_Q", "EVALUATION"] as const;
 
 export const STEPS = [...FIXED_STEPS, ...VARIANT_STEPS] as const;
 

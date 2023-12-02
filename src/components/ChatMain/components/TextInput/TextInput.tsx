@@ -28,7 +28,7 @@ const TextInput = () => {
     inputRef.current.value = "";
   };
 
-  // if (!editable) return <></>;
+  if (!editable) return <></>;
   return (
     <L.FlexRow w={"100%"} ph={20} pv={20} alignItems="flex-end">
       <S.Input disabled={!editable} onChange={handleOnChange} ref={inputRef} />

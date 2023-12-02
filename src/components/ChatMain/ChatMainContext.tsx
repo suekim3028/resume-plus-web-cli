@@ -3,6 +3,7 @@ import { INTERVIEW_CONSTS } from "@constants";
 import { InterviewTypes } from "@types";
 import {
   PropsWithChildren,
+  RefObject,
   createContext,
   useContext,
   useRef,
@@ -27,7 +28,10 @@ type ChatMainContextValue = {
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
 
-const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
+const ChatMainContextProvider = ({
+  children,
+  scrollRef,
+}: PropsWithChildren<{ scrollRef: RefObject<HTMLDivElement> }>) => {
   const [stepIdx, setStepIdx] = useState(0);
   const step = STEPS[stepIdx];
   const [lang, setLang] = useState<InterviewTypes.Lang | null>(null);
@@ -62,7 +66,13 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     }
   })();
 
-  const askNextQ = () => {
+  const askNextQ = async () => {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(null);
+      }, 300);
+    });
+
     console.log("ASK NEXT  Q");
     currentQIdx.current++;
     console.log(questions.current[currentQIdx.current].question);
@@ -70,6 +80,15 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
       ...prev,
       { isMine: false, text: questions.current[currentQIdx.current].question },
     ]);
+
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 200);
   };
 
   const addQuestions = (newQ: InterviewTypes.Question[]) => {
@@ -93,57 +112,55 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const goNext = () => {
+  const goNext = async () => {
     if (stepIdx === STEPS.length - 1) return;
+    setStepIdx((i) => i + 1);
 
     switch (step) {
-      case "INTRO":
-        break;
       case "UPLOAD_CV": {
         if (!localPdfFile || !position) break;
         pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
         setIsLoading(true);
-        (async () => {
-          const document = await pdfjs.getDocument(
-            await localPdfFile.arrayBuffer()
-          ).promise;
 
-          for (let index of Array.from(
-            { length: document.numPages },
-            (_, i) => i
-          )) {
-            const page = await document.getPage(index + 1);
-            const pageContent = await page.getTextContent();
-            pageContent.items.map((item) => {
-              if ("str" in item) {
-                cvTextRef.current = [cvTextRef.current, item.str].join(" ");
-              }
-            });
-          }
-          await interviewApis.uploadCV({
-            content: cvTextRef.current,
-            position,
+        const document = await pdfjs.getDocument(
+          await localPdfFile.arrayBuffer()
+        ).promise;
+
+        for (let index of Array.from(
+          { length: document.numPages },
+          (_, i) => i
+        )) {
+          const page = await document.getPage(index + 1);
+          const pageContent = await page.getTextContent();
+          pageContent.items.map((item) => {
+            if ("str" in item) {
+              cvTextRef.current = [cvTextRef.current, item.str].join(" ");
+            }
           });
+        }
+        await interviewApis.uploadCV({
+          content: cvTextRef.current,
+          position,
+        });
 
-          const { behavQuestions, techQuestions } =
-            await interviewApis.getCommonQ();
+        const { behavQuestions, techQuestions } =
+          await interviewApis.getCommonQ();
 
-          const commonQuestions = [
-            ...behavQuestions.map(
-              (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
-            ),
-            ...techQuestions.map(
-              (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
-            ),
-          ].toSorted((_a, _b) => Math.random() - 0.5);
+        const commonQuestions = [
+          ...behavQuestions.map(
+            (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
+          ),
+          ...techQuestions.map(
+            (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
+          ),
+        ].toSorted((_a, _b) => Math.random() - 0.5);
 
-          addQuestions(commonQuestions);
+        addQuestions(commonQuestions);
 
-          console.log("-----common questions added----");
-          askNextQ();
-          setIsLoading(false);
-        })();
+        console.log("-----common questions added----");
+        askNextQ();
+        setIsLoading(false);
         break;
       }
 
@@ -151,16 +168,16 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
         console.log("next....feedback....");
         console.log({ evaluations, unevaluatedQs });
         setIsLoading(true);
-        (async () => {
-          const { personalQuestions } = await interviewApis.getPersonalQ();
-          addQuestions(
-            personalQuestions.map(
-              (obj): InterviewTypes.Question => ({ ...obj, type: "personal_q" })
-            )
-          );
-          askNextQ();
-          setIsLoading(false);
-        })();
+
+        const { personalQuestions } = await interviewApis.getPersonalQ();
+        addQuestions(
+          personalQuestions.map(
+            (obj): InterviewTypes.Question => ({ ...obj, type: "personal_q" })
+          )
+        );
+        askNextQ();
+        setIsLoading(false);
+
         break;
       }
 
@@ -168,23 +185,21 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
         console.log("next....feedback....");
         console.log({ evaluations, unevaluatedQs });
         if (!unevaluatedQs.current.length) break;
-        (async () => {
-          setIsLoading(true);
-          console.log("기다려 ! ! !! ! !  ! ! ! ! ");
-          await new Promise((resolve: (value: null) => void) => {
-            feedbackResolver.current = resolve;
-          });
 
-          console.log("다왔으");
-          setIsLoading(false);
-        })();
+        setIsLoading(true);
+        console.log("기다려 ! ! !! ! !  ! ! ! ! ");
+        await new Promise((resolve: (value: null) => void) => {
+          feedbackResolver.current = resolve;
+        });
+
+        console.log("다왔으");
+        setIsLoading(false);
         break;
       }
 
       default:
         break;
     }
-    setStepIdx((i) => i + 1);
   };
 
   const startEvaluation = async (answer: string) => {
@@ -222,6 +237,7 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
           questionId,
           answer,
         });
+
         evaluations.current = {
           ...evaluations.current,
           [questionId]: evaluation.evaluation,
@@ -240,6 +256,15 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     currentQIdx.current === questions.current.length - 1
       ? goNext()
       : askNextQ();
+
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 200);
   };
 
   const isAfterStep = (isAfter: InterviewTypes.Step) =>

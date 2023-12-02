@@ -6,12 +6,13 @@ import Intro from "./components/Steps/Intro/Intro";
 import TextInput from "./components/TextInput/TextInput";
 import UploadCv from "./components/Steps/UploadCv/UploadCv";
 import Questions from "./components/Steps/Questions/Questions";
-
-const { STEPS } = INTERVIEW_CONSTS;
+import { useRef } from "react";
+import Evaluation from "./components/Steps/Evaluation/Evaluation";
 
 const ChatMain = () => {
+  const chatDivRef = useRef<HTMLDivElement>(null);
   return (
-    <ChatMainContextProvider>
+    <ChatMainContextProvider scrollRef={chatDivRef}>
       <L.FlexCol
         w="100%"
         style={{
@@ -19,11 +20,13 @@ const ChatMain = () => {
           width: "100%",
           overflowY: "scroll",
         }}
+        ref={chatDivRef}
       >
         <S.Container>
           <Intro />
           <UploadCv />
           <Questions />
+          <Evaluation />
         </S.Container>
       </L.FlexCol>
       <TextInput />

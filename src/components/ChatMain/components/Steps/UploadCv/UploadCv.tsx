@@ -58,6 +58,7 @@ const UploadCv = () => {
             accept=".pdf"
             id="image_uploads"
             ref={fileRef}
+            disabled={!isCurrentStep}
             onChange={handleOnFileChange}
             multiple={false}
           />
