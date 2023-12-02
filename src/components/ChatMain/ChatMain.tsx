@@ -5,21 +5,28 @@ import ChatMainContextProvider from "./ChatMainContext";
 import Intro from "./components/Steps/Intro/Intro";
 import TextInput from "./components/TextInput/TextInput";
 import UploadCv from "./components/Steps/UploadCv/UploadCv";
-import CommonQ from "./components/Steps/CommonQ/CommonQ";
+import Questions from "./components/Steps/Questions/Questions";
 
 const { STEPS } = INTERVIEW_CONSTS;
 
 const ChatMain = () => {
   return (
     <ChatMainContextProvider>
-      <L.FlexCol w={"100%"} h={"100%"} pv={20}>
+      <L.FlexCol
+        w="100%"
+        style={{
+          flex: 1,
+          width: "100%",
+          overflowY: "scroll",
+        }}
+      >
         <S.Container>
           <Intro />
           <UploadCv />
-          <CommonQ />
+          <Questions />
         </S.Container>
-        <TextInput />
       </L.FlexCol>
+      <TextInput />
     </ChatMainContextProvider>
   );
 };

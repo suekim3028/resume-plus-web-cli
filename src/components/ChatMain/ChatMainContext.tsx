@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { pdfjs } from "react-pdf";
+import CommonQ from "./components/Steps/Questions/Questions";
 const { STEPS } = INTERVIEW_CONSTS;
 
 type ChatMainContextValue = {
@@ -20,8 +21,8 @@ type ChatMainContextValue = {
   setPosition: (position: InterviewTypes.Position | null) => void;
   setLocalPdfFile: (file: File | null) => void;
   canGoNext: boolean;
-  answerCommonQ: (text: string) => void;
-  commonQBubbles: { isMine: boolean; text: string }[];
+  answer: (text: string) => void;
+  questionBubbles: { isMine: boolean; text: string }[];
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -36,10 +37,15 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const commonQs = useRef<InterviewTypes.Question[]>([]);
-  const commonQIdx = useRef(0);
+  const questions = useRef<InterviewTypes.Question[]>([]);
+  const currentQIdx = useRef(-1);
 
-  const [commonQBubbles, setCommonQBubbles] = useState<
+  const unevaluatedQs = useRef<number[]>([]);
+  const evaluations = useRef<Record<number, InterviewTypes.Evaluation[]>>({});
+
+  const feedbackResolver = useRef<null | ((value: null) => void)>(null);
+
+  const [questionBubbles, setQuestionsBubbles] = useState<
     { isMine: boolean; text: string }[]
   >([]);
 
@@ -56,13 +62,35 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     }
   })();
 
-  const askNextCommonQ = () => {
-    console.log("ASK NEXT COMMON Q");
-    console.log(commonQs.current[commonQIdx.current].question);
-    setCommonQBubbles((prev) => [
+  const askNextQ = () => {
+    console.log("ASK NEXT  Q");
+    currentQIdx.current++;
+    console.log(questions.current[currentQIdx.current].question);
+    setQuestionsBubbles((prev) => [
       ...prev,
-      { isMine: false, text: commonQs.current[commonQIdx.current].question },
+      { isMine: false, text: questions.current[currentQIdx.current].question },
     ]);
+  };
+
+  const addQuestions = (newQ: InterviewTypes.Question[]) => {
+    console.log(
+      " ADD QUESTIONS ! ",
+      newQ.map(({ id }) => id)
+    );
+    questions.current = [...questions.current, ...newQ];
+    unevaluatedQs.current = [
+      ...unevaluatedQs.current,
+      ...newQ.map(({ id }) => id),
+    ];
+  };
+
+  const checkEvaluatedQ = (questionId: number) => {
+    unevaluatedQs.current = unevaluatedQs.current.filter(
+      (id) => id !== questionId
+    );
+    if (unevaluatedQs.current.length === 0 && feedbackResolver.current) {
+      feedbackResolver.current(null);
+    }
   };
 
   const goNext = () => {
@@ -98,29 +126,59 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
             position,
           });
 
-          const {
-            behavQuestions: _behavQuestions,
-            techQuestions: _techQuestions,
-          } = await interviewApis.getCommonQ();
-
-          const behavQuestions: InterviewTypes.Question[] = _behavQuestions.map(
-            (obj) => ({ ...obj, type: "behav_q" })
-          );
-          const techQuestions: InterviewTypes.Question[] = _techQuestions.map(
-            (obj) => ({ ...obj, type: "tech_q" })
-          );
+          const { behavQuestions, techQuestions } =
+            await interviewApis.getCommonQ();
 
           const commonQuestions = [
-            ...behavQuestions,
-            ...techQuestions,
+            ...behavQuestions.map(
+              (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
+            ),
+            ...techQuestions.map(
+              (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
+            ),
           ].toSorted((_a, _b) => Math.random() - 0.5);
 
-          console.log(commonQuestions);
+          addQuestions(commonQuestions);
 
-          commonQs.current = commonQuestions;
-          askNextCommonQ();
+          console.log("-----common questions added----");
+          askNextQ();
           setIsLoading(false);
         })();
+        break;
+      }
+
+      case "COMMON_Q": {
+        console.log("next....feedback....");
+        console.log({ evaluations, unevaluatedQs });
+        setIsLoading(true);
+        (async () => {
+          const { personalQuestions } = await interviewApis.getPersonalQ();
+          addQuestions(
+            personalQuestions.map(
+              (obj): InterviewTypes.Question => ({ ...obj, type: "personal_q" })
+            )
+          );
+          askNextQ();
+          setIsLoading(false);
+        })();
+        break;
+      }
+
+      case "PERSONAL_Q": {
+        console.log("next....feedback....");
+        console.log({ evaluations, unevaluatedQs });
+        if (!unevaluatedQs.current.length) break;
+        (async () => {
+          setIsLoading(true);
+          console.log("기다려 ! ! !! ! !  ! ! ! ! ");
+          await new Promise((resolve: (value: null) => void) => {
+            feedbackResolver.current = resolve;
+          });
+
+          console.log("다왔으");
+          setIsLoading(false);
+        })();
+        break;
       }
 
       default:
@@ -129,7 +187,60 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
     setStepIdx((i) => i + 1);
   };
 
-  const answerCommonQ = (text: string) => {};
+  const startEvaluation = async (answer: string) => {
+    const currentQ = questions.current[currentQIdx.current];
+    if (!currentQ) return;
+
+    const { id: questionId, type } = currentQ;
+
+    switch (type) {
+      case "behav_q": {
+        const { evaluation } = await interviewApis.answerBehavQ({
+          questionId,
+          answer,
+        });
+
+        evaluations.current = {
+          ...evaluations.current,
+          [questionId]: [evaluation],
+        };
+        break;
+      }
+      case "tech_q": {
+        const { evaluation } = await interviewApis.answerTechQ({
+          questionId,
+          answer,
+        });
+        evaluations.current = {
+          ...evaluations.current,
+          [questionId]: [evaluation],
+        };
+        break;
+      }
+      case "personal_q": {
+        const { evaluation } = await interviewApis.answerPersonalQ({
+          questionId,
+          answer,
+        });
+        evaluations.current = {
+          ...evaluations.current,
+          [questionId]: evaluation.evaluation,
+        };
+        break;
+      }
+    }
+
+    checkEvaluatedQ(questionId);
+  };
+
+  const answer = async (answer: string) => {
+    console.log("=========ANSWER=====");
+    startEvaluation(answer);
+    setQuestionsBubbles((prev) => [...prev, { isMine: true, text: answer }]);
+    currentQIdx.current === questions.current.length - 1
+      ? goNext()
+      : askNextQ();
+  };
 
   const isAfterStep = (isAfter: InterviewTypes.Step) =>
     stepIdx >= STEPS.findIndex((s) => s === isAfter);
@@ -137,14 +248,14 @@ const ChatMainContextProvider = ({ children }: PropsWithChildren) => {
   const value: ChatMainContextValue = {
     step,
     goNext,
-    commonQBubbles,
+    questionBubbles,
     setPosition,
     setLanguage: setLang,
     isLoading,
     setLocalPdfFile,
     canGoNext,
     isAfterStep,
-    answerCommonQ,
+    answer,
   };
 
   return (

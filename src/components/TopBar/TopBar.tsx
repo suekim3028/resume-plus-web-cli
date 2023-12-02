@@ -4,7 +4,7 @@ import { useTheme } from "styled-components";
 const TopBar = () => {
   const theme = useTheme();
   return (
-    <L.FlexRow w="100%" p={10}>
+    <L.FlexRow w="100%" p={10} style={{ alignSelf: "flex-start" }}>
       <L.FlexRow
         alignItems={"center"}
         w={"100%"}

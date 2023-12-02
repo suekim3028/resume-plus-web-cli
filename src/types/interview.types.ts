@@ -9,12 +9,15 @@ export type Position = (typeof INTERVIEW_CONSTS.POSITION_OPTIONS)[number];
 
 export type QuestionType = "behav_q" | "tech_q" | "personal_q";
 
+export type Evaluation = { criteria: string; score: number; rationale: string };
+
 export type Feedback<T extends QuestionType> = {
   type: T;
   question: string;
   user_answer: string;
-  criteria: string;
-  evaluation: string;
+  evaluation: T extends "personal_q"
+    ? { evaluation: Evaluation[] }
+    : Evaluation;
 };
 
 export type Question = {

@@ -25,6 +25,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: white;
         overflow: hidden;
         min-width: 300px;
+        height: 100dvh;
     }
 
     /* HTML5 display-role reset for older browsers */
@@ -36,6 +37,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         line-height: 1;
         margin: 0 auto;
+        height: 100dvh;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -59,6 +61,11 @@ const GlobalStyle = createGlobalStyle`
     textarea{
         all: unset;
         background-color: white;
+    }
+
+    #__next{
+        height: 100dvh;
+        display: flex;
     }
 `;
 
