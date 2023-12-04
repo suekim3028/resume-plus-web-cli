@@ -5,6 +5,9 @@ import { StyleSheetManager, ThemeProvider } from "styled-components";
 import { IconContext } from "react-icons";
 import "../styles/global.style.css";
 import { API } from "@apis";
+import { createContext } from "react";
+
+const UserContext = createContext<{ username: string } | null>(null);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -19,7 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <IconContext.Provider
           value={{ size: "20px", style: { verticalAlign: "middle" } }}
         >
+          {/* <UserContext.Provider valu> */}
           <Component {...pageProps} />
+          {/* </UserContext.Provider> */}
         </IconContext.Provider>
       </ThemeProvider>
     </>

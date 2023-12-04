@@ -4,6 +4,7 @@ import * as S from "./login.styles";
 import { ChangeEvent, ChangeEventHandler, useRef, useState } from "react";
 import { userApis } from "@apis";
 import { useRouter } from "next/router";
+import { withErrorHandling } from "@utils";
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const router = useRouter();
@@ -26,13 +27,15 @@ const Login = () => {
 
   const submit = async () => {
     if (!canSubmit) return;
-    try {
-      // await userApis.signIn({
-      //   username: idRef.current,
-      //   password: pwRef.current,
-      // });
-      router.replace("/main");
-    } catch (e) {}
+
+    const { isError } = await withErrorHandling(() =>
+      userApis.signIn({
+        username: idRef.current,
+        password: pwRef.current,
+      })
+    );
+    if (isError) return;
+    router.replace("/main");
   };
 
   return (

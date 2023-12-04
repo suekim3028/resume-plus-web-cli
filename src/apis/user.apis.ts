@@ -9,9 +9,10 @@ type SignInResponse = {
   access_token: string;
 };
 
-export const signIn = async (params: SignInParams) => {
-  const { access_token } = await API.post<SignInResponse>("/auth/login", {
-    data: params,
-  });
+export const signIn = async ({ username, password }: SignInParams) => {
+  const { access_token } = await API.post<SignInResponse>(
+    `/auth/token?username=${username}&password=${password}`
+  );
+  console.log({ access_token });
   API.setHeaderToken(access_token);
 };
