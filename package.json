@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start -p 8080",
+    "lint": "next lint",
+    "deploy": "yarn build && eb deploy resume-ai-web-eb-env && echo '🏊🏻 deployment completed!'"
   },
   "dependencies": {
     "axios": "^1.6.2",
