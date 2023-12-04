@@ -11,6 +11,7 @@ import {
 } from "react";
 import { pdfjs } from "react-pdf";
 import CommonQ from "./components/Steps/Questions/Questions";
+import { withErrorHandling } from "@utils";
 const { STEPS } = INTERVIEW_CONSTS;
 
 type ChatMainContextValue = {
@@ -152,13 +153,20 @@ const ChatMainContextProvider = ({
             }
           });
         }
-        await interviewApis.uploadCV({
-          content: cvTextRef.current,
-          position,
-        });
+        const { isError: uploadCvError } = await withErrorHandling(() =>
+          interviewApis.uploadCV({
+            content: cvTextRef.current,
+            position,
+          })
+        );
 
-        const { behavQuestions, techQuestions } =
-          await interviewApis.getCommonQ();
+        if (uploadCvError) return;
+
+        const { isError: isCommonQError, data } = await withErrorHandling(() =>
+          interviewApis.getCommonQ()
+        );
+        if (isCommonQError) return;
+        const { behavQuestions, techQuestions } = data;
 
         const commonQuestions = [
           ...behavQuestions.map(
@@ -182,7 +190,12 @@ const ChatMainContextProvider = ({
         console.log({ feedbackObj, unevaluatedQs });
         setIsLoading(true);
 
-        const { personalQuestions } = await interviewApis.getPersonalQ();
+        const { isError: isPersonalQError, data } = await withErrorHandling(
+          () => interviewApis.getPersonalQ()
+        );
+        if (isPersonalQError) return;
+
+        const { personalQuestions } = data;
         addQuestions(
           personalQuestions.map(
             (obj): InterviewTypes.Question => ({ ...obj, type: "personal_q" })
@@ -228,10 +241,14 @@ const ChatMainContextProvider = ({
         ? interviewApis.answerTechQ
         : interviewApis.answerPersonalQ;
 
-    const res = await answerFn({
-      questionId,
-      answer,
-    });
+    const { isError: isAnswerError, data: res } = await withErrorHandling(() =>
+      answerFn({
+        questionId,
+        answer,
+      })
+    );
+
+    if (isAnswerError) return;
 
     feedbackObj.current = {
       ...feedbackObj.current,
