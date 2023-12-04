@@ -16,17 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
           defaultThemeLight
         }
       >
-        <StyleSheetManager
-          shouldForwardProp={(prop) =>
-            !["justifyContent", "alignItems"].includes(prop)
-          }
+        <IconContext.Provider
+          value={{ size: "20px", style: { verticalAlign: "middle" } }}
         >
-          <IconContext.Provider
-            value={{ size: "20px", style: { verticalAlign: "middle" } }}
-          >
-            <Component {...pageProps} />
-          </IconContext.Provider>
-        </StyleSheetManager>
+          <Component {...pageProps} />
+        </IconContext.Provider>
       </ThemeProvider>
     </>
   );
