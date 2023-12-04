@@ -65,10 +65,9 @@ export const answerTechQ = async ({
   const {
     evaluation: { evaluation },
     ...res
-  } = await API.post<AnswerTechQResponse>(
-    `/submit_tech_answer/${questionId}`,
-    answer
-  );
+  } = await API.post<AnswerTechQResponse>(`/submit_tech_answer/${questionId}`, {
+    answer,
+  });
 
   return {
     ...res,
@@ -86,7 +85,7 @@ export const answerBehavQ = async ({
 }: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
   const { evaluation, ...res } = await API.post<AnswerBehavQResponse>(
     `/submit_behav_answer/${questionId}`,
-    answer
+    { answer }
   );
 
   return { ...res, evaluation: [evaluation] };
@@ -98,6 +97,6 @@ export const answerPersonalQ = async ({
 }: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
   return await API.post<InterviewTypes.Feedback>(
     `/submit_personal_answer/${questionId}`,
-    answer
+    { answer }
   );
 };

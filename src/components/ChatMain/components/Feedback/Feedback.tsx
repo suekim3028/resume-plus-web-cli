@@ -20,8 +20,6 @@ const Feedback = () => {
       justifyContent="center"
     >
       {feedbacks.map(({ question, user_answer, evaluation, type }) => {
-        const oneEvaluation = evaluation[0];
-
         return (
           <L.FlexCol
             style={{ width: "80%", maxWidth: 400 }}
@@ -46,28 +44,23 @@ const Feedback = () => {
               mt={4}
             >{`A. ${user_answer}`}</Font.Body>
 
-            {evaluation.length > 1 ? (
-              <></>
-            ) : (
-              <>
-                <InfoRow
-                  title={"criteria"}
-                  body={oneEvaluation.criteria}
-                  mt={20}
-                />
-                <InfoRow
-                  title={"score"}
-                  body={`${oneEvaluation.score}`}
-                  mt={10}
-                  bgColor={"PRIMARY_100"}
-                />
-                <InfoRow
-                  title={"rationale"}
-                  body={oneEvaluation.rationale}
-                  mt={10}
-                />
-              </>
-            )}
+            {Array.isArray(evaluation) &&
+              evaluation.map((ev) => (
+                <>
+                  <InfoRow
+                    title={"criteria"}
+                    body={ev?.criteria || ""}
+                    mt={20}
+                  />
+                  <InfoRow
+                    title={"score"}
+                    body={`${ev.score}`}
+                    mt={10}
+                    bgColor={"PRIMARY_100"}
+                  />
+                  <InfoRow title={"rationale"} body={ev.rationale} mt={10} />
+                </>
+              ))}
           </L.FlexCol>
         );
       })}

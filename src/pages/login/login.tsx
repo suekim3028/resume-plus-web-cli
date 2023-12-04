@@ -35,6 +35,7 @@ const Login = () => {
       })
     );
     if (isError) return;
+
     router.replace("/main");
   };
 

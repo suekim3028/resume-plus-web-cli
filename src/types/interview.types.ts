@@ -9,13 +9,17 @@ export type Position = (typeof INTERVIEW_CONSTS.POSITION_OPTIONS)[number];
 
 export type QuestionType = "behav_q" | "tech_q" | "personal_q";
 
-export type Evaluation = { criteria: string; score: number; rationale: string };
+export type Evaluation = {
+  criteria?: string;
+  score: number;
+  rationale: string;
+};
 
 export type Feedback = {
   type: QuestionType;
   question: string;
   user_answer: string;
-  evaluation: Evaluation[];
+  evaluation?: Evaluation[];
 };
 
 export type Question = {
