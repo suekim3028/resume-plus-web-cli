@@ -87,9 +87,7 @@ const ChatMainContextProvider = ({
       }, 300);
     });
 
-    console.log("ASK NEXT  Q");
     currentQIdx.current++;
-    console.log(questions.current[currentQIdx.current].question);
     setQuestionsBubbles((prev) => [
       ...prev,
       { isMine: false, text: questions.current[currentQIdx.current].question },
@@ -99,10 +97,6 @@ const ChatMainContextProvider = ({
   };
 
   const addQuestions = (newQ: InterviewTypes.Question[]) => {
-    console.log(
-      " ADD QUESTIONS ! ",
-      newQ.map(({ id }) => id)
-    );
     questions.current = [...questions.current, ...newQ];
     unevaluatedQs.current = [
       ...unevaluatedQs.current,

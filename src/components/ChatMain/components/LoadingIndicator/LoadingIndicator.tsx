@@ -24,8 +24,6 @@ const LoadingIndicator = ({ indicator }: { indicator: string }) => {
     };
   }, []);
 
-  console.log(phrase);
-
   return (
     <L.LayoutBase p={20}>
       <Font.Body type={"16_semibold_single"} color={"GRAY_500"}>

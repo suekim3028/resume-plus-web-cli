@@ -11,9 +11,8 @@ type SignInResponse = {
 
 export const signIn = async (params: SignInParams) => {
   const { access_token } = await API.post<SignInResponse>(
-    `/auth/token`,
+    `/auth/login`,
     params
   );
-  console.log({ access_token });
   API.setHeaderToken(access_token);
 };
