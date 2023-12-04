@@ -14,6 +14,7 @@ const Main = () => {
   }, [context?.hasUser]);
 
   if (!context || !context.hasUser) return <></>;
+
   return (
     <L.FlexCol h={"100%"} w={"100%"} justifyContent="space-between">
       <TopBar />
