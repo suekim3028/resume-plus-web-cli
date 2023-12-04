@@ -16,7 +16,7 @@ const Login = () => {
     setCanSubmit(!!idRef.current && !!pwRef.current);
 
   const handleChange = (
-    e: ChangeEvent<HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement>,
     type: "ID" | "PW"
   ) => {
     type === "ID"
@@ -78,6 +78,7 @@ const Login = () => {
                 aria-multiline={false}
                 placeholder="Password"
                 onChange={(e) => handleChange(e, "PW")}
+                type={"password"}
               />
             </L.LayoutBase>
             <L.LayoutBase

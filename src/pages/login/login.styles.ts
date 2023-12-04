@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Input = styled.textarea`
+export const Input = styled.input`
   font-family: Pretendard;
   font-size: 16px;
   line-height: 16px;
