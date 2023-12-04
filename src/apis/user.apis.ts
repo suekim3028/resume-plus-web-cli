@@ -1,13 +1,17 @@
 import API from "./API";
 
 type SignInParams = {
-  email: string;
+  username: string;
   password: string;
 };
 
 type SignInResponse = {
-  token: string;
+  access_token: string;
 };
 
-export const signIn = (params: SignInParams) =>
-  API.post<SignInResponse>("", { data: params });
+export const signIn = async (params: SignInParams) => {
+  const { access_token } = await API.post<SignInResponse>("/auth/login", {
+    data: params,
+  });
+  API.setHeaderToken(access_token);
+};
