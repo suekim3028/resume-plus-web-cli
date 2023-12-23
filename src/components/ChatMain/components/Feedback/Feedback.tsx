@@ -61,6 +61,27 @@ const Feedback = () => {
                   <InfoRow title={"rationale"} body={ev.rationale} mt={10} />
                 </>
               ))}
+
+            {!Array.isArray(evaluation) && !!evaluation && (
+              <>
+                <InfoRow
+                  title={"criteria"}
+                  body={evaluation?.criteria || ""}
+                  mt={20}
+                />
+                <InfoRow
+                  title={"score"}
+                  body={`${evaluation.score}`}
+                  mt={10}
+                  bgColor={"PRIMARY_100"}
+                />
+                <InfoRow
+                  title={"rationale"}
+                  body={evaluation.rationale}
+                  mt={10}
+                />
+              </>
+            )}
           </L.FlexCol>
         );
       })}

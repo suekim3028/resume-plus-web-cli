@@ -19,7 +19,7 @@ export type Feedback = {
   type: QuestionType;
   question: string;
   user_answer: string;
-  evaluation?: Evaluation[];
+  evaluation?: Evaluation[] | Evaluation;
 };
 
 export type Question = {
