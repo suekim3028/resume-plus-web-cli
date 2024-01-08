@@ -1,11 +1,10 @@
 import { Font, Layout as L } from "@design-system";
-import TopBar from "src/components/TopBar/TopBar";
 import * as S from "./Login.styles";
 
 import { useUser } from "@hooks";
-import { ChangeEvent, useRef, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { ChangeEvent, useRef, useState } from "react";
 
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
@@ -32,7 +31,6 @@ const Login = () => {
 
   return (
     <L.FlexCol h={"100%"} w={"100%"} justifyContent="space-between">
-      <TopBar />
       <L.FlexCol flex={1} w="100%" justifyContent="center" alignItems="center">
         <L.FlexCol p={40} bgColor={"GRAY_100"} w={400} rounded={20}>
           <Font.Title type={"20_bold_single"} color={"PRIMARY_400"} mb={20}>

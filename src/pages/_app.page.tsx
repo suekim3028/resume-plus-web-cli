@@ -1,13 +1,13 @@
 import { API } from "@apis";
 import type { AppProps } from "next/app";
-import { PropsWithChildren, createContext, useState } from "react";
 import { IconContext } from "react-icons";
+import { RecoilRoot } from "recoil";
 import GlobalStyle from "src/styles/GlobalStyle";
 import { defaultThemeLight } from "src/styles/defaultTheme";
 import { ThemeProvider } from "styled-components";
 import "../styles/global.style.css";
-import { RecoilRoot } from "recoil";
-
+import { AppHead, TopBar } from "@components";
+import { Layout as L } from "@design-system";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -17,7 +17,11 @@ export default function App({ Component, pageProps }: AppProps) {
           value={{ size: "20px", style: { verticalAlign: "middle" } }}
         >
           <RecoilRoot>
-            <Component {...pageProps} />
+            <AppHead />
+            <L.FlexCol w={"100%"}>
+              <TopBar />
+              <Component {...pageProps} />
+            </L.FlexCol>
           </RecoilRoot>
         </IconContext.Provider>
       </ThemeProvider>
