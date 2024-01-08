@@ -1,6 +1,7 @@
 import { Font, Layout as L } from "@design-system";
 import TopBar from "src/components/TopBar/TopBar";
-import * as S from "./login.styles";
+import * as S from "./Login.styles";
+
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -11,7 +12,8 @@ import {
 import { userApis } from "@apis";
 import { useRouter } from "next/router";
 import { withErrorHandling } from "@utils";
-import { UserContext } from "../_app.page";
+import { UserContext } from "../../pages/_app.page";
+
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const router = useRouter();

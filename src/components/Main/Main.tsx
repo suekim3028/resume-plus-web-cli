@@ -2,7 +2,7 @@ import { ChatMain } from "@components";
 import { Layout as L } from "@design-system";
 import { useContext, useEffect } from "react";
 import TopBar from "src/components/TopBar/TopBar";
-import { UserContext } from "../_app.page";
+import { UserContext } from "../../pages/_app.page";
 import { useRouter } from "next/router";
 
 const Main = () => {

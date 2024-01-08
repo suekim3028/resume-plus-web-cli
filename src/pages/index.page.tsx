@@ -1,11 +1,11 @@
-import { AppHead } from "@components";
-import Login from "./login/login";
+import { AppHead, Login, Main } from "@components";
 
 export default function Home() {
+  const hasUser = false;
   return (
     <>
       <AppHead />
-      <Login />
+      {hasUser ? <Login /> : <Main />}
     </>
   );
 }
