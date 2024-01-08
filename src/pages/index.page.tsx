@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <AppHead />
-      {hasUser ? <Login /> : <Main />}
+      {hasUser ? <Main /> : <Login />}
     </>
   );
 }

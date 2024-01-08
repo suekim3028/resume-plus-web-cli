@@ -4,11 +4,13 @@ import * as S from "./Login.styles";
 
 import { useUser } from "@hooks";
 import { ChangeEvent, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
-
   const { login } = useUser();
+  const router = useRouter();
 
   const usernameRef = useRef("");
   const passwordRef = useRef("");
@@ -83,6 +85,22 @@ const Login = () => {
                 Login
               </Font.Title>
             </L.LayoutBase>
+
+            <L.FlexRow mt={12} alignItems="center">
+              <Font.Body type={"14_medium_single"} color={"GRAY_700"}>
+                New Here?
+              </Font.Body>
+              <Link href={"/sign-up"}>
+                <Font.Body
+                  underline
+                  type={"14_semibold_single"}
+                  color={"PRIMARY_300"}
+                  ml={8}
+                >
+                  Create an account
+                </Font.Body>
+              </Link>
+            </L.FlexRow>
           </L.FlexCol>
         </L.FlexCol>
       </L.FlexCol>

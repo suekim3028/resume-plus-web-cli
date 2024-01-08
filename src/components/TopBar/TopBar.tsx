@@ -2,7 +2,6 @@ import { Font, Icons, Layout as L } from "@design-system";
 import { useTheme } from "styled-components";
 
 const TopBar = () => {
-  const theme = useTheme();
   return (
     <L.FlexRow w="100%" style={{ alignSelf: "flex-start" }}>
       <L.FlexRow
@@ -13,7 +12,7 @@ const TopBar = () => {
         bgColor={"PRIMARY_400"}
       >
         <Font.Title type={"24_semibold_single"} color={"BASIC_WHITE"} ml={10}>
-          이름이... 몰까
+          Resume+
         </Font.Title>
       </L.FlexRow>
     </L.FlexRow>
