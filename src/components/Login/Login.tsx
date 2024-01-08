@@ -2,49 +2,30 @@ import { Font, Layout as L } from "@design-system";
 import TopBar from "src/components/TopBar/TopBar";
 import * as S from "./Login.styles";
 
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  useContext,
-  useRef,
-  useState,
-} from "react";
-import { userApis } from "@apis";
-import { useRouter } from "next/router";
-import { withErrorHandling } from "@utils";
+import { useUser } from "@hooks";
+import { ChangeEvent, useRef, useState } from "react";
 
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
-  const router = useRouter();
 
-  const idRef = useRef("");
-  const pwRef = useRef("");
+  const { login } = useUser();
 
-  const updateCanSubmit = () =>
-    setCanSubmit(!!idRef.current && !!pwRef.current);
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     type: "ID" | "PW"
   ) => {
     type === "ID"
-      ? (idRef.current = e.target.value)
-      : (pwRef.current = e.target.value);
-    updateCanSubmit();
+      ? (usernameRef.current = e.target.value)
+      : (passwordRef.current = e.target.value);
+    setCanSubmit(!!usernameRef.current && !!passwordRef.current);
   };
 
   const submit = async () => {
     if (!canSubmit) return;
-
-    const { isError } = await withErrorHandling(() =>
-      userApis.signIn({
-        username: idRef.current,
-        password: pwRef.current,
-      })
-    );
-    if (isError) return;
-
-    router.replace("/main");
+    await login(usernameRef.current, passwordRef.current);
   };
 
   return (
