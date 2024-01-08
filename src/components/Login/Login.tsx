@@ -12,13 +12,10 @@ import {
 import { userApis } from "@apis";
 import { useRouter } from "next/router";
 import { withErrorHandling } from "@utils";
-import { UserContext } from "../../pages/_app.page";
 
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const router = useRouter();
-
-  const context = useContext(UserContext);
 
   const idRef = useRef("");
   const pwRef = useRef("");
@@ -46,8 +43,6 @@ const Login = () => {
       })
     );
     if (isError) return;
-
-    context?.setUser(idRef.current);
 
     router.replace("/main");
   };

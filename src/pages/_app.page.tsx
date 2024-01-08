@@ -6,26 +6,7 @@ import GlobalStyle from "src/styles/GlobalStyle";
 import { defaultThemeLight } from "src/styles/defaultTheme";
 import { ThemeProvider } from "styled-components";
 import "../styles/global.style.css";
-
-export const UserContext = createContext<{
-  setUser: (username: string) => void;
-  hasUser: boolean;
-} | null>(null);
-
-const UserContextProvider = ({ children }: PropsWithChildren) => {
-  const [user, setUser] = useState<null | string>(null);
-
-  return (
-    <UserContext.Provider
-      value={{
-        setUser: (username: string) => setUser(username),
-        hasUser: !!user,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
-};
+import { RecoilRoot } from "recoil";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -35,9 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <IconContext.Provider
           value={{ size: "20px", style: { verticalAlign: "middle" } }}
         >
-          <UserContextProvider>
+          <RecoilRoot>
             <Component {...pageProps} />
-          </UserContextProvider>
+          </RecoilRoot>
         </IconContext.Provider>
       </ThemeProvider>
     </>
