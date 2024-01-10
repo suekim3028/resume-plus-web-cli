@@ -47,6 +47,7 @@ const Bubble = ({ isMine, content, onEndTextAnim }: BubbleProps) => {
         <Font.Body
           type={"16_medium_multi"}
           color={isMine ? "BASIC_WHITE" : "GRAY_900"}
+          selectable
         >
           {text}
         </Font.Body>

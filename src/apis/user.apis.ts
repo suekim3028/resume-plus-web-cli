@@ -12,8 +12,9 @@ type SignInResponse = {
 
 export const signIn = async (params: SignInParams) => {
   const { access_token } = await API.post<SignInResponse>(
-    `/auth/token`,
+    `/auth/login`,
     params
+    // { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
   );
   API.setHeaderToken(access_token);
 };

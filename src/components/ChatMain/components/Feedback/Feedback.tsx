@@ -1,8 +1,9 @@
-import { Font, Layout as L } from "@design-system";
-import { use, useEffect, useMemo } from "react";
-import { useChatMainContext } from "../../ChatMainContext";
 import { INTERVIEW_CONSTS } from "@constants";
+import { Font, Layout as L } from "@design-system";
 import { StyleTypes } from "@types";
+import { useMemo } from "react";
+import { useChatMainContext } from "../../ChatMainContext";
+import { isScoreEval } from "./Feedback.utils";
 
 const Feedback = () => {
   const { getFeedback, scrollToBottom } = useChatMainContext();
@@ -16,7 +17,6 @@ const Feedback = () => {
       gap={20}
       w={"100%"}
       style={{ flexWrap: "wrap" }}
-      //   alignItems={"center"}
       justifyContent="center"
     >
       {feedbacks.map(({ question, user_answer, evaluation, type }) => {
@@ -44,31 +44,8 @@ const Feedback = () => {
               mt={4}
             >{`A. ${user_answer}`}</Font.Body>
 
-            {Array.isArray(evaluation) &&
-              evaluation.map((ev) => (
-                <>
-                  <InfoRow
-                    title={"criteria"}
-                    body={ev?.criteria || ""}
-                    mt={20}
-                  />
-                  <InfoRow
-                    title={"score"}
-                    body={`${ev.score}`}
-                    mt={10}
-                    bgColor={"PRIMARY_100"}
-                  />
-                  <InfoRow title={"rationale"} body={ev.rationale} mt={10} />
-                </>
-              ))}
-
-            {!Array.isArray(evaluation) && !!evaluation && (
+            {!!evaluation && isScoreEval(evaluation) && (
               <>
-                <InfoRow
-                  title={"criteria"}
-                  body={evaluation?.criteria || ""}
-                  mt={20}
-                />
                 <InfoRow
                   title={"score"}
                   body={`${evaluation.score}`}
@@ -80,6 +57,39 @@ const Feedback = () => {
                   body={evaluation.rationale}
                   mt={10}
                 />
+              </>
+            )}
+
+            {!!evaluation && !isScoreEval(evaluation) && (
+              <>
+                {Object.keys(evaluation).map((criteria, idx) => {
+                  const [_score, rationale] = evaluation[criteria];
+                  const score = Number(_score);
+
+                  return (
+                    <L.FlexCol
+                      w={"100%"}
+                      key={criteria}
+                      pt={idx === 0 ? 0 : 20}
+                    >
+                      {idx !== 0 && (
+                        <L.LayoutBase w={"100%"} h={1} bgColor="GRAY_200" />
+                      )}
+                      <InfoRow
+                        title={"criteria"}
+                        body={criteria || ""}
+                        mt={20}
+                      />
+                      <InfoRow
+                        title={"score"}
+                        body={`${score}`}
+                        mt={10}
+                        bgColor={"PRIMARY_100"}
+                      />
+                      <InfoRow title={"rationale"} body={rationale} mt={10} />
+                    </L.FlexCol>
+                  );
+                })}{" "}
               </>
             )}
           </L.FlexCol>
@@ -101,7 +111,7 @@ const InfoRow = ({
   body: string;
 }) => {
   return (
-    <L.FlexRow mt={mt} alignItems="center" w={"100%"}>
+    <L.FlexRow mt={mt} alignItems="flex-start" w={"100%"}>
       <L.LayoutBase w={80}>
         <L.LayoutBase
           rounded={20}
@@ -112,7 +122,7 @@ const InfoRow = ({
           <Font.Body type={"14_semibold_single"}>{title}</Font.Body>
         </L.LayoutBase>
       </L.LayoutBase>
-      <L.LayoutBase flex={1}>
+      <L.FlexCol flex={1} style={{ margin: "auto" }}>
         <Font.Body
           type={"14_medium_single"}
           ml={8}
@@ -121,7 +131,7 @@ const InfoRow = ({
         >
           {body}
         </Font.Body>
-      </L.LayoutBase>
+      </L.FlexCol>
     </L.FlexRow>
   );
 };

@@ -222,11 +222,11 @@ const ChatMainContextProvider = ({
     }
   };
 
-  const startEvaluation = async (answer: string) => {
-    const currentQ = questions.current[currentQIdx.current];
+  const startEvaluation = async (qIdx: number, answer: string) => {
+    const currentQ = questions.current[qIdx];
     if (!currentQ) return;
 
-    const { id: questionId, type } = currentQ;
+    const { id: questionId, type, question } = currentQ;
 
     const answerFn =
       type === "behav_q"
@@ -242,6 +242,8 @@ const ChatMainContextProvider = ({
       })
     );
 
+    console.log({ question, type, res });
+
     if (isAnswerError) return;
 
     feedbackObj.current = {
@@ -254,7 +256,7 @@ const ChatMainContextProvider = ({
 
   const answer = async (answer: string) => {
     console.log("=========ANSWER=====");
-    startEvaluation(answer);
+    startEvaluation(currentQIdx.current, answer);
     setQuestionsBubbles((prev) => [...prev, { isMine: true, text: answer }]);
     currentQIdx.current === questions.current.length - 1
       ? goNext()

@@ -54,49 +54,17 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
-type AnswerTechQResponse = Omit<InterviewTypes.Feedback, "evaluation"> & {
-  evaluation: { evaluation: InterviewTypes.Evaluation[] };
-};
-
-export const answerTechQ = async ({
-  questionId,
-  answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
-  const {
-    evaluation: { evaluation },
-    ...res
-  } = await API.post<AnswerTechQResponse>(`/submit_tech_answer/${questionId}`, {
+export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
     answer,
   });
 
-  return {
-    ...res,
-    evaluation,
-  };
-};
+export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
+    answer,
+  });
 
-type AnswerBehavQResponse = Omit<InterviewTypes.Feedback, "evaluation"> & {
-  evaluation: InterviewTypes.Evaluation;
-};
-
-export const answerBehavQ = async ({
-  questionId,
-  answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
-  const { evaluation, ...res } = await API.post<AnswerBehavQResponse>(
-    `/submit_behav_answer/${questionId}`,
-    { answer }
-  );
-
-  return { ...res, evaluation: [evaluation] };
-};
-
-export const answerPersonalQ = async ({
-  questionId,
-  answer,
-}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
-  return await API.post<InterviewTypes.Feedback>(
-    `/submit_personal_answer/${questionId}`,
-    { answer }
-  );
-};
+export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
+    answer,
+  });
