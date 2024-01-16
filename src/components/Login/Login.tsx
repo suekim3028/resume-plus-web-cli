@@ -73,7 +73,7 @@ const Login = () => {
             >
               <S.Input
                 aria-multiline={false}
-                placeholder="Password"
+                placeholder="assword"
                 onChange={(e) => handleChange(e, "password")}
                 type={"password"}
               />

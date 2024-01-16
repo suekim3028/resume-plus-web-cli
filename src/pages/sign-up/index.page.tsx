@@ -106,7 +106,7 @@ const Index = () => {
             >
               <S.Input
                 aria-multiline={false}
-                placeholder="Password"
+                placeholder="password"
                 onChange={(e) => handleChange(e, "password")}
                 type={"password"}
               />
