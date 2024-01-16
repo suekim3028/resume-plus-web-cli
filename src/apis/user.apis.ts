@@ -1,16 +1,11 @@
-import { ApiTypes } from "@types";
+import { ApiTypes, UserType } from "@types";
 import API from "./API";
-
-type SignInParams = {
-  username: string;
-  password: string;
-};
 
 type SignInResponse = {
   access_token: string;
 };
 
-export const signIn = async (params: SignInParams) => {
+export const signIn = async (params: UserType.SignInUser) => {
   const { access_token } = await API.post<SignInResponse>(
     `/auth/login`,
     params
@@ -19,12 +14,5 @@ export const signIn = async (params: SignInParams) => {
   API.setHeaderToken(access_token);
 };
 
-type SignUpParams = {
-  username: string;
-  name: string;
-  email: string;
-  password: string;
-};
-
-export const signUp = (data: SignUpParams) =>
+export const signUp = (data: UserType.SignUpUser) =>
   API.post<ApiTypes.SuccessRes>("/auth", data);

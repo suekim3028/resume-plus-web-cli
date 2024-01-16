@@ -5,30 +5,37 @@ import { useUser } from "@hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useRef, useState } from "react";
+import { UserType } from "@types";
 
 const Login = () => {
   const [canSubmit, setCanSubmit] = useState(false);
-  const { login } = useUser();
+  const { signIn } = useUser();
   const router = useRouter();
 
-  const usernameRef = useRef("");
-  const passwordRef = useRef("");
+  const signInUser = useRef<UserType.SignInUser>({
+    username: "",
+    password: "",
+  });
+
+  const checkValidSignInUser = () =>
+    Object.values(signInUser.current).every(Boolean);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
-    type: "ID" | "PW"
+    type: keyof UserType.SignInUser
   ) => {
-    type === "ID"
-      ? (usernameRef.current = e.target.value)
-      : (passwordRef.current = e.target.value);
-    setCanSubmit(!!usernameRef.current && !!passwordRef.current);
+    signInUser.current = {
+      ...signInUser.current,
+      [type]: e.target.value,
+    };
+
+    setCanSubmit(checkValidSignInUser());
   };
 
   const submit = async () => {
-    if (!canSubmit) return;
-    await login(usernameRef.current, passwordRef.current);
+    if (!checkValidSignInUser()) return;
+    await signIn(signInUser.current);
   };
-
   return (
     <L.FlexCol h={"100%"} w={"100%"} justifyContent="space-between">
       <L.FlexCol flex={1} w="100%" justifyContent="center" alignItems="center">
@@ -51,7 +58,7 @@ const Login = () => {
               <S.Input
                 aria-multiline={false}
                 placeholder="username"
-                onChange={(e) => handleChange(e, "ID")}
+                onChange={(e) => handleChange(e, "username")}
               />
             </L.LayoutBase>
             <L.LayoutBase
@@ -67,7 +74,7 @@ const Login = () => {
               <S.Input
                 aria-multiline={false}
                 placeholder="Password"
-                onChange={(e) => handleChange(e, "PW")}
+                onChange={(e) => handleChange(e, "password")}
                 type={"password"}
               />
             </L.LayoutBase>
