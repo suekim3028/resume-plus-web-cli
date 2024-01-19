@@ -8,6 +8,7 @@ import UploadCv from "./components/Steps/UploadCv/UploadCv";
 import Questions from "./components/Steps/Questions/Questions";
 import { useRef } from "react";
 import Evaluation from "./components/Steps/Evaluation/Evaluation";
+import CameraView from "./components/CameraView/CameraView";
 
 const ChatMain = () => {
   const chatDivRef = useRef<HTMLDivElement>(null);
@@ -24,6 +25,7 @@ const ChatMain = () => {
         ref={chatDivRef}
       >
         <S.Container>
+          <CameraView />
           <Intro />
           <UploadCv />
           <Questions />
