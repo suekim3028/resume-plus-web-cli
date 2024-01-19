@@ -10,17 +10,17 @@ const SelectChips = <T,>({
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   return (
-    <L.FlexCol w={"100%"} pv={5}>
+    <L.FlexCol pv={5}>
       <L.FlexRow>
         {options.map((option, idx) => {
           const selected = selectedIdx === idx;
           return (
             <L.FlexRow
               pv={8}
-              ph={12}
+              ph={30}
               key={option.text}
               ml={idx === 0 ? 0 : 10}
-              rounded={20}
+              rounded={10}
               bgColor={selected ? "PRIMARY_300" : "BASIC_WHITE"}
               hoverBgColor={selected || !selectable ? undefined : "PRIMARY_100"}
               outline={"GRAY_400"}

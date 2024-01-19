@@ -21,19 +21,16 @@ const ChatMain = () => {
           width: "100%",
           overflowY: "scroll",
         }}
-        bgColor="GRAY_200"
+        bgColor="BASIC_WHITE"
         ref={chatDivRef}
       >
         <S.Container>
-          <CameraView />
           <Intro />
           <UploadCv />
           <Questions />
           <Evaluation />
         </S.Container>
       </L.FlexCol>
-
-      <TextInput />
     </ChatMainContextProvider>
   );
 };

@@ -10,8 +10,8 @@ export const FIXED_CONVO: Record<
   { KOR: string; ENG: string }
 > = {
   INTRO: {
-    KOR: "Welcome to Interview Bot ! Please select your preferred language",
-    ENG: "Welcome to Interview Bot ! Please select your preferred language",
+    KOR: `Welcome to Interview Bot !\nPlease select your preferred language.`,
+    ENG: `Welcome to Interview Bot !\nPlease select your preferred language.`,
   },
   UPLOAD_CV: {
     KOR: "관심 있는 직무를 선택하고, 자기소개서 또는 이력서를 업로드해주세요.",
