@@ -1,6 +1,6 @@
 import { INTERVIEW_CONSTS } from "@constants";
 import Bubble from "../../Bubble/Bubble";
-import { Layout as L } from "@design-system";
+import { Font, Layout as L } from "@design-system";
 import SelectChips from "../../SelectChips/SelectChips";
 import React, { useRef, useState } from "react";
 import { useChatMainContext } from "../../../ChatMainContext";
@@ -14,16 +14,14 @@ const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
 const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
 const UploadCv = () => {
-  const { step, isAfterStep, goNext, setPosition, setLocalPdfFile, canGoNext } =
+  const { step, goNext, setPosition, setLocalPdfFile, canGoNext } =
     useChatMainContext();
-  const visible = isAfterStep(CV_STEP);
+
   const isCurrentStep = step === CV_STEP;
 
   const fileRef = useRef<HTMLInputElement>(null);
 
   fileRef.current?.files;
-
-  const [textAnimEnd, setTextAnimEnd] = useState(false);
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -33,39 +31,46 @@ const UploadCv = () => {
     setLocalPdfFile(files[0]);
   };
 
-  if (!visible) return <></>;
+  if (!isCurrentStep) return <></>;
 
   return (
-    <L.FlexCol w={"100%"} mt={20}>
-      <Bubble
-        content={FIXED_CONVO[CV_STEP].ENG}
-        isMine={false}
-        onEndTextAnim={() => setTextAnimEnd(true)}
-      />
-      {textAnimEnd && (
-        <L.FlexCol w={"100%"}>
-          <SelectChips<InterviewTypes.Position>
-            options={POSITION_OPTIONS.map((value) => ({
-              value,
-              text: POSITION_OPTION_LABEL[value],
-            }))}
-            onSelect={setPosition}
-            selectable={isCurrentStep}
-          />
+    <L.FlexCol
+      w={"100%"}
+      flex={1}
+      pv={30}
+      ph={30}
+      alignItems="center"
+      justifyContent="center"
+    >
+      <L.FlexCol alignItems="center" w={"60%"}>
+        <Font.Body
+          type={"16_medium_multi"}
+          color={"PRIMARY_500"}
+          mb={20}
+          textAlign="center"
+        >
+          {FIXED_CONVO[CV_STEP].ENG}
+        </Font.Body>
 
-          <S.PdfFileInput
-            type={"file"}
-            accept=".pdf"
-            id="image_uploads"
-            ref={fileRef}
-            disabled={!isCurrentStep}
-            onChange={handleOnFileChange}
-            multiple={false}
-          />
-        </L.FlexCol>
-      )}
-
-      {isCurrentStep && <GoNextButton onClick={goNext} canGoNext={canGoNext} />}
+        <SelectChips<InterviewTypes.Position>
+          options={POSITION_OPTIONS.map((value) => ({
+            value,
+            text: POSITION_OPTION_LABEL[value],
+          }))}
+          onSelect={setPosition}
+          selectable={isCurrentStep}
+        />
+        <S.PdfFileInput
+          type={"file"}
+          accept=".pdf"
+          id="image_uploads"
+          ref={fileRef}
+          disabled={!isCurrentStep}
+          onChange={handleOnFileChange}
+          multiple={false}
+        />
+        <GoNextButton onClick={goNext} canGoNext={canGoNext} />
+      </L.FlexCol>
     </L.FlexCol>
   );
 };
