@@ -1,19 +1,33 @@
-import { INTERVIEW_CONSTS } from "@constants";
+import { StepContextProvider, useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
+import React from "react";
 import * as S from "./ChatMain.styles";
-import ChatMainContextProvider from "./ChatMainContext";
-import Intro from "./components/Steps/Intro/Intro";
-import TextInput from "./components/TextInput/TextInput";
-import UploadCv from "./components/Steps/UploadCv/UploadCv";
-import Questions from "./components/Steps/Questions/Questions";
-import { useRef } from "react";
+import CameraReady from "./components/Steps/CameraReady/CameraReady";
 import Evaluation from "./components/Steps/Evaluation/Evaluation";
-import CameraView from "./components/CameraView/CameraView";
+import Intro from "./components/Steps/Intro/Intro";
+import Questions from "./components/Steps/Questions/Questions";
+import UploadCv from "./components/Steps/UploadCv/UploadCv";
+
+const StepComponent: React.FC = () => {
+  const { step } = useStepContext();
+
+  switch (step) {
+    case "INTRO":
+      return <Intro />;
+    case "CAMERA_READY":
+      return <CameraReady />;
+    case "EVALUATION":
+      return <Evaluation />;
+    case "QUESTIONS":
+      return <Questions />;
+    case "UPLOAD_CV":
+      return <UploadCv />;
+  }
+};
 
 const ChatMain = () => {
-  const chatDivRef = useRef<HTMLDivElement>(null);
   return (
-    <ChatMainContextProvider scrollRef={chatDivRef}>
+    <StepContextProvider>
       <L.FlexCol
         w="100%"
         style={{
@@ -22,16 +36,12 @@ const ChatMain = () => {
           overflowY: "scroll",
         }}
         bgColor="BASIC_WHITE"
-        ref={chatDivRef}
       >
         <S.Container>
-          <Intro />
-          <UploadCv />
-          <Questions />
-          <Evaluation />
+          <StepComponent />
         </S.Container>
       </L.FlexCol>
-    </ChatMainContextProvider>
+    </StepContextProvider>
   );
 };
 

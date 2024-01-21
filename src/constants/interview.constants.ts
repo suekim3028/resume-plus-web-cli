@@ -1,7 +1,7 @@
 import { InterviewTypes } from "@types";
 
 export const FIXED_STEPS = ["INTRO", "UPLOAD_CV", "CAMERA_READY"] as const;
-export const VARIANT_STEPS = ["COMMON_Q", "PERSONAL_Q", "EVALUATION"] as const;
+export const VARIANT_STEPS = ["QUESTIONS", "EVALUATION"] as const;
 
 export const STEPS = [...FIXED_STEPS, ...VARIANT_STEPS] as const;
 
@@ -30,7 +30,7 @@ export const LANG_OPTION_LABEL: Record<InterviewTypes.Lang, string> = {
   KOR: "Korean",
 };
 
-export const POSITION_OPTIONS = ["ai", "be", "fe", "mobile"];
+export const POSITION_OPTIONS = ["ai", "be", "fe", "mobile"] as const;
 export const POSITION_OPTION_LABEL: Record<InterviewTypes.Position, string> = {
   ai: "AI/ML",
   be: "Backend",

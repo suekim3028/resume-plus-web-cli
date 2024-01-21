@@ -27,7 +27,8 @@
       "@storage": ["src/storage"],
       "@components": ["src/components"],
       "@utils": ["src/utils"],
-      "@apis": ["src/apis"]
+      "@apis": ["src/apis"],
+      "@contexts": ["src/contexts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

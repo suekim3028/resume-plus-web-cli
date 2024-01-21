@@ -11,7 +11,7 @@ type UploadCvParams = {
 };
 
 export const uploadCV = async (params: UploadCvParams) => {
-  return API.post<ApiTypes.SuccessRes>("/cv", params);
+  // return API.post<ApiTypes.SuccessRes>("/cv", params);
 };
 
 /**
@@ -23,12 +23,17 @@ type GetCommonQResponse = {
 };
 
 export const getCommonQ = async (): Promise<GetCommonQResponse> => {
-  const { tech_questions: techQuestions, behav_questions: behavQuestions } =
-    await API.get<{
-      tech_questions: { id: number; question: string }[];
-      behav_questions: { id: number; question: string }[];
-    }>("/common_question");
-  return { techQuestions, behavQuestions };
+  // const { tech_questions: techQuestions, behav_questions: behavQuestions } =
+  //   await API.get<{
+  //     tech_questions: { id: number; question: string }[];
+  //     behav_questions: { id: number; question: string }[];
+  //   }>("/common_question");
+
+  const samples = Array.from({ length: 10 }, (_, id) => ({
+    id,
+    question: `${id} This is random question for test`,
+  }));
+  return { techQuestions: samples, behavQuestions: samples };
 };
 
 /**
@@ -54,17 +59,23 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
-export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
-    answer,
-  });
+export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) => {};
+// API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
+//   answer,
+// });
 
-export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
-    answer,
-  });
+export const answerBehavQ = ({
+  questionId,
+  answer,
+}: AnswerQuestionParams) => {};
+// API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
+//   answer,
+// });
 
-export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
-    answer,
-  });
+export const answerPersonalQ = ({
+  questionId,
+  answer,
+}: AnswerQuestionParams) => {};
+// API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
+//   answer,
+// });

@@ -1,7 +1,9 @@
 import { interviewApis } from "@apis";
 import { INTERVIEW_CONSTS } from "@constants";
 import { InterviewTypes } from "@types";
+import { withErrorHandling } from "@utils";
 import {
+  MutableRefObject,
   PropsWithChildren,
   RefObject,
   createContext,
@@ -10,8 +12,6 @@ import {
   useState,
 } from "react";
 import { pdfjs } from "react-pdf";
-import CommonQ from "./components/Steps/Questions/Questions";
-import { withErrorHandling } from "@utils";
 const { STEPS } = INTERVIEW_CONSTS;
 
 type ChatMainContextValue = {
@@ -24,9 +24,10 @@ type ChatMainContextValue = {
   setLocalPdfFile: (file: File | null) => void;
   canGoNext: boolean;
   answer: (text: string) => void;
-  questionBubbles: { isMine: boolean; text: string }[];
+  currentQIdx: number;
   getFeedback: () => InterviewTypes.Feedback[];
   scrollToBottom: () => void;
+  questionsRef: MutableRefObject<InterviewTypes.Question[]>;
 };
 
 const ChatMainContext = createContext<ChatMainContextValue | null>(null);
@@ -45,16 +46,13 @@ const ChatMainContextProvider = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const questions = useRef<InterviewTypes.Question[]>([]);
-  const currentQIdx = useRef(-1);
+
+  const [currentQIdx, setCurrentQIdx] = useState(-1);
 
   const unevaluatedQs = useRef<number[]>([]);
   const feedbackObj = useRef<Record<number, InterviewTypes.Feedback>>({});
 
   const feedbackResolver = useRef<null | ((value: null) => void)>(null);
-
-  const [questionBubbles, setQuestionsBubbles] = useState<
-    { isMine: boolean; text: string }[]
-  >([]);
 
   const cvTextRef = useRef("");
 
@@ -87,11 +85,7 @@ const ChatMainContextProvider = ({
       }, 300);
     });
 
-    currentQIdx.current++;
-    setQuestionsBubbles((prev) => [
-      ...prev,
-      { isMine: false, text: questions.current[currentQIdx.current].question },
-    ]);
+    setCurrentQIdx((p) => p + 1);
 
     scrollToBottom();
   };
@@ -235,6 +229,7 @@ const ChatMainContextProvider = ({
         ? interviewApis.answerTechQ
         : interviewApis.answerPersonalQ;
 
+    return;
     const { isError: isAnswerError, data: res } = await withErrorHandling(() =>
       answerFn({
         questionId,
@@ -256,11 +251,8 @@ const ChatMainContextProvider = ({
 
   const answer = async (answer: string) => {
     console.log("=========ANSWER=====");
-    startEvaluation(currentQIdx.current, answer);
-    setQuestionsBubbles((prev) => [...prev, { isMine: true, text: answer }]);
-    currentQIdx.current === questions.current.length - 1
-      ? goNext()
-      : askNextQ();
+    startEvaluation(currentQIdx, answer);
+    currentQIdx === questions.current.length - 1 ? goNext() : askNextQ();
 
     scrollToBottom();
   };
@@ -271,7 +263,7 @@ const ChatMainContextProvider = ({
   const value: ChatMainContextValue = {
     step,
     goNext,
-    questionBubbles,
+    questionsRef: questions,
     setPosition,
     setLanguage: setLang,
     isLoading,
@@ -281,6 +273,7 @@ const ChatMainContextProvider = ({
     answer,
     scrollToBottom,
     getFeedback,
+    currentQIdx,
   };
 
   return (
