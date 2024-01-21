@@ -1,25 +1,17 @@
 import { INTERVIEW_CONSTS } from "@constants";
-import Bubble from "../../Bubble/Bubble";
-import { Font, Layout as L } from "@design-system";
-import SelectChips from "../../SelectChips/SelectChips";
-import React, { useState } from "react";
-import { useChatMainContext } from "../../../ChatMainContext";
-import { InterviewTypes } from "@types";
-import GoNextButton from "../../GoNextButton/GoNextButton";
-import CameraWrapper from "../../CameraWrapper/CameraWrapper";
 import { useStepContext } from "@contexts";
+import { Font, Layout as L } from "@design-system";
+import { InterviewTypes } from "@types";
+import React from "react";
+import CameraWrapper from "../../CameraWrapper/CameraWrapper";
+import GoNextButton from "../../GoNextButton/GoNextButton";
 
-const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
+const { FIXED_CONVO } = INTERVIEW_CONSTS;
 
 const CAMERA_READY_STEP: InterviewTypes.Step = "CAMERA_READY";
 
 const CameraReady = () => {
-  const { step, goNext, setLanguage } = useChatMainContext();
-  const { cameraReady } = useStepContext();
-
-  const isCurrentStep = step === CAMERA_READY_STEP;
-
-  if (!isCurrentStep) return <></>;
+  const { cameraReady, goNext } = useStepContext();
 
   return (
     <CameraWrapper>
@@ -46,7 +38,14 @@ const CameraReady = () => {
             {FIXED_CONVO[CAMERA_READY_STEP].ENG}
           </Font.Body>
         </L.FlexCol>
-        <GoNextButton onClick={goNext} canGoNext={cameraReady} text={"START"} />
+        <GoNextButton
+          onClick={goNext}
+          canGoNext={cameraReady}
+          text={{
+            ENG: "START",
+            KOR: "시작하기",
+          }}
+        />
       </L.FlexCol>
     </CameraWrapper>
   );

@@ -1,14 +1,10 @@
-import { DIMENSIONS } from "@constants";
-import { useOnWindowSizeChange } from "@hooks";
-import { withErrorHandling } from "@utils";
-import React, { useCallback, useEffect, useRef } from "react";
-import { Font, Layout as L } from "@design-system";
-import { useChatMainContext } from "../../ChatMainContext";
 import { useStepContext } from "@contexts";
+import { Font, Layout as L } from "@design-system";
+import { useOnWindowSizeChange } from "@hooks";
+import React, { useCallback } from "react";
 
 const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
-  const { step, goNext, setLanguage, canGoNext } = useChatMainContext();
-  const { onCameraReady } = useStepContext();
+  const { onCameraReady, cameraReady } = useStepContext();
 
   useOnWindowSizeChange(
     useCallback(() => {
@@ -33,7 +29,7 @@ const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
           playsInline
         />
       </L.AbsoluteFill>
-      {true && (
+      {!cameraReady && (
         <L.AbsoluteFill bgColor="GRAY_800">
           <L.FlexCol
             w={"100%"}
