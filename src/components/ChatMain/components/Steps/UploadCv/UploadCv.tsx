@@ -1,11 +1,15 @@
+import { interviewApis } from "@apis";
 import { INTERVIEW_CONSTS } from "@constants";
-import Bubble from "../../Bubble/Bubble";
+import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
-import SelectChips from "../../SelectChips/SelectChips";
-import React, { useRef, useState } from "react";
-import { useChatMainContext } from "../../../ChatMainContext";
+import { langStore, positionStore } from "@store";
 import { InterviewTypes } from "@types";
+import { withErrorHandling } from "@utils";
+import React, { useRef, useState } from "react";
+import { pdfjs } from "react-pdf";
+import { useRecoilState, useRecoilValue } from "recoil";
 import GoNextButton from "../../GoNextButton/GoNextButton";
+import SelectChips from "../../SelectChips/SelectChips";
 import * as S from "./UploadCv.styles";
 
 const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
@@ -14,14 +18,15 @@ const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
 const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
 const UploadCv = () => {
-  const { step, goNext, setPosition, setLocalPdfFile, canGoNext } =
-    useChatMainContext();
-
-  const isCurrentStep = step === CV_STEP;
-
   const fileRef = useRef<HTMLInputElement>(null);
+  const _lang = useRecoilValue(langStore);
+  const lang = _lang || "ENG";
 
-  fileRef.current?.files;
+  const [position, setPosition] = useRecoilState(positionStore);
+  const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
+  const cvTextRef = useRef("");
+
+  const { goNext, questionsRef } = useStepContext();
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -31,7 +36,61 @@ const UploadCv = () => {
     setLocalPdfFile(files[0]);
   };
 
-  if (!isCurrentStep) return <></>;
+  const canGoNext = !!position && !!localPdfFile;
+
+  const uploadPdf = async () => {
+    if (!localPdfFile || !position) return false;
+    pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+    const document = await pdfjs.getDocument(await localPdfFile.arrayBuffer())
+      .promise;
+
+    for (let index of Array.from({ length: document.numPages }, (_, i) => i)) {
+      const page = await document.getPage(index + 1);
+      const pageContent = await page.getTextContent();
+      pageContent.items.map((item) => {
+        if ("str" in item) {
+          cvTextRef.current = [cvTextRef.current, item.str].join(" ");
+        }
+      });
+    }
+    const { isError: uploadCvError } = await withErrorHandling(() =>
+      interviewApis.uploadCV({
+        content: cvTextRef.current,
+        position,
+      })
+    );
+
+    return uploadCvError;
+  };
+
+  const handleOnClickNext = async () => {
+    // TODO: Loading
+
+    await uploadPdf();
+
+    const { isError: isCommonQError, data } = await withErrorHandling(() =>
+      interviewApis.getCommonQ()
+    );
+    if (isCommonQError) return;
+    const { behavQuestions, techQuestions } = data;
+
+    const commonQuestions = [
+      ...behavQuestions.map(
+        (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
+      ),
+      ...techQuestions.map(
+        (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
+      ),
+    ].toSorted((_a, _b) => Math.random() - 0.5);
+
+    questionsRef.current = commonQuestions;
+    console.log({ commonQuestions });
+
+    goNext();
+
+    console.log("-----common questions added----");
+  };
 
   return (
     <L.FlexCol
@@ -49,7 +108,7 @@ const UploadCv = () => {
           mb={20}
           textAlign="center"
         >
-          {FIXED_CONVO[CV_STEP].ENG}
+          {FIXED_CONVO[CV_STEP][lang]}
         </Font.Body>
 
         <SelectChips<InterviewTypes.Position>
@@ -58,18 +117,16 @@ const UploadCv = () => {
             text: POSITION_OPTION_LABEL[value],
           }))}
           onSelect={setPosition}
-          selectable={isCurrentStep}
         />
         <S.PdfFileInput
           type={"file"}
           accept=".pdf"
           id="image_uploads"
           ref={fileRef}
-          disabled={!isCurrentStep}
           onChange={handleOnFileChange}
           multiple={false}
         />
-        <GoNextButton onClick={goNext} canGoNext={canGoNext} />
+        <GoNextButton onClick={handleOnClickNext} canGoNext={canGoNext} />
       </L.FlexCol>
     </L.FlexCol>
   );
