@@ -5,7 +5,7 @@ import { useTheme } from "styled-components";
 const SelectChips = <T,>({
   options,
   onSelect,
-  selectable,
+  disabled,
 }: SelectChipsProps<T>) => {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
@@ -22,10 +22,10 @@ const SelectChips = <T,>({
               ml={idx === 0 ? 0 : 10}
               rounded={10}
               bgColor={selected ? "PRIMARY_300" : "BASIC_WHITE"}
-              hoverBgColor={selected || !selectable ? undefined : "PRIMARY_100"}
+              hoverBgColor={selected || disabled ? undefined : "PRIMARY_100"}
               outline={"GRAY_400"}
               onClick={() => {
-                if (!selectable) return;
+                if (disabled) return;
                 let isNull = false;
                 setSelectedIdx((p) => {
                   if (p === idx) {
@@ -55,7 +55,7 @@ const SelectChips = <T,>({
 type SelectChipsProps<T> = {
   options: { value: T; text: string }[];
   onSelect: (option: T | null) => void;
-  selectable: boolean;
+  disabled?: boolean;
 };
 
 export default SelectChips;

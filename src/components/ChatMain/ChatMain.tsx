@@ -4,7 +4,7 @@ import React from "react";
 import * as S from "./ChatMain.styles";
 import CameraReady from "./components/Steps/CameraReady/CameraReady";
 import Evaluation from "./components/Steps/Evaluation/Evaluation";
-import Intro from "./components/Steps/Intro/Intro";
+import Intro from "./components/Steps/SelectLang/SelectLang";
 import Questions from "./components/Steps/Questions/Questions";
 import UploadCv from "./components/Steps/UploadCv/UploadCv";
 
@@ -12,7 +12,7 @@ const StepComponent: React.FC = () => {
   const { step } = useStepContext();
 
   switch (step) {
-    case "INTRO":
+    case "SELECT_LANG":
       return <Intro />;
     case "CAMERA_READY":
       return <CameraReady />;

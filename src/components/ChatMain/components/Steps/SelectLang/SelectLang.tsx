@@ -1,22 +1,20 @@
 import { INTERVIEW_CONSTS } from "@constants";
-import Bubble from "../../Bubble/Bubble";
+import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
-import SelectChips from "../../SelectChips/SelectChips";
-import React, { useState } from "react";
-import { useChatMainContext } from "../../../ChatMainContext";
+import { langStore } from "@store";
 import { InterviewTypes } from "@types";
+import React from "react";
+import { useRecoilState } from "recoil";
 import GoNextButton from "../../GoNextButton/GoNextButton";
+import SelectChips from "../../SelectChips/SelectChips";
 
 const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
 
-const INTRO_STEP: InterviewTypes.Step = "INTRO";
+const SelectLang = () => {
+  const [lang, setLang] = useRecoilState(langStore);
+  const { goNext } = useStepContext();
 
-const Intro = () => {
-  const { step, goNext, setLanguage, canGoNext } = useChatMainContext();
-
-  const isCurrentStep = step === INTRO_STEP;
-
-  if (!isCurrentStep) return <></>;
+  const canGoNext = !!lang;
 
   return (
     <L.FlexCol
@@ -34,7 +32,7 @@ const Intro = () => {
           mb={20}
           textAlign="center"
         >
-          {FIXED_CONVO[INTRO_STEP].ENG}
+          {FIXED_CONVO["SELECT_LANG"]["ENG"]}
         </Font.Body>
 
         <SelectChips<InterviewTypes.Lang>
@@ -42,8 +40,7 @@ const Intro = () => {
             value,
             text: LANG_OPTION_LABEL[value],
           }))}
-          onSelect={setLanguage}
-          selectable={isCurrentStep}
+          onSelect={setLang}
         />
         <GoNextButton onClick={goNext} canGoNext={canGoNext} />
       </L.FlexCol>
@@ -51,4 +48,4 @@ const Intro = () => {
   );
 };
 
-export default React.memo(Intro);
+export default React.memo(SelectLang);

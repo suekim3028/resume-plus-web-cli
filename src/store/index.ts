@@ -6,9 +6,9 @@ export const userStore = atom<null | { username: string }>({
   default: null,
 });
 
-export const langStore = atom<InterviewTypes.Lang>({
+export const langStore = atom<InterviewTypes.Lang | null>({
   key: "lang",
-  default: "ENG",
+  default: null,
 });
 
 export const positionStore = atom<InterviewTypes.Position | null>({

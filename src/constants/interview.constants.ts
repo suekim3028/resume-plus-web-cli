@@ -1,6 +1,10 @@
 import { InterviewTypes } from "@types";
 
-export const FIXED_STEPS = ["INTRO", "UPLOAD_CV", "CAMERA_READY"] as const;
+export const FIXED_STEPS = [
+  "SELECT_LANG",
+  "UPLOAD_CV",
+  "CAMERA_READY",
+] as const;
 export const VARIANT_STEPS = ["QUESTIONS", "EVALUATION"] as const;
 
 export const STEPS = [...FIXED_STEPS, ...VARIANT_STEPS] as const;
@@ -9,7 +13,7 @@ export const FIXED_CONVO: Record<
   InterviewTypes.FixedStep,
   { KOR: string; ENG: string }
 > = {
-  INTRO: {
+  SELECT_LANG: {
     KOR: `Welcome to Interview Bot !\nPlease select your preferred language.`,
     ENG: `Welcome to Interview Bot !\nPlease select your preferred language.`,
   },
