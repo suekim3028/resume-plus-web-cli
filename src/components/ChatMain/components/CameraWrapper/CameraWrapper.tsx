@@ -66,9 +66,8 @@ const getDevices = async ({ onReady }: { onReady: () => void }) => {
       },
       audio: true,
     });
-    console.log({ videoMediaStream });
-
-    if (!videoMediaStream) throw new Error();
+    // TODO(Sue): 삭제
+    // if (!videoMediaStream) throw new Error();
     console.log(videoMediaStream);
     const video = _video as HTMLVideoElement;
     video.srcObject = videoMediaStream;

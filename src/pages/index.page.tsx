@@ -3,5 +3,5 @@ import { useUser } from "@hooks";
 
 export default function Home() {
   const { hasUser } = useUser();
-  return !hasUser ? <ChatMain /> : <Login />;
+  return hasUser ? <ChatMain /> : <Login />;
 }

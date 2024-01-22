@@ -7,6 +7,8 @@ import Bubble from "../../components/Bubble/Bubble";
 import CameraWrapper from "../../components/CameraWrapper/CameraWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import TextInput from "../../components/TextInput/TextInput";
+import { useRecoilValue } from "recoil";
+import { langStore } from "@store";
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] =
@@ -15,6 +17,8 @@ const Questions = () => {
   const [status, setStatus] = useState<"QUESTION" | "ANSWER" | "LOADING">(
     "LOADING"
   );
+  const _lang = useRecoilValue(langStore);
+  const lang = _lang || "ENG";
 
   const { goNext } = useStepContext();
 
@@ -37,10 +41,21 @@ const Questions = () => {
     setStatus("QUESTION");
   };
 
+  const updateVoice = () => {
+    if (!!voiceRef.current) return;
+    speechSynthesisRef.current = window.speechSynthesis;
+    const voices = speechSynthesisRef.current.getVoices();
+    const voice = voices.find(
+      (v) => v.lang === (lang === "ENG" ? "en-US" : "ko")
+    );
+    voiceRef.current = voice;
+  };
+
   useEffect(() => {
     window.speechSynthesis.cancel();
     if (!currentQuestion?.question) return;
     const utterance = new SpeechSynthesisUtterance(currentQuestion.question);
+    updateVoice();
     utterance.voice = voiceRef.current ?? null;
     window?.speechSynthesis?.speak(utterance);
     utterance.addEventListener("end", () => setStatus("ANSWER"));
@@ -50,12 +65,7 @@ const Questions = () => {
     };
   }, [currentQuestion?.question]);
 
-  useEffect(() => {
-    speechSynthesisRef.current = window.speechSynthesis;
-    const voices = speechSynthesisRef.current.getVoices();
-    const voice = voices.find((v) => v.lang === "en-US");
-    voiceRef.current = voice;
-  }, []);
+  useEffect(updateVoice, []);
 
   useEffect(() => {
     (async () => {
