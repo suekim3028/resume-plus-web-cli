@@ -8,8 +8,8 @@ import { withErrorHandling } from "@utils";
 import React, { useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
 import { useRecoilState, useRecoilValue } from "recoil";
-import GoNextButton from "../../GoNextButton/GoNextButton";
-import SelectChips from "../../SelectChips/SelectChips";
+import GoNextButton from "../../components/GoNextButton/GoNextButton";
+import SelectChips from "../../components/SelectChips/SelectChips";
 import * as S from "./UploadCv.styles";
 import { InterviewManager } from "@libs";
 

@@ -5,8 +5,8 @@ import { langStore } from "@store";
 import { InterviewTypes } from "@types";
 import React from "react";
 import { useRecoilState } from "recoil";
-import GoNextButton from "../../GoNextButton/GoNextButton";
-import SelectChips from "../../SelectChips/SelectChips";
+import GoNextButton from "../../components/GoNextButton/GoNextButton";
+import SelectChips from "../../components/SelectChips/SelectChips";
 
 const { FIXED_CONVO, LANG_OPTIONS, LANG_OPTION_LABEL } = INTERVIEW_CONSTS;
 

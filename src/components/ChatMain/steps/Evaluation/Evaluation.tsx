@@ -1,21 +1,37 @@
 import { INTERVIEW_CONSTS } from "@constants";
 import { Font, Layout as L } from "@design-system";
-import { StyleTypes } from "@types";
-import { useMemo } from "react";
-import { useChatMainContext } from "../../ChatMainContext";
-import { isScoreEval } from "./Feedback.utils";
+import { InterviewManager } from "@libs";
+import { InterviewTypes } from "@types";
+import React, { useEffect, useState } from "react";
+import InfoRow from "../../components/InfoRow/InfoRow";
+import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import { isScoreEval } from "./Evaluation.utils";
 
-const Feedback = () => {
-  const { getFeedback, scrollToBottom } = useChatMainContext();
-  const feedbacks = useMemo(() => {
-    scrollToBottom();
-    return getFeedback();
+const EvaluationStep: InterviewTypes.Step = "EVALUATION";
+
+const Evaluation = () => {
+  const [feedbacks, setFeedbacks] = useState<InterviewTypes.Feedback[] | null>(
+    null
+  );
+
+  useEffect(() => {
+    (async () => {
+      setFeedbacks(await InterviewManager.getFeedbackArr());
+    })();
   }, []);
+
+  if (!feedbacks)
+    return (
+      <L.FlexCol w={"100%"} mt={20}>
+        <LoadingIndicator indicator="Analyzing your responses for feedback..." />
+      </L.FlexCol>
+    );
 
   return (
     <L.FlexRow
       gap={20}
       w={"100%"}
+      mt={20}
       style={{ flexWrap: "wrap" }}
       justifyContent="center"
     >
@@ -99,41 +115,4 @@ const Feedback = () => {
   );
 };
 
-const InfoRow = ({
-  title,
-  body,
-  mt,
-  bgColor,
-}: {
-  mt?: number;
-  title: string;
-  bgColor?: StyleTypes.ColorKeys;
-  body: string;
-}) => {
-  return (
-    <L.FlexRow mt={mt} alignItems="flex-start" w={"100%"}>
-      <L.LayoutBase w={80}>
-        <L.LayoutBase
-          rounded={20}
-          bgColor={bgColor || "GRAY_200"}
-          pv={4}
-          ph={10}
-        >
-          <Font.Body type={"14_semibold_single"}>{title}</Font.Body>
-        </L.LayoutBase>
-      </L.LayoutBase>
-      <L.FlexCol flex={1} style={{ margin: "auto" }}>
-        <Font.Body
-          type={"14_medium_single"}
-          ml={8}
-          color={"GRAY_800"}
-          wordBreak="break-all"
-        >
-          {body}
-        </Font.Body>
-      </L.FlexCol>
-    </L.FlexRow>
-  );
-};
-
-export default Feedback;
+export default React.memo(Evaluation);

@@ -3,8 +3,8 @@ import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
 import { InterviewTypes } from "@types";
 import React from "react";
-import CameraWrapper from "../../CameraWrapper/CameraWrapper";
-import GoNextButton from "../../GoNextButton/GoNextButton";
+import CameraWrapper from "../../components/CameraWrapper/CameraWrapper";
+import GoNextButton from "../../components/GoNextButton/GoNextButton";
 
 const { FIXED_CONVO } = INTERVIEW_CONSTS;
 

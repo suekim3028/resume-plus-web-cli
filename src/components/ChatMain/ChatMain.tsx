@@ -2,11 +2,11 @@ import { StepContextProvider, useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
 import React from "react";
 import * as S from "./ChatMain.styles";
-import CameraReady from "./components/Steps/CameraReady/CameraReady";
-import Evaluation from "./components/Steps/Evaluation/Evaluation";
-import Intro from "./components/Steps/SelectLang/SelectLang";
-import Questions from "./components/Steps/Questions/Questions";
-import UploadCv from "./components/Steps/UploadCv/UploadCv";
+import CameraReady from "./steps/CameraReady/CameraReady";
+import Evaluation from "./steps/Evaluation/Evaluation";
+import Intro from "./steps/SelectLang/SelectLang";
+import Questions from "./steps/Questions/Questions";
+import UploadCv from "./steps/UploadCv/UploadCv";
 
 const StepComponent: React.FC = () => {
   const { step } = useStepContext();

@@ -3,10 +3,10 @@ import { Layout as L } from "@design-system";
 import { InterviewManager } from "@libs";
 import { InterviewTypes } from "@types";
 import React, { useEffect, useRef, useState } from "react";
-import Bubble from "../../Bubble/Bubble";
-import CameraWrapper from "../../CameraWrapper/CameraWrapper";
-import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
-import TextInput from "../../TextInput/TextInput";
+import Bubble from "../../components/Bubble/Bubble";
+import CameraWrapper from "../../components/CameraWrapper/CameraWrapper";
+import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import TextInput from "../../components/TextInput/TextInput";
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] =

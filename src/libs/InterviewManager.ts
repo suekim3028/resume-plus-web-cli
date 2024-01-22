@@ -132,15 +132,24 @@ class _InterviewManager {
     }
   };
 
-  public getFeedback = async () => {
+  private genFeedbackArr = () => {
+    return [...this.commonQs, ...this.personalQs].map((question) => {
+      const feedback = this.feedbacks[question.id];
+      if (!feedback) throw new Error();
+      return feedback;
+    });
+  };
+
+  public getFeedbackArr = async () => {
     if (this.checkFeedbackFinish()) {
-      return this.feedbacks;
+      return this.genFeedbackArr();
     }
 
     await new Promise(
       (resolver: (value: null) => void) => (this.feedbackResolver = resolver)
     );
-    return this.feedbacks;
+
+    return this.genFeedbackArr();
   };
 }
 
