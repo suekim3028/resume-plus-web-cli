@@ -12,8 +12,10 @@ class _InterviewManager {
   private commonQResolver: ((value: null) => void) | null = null;
   private personalQResolver: ((value: null) => void) | null = null;
 
-  private currentCommonQIdx = -1;
-  private currentPersonalQIdx = -1;
+  private currentCommonQIdx = 0;
+  private currentPersonalQIdx = 0;
+  private commonQAllAnswered = false;
+  private personalQAllAnswered = false;
 
   private feedbacks: Record<number, InterviewTypes.Feedback | null> = {};
   private feedbackResolver: ((value: null) => void) | null = null;
@@ -31,7 +33,7 @@ class _InterviewManager {
     await new Promise(
       (resolver: (value: null) => void) => (this.personalQResolver = resolver)
     );
-    return this.personalQResolver;
+    return;
   };
 
   private getCommonQs = async () => {
@@ -58,7 +60,7 @@ class _InterviewManager {
     }
   };
 
-  private getPrivateQs = async () => {
+  private getPersonalQs = async () => {
     const { isError: isPersonalQError, data: personalQData } =
       await withErrorHandling(() => interviewApis.getPersonalQ());
     if (isPersonalQError) return;
@@ -78,23 +80,16 @@ class _InterviewManager {
 
   public initQuestions = () => {
     this.getCommonQs();
-    this.getPrivateQs();
+    this.getPersonalQs();
   };
 
   public getNextQuestion = async () => {
-    await this.waitForCommonQ();
-    if (this.currentCommonQIdx < this.commonQs.length - 1) {
-      this.currentCommonQIdx += 1;
+    if (this.commonQAllAnswered && this.personalQAllAnswered) return null;
+    if (!this.commonQAllAnswered) {
+      await this.waitForCommonQ();
       return this.commonQs[this.currentCommonQIdx];
     }
     await this.waitForPersonalQ();
-
-    this.currentPersonalQIdx += 1;
-
-    if (this.currentPersonalQIdx === this.personalQs.length - 1) {
-      return null;
-    }
-
     return this.personalQs[this.currentPersonalQIdx];
   };
 
@@ -104,6 +99,20 @@ class _InterviewManager {
     Object.values(this.feedbacks).every(Boolean);
 
   public answer = async (question: InterviewTypes.Question, answer: string) => {
+    if (!this.commonQAllAnswered) {
+      if (this.currentCommonQIdx === this.commonQs.length - 1) {
+        this.commonQAllAnswered = true;
+      } else {
+        this.currentCommonQIdx += 1;
+      }
+    } else {
+      if (this.currentPersonalQIdx === this.personalQs.length - 1) {
+        this.personalQAllAnswered = true;
+      } else {
+        this.currentPersonalQIdx += 1;
+      }
+    }
+
     const { type, id } = question;
     const answerFn =
       type === "behav_q"
@@ -119,10 +128,7 @@ class _InterviewManager {
       })
     );
 
-    console.log({ question, type, res });
-
     if (isAnswerError) return;
-
     this.feedbacks[id] = res;
 
     // 마지막 피드백인 경우 resolve

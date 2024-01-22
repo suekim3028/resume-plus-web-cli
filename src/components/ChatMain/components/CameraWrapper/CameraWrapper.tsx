@@ -1,16 +1,18 @@
 import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
 import { useOnWindowSizeChange } from "@hooks";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { onCameraReady, cameraReady } = useStepContext();
 
-  useOnWindowSizeChange(
-    useCallback(() => {
-      getDevices({ onReady: onCameraReady });
-    }, [onCameraReady])
-  );
+  const setCamera = useCallback(() => {
+    getDevices({ onReady: onCameraReady });
+  }, [onCameraReady]);
+
+  useOnWindowSizeChange(setCamera);
+
+  useEffect(setCamera, [setCamera]);
 
   return (
     <L.FlexCol w="100%" h={"100%"}>
@@ -62,8 +64,12 @@ const getDevices = async ({ onReady }: { onReady: () => void }) => {
       video: {
         facingMode: { ideal: "user" },
       },
+      audio: true,
     });
+    console.log({ videoMediaStream });
 
+    if (!videoMediaStream) throw new Error();
+    console.log(videoMediaStream);
     const video = _video as HTMLVideoElement;
     video.srcObject = videoMediaStream;
     onReady();

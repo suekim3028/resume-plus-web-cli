@@ -71,8 +71,6 @@ const UploadCv = () => {
     await uploadPdf();
     InterviewManager.initQuestions();
     goNext();
-
-    console.log("-----common questions added----");
   };
 
   return (

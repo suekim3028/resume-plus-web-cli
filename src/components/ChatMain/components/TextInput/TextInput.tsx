@@ -37,7 +37,6 @@ const TextInput = ({
     }: {
       results: SpeechRecognitionResultList;
     }) => {
-      console.log(results);
       const resultLength = results.length;
 
       const resultList = Array.from({ length: resultLength }, (_, i) =>
@@ -60,7 +59,6 @@ const TextInput = ({
     };
 
     // recognition.onerror = (e: any) => console.log(e);
-    console.log("=========================");
     recognition.start();
 
     return () => {
@@ -68,13 +66,12 @@ const TextInput = ({
     };
   }, []);
 
-  console.log(value);
   return (
     <L.FlexRow
       justifyContent="space-between"
       style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
       p={10}
-      rounded={20}
+      rounded={10}
       w={"100%"}
     >
       <L.FlexRow flex={1}>
@@ -82,7 +79,13 @@ const TextInput = ({
           <>{text}</>
         ))}
       </L.FlexRow>
-      <L.FlexCol onClick={handleClickSend} bgColor={"PRIMARY_500"}>
+      <L.FlexCol
+        onClick={handleClickSend}
+        bgColor={"PRIMARY_500"}
+        rounded={20}
+        pv={10}
+        ph={15}
+      >
         <Font.Body type={"16_semibold_single"} color={"BASIC_WHITE"}>
           answer
         </Font.Body>
