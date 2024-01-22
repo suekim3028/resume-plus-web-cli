@@ -11,6 +11,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import GoNextButton from "../../GoNextButton/GoNextButton";
 import SelectChips from "../../SelectChips/SelectChips";
 import * as S from "./UploadCv.styles";
+import { InterviewManager } from "@libs";
 
 const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
   INTERVIEW_CONSTS;
@@ -26,7 +27,7 @@ const UploadCv = () => {
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const cvTextRef = useRef("");
 
-  const { goNext, questionsRef } = useStepContext();
+  const { goNext } = useStepContext();
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -68,25 +69,7 @@ const UploadCv = () => {
     // TODO: Loading
 
     await uploadPdf();
-
-    const { isError: isCommonQError, data } = await withErrorHandling(() =>
-      interviewApis.getCommonQ()
-    );
-    if (isCommonQError) return;
-    const { behavQuestions, techQuestions } = data;
-
-    const commonQuestions = [
-      ...behavQuestions.map(
-        (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
-      ),
-      ...techQuestions.map(
-        (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
-      ),
-    ].toSorted((_a, _b) => Math.random() - 0.5);
-
-    questionsRef.current = commonQuestions;
-    console.log({ commonQuestions });
-
+    InterviewManager.initQuestions();
     goNext();
 
     console.log("-----common questions added----");

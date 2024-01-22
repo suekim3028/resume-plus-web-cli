@@ -59,23 +59,62 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
-export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) => {};
+export const answerTechQ = async ({
+  questionId,
+  answer,
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
+  await new Promise((resolver: (value: null) => void) => {
+    setTimeout(() => {
+      resolver(null);
+    }, Math.random() * 3000);
+  });
+  return {
+    question: "tech q " + questionId,
+    user_answer: "answer",
+    type: "tech_q",
+    evaluation: { score: 2, rationale: "fwewfwf" },
+  };
+};
 // API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
 //   answer,
 // });
 
-export const answerBehavQ = ({
+export const answerBehavQ = async ({
   questionId,
   answer,
-}: AnswerQuestionParams) => {};
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
+  await new Promise((resolver: (value: null) => void) => {
+    setTimeout(() => {
+      resolver(null);
+    }, Math.random() * 3000);
+  });
+  return {
+    question: "behav q" + questionId,
+    user_answer: "answer",
+    type: "behav_q",
+    evaluation: { score: 2, rationale: "fwewfwf" },
+  };
+};
 // API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
 //   answer,
 // });
 
-export const answerPersonalQ = ({
+export const answerPersonalQ = async ({
   questionId,
   answer,
-}: AnswerQuestionParams) => {};
+}: AnswerQuestionParams): Promise<InterviewTypes.Feedback> => {
+  await new Promise((resolver: (value: null) => void) => {
+    setTimeout(() => {
+      resolver(null);
+    }, Math.random() * 3000);
+  });
+  return {
+    question: "personal q" + questionId,
+    user_answer: "answer",
+    type: "personal_q",
+    evaluation: { score: 2, rationale: "fwewfwf" },
+  };
+};
 // API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
 //   answer,
 // });

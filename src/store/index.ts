@@ -15,8 +15,3 @@ export const positionStore = atom<InterviewTypes.Position | null>({
   key: "position",
   default: null,
 });
-
-export const feedbackStore = atom<Record<
-  number,
-  InterviewTypes.Feedback
-> | null>({ default: null, key: "feedback" });

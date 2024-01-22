@@ -1,24 +1,19 @@
-import { Font, Icons, Layout as L } from "@design-system";
-import * as S from "./TextInput.styles";
-import { useChatMainContext } from "../../ChatMainContext";
+import { Font, Layout as L } from "@design-system";
+import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
-import {
-  ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 
-const TextInput = () => {
-  const { isLoading, answer } = useChatMainContext();
+const TextInput = ({
+  onFinishAnswer,
+}: {
+  onFinishAnswer: (answer: string) => void;
+}) => {
   const theme = useTheme();
 
   const [value, setValue] = useState<string[]>([""]);
 
   const handleClickSend = () => {
     if (!value) return;
-    answer(value.join(" "));
+    onFinishAnswer(value.join(" "));
   };
 
   useEffect(() => {
@@ -87,10 +82,7 @@ const TextInput = () => {
           <>{text}</>
         ))}
       </L.FlexRow>
-      <L.FlexCol
-        onClick={() => answer(value.join(" "))}
-        bgColor={"PRIMARY_500"}
-      >
+      <L.FlexCol onClick={handleClickSend} bgColor={"PRIMARY_500"}>
         <Font.Body type={"16_semibold_single"} color={"BASIC_WHITE"}>
           answer
         </Font.Body>

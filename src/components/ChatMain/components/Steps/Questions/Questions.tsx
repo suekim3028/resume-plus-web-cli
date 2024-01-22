@@ -1,65 +1,80 @@
-import { Font, Layout as L } from "@design-system";
+import { useStepContext } from "@contexts";
+import { Layout as L } from "@design-system";
+import { InterviewManager } from "@libs";
 import { InterviewTypes } from "@types";
 import React, { useEffect, useRef, useState } from "react";
-import { useChatMainContext } from "../../../ChatMainContext";
 import Bubble from "../../Bubble/Bubble";
+import CameraWrapper from "../../CameraWrapper/CameraWrapper";
 import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import TextInput from "../../TextInput/TextInput";
-import CameraWrapper from "../../CameraWrapper/CameraWrapper";
-
-const CommonQStep: InterviewTypes.Step = "COMMON_Q";
-const PersonalQStep: InterviewTypes.Step = "PERSONAL_Q";
 
 const Questions = () => {
-  const { step, isAfterStep, questionsRef, currentQIdx, isLoading, answer } =
-    useChatMainContext();
+  const [currentQuestion, setCurrentQuestion] =
+    useState<InterviewTypes.Question | null>(null);
 
-  const isCurrentStep = step === CommonQStep || step === PersonalQStep;
-  const [isAnswering, setIsAnswering] = useState(false);
-  const currentQuestion = questionsRef.current[currentQIdx];
+  const [status, setStatus] = useState<"QUESTION" | "ANSWER" | "LOADING">(
+    "LOADING"
+  );
+
+  const { goNext } = useStepContext();
 
   const speechSynthesisRef = useRef<SpeechSynthesis>();
   const voiceRef = useRef<SpeechSynthesisVoice>();
 
-  useEffect(() => {
-    const currentQuestion = questionsRef.current[currentQIdx]?.question;
-    setIsAnswering(false);
+  const answer = async (text: string) => {
+    if (!currentQuestion) return;
+    InterviewManager.answer(currentQuestion, text);
 
-    if (currentQuestion && isCurrentStep) {
-      if (!speechSynthesisRef.current || !voiceRef.current) {
-        speechSynthesisRef.current = window.speechSynthesis;
-        const voices = speechSynthesisRef.current.getVoices();
+    setStatus("LOADING");
+    const question = await InterviewManager.getNextQuestion();
 
-        const voice = voices.find((v) => v.lang === "en-US");
-        console.log({ voice });
-        voiceRef.current = voice;
-      }
-
-      setIsAnswering(false);
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentQuestion);
-      utterance.voice = voiceRef.current ?? null;
-      window?.speechSynthesis?.speak(utterance);
-      utterance.addEventListener("end", () => setIsAnswering(true));
+    if (!question) {
+      goNext();
+      return;
     }
+
+    setCurrentQuestion(question);
+    setStatus("QUESTION");
+  };
+
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+    if (!currentQuestion?.question) return;
+    const utterance = new SpeechSynthesisUtterance(currentQuestion.question);
+    utterance.voice = voiceRef.current ?? null;
+    window?.speechSynthesis?.speak(utterance);
+    utterance.addEventListener("end", () => setStatus("ANSWER"));
 
     return () => {
       window.speechSynthesis?.cancel();
     };
-  }, [currentQIdx, isCurrentStep]);
+  }, [currentQuestion?.question]);
 
-  if (!isCurrentStep || !currentQuestion) return <></>;
+  useEffect(() => {
+    speechSynthesisRef.current = window.speechSynthesis;
+    const voices = speechSynthesisRef.current.getVoices();
+    const voice = voices.find((v) => v.lang === "en-US");
+    voiceRef.current = voice;
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const question = await InterviewManager.getNextQuestion();
+      setCurrentQuestion(question);
+      setStatus("QUESTION");
+    })();
+  }, []);
 
   return (
     <CameraWrapper>
       <L.FlexCol w={"100%"} p={40} h="100%" justifyContent="space-between">
-        {isLoading ? (
+        {status === "LOADING" || !currentQuestion ? (
           <LoadingIndicator indicator="・ ・ ・ Generating questions" />
         ) : (
           <Bubble content={currentQuestion.question} />
         )}
 
-        {isAnswering && <TextInput />}
+        {status === "ANSWER" && <TextInput onFinishAnswer={answer} />}
       </L.FlexCol>
     </CameraWrapper>
   );
