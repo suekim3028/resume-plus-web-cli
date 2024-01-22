@@ -1,7 +1,7 @@
 import { Font, Icons, Layout as L } from "@design-system";
 import { langStore } from "@store";
 import { InterviewTypes } from "@types";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 
 const LABEL: Record<InterviewTypes.Lang, string> = {
   ENG: "continue",

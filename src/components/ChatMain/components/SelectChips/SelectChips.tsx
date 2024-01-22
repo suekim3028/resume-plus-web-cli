@@ -1,6 +1,5 @@
-import { Font, Icons, Layout as L } from "@design-system";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { useTheme } from "styled-components";
+import { Font, Layout as L } from "@design-system";
+import { useState } from "react";
 
 const SelectChips = <T,>({
   options,

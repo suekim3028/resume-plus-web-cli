@@ -7,8 +7,6 @@ import InfoRow from "../../components/InfoRow/InfoRow";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { isScoreEval } from "./Evaluation.utils";
 
-const EvaluationStep: InterviewTypes.Step = "EVALUATION";
-
 const Evaluation = () => {
   const [feedbacks, setFeedbacks] = useState<InterviewTypes.Feedback[] | null>(
     null

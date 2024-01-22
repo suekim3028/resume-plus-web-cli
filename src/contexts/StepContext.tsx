@@ -1,14 +1,6 @@
 import { INTERVIEW_CONSTS } from "@constants";
 import { InterviewTypes } from "@types";
-import {
-  MutableRefObject,
-  PropsWithChildren,
-  RefObject,
-  createContext,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
 const { STEPS } = INTERVIEW_CONSTS;
 
 type StepContextValue = {

@@ -10,8 +10,8 @@ import { pdfjs } from "react-pdf";
 import { useRecoilState, useRecoilValue } from "recoil";
 import GoNextButton from "../../components/GoNextButton/GoNextButton";
 import SelectChips from "../../components/SelectChips/SelectChips";
-import * as S from "./UploadCv.styles";
 import { InterviewManager } from "@libs";
+import * as S from "./UploadCv.styles";
 
 const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
   INTERVIEW_CONSTS;
