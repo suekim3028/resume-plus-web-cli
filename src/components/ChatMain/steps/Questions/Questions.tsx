@@ -22,9 +22,6 @@ const Questions = () => {
 
   const { goNext } = useStepContext();
 
-  const speechSynthesisRef = useRef<SpeechSynthesis>();
-  const voiceRef = useRef<SpeechSynthesisVoice>();
-
   const answer = async (text: string) => {
     if (!currentQuestion) return;
     InterviewManager.answer(currentQuestion, text);
@@ -42,30 +39,35 @@ const Questions = () => {
   };
 
   const updateVoice = () => {
-    if (!!voiceRef.current) return;
-    speechSynthesisRef.current = window.speechSynthesis;
-    const voices = speechSynthesisRef.current.getVoices();
-    const voice = voices.find(
-      (v) => v.lang === (lang === "ENG" ? "en-US" : "ko")
-    );
-    voiceRef.current = voice;
+    const voices = window.speechSynthesis.getVoices();
+    const voice =
+      voices.find((v) => v.lang === (lang === "ENG" ? "en-US" : "ko-KR")) ||
+      null;
+    return voice;
   };
 
+  const voiceRef = useRef<SpeechSynthesisVoice>(null);
+
   useEffect(() => {
-    window.speechSynthesis.cancel();
     if (!currentQuestion?.question) return;
     const utterance = new SpeechSynthesisUtterance(currentQuestion.question);
-    updateVoice();
-    utterance.voice = voiceRef.current ?? null;
-    window?.speechSynthesis?.speak(utterance);
-    utterance.addEventListener("end", () => setStatus("ANSWER"));
+    (async () => {
+      var voice = updateVoice();
+      if (!voice) {
+        await new Promise((resolve: (value: undefined) => void) => {
+          setTimeout(resolve, 1000);
+        });
+      }
+      voice = updateVoice();
+      utterance.voice = voice;
+      window?.speechSynthesis?.speak(utterance);
+      utterance.addEventListener("end", () => setStatus("ANSWER"));
+    })();
 
     return () => {
       window.speechSynthesis?.cancel();
     };
   }, [currentQuestion?.question]);
-
-  useEffect(updateVoice, []);
 
   useEffect(() => {
     (async () => {

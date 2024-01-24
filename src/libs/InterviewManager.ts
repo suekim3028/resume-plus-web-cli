@@ -44,10 +44,10 @@ class _InterviewManager {
 
     this.commonQs = [
       ...behavQuestions.map(
-        (obj): InterviewTypes.Question => ({ ...obj, type: "behav_q" })
+        (obj): InterviewTypes.Question => ({ ...obj, type: "behavQ" })
       ),
       ...techQuestions.map(
-        (obj): InterviewTypes.Question => ({ ...obj, type: "tech_q" })
+        (obj): InterviewTypes.Question => ({ ...obj, type: "techQ" })
       ),
     ].toSorted((_a, _b) => Math.random() - 0.5);
 
@@ -66,7 +66,7 @@ class _InterviewManager {
     if (isPersonalQError) return;
     const { personalQuestions } = personalQData;
     this.personalQs = personalQuestions.map(
-      (obj): InterviewTypes.Question => ({ ...obj, type: "personal_q" })
+      (obj): InterviewTypes.Question => ({ ...obj, type: "perQ" })
     );
 
     this.personalQs.forEach((question) => (this.feedbacks[question.id] = null));
@@ -115,9 +115,9 @@ class _InterviewManager {
 
     const { type, id } = question;
     const answerFn =
-      type === "behav_q"
+      type === "behavQ"
         ? interviewApis.answerBehavQ
-        : type === "tech_q"
+        : type === "techQ"
         ? interviewApis.answerTechQ
         : interviewApis.answerPersonalQ;
 

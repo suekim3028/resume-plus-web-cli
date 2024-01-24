@@ -16,7 +16,7 @@ const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <L.FlexCol w="100%" h={"100%"}>
-      <L.AbsoluteFill>
+      <L.AbsoluteFill bgColor="GRAY_600">
         <video
           autoPlay
           disableRemotePlayback

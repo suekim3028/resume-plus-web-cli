@@ -44,7 +44,7 @@ export const POSITION_OPTION_LABEL: Record<InterviewTypes.Position, string> = {
 
 export const QUESTION_TYPE_LABEL: Record<InterviewTypes.QuestionType, string> =
   {
-    behav_q: "Behavior Question",
-    personal_q: "Personal Question",
-    tech_q: "Technical Question",
+    behavQ: "Behavior Question",
+    perQ: "Personal Question",
+    techQ: "Technical Question",
   };
