@@ -1,11 +1,29 @@
 import { INTERVIEW_CONSTS } from "@constants";
 
-export type FixedStep = (typeof INTERVIEW_CONSTS.FIXED_STEPS)[number];
-export type VariantStep = (typeof INTERVIEW_CONSTS.VARIANT_STEPS)[number];
 export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 
-export type Lang = (typeof INTERVIEW_CONSTS.LANG_OPTIONS)[number];
-export type Position = (typeof INTERVIEW_CONSTS.POSITION_OPTIONS)[number];
+export type Company = {
+  id: number;
+  name: string;
+  thumbnailUrl: string;
+};
+
+export type JobGroup = {
+  id: number;
+  name: string;
+  jobs: Job[];
+};
+
+export type Job = {
+  id: number;
+  name: string;
+};
+
+export type InterviewInfo = {
+  companyId: number;
+  jobGroupId: number;
+  jobId: number;
+};
 
 export type QuestionType = "behavQ" | "techQ" | "perQ";
 
@@ -14,6 +32,7 @@ export type ScoreEvaluation = {
   score: number;
   rationale: string;
 };
+
 export type Evaluation = ScoreEvaluation | CriteriaEvaluation;
 
 export type Feedback = {
@@ -24,7 +43,6 @@ export type Feedback = {
 };
 
 export type Question = {
-  type: QuestionType;
   question: string;
   id: number;
 };
