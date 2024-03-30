@@ -1,14 +1,15 @@
 import { Progress, Stack, Text } from "@chakra-ui/react";
 import { useStepContext } from "@contexts";
-import { questionAllLoadedStore } from "@store";
+import { interviewQuestionsStore } from "@store";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { Font, Layout as L } from "@design-system";
+import { useRecoilValueLoadable } from "recoil";
+
 const QuestionLoading = () => {
   console.log("!!!!!!!!!!!!!!");
   const { goNext } = useStepContext();
-  const questionsAllLoaded = useRecoilValue(questionAllLoadedStore);
-  console.log({ questionsAllLoaded });
+  const interviewQuestionsLoadable = useRecoilValueLoadable(
+    interviewQuestionsStore
+  );
 
   const [showLoader, setShowLoader] = useState(false);
 
@@ -21,16 +22,11 @@ const QuestionLoading = () => {
   }, []);
 
   useEffect(() => {
-    if (questionsAllLoaded) {
-      // goNext();
+    if (interviewQuestionsLoadable.state === "hasValue") {
+      goNext();
     }
-  }, [questionsAllLoaded, goNext]);
+  }, [interviewQuestionsLoadable.state, goNext]);
 
-  return (
-    <L.FlexCol>
-      <Font.Display type="28_bold_multi">??</Font.Display>
-    </L.FlexCol>
-  );
   return (
     <Stack direction={"column"}>
       <Text>김팔자님의 레쥬메 바탕으로 질문을 만들고 있어요!</Text>

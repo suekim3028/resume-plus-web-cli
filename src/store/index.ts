@@ -12,7 +12,7 @@ export const interviewInfoStore = atom<null | InterviewTypes.InterviewInfo>({
   default: null,
 });
 
-const interviewQuestionsStore = selector({
+export const interviewQuestionsStore = selector({
   key: "interviewQuestions",
   get: async ({ get }) => {
     const interviewInfo = get(interviewInfoStore);
@@ -23,15 +23,6 @@ const interviewQuestionsStore = selector({
     console.log("===========");
 
     return { techQ, behavQ, perQ };
-  },
-});
-
-export const questionAllLoadedStore = selector({
-  key: "questionAllLoaded",
-  get: ({ get }) => {
-    const questions = get(interviewQuestionsStore);
-    console.log({ questionAllLoadedStore: !!questions });
-    return !!questions;
   },
 });
 

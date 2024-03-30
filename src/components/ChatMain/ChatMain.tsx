@@ -10,7 +10,6 @@ const StepComponent = (): JSX.Element => {
   const { step } = useStepContext();
   console.log("===STEP COMPOENTN", step);
 
-  return <>???</>;
   switch (step) {
     case "UPLOAD_CV":
       return <UploadCv />;
