@@ -6,12 +6,29 @@ export const userStore = atom<null | { username: string }>({
   default: null,
 });
 
-export const langStore = atom<InterviewTypes.Lang | null>({
-  key: "lang",
+export const interviewInfoStore = atom<null | InterviewTypes.InterviewInfo>({
+  key: "interviewInfo",
   default: null,
 });
 
-export const positionStore = atom<InterviewTypes.Position | null>({
-  key: "position",
-  default: null,
+export const interviewQuestionsStore = atom<
+  Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>
+>({
+  key: "interviewQuestions",
+  default: {
+    perQ: [],
+    techQ: [],
+    behavQ: [],
+  },
+});
+
+export const evaluationStore = atom<
+  Record<InterviewTypes.QuestionType, InterviewTypes.ScoreEvaluation[]>
+>({
+  key: "evaluation",
+  default: {
+    perQ: [],
+    techQ: [],
+    behavQ: [],
+  },
 });
