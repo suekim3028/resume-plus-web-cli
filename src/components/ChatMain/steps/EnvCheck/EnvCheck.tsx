@@ -1,54 +1,53 @@
-import { INTERVIEW_CONSTS } from "@constants";
 import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
-import { InterviewTypes } from "@types";
-import React from "react";
-import CameraWrapper from "../../components/CameraWrapper/CameraWrapper";
+import React, { useState } from "react";
 import GoNextButton from "../../components/GoNextButton/GoNextButton";
 
-const { FIXED_CONVO } = INTERVIEW_CONSTS;
-
-const CAMERA_READY_STEP: InterviewTypes.Step = "CAMERA_READY";
-
-const CameraReady = () => {
-  const { cameraReady, goNext } = useStepContext();
+const EnvCheck = () => {
+  const { goNext } = useStepContext();
+  const [video, setVideo] = useState(true); // TODO: 화면 녹화 시 setVideo
 
   return (
-    <CameraWrapper>
+    <L.FlexCol
+      w={"100%"}
+      h={"100%"}
+      pv={30}
+      ph={30}
+      alignItems="flex-end"
+      justifyContent="flex-end"
+    >
       <L.FlexCol
-        w={"100%"}
-        h={"100%"}
-        pv={30}
-        ph={30}
-        alignItems="flex-end"
-        justifyContent="flex-end"
+        style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
+        p={10}
+        outline={"GRAY_400"}
+        rounded={10}
+        mb={20}
       >
-        <L.FlexCol
-          style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-          p={10}
-          outline={"GRAY_400"}
-          rounded={10}
-          mb={20}
+        <Font.Body
+          type={"16_medium_multi"}
+          color={"PRIMARY_500"}
+          textAlign="center"
         >
-          <Font.Body
-            type={"16_medium_multi"}
-            color={"PRIMARY_500"}
-            textAlign="center"
-          >
-            {FIXED_CONVO[CAMERA_READY_STEP].ENG}
-          </Font.Body>
-        </L.FlexCol>
-        <GoNextButton
-          onClick={goNext}
-          canGoNext={cameraReady}
-          text={{
-            ENG: "START",
-            KOR: "시작하기",
-          }}
-        />
+          “안녕하세요, 잘 부탁드립니다.”
+        </Font.Body>
+        <Font.Body
+          type={"16_medium_multi"}
+          color={"PRIMARY_500"}
+          textAlign="center"
+        >
+          카메라 정면을 응시한 상태로, 5초 이내에 위 문구를 읽어주세요.
+        </Font.Body>
       </L.FlexCol>
-    </CameraWrapper>
+      <GoNextButton
+        onClick={goNext}
+        canGoNext={!!video}
+        text={{
+          ENG: "START",
+          KOR: "시작하기",
+        }}
+      />
+    </L.FlexCol>
   );
 };
 
-export default React.memo(CameraReady);
+export default React.memo(EnvCheck);

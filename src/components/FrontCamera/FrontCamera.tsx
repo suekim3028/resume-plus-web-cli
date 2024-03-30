@@ -1,14 +1,13 @@
-import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
 import { useOnWindowSizeChange } from "@hooks";
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
-  const { onCameraReady, cameraReady } = useStepContext();
+const FrontCamera = () => {
+  const [cameraReady, setCameraReady] = useState(false);
 
   const setCamera = useCallback(() => {
-    getDevices({ onReady: onCameraReady });
-  }, [onCameraReady]);
+    getDevices({ onReady: () => setCameraReady(true) });
+  }, []);
 
   useOnWindowSizeChange(setCamera);
 
@@ -49,7 +48,6 @@ const CameraWrapper = ({ children }: { children?: React.ReactNode }) => {
           </L.FlexCol>
         </L.AbsoluteFill>
       )}
-      {children}
     </L.FlexCol>
   );
 };
@@ -77,4 +75,4 @@ const getDevices = async ({ onReady }: { onReady: () => void }) => {
   }
 };
 
-export default CameraWrapper;
+export default FrontCamera;
