@@ -4,33 +4,36 @@ import API from "./API";
 /**
  * CV 업로드
  */
+// TODO: api 타입 다시 정의
 type UploadCvParams = {
   content: string;
-  position: InterviewTypes.Position;
-};
+} & InterviewTypes.InterviewInfo;
 
 export const uploadCV = async (params: UploadCvParams) => {
   return API.post<ApiTypes.SuccessRes>("/cv", params);
 };
 
+const dummyQuestionGenerator = (length: number): InterviewTypes.Question[] =>
+  Array.from({ length }, (_, idx) => ({ id: idx, question: "ababababbaba" }));
+
 /**
  * Common Questions 가져오기
  */
 type GetCommonQResponse = {
-  techQuestions: { id: number; question: string }[];
-  behavQuestions: { id: number; question: string }[];
+  techQuestions: InterviewTypes.Question[];
+  behavQuestions: InterviewTypes.Question[];
 };
 
 export const getCommonQ = async (): Promise<GetCommonQResponse> => {
-  const { tech_questions: techQuestions, behav_questions: behavQuestions } =
-    await API.get<{
-      tech_questions: { id: number; question: string }[];
-      behav_questions: { id: number; question: string }[];
-    }>("/common_question");
+  // const { tech_questions: techQuestions, behav_questions: behavQuestions } =
+  // await API.get<{
+  //   tech_questions: InterviewTypes.Question[];
+  //   behav_questions: InterviewTypes.Question[];
+  // }>("/common_question");
 
   return {
-    techQuestions,
-    behavQuestions,
+    techQuestions: dummyQuestionGenerator(5),
+    behavQuestions: dummyQuestionGenerator(5),
   };
 };
 
@@ -38,16 +41,16 @@ export const getCommonQ = async (): Promise<GetCommonQResponse> => {
  * Personal Questions 가져오기
  */
 type GetPersonalQResponse = {
-  personalQuestions: { id: number; question: string }[];
+  personalQuestions: InterviewTypes.Question[];
 };
 
 export const getPersonalQ = async (): Promise<GetPersonalQResponse> => {
-  const { personal_questions: personalQuestions } = await API.get<{
-    personal_questions: { id: number; question: string }[];
-  }>("/personal_question");
+  // const { personal_questions: personalQuestions } = await API.get<{
+  //   personal_questions: InterviewTypes.Question[];
+  // }>("/personal_question");
 
   return {
-    personalQuestions,
+    personalQuestions: dummyQuestionGenerator(5),
   };
 };
 
@@ -60,17 +63,33 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
-export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
-    answer,
-  });
+// export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
+//   API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
+//     answer,
+//   });
 
-export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
-    answer,
-  });
+// export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
+//   API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
+//     answer,
+//   });
 
-export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
-    answer,
-  });
+// export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
+//   API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
+//     answer,
+//   });
+
+export const dummyAnswer = async ({
+  questionId,
+  answer,
+  type,
+}: AnswerQuestionParams & {
+  type: InterviewTypes.QuestionType;
+}): Promise<InterviewTypes.Feedback> => ({
+  question: "aaaa",
+  user_answer: "bbbb",
+  type,
+});
+
+export const answerTechQ = dummyAnswer;
+export const answerBehavQ = dummyAnswer;
+export const answerPersonalQ = dummyAnswer;
