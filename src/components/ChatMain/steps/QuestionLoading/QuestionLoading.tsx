@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useRecoilValueLoadable } from "recoil";
 
 const QuestionLoading = () => {
-  console.log("!!!!!!!!!!!!!!");
   const { goNext } = useStepContext();
   const interviewQuestionsLoadable = useRecoilValueLoadable(
     interviewQuestionsStore

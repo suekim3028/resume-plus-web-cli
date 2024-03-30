@@ -5,10 +5,10 @@ import * as S from "./ChatMain.styles";
 import UploadCv from "./steps/UploadCv/UploadCv";
 import EnvCheck from "./steps/EnvCheck/EnvCheck";
 import QuestionLoading from "./steps/QuestionLoading/QuestionLoading";
+import QuestionReady from "./steps/QuestionReady/QuestionReady";
 
 const StepComponent = (): JSX.Element => {
   const { step } = useStepContext();
-  console.log("===STEP COMPOENTN", step);
 
   switch (step) {
     case "UPLOAD_CV":
@@ -16,7 +16,7 @@ const StepComponent = (): JSX.Element => {
     case "QUESTION_LOADING":
       return <QuestionLoading />;
     case "QUESTION_READY":
-      return <></>;
+      return <QuestionReady />;
     case "ENV_CHECK":
       return <EnvCheck />;
     case "INTERVIEW_LOADING":
