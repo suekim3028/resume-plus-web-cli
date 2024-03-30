@@ -1,7 +1,7 @@
 import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
 import React, { useState } from "react";
-import GoNextButton from "../../components/GoNextButton/GoNextButton";
+import { Button } from "@chakra-ui/react";
 
 const EnvCheck = () => {
   const { goNext } = useStepContext();
@@ -38,14 +38,10 @@ const EnvCheck = () => {
           카메라 정면을 응시한 상태로, 5초 이내에 위 문구를 읽어주세요.
         </Font.Body>
       </L.FlexCol>
-      <GoNextButton
-        onClick={goNext}
-        canGoNext={!!video}
-        text={{
-          ENG: "START",
-          KOR: "시작하기",
-        }}
-      />
+      <L.FlexRow>
+        <Button title={"다시하기"} />
+        <Button title={"확인"} onClick={goNext} />
+      </L.FlexRow>
     </L.FlexCol>
   );
 };

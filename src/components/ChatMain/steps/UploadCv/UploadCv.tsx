@@ -1,33 +1,22 @@
-import { interviewApis } from "@apis";
-import { INTERVIEW_CONSTS } from "@constants";
+import { Button } from "@chakra-ui/react";
 import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
-import { langStore, positionStore } from "@store";
-import { InterviewTypes } from "@types";
+import { InterviewManager } from "@libs";
+import { interviewInfoStore } from "@store";
 import { withErrorHandling } from "@utils";
 import React, { useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
-import { useRecoilState, useRecoilValue } from "recoil";
-import GoNextButton from "../../components/GoNextButton/GoNextButton";
-import SelectChips from "../../components/SelectChips/SelectChips";
-import { InterviewManager } from "@libs";
+import { useRecoilState } from "recoil";
 import * as S from "./UploadCv.styles";
-
-const { FIXED_CONVO, POSITION_OPTIONS, POSITION_OPTION_LABEL } =
-  INTERVIEW_CONSTS;
-
-const CV_STEP: InterviewTypes.Step = "UPLOAD_CV";
 
 const UploadCv = () => {
   const fileRef = useRef<HTMLInputElement>(null);
-  const _lang = useRecoilValue(langStore);
-  const lang = _lang || "ENG";
 
-  const [position, setPosition] = useRecoilState(positionStore);
+  const [interviewInfo, setInterviewInfo] = useRecoilState(interviewInfoStore);
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const cvTextRef = useRef("");
 
-  const { goNext } = useStepContext();
+  const { goNext: _goNext } = useStepContext();
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -37,10 +26,10 @@ const UploadCv = () => {
     setLocalPdfFile(files[0]);
   };
 
-  const canGoNext = !!position && !!localPdfFile;
+  const canGoNext = !!localPdfFile; //TODO: check job group etc.
 
   const uploadPdf = async () => {
-    if (!localPdfFile || !position) return false;
+    if (!canGoNext) return false;
     pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
     const document = await pdfjs.getDocument(await localPdfFile.arrayBuffer())
@@ -55,22 +44,23 @@ const UploadCv = () => {
         }
       });
     }
-    const { isError: uploadCvError } = await withErrorHandling(() =>
-      interviewApis.uploadCV({
-        content: cvTextRef.current,
-        position,
-      })
+    const { isError: uploadCvError } = await withErrorHandling(
+      async () => ({})
+      // TODO
+      // interviewApis.uploadCV({
+      //   content: cvTextRef.current,
+      //   position,
+      // })
     );
 
     return uploadCvError;
   };
 
-  const handleOnClickNext = async () => {
+  const goNext = async () => {
     // TODO: Loading
-
     await uploadPdf();
     InterviewManager.initQuestions();
-    goNext();
+    _goNext();
   };
 
   return (
@@ -89,16 +79,9 @@ const UploadCv = () => {
           mb={20}
           textAlign="center"
         >
-          {FIXED_CONVO[CV_STEP][lang]}
+          아래 정보를 추가하면 맞춤형 면접 환경을 제공해드려요!
         </Font.Body>
 
-        <SelectChips<InterviewTypes.Position>
-          options={POSITION_OPTIONS.map((value) => ({
-            value,
-            text: POSITION_OPTION_LABEL[value],
-          }))}
-          onSelect={setPosition}
-        />
         <S.PdfFileInput
           type={"file"}
           accept=".pdf"
@@ -107,7 +90,7 @@ const UploadCv = () => {
           onChange={handleOnFileChange}
           multiple={false}
         />
-        <GoNextButton onClick={handleOnClickNext} canGoNext={canGoNext} />
+        <Button disabled={!canGoNext} onClick={goNext} />
       </L.FlexCol>
     </L.FlexCol>
   );
