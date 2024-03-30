@@ -1,18 +1,15 @@
 import { Button } from "@chakra-ui/react";
 import { useStepContext } from "@contexts";
 import { Font, Layout as L } from "@design-system";
-import { InterviewManager } from "@libs";
 import { interviewInfoStore } from "@store";
-import { withErrorHandling } from "@utils";
 import React, { useRef, useState } from "react";
-import { pdfjs } from "react-pdf";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import * as S from "./UploadCv.styles";
 
 const UploadCv = () => {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const [interviewInfo, setInterviewInfo] = useRecoilState(interviewInfoStore);
+  const setInterviewInfo = useSetRecoilState(interviewInfoStore);
   const [localPdfFile, setLocalPdfFile] = useState<File | null>(null);
   const cvTextRef = useRef("");
 
@@ -29,37 +26,42 @@ const UploadCv = () => {
   const canGoNext = !!localPdfFile; //TODO: check job group etc.
 
   const uploadPdf = async () => {
-    if (!canGoNext) return false;
-    pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+    return true;
+    // if (!canGoNext) return false;
+    // pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
-    const document = await pdfjs.getDocument(await localPdfFile.arrayBuffer())
-      .promise;
+    // const document = await pdfjs.getDocument(await localPdfFile.arrayBuffer())
+    //   .promise;
 
-    for (let index of Array.from({ length: document.numPages }, (_, i) => i)) {
-      const page = await document.getPage(index + 1);
-      const pageContent = await page.getTextContent();
-      pageContent.items.map((item) => {
-        if ("str" in item) {
-          cvTextRef.current = [cvTextRef.current, item.str].join(" ");
-        }
-      });
-    }
-    const { isError: uploadCvError } = await withErrorHandling(
-      async () => ({})
-      // TODO
-      // interviewApis.uploadCV({
-      //   content: cvTextRef.current,
-      //   position,
-      // })
-    );
+    // for (let index of Array.from({ length: document.numPages }, (_, i) => i)) {
+    //   const page = await document.getPage(index + 1);
+    //   const pageContent = await page.getTextContent();
+    //   pageContent.items.map((item) => {
+    //     if ("str" in item) {
+    //       cvTextRef.current = [cvTextRef.current, item.str].join(" ");
+    //     }
+    //   });
+    // }
+    // const { isError: uploadCvError } = await withErrorHandling(
+    //   async () => ({})
+    //   // TODO
+    //   // interviewApis.uploadCV({
+    //   //   content: cvTextRef.current,
+    //   //   position,
+    //   // })
+    // );
 
-    return uploadCvError;
+    // return uploadCvError;
   };
 
   const goNext = async () => {
-    // TODO: Loading
+    // TODO
     await uploadPdf();
-    InterviewManager.initQuestions();
+    setInterviewInfo({
+      companyId: 1,
+      jobGroupId: 1,
+      jobId: 1,
+    });
     _goNext();
   };
 
@@ -90,7 +92,10 @@ const UploadCv = () => {
           onChange={handleOnFileChange}
           multiple={false}
         />
-        <Button disabled={!canGoNext} onClick={goNext} />
+
+        <Button disabled={!canGoNext} onClick={goNext}>
+          맞춤형 면접 시작하기
+        </Button>
       </L.FlexCol>
     </L.FlexCol>
   );

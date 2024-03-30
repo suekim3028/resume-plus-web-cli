@@ -1,8 +1,6 @@
-import { INTERVIEW_CONSTS } from "@constants";
 import { Font, Layout as L } from "@design-system";
-import { InterviewManager } from "@libs";
 import { InterviewTypes } from "@types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InfoRow from "../../components/InfoRow/InfoRow";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { isScoreEval } from "./Evaluation.utils";
@@ -12,11 +10,11 @@ const Evaluation = () => {
     null
   );
 
-  useEffect(() => {
-    (async () => {
-      setFeedbacks(await InterviewManager.getFeedbackArr());
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     setFeedbacks(await InterviewManager.getFeedbackArr());
+  //   })();
+  // }, []);
 
   if (!feedbacks)
     return (
@@ -43,9 +41,10 @@ const Evaluation = () => {
               ph={20}
               pv={20}
             >
-              <Font.Body type={"12_medium_single"} color={"GRAY_500"}>
-                {INTERVIEW_CONSTS.QUESTION_TYPE_LABEL[type]}
-              </Font.Body>
+              <Font.Body
+                type={"12_medium_single"}
+                color={"GRAY_500"}
+              ></Font.Body>
               <Font.Body
                 type={"16_semibold_multi"}
                 color={"PRIMARY_500"}

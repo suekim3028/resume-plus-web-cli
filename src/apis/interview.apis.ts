@@ -19,9 +19,17 @@ const dummyQuestionGenerator = (length: number): InterviewTypes.Question[] =>
 /**
  * Common Questions 가져오기
  */
-type GetCommonQResponse = {
-  techQuestions: InterviewTypes.Question[];
-  behavQuestions: InterviewTypes.Question[];
+type GetCommonQResponse = Record<
+  Extract<InterviewTypes.QuestionType, "behavQ" | "techQ">,
+  InterviewTypes.Question[]
+>;
+
+const wait = async (seconds: number) => {
+  await new Promise((resolver: (v: null) => void) => {
+    setTimeout(() => {
+      resolver(null);
+    }, seconds * 1000);
+  });
 };
 
 export const getCommonQ = async (): Promise<GetCommonQResponse> => {
@@ -30,27 +38,31 @@ export const getCommonQ = async (): Promise<GetCommonQResponse> => {
   //   tech_questions: InterviewTypes.Question[];
   //   behav_questions: InterviewTypes.Question[];
   // }>("/common_question");
+  console.log("getCommonQ");
 
+  await wait(3);
   return {
-    techQuestions: dummyQuestionGenerator(5),
-    behavQuestions: dummyQuestionGenerator(5),
+    techQ: dummyQuestionGenerator(5),
+    behavQ: dummyQuestionGenerator(5),
   };
 };
 
 /**
  * Personal Questions 가져오기
  */
-type GetPersonalQResponse = {
-  personalQuestions: InterviewTypes.Question[];
-};
+type GetPersonalQResponse = Record<
+  Extract<InterviewTypes.QuestionType, "perQ">,
+  InterviewTypes.Question[]
+>;
 
 export const getPersonalQ = async (): Promise<GetPersonalQResponse> => {
   // const { personal_questions: personalQuestions } = await API.get<{
   //   personal_questions: InterviewTypes.Question[];
-  // }>("/personal_question");
-
+  // }>("/personal_question")
+  console.log("getPersonalQ");
+  await wait(2);
   return {
-    personalQuestions: dummyQuestionGenerator(5),
+    perQ: dummyQuestionGenerator(5),
   };
 };
 

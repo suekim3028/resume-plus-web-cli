@@ -13,6 +13,7 @@ const StepContext = createContext<StepContextValue | null>(null);
 const StepContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [stepIdx, setStepIdx] = useState(0);
   const step = STEPS[stepIdx];
+  console.log({ step });
 
   const goNext = () => setStepIdx((p) => (p === STEPS.length - 1 ? p : p + 1));
 

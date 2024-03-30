@@ -1,14 +1,10 @@
 import { useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
-import { InterviewManager } from "@libs";
 import { InterviewTypes } from "@types";
 import React, { useEffect, useRef, useState } from "react";
 import Bubble from "../../components/Bubble/Bubble";
-import CameraWrapper from "../../components/CameraWrapper/CameraWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import TextInput from "../../components/TextInput/TextInput";
-import { useRecoilValue } from "recoil";
-import { langStore } from "@store";
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] =
@@ -17,32 +13,25 @@ const Questions = () => {
   const [status, setStatus] = useState<"QUESTION" | "ANSWER" | "LOADING">(
     "LOADING"
   );
-  const _lang = useRecoilValue(langStore);
-  const lang = _lang || "ENG";
 
   const { goNext } = useStepContext();
 
   const answer = async (text: string) => {
-    if (!currentQuestion) return;
-    InterviewManager.answer(currentQuestion, text);
-
-    setStatus("LOADING");
-    const question = await InterviewManager.getNextQuestion();
-
-    if (!question) {
-      goNext();
-      return;
-    }
-
-    setCurrentQuestion(question);
-    setStatus("QUESTION");
+    // if (!currentQuestion) return;
+    // InterviewManager.answer(currentQuestion, text);
+    // setStatus("LOADING");
+    // const question = await InterviewManager.getNextQuestion();
+    // if (!question) {
+    //   goNext();
+    //   return;
+    // }
+    // setCurrentQuestion(question);
+    // setStatus("QUESTION");
   };
 
   const updateVoice = () => {
     const voices = window.speechSynthesis.getVoices();
-    const voice =
-      voices.find((v) => v.lang === (lang === "ENG" ? "en-US" : "ko-KR")) ||
-      null;
+    const voice = voices.find((v) => v.lang === "ko-KR") || null;
     return voice;
   };
 
@@ -71,24 +60,22 @@ const Questions = () => {
 
   useEffect(() => {
     (async () => {
-      const question = await InterviewManager.getNextQuestion();
-      setCurrentQuestion(question);
+      // const question = await InterviewManager.getNextQuestion();
+      // setCurrentQuestion(question);
       setStatus("QUESTION");
     })();
   }, []);
 
   return (
-    <CameraWrapper>
-      <L.FlexCol w={"100%"} p={40} h="100%" justifyContent="space-between">
-        {status === "LOADING" || !currentQuestion ? (
-          <LoadingIndicator indicator="・ ・ ・ Generating questions" />
-        ) : (
-          <Bubble content={currentQuestion.question} />
-        )}
+    <L.FlexCol w={"100%"} p={40} h="100%" justifyContent="space-between">
+      {status === "LOADING" || !currentQuestion ? (
+        <LoadingIndicator indicator="・ ・ ・ Generating questions" />
+      ) : (
+        <Bubble content={currentQuestion.question} />
+      )}
 
-        {status === "ANSWER" && <TextInput onFinishAnswer={answer} />}
-      </L.FlexCol>
-    </CameraWrapper>
+      {status === "ANSWER" && <TextInput onFinishAnswer={answer} />}
+    </L.FlexCol>
   );
 };
 

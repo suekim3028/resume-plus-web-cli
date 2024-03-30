@@ -1,5 +1,6 @@
+import { interviewApis } from "@apis";
 import { InterviewTypes } from "@types";
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export const userStore = atom<null | { username: string }>({
   key: "user",
@@ -11,14 +12,26 @@ export const interviewInfoStore = atom<null | InterviewTypes.InterviewInfo>({
   default: null,
 });
 
-export const interviewQuestionsStore = atom<
-  Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>
->({
+const interviewQuestionsStore = selector({
   key: "interviewQuestions",
-  default: {
-    perQ: [],
-    techQ: [],
-    behavQ: [],
+  get: async ({ get }) => {
+    const interviewInfo = get(interviewInfoStore);
+    if (!interviewInfo) return null;
+
+    const { techQ, behavQ } = await interviewApis.getCommonQ();
+    const { perQ } = await interviewApis.getPersonalQ();
+    console.log("===========");
+
+    return { techQ, behavQ, perQ };
+  },
+});
+
+export const questionAllLoadedStore = selector({
+  key: "questionAllLoaded",
+  get: ({ get }) => {
+    const questions = get(interviewQuestionsStore);
+    console.log({ questionAllLoadedStore: !!questions });
+    return !!questions;
   },
 });
 

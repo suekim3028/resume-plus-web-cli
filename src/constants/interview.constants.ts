@@ -1,6 +1,6 @@
 // TODO: 하나씩 refactor
 export const STEPS = [
-  // "UPLOAD_CV",
+  "UPLOAD_CV",
   "QUESTION_LOADING",
   "QUESTION_READY",
   "ENV_CHECK",
