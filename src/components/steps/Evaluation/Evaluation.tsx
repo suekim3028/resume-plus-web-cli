@@ -1,8 +1,6 @@
 import { Font, Layout as L } from "@design-system";
 import { InterviewTypes } from "@types";
 import React, { useState } from "react";
-import InfoRow from "../../components/InfoRow/InfoRow";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { isScoreEval } from "./Evaluation.utils";
 
 const Evaluation = () => {
@@ -19,7 +17,7 @@ const Evaluation = () => {
   if (!feedbacks)
     return (
       <L.FlexCol w={"100%"} mt={20}>
-        <LoadingIndicator indicator="Analyzing your responses for feedback..." />
+        Analyzing your responses for feedback...
       </L.FlexCol>
     );
 

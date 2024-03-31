@@ -68,10 +68,10 @@ const Questions = () => {
       {status === "LOADING" || !currentQuestion ? (
         <LoadingIndicator indicator="・ ・ ・ Generating questions" />
       ) : (
-        <Bubble content={currentQuestion.question} />
+        <div>{currentQuestion.question}</div>
       )}
 
-      {status === "ANSWER" && <TextInput onFinishAnswer={answer} />}
+      {status === "ANSWER" && <input />}
     </L.FlexCol>
   );
 };

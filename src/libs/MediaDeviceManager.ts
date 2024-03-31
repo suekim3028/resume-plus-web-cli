@@ -1,9 +1,12 @@
 class MediaDeviceManager {
   private mediaStream: MediaStream | null = null;
   private initiated = false;
+  private initiating = false;
   private mediaStreamResolvers: ((value: null) => void)[] = [];
 
   public initMedia = async () => {
+    if (this.initiating) return;
+    this.initiating = true;
     try {
       const mediaStream = await navigator.mediaDevices?.getUserMedia({
         video: {
@@ -23,6 +26,7 @@ class MediaDeviceManager {
     } catch (e) {
       console.log("no front camera");
     }
+    this.initiating = true;
   };
 
   public getMediaStream = async () => {
