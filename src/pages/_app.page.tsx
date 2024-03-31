@@ -28,6 +28,17 @@ export default function App({ Component, pageProps }: AppProps) {
           </IconContext.Provider>
         </ThemeProvider>
       </ChakraProvider>
+      <audio
+        autoPlay={false}
+        id="audioElement"
+        style={{
+          position: "fixed",
+          left: -99999,
+          top: -99999,
+        }}
+        controls={false}
+        playsInline
+      />
     </>
   );
 }

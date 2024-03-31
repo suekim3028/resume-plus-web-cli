@@ -1,10 +1,7 @@
-import { useStepContext } from "@contexts";
-import { Font, Layout as L } from "@design-system";
-import React, { useEffect, useState } from "react";
-import { Button, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
-import { commonHooks } from "@web-core";
-import { MediaDeviceManager } from "@libs";
+import { useStepContext } from "@contexts";
+import React, { useState } from "react";
 
 const EnvCheck = () => {
   const { goNext } = useStepContext();

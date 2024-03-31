@@ -1,8 +1,7 @@
 import { Font, Layout as L } from "@design-system";
-import { useOnWindowSizeChange } from "@hooks";
 import { MediaDeviceManager } from "@libs";
 import { commonHooks } from "@web-core";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 const FrontCamera = () => {
   const [cameraReady, setCameraReady] = useState(false);
@@ -11,9 +10,7 @@ const FrontCamera = () => {
     const mediaStream = await MediaDeviceManager.getMediaStream();
     const _video = document.querySelector("#videoElement");
     const video = _video as HTMLVideoElement;
-    const cloned = mediaStream.clone();
-    cloned.getAudioTracks().forEach((t) => (t.enabled = false));
-    video.srcObject = cloned;
+    video.srcObject = mediaStream;
     setCameraReady(true);
   }, []);
 
@@ -30,6 +27,7 @@ const FrontCamera = () => {
           style={{
             objectFit: "fill",
           }}
+          muted
           controls={false}
           playsInline
         />

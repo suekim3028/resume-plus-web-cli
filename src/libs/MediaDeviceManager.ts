@@ -15,6 +15,10 @@ class MediaDeviceManager {
       // if (!videoMediaStream) throw new Error();
       this.mediaStream = mediaStream;
       this.initiated = true;
+
+      //TODO: audio 이후 플레이 필요할 경우 사용
+      // const audio = document.querySelector("#audioElement") as HTMLAudioElement;
+      // audio.srcObject = mediaStream;
       this.mediaStreamResolvers.forEach((resolve) => resolve(null));
     } catch (e) {
       console.log("no front camera");
