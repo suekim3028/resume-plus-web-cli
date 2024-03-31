@@ -2,10 +2,12 @@ import { StepContextProvider, useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
 import React from "react";
 import * as S from "./ChatMain.styles";
-import UploadCv from "./steps/UploadCv/UploadCv";
-import EnvCheck from "./steps/EnvCheck/EnvCheck";
-import QuestionLoading from "./steps/QuestionLoading/QuestionLoading";
-import QuestionReady from "./steps/QuestionReady/QuestionReady";
+import {
+  EnvCheck,
+  QuestionLoading,
+  QuestionReady,
+  UploadCv,
+} from "@components/steps";
 
 const StepComponent = (): JSX.Element => {
   const { step } = useStepContext();

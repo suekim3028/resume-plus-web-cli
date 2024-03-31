@@ -3,4 +3,5 @@ import ChatMain from "./ChatMain/ChatMain";
 import TopBar from "./TopBar/TopBar";
 import Login from "./Login/Login";
 import FrontCamera from "./FrontCamera/FrontCamera";
-export { AppHead, ChatMain, Login, TopBar, FrontCamera };
+import LoadingIndicator from "./LoadingIndicator/LoadingIndicator";
+export { AppHead, ChatMain, Login, TopBar, FrontCamera, LoadingIndicator };

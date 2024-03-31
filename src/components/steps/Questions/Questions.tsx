@@ -1,11 +1,8 @@
+import LoadingIndicator from "@components/LoadingIndicator/LoadingIndicator";
 import { useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
 import { InterviewTypes } from "@types";
 import React, { useEffect, useRef, useState } from "react";
-import Bubble from "../../components/Bubble/Bubble";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import TextInput from "../../components/TextInput/TextInput";
-
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] =
     useState<InterviewTypes.Question | null>(null);

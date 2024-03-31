@@ -9,8 +9,10 @@ const EnvCheck = () => {
 
   return (
     <Stack direction={"row"}>
-      <div style={{ width: 20, height: 20 }}>
-        <FrontCamera />
+      <div style={{ width: 500, height: 400, backgroundColor: "black" }}>
+        <div style={{ width: 20, height: 20 }}>
+          <FrontCamera />
+        </div>
       </div>
     </Stack>
   );
