@@ -40,7 +40,7 @@ export const getCommonQ = async (): Promise<GetCommonQResponse> => {
   // }>("/common_question");
   console.log("getCommonQ");
 
-  await wait(3);
+  await wait(1);
   return {
     techQ: dummyQuestionGenerator(5),
     behavQ: dummyQuestionGenerator(5),
@@ -60,7 +60,7 @@ export const getPersonalQ = async (): Promise<GetPersonalQResponse> => {
   //   personal_questions: InterviewTypes.Question[];
   // }>("/personal_question")
   console.log("getPersonalQ");
-  await wait(2);
+  await wait(1);
   return {
     perQ: dummyQuestionGenerator(5),
   };

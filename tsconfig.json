@@ -15,20 +15,9 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@design-system": ["src/design-system"],
-      "@queries": ["src/queries"],
       "@public/*": ["./public/*"],
-      "@constants": ["src/constants"],
-      "@store": ["src/store"],
-      "@hooks": ["src/hooks"],
-      "@types": ["src/types"],
-      "@libs": ["src/libs"],
-      "@logger": ["src/logger"],
-      "@storage": ["src/storage"],
-      "@components": ["src/components"],
-      "@utils": ["src/utils"],
-      "@apis": ["src/apis"],
-      "@contexts": ["src/contexts"]
+      "@web-core": ["web-core-modules"],
+      "@*": ["src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

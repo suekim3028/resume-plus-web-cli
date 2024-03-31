@@ -1,17 +1,21 @@
 import { Font, Layout as L } from "@design-system";
 import { useOnWindowSizeChange } from "@hooks";
+import { MediaDeviceManager } from "@libs";
+import { commonHooks } from "@web-core";
 import { useCallback, useEffect, useState } from "react";
 
 const FrontCamera = () => {
   const [cameraReady, setCameraReady] = useState(false);
 
-  const setCamera = useCallback(() => {
-    getDevices({ onReady: () => setCameraReady(true) });
+  commonHooks.useAsyncEffect(async () => {
+    const mediaStream = await MediaDeviceManager.getMediaStream();
+    const _video = document.querySelector("#videoElement");
+    const video = _video as HTMLVideoElement;
+    const cloned = mediaStream.clone();
+    cloned.getAudioTracks().forEach((t) => (t.enabled = false));
+    video.srcObject = cloned;
+    setCameraReady(true);
   }, []);
-
-  useOnWindowSizeChange(setCamera);
-
-  useEffect(setCamera, [setCamera]);
 
   return (
     <L.FlexCol w="100%" h={"100%"}>
@@ -51,28 +55,4 @@ const FrontCamera = () => {
     </L.FlexCol>
   );
 };
-
-const getDevices = async ({ onReady }: { onReady: () => void }) => {
-  const _video = document.querySelector("#videoElement");
-
-  if (!_video) return;
-
-  try {
-    const videoMediaStream = await navigator.mediaDevices?.getUserMedia({
-      video: {
-        facingMode: { ideal: "user" },
-      },
-      audio: true,
-    });
-    // TODO(Sue): 삭제
-    // if (!videoMediaStream) throw new Error();
-    console.log(videoMediaStream);
-    const video = _video as HTMLVideoElement;
-    video.srcObject = videoMediaStream;
-    onReady();
-  } catch (e) {
-    console.log("no front camera");
-  }
-};
-
 export default FrontCamera;
