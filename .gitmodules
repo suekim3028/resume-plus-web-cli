@@ -1,0 +1,3 @@
+[submodule "web-core-modules"]
+	path = web-core-modules
+	url = https://github.com/suekim3028/suekim3028-web-core-modules.git
