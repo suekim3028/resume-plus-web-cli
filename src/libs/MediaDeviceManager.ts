@@ -3,17 +3,21 @@ class MediaDeviceManager {
   private initiated = false;
   private initiating = false;
   private mediaStreamResolvers: ((value: null) => void)[] = [];
+  private cameraOn = true;
+  private audioOn = true;
 
+  private getUserMedia = () =>
+    navigator.mediaDevices?.getUserMedia({
+      video: {
+        facingMode: { ideal: "user" },
+      },
+      audio: true,
+    });
   private initMedia = async () => {
     if (this.initiating) return;
     this.initiating = true;
     try {
-      const mediaStream = await navigator.mediaDevices?.getUserMedia({
-        video: {
-          facingMode: { ideal: "user" },
-        },
-        audio: true,
-      });
+      const mediaStream = await this.getUserMedia();
       // TODO(Sue): 삭제
       // if (!videoMediaStream) throw new Error();
       this.mediaStream = mediaStream;
@@ -23,6 +27,8 @@ class MediaDeviceManager {
       // const audio = document.querySelector("#audioElement") as HTMLAudioElement;
       // audio.srcObject = mediaStream;
       this.mediaStreamResolvers.forEach((resolve) => resolve(null));
+      this.audioOn = true;
+      this.cameraOn = true;
     } catch (e) {
       console.log("no front camera");
     }
@@ -31,7 +37,6 @@ class MediaDeviceManager {
 
   public getMediaStream = async () => {
     if (this.initiated) {
-      this.enableAll();
       return this.mediaStream as MediaStream;
     }
     this.initMedia();
@@ -41,17 +46,31 @@ class MediaDeviceManager {
     return this.mediaStream as MediaStream;
   };
 
-  public enableAll = () => {
-    if (!this.initiated) return;
-    const mediaStream = this.mediaStream as MediaStream;
-
-    mediaStream.getTracks().forEach((track) => (track.enabled = true));
+  public disableMediaStream = () => {
+    if (!this.mediaStream) return;
+    this.mediaStream.getTracks().forEach((t) => t.stop());
+    this.mediaStream = null;
+    this.initiated = false;
   };
 
-  public disableAll = () => {
-    if (!this.initiated) return;
-    const mediaStream = this.mediaStream as MediaStream;
-    mediaStream.getTracks().forEach((track) => track.stop());
+  public toggleCamera = () => {
+    if (!this.mediaStream) return false;
+
+    this.mediaStream.getVideoTracks().forEach((t) => {
+      t.enabled = !this.cameraOn;
+    });
+    this.cameraOn = !this.cameraOn;
+    return this.cameraOn;
+  };
+
+  public toggleAudio = () => {
+    if (!this.mediaStream) return false;
+
+    this.mediaStream.getAudioTracks().forEach((t) => {
+      t.enabled = !this.audioOn;
+    });
+    this.audioOn = !this.audioOn;
+    return this.audioOn;
   };
 }
 

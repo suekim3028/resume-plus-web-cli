@@ -5,7 +5,7 @@ export const STEPS = [
   "QUESTION_READY",
   "ENV_CHECK",
   "INTERVIEW_LOADING",
-  "INTERVIEW_ING",
+  "INTERVIEW_MAIN",
   // "EVALUATION",
 ] as const;
 

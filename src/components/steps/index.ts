@@ -5,6 +5,8 @@ import QuestionReady from "./QuestionReady/QuestionReady";
 import UploadCv from "./UploadCv/UploadCv";
 import Questions from "./Questions/Questions";
 import InterviewLoading from "./InterviewLoading/InterviewLoading";
+import InterviewMain from "./InterviewMain/InterviewMain";
+
 export {
   EnvCheck,
   Evaluation,
@@ -13,4 +15,5 @@ export {
   UploadCv,
   Questions,
   InterviewLoading,
+  InterviewMain,
 };

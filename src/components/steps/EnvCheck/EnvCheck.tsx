@@ -15,7 +15,6 @@ const EnvCheck = () => {
   const recorder = CurrentMediaRecorder();
 
   const record = () => {
-    MediaDeviceManager.enableAll();
     setStatus("RECORDING");
     setVideoUrl(null);
     recorder.record({
@@ -24,7 +23,6 @@ const EnvCheck = () => {
     setTimeout(() => {
       recorder.stop();
       setStatus("RECORDED");
-      MediaDeviceManager.disableAll();
     }, INTERVIEW_CONSTS.ENV_CHECK_SECONDS * 1000);
   };
 
@@ -62,11 +60,6 @@ const EnvCheck = () => {
         );
     }
   };
-
-  useEffect(() => {
-    MediaDeviceManager.enableAll();
-    return MediaDeviceManager.disableAll;
-  }, []);
 
   return (
     <Stack direction={"row"}>
