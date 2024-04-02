@@ -4,7 +4,7 @@ class MediaDeviceManager {
   private initiating = false;
   private mediaStreamResolvers: ((value: null) => void)[] = [];
 
-  public initMedia = async () => {
+  private initMedia = async () => {
     if (this.initiating) return;
     this.initiating = true;
     try {
@@ -30,12 +30,28 @@ class MediaDeviceManager {
   };
 
   public getMediaStream = async () => {
-    if (this.initiated) return this.mediaStream as MediaStream;
+    if (this.initiated) {
+      this.enableAll();
+      return this.mediaStream as MediaStream;
+    }
     this.initMedia();
     await new Promise((resolve: (v: null) => void) => {
       this.mediaStreamResolvers.push(resolve);
     });
     return this.mediaStream as MediaStream;
+  };
+
+  public enableAll = () => {
+    if (!this.initiated) return;
+    const mediaStream = this.mediaStream as MediaStream;
+
+    mediaStream.getTracks().forEach((track) => (track.enabled = true));
+  };
+
+  public disableAll = () => {
+    if (!this.initiated) return;
+    const mediaStream = this.mediaStream as MediaStream;
+    mediaStream.getTracks().forEach((track) => track.stop());
   };
 }
 

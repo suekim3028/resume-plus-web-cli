@@ -13,3 +13,5 @@ export const META_DATA: Required<WebsiteTypes.MetaTags> = {
   ogImageHeight: "540",
   ogImageAlt: "",
 } as const;
+
+export const CAMERA_VIDEO_QUERY = "#videoElement";

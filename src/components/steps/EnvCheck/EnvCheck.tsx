@@ -1,9 +1,9 @@
 import { Button, Stack, Text } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
 import { useStepContext } from "@contexts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Microphone from "./components/Microphone";
-import { CurrentMediaRecorder } from "@libs";
+import { CurrentMediaRecorder, MediaDeviceManager } from "@libs";
 import { INTERVIEW_CONSTS } from "@constants";
 
 type Status = "BEFORE" | "RECORDING" | "RECORDED";
@@ -15,6 +15,7 @@ const EnvCheck = () => {
   const recorder = CurrentMediaRecorder();
 
   const record = () => {
+    MediaDeviceManager.enableAll();
     setStatus("RECORDING");
     setVideoUrl(null);
     recorder.record({
@@ -23,6 +24,7 @@ const EnvCheck = () => {
     setTimeout(() => {
       recorder.stop();
       setStatus("RECORDED");
+      MediaDeviceManager.disableAll();
     }, INTERVIEW_CONSTS.ENV_CHECK_SECONDS * 1000);
   };
 
@@ -60,7 +62,11 @@ const EnvCheck = () => {
         );
     }
   };
-  console.log(videoUrl);
+
+  useEffect(() => {
+    MediaDeviceManager.enableAll();
+    return MediaDeviceManager.disableAll;
+  }, []);
 
   return (
     <Stack direction={"row"}>
