@@ -8,3 +8,5 @@ export const STEPS = [
   "INTERVIEW_ING",
   // "EVALUATION",
 ] as const;
+
+export const ENV_CHECK_SECONDS = 5;

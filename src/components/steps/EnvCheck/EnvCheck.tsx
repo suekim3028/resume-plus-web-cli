@@ -4,6 +4,7 @@ import { useStepContext } from "@contexts";
 import React, { useState } from "react";
 import Microphone from "./components/Microphone";
 import { CurrentMediaRecorder } from "@libs";
+import { INTERVIEW_CONSTS } from "@constants";
 
 type Status = "BEFORE" | "RECORDING" | "RECORDED";
 const EnvCheck = () => {
@@ -22,7 +23,7 @@ const EnvCheck = () => {
     setTimeout(() => {
       recorder.stop();
       setStatus("RECORDED");
-    }, 5000);
+    }, INTERVIEW_CONSTS.ENV_CHECK_SECONDS * 1000);
   };
 
   const LABELS: Record<Status, { title: string; body: string }> = {
