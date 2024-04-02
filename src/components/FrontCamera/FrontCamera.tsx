@@ -26,6 +26,7 @@ const FrontCamera = () => {
           id="videoElement"
           style={{
             objectFit: "fill",
+            transform: "rotateY(180deg)",
           }}
           muted
           controls={false}
