@@ -1,11 +1,7 @@
 import { ChatMain, UserOnlyPage } from "@components";
 
 const Index = () => {
-  return (
-    <UserOnlyPage>
-      <ChatMain />
-    </UserOnlyPage>
-  );
+  return <ChatMain />;
 };
 
 export default Index;

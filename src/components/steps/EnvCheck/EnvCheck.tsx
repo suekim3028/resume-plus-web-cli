@@ -33,7 +33,7 @@ const EnvCheck = () => {
         <video
           style={{ width: 500, height: 400, transform: "rotateY(180deg)" }}
           src={videoUrl}
-          autoPlay
+          controls
         />
       )}
       {status !== "RECORDED" && (
