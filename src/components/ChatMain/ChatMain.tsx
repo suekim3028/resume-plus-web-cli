@@ -4,6 +4,7 @@ import React from "react";
 import * as S from "./ChatMain.styles";
 import {
   EnvCheck,
+  InterviewLoading,
   QuestionLoading,
   QuestionReady,
   UploadCv,
@@ -22,7 +23,7 @@ const StepComponent = (): JSX.Element => {
     case "ENV_CHECK":
       return <EnvCheck />;
     case "INTERVIEW_LOADING":
-      return <></>;
+      return <InterviewLoading />;
     case "INTERVIEW_ING":
       return <></>;
   }

@@ -4,6 +4,7 @@ import QuestionLoading from "./QuestionLoading/QuestionLoading";
 import QuestionReady from "./QuestionReady/QuestionReady";
 import UploadCv from "./UploadCv/UploadCv";
 import Questions from "./Questions/Questions";
+import InterviewLoading from "./InterviewLoading/InterviewLoading";
 export {
   EnvCheck,
   Evaluation,
@@ -11,4 +12,5 @@ export {
   QuestionReady,
   UploadCv,
   Questions,
+  InterviewLoading,
 };
