@@ -35,6 +35,7 @@ const Login = () => {
   const submit = async () => {
     if (!checkValidSignInUser()) return;
     await signIn(signInUser.current);
+    router.replace("/");
   };
   return (
     <L.FlexCol h={"100%"} w={"100%"} justifyContent="space-between">

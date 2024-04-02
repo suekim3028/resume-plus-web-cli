@@ -8,8 +8,10 @@ export const useUser = () => {
   const [user, setUser] = useRecoilState(userStore);
 
   const signIn = async (user: UserType.SignInUser) => {
-    const { isError } = await withErrorHandling(() => userApis.signIn(user));
-    if (isError) return;
+    // const { isError } = await withErrorHandling(() => userApis.signIn(user));
+    // if (isError) return;
+
+    console.log({ user });
 
     const { username } = user;
     setUser({ username });
