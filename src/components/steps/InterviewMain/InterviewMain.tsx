@@ -1,19 +1,36 @@
 import { Button, Stack } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
-import { MediaDeviceManager } from "@libs";
-import { useState } from "react";
+import { DisplayMediaRecorder, MediaDeviceManager } from "@libs";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const InterviewMain = () => {
   const [cameraOn, setCameraOn] = useState(true);
   const [audioOn, setAudioOn] = useState(true);
+  const displayRecorder = useRef(DisplayMediaRecorder());
+  const [displayRecord, setDisplayRecord] = useState<string | null>(null);
+
+  const downloader = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    displayRecorder.current.record({ onDataAvailable: setDisplayRecord });
+  }, []);
+
+  const endInterview = () => {
+    displayRecorder.current.stop();
+    if (!downloader.current || !displayRecord) return;
+    downloader.current.href = displayRecord;
+    downloader.current.download = "test.mp4";
+    downloader.current.click();
+  };
+
   return (
     <Stack direction={"row"}>
+      <a style={{ display: "none" }} ref={downloader} />
       <Stack>
         <Stack direction={"row"}>
           <div
             style={{
               position: "relative",
-              border: "1px solid red",
               width: 500,
               height: 500,
               backgroundColor: "black",
@@ -22,7 +39,6 @@ const InterviewMain = () => {
           <div
             style={{
               position: "relative",
-              border: "1px solid red",
               width: 500,
               height: 500,
             }}
@@ -47,6 +63,7 @@ const InterviewMain = () => {
           </Button>
         </Stack>
       </Stack>
+      <Button onClick={endInterview}>영상 끝내기 (dummy)</Button>
     </Stack>
   );
 };

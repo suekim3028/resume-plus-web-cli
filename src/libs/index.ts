@@ -1,4 +1,5 @@
 import MediaDeviceManager from "./MediaDeviceManager";
 import CurrentMediaRecorder from "./MediaRecorder";
-//
-export { MediaDeviceManager, CurrentMediaRecorder };
+import DisplayMediaRecorder from "./DisplayMediaRecorder";
+
+export { MediaDeviceManager, CurrentMediaRecorder, DisplayMediaRecorder };
