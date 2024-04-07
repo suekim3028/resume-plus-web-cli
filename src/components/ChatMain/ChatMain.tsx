@@ -9,6 +9,7 @@ import {
   QuestionLoading,
   QuestionReady,
   UploadCv,
+  EvaluationLoading,
 } from "@components/steps";
 
 const StepComponent = (): JSX.Element => {
@@ -27,6 +28,9 @@ const StepComponent = (): JSX.Element => {
       return <InterviewLoading />;
     case "INTERVIEW_MAIN":
       return <InterviewMain />;
+    case "EVALUATION_LOADING":
+      return <EvaluationLoading />;
+      case 
   }
 };
 

@@ -5,11 +5,13 @@ import { commonHooks, jsUtils } from "@web-core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Chat from "./components/Chat";
 import useInterviewAnswer from "./hooks/useInterviewAnswer";
+import { useStepContext } from "@contexts";
 
 const InterviewMain = () => {
   const [cameraOn, setCameraOn] = useState(true);
   const [audioOn, setAudioOn] = useState(true);
   const [status, setStatus] = useState<"SHOW_CHAT" | "HIDE_CHAT">("HIDE_CHAT");
+  const { goNext } = useStepContext();
 
   const { chats, answer, questionStep, startInterview } = useInterviewAnswer({
     onQuestion: (question) => {
@@ -25,6 +27,11 @@ const InterviewMain = () => {
     () => setStatus((s) => (s === "HIDE_CHAT" ? "SHOW_CHAT" : "HIDE_CHAT")),
     []
   );
+
+  const handleAnswer = (answerText: string) => {
+    const { isEnd, isError } = answer(answerText);
+    if (isEnd && !isError) goNext();
+  };
 
   commonHooks.useAsyncEffect(async () => {
     await displayRecorder.init();
@@ -77,7 +84,7 @@ const InterviewMain = () => {
 
       {status === "SHOW_CHAT" && (
         <Stack w={"35%"} h={"100%"} backgroundColor={"gray"}>
-          <Chat answer={answer} chats={chats} />
+          <Chat answer={handleAnswer} chats={chats} />
         </Stack>
       )}
     </Flex>

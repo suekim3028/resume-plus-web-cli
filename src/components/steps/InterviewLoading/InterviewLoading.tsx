@@ -11,6 +11,7 @@ const InterviewLoading = () => {
 
     setLeftSeconds(_leftSeconds);
     if (_leftSeconds === 0) {
+      console.log("?????");
       goNext();
     }
   });

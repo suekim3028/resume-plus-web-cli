@@ -55,7 +55,7 @@ const useInterviewAnswer = ({
   };
 
   const answer = (answer: string) => {
-    if (!currentQuestion) return;
+    if (!currentQuestion) return { isError: true, isEnd: false };
     setChats((prev) => [...prev, { isMine: true, content: answer }]);
 
     (async () => {
@@ -70,6 +70,7 @@ const useInterviewAnswer = ({
     if (!isLastQuestion) {
       setQuestionIdx((idx) => (idx === undefined ? undefined : idx + 1));
     }
+    return { isError: false, isEnd: isLastQuestion };
   };
 
   useEffect(() => {
