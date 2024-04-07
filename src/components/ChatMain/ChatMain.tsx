@@ -34,17 +34,13 @@ const ChatMain = () => {
   return (
     <StepContextProvider>
       <L.FlexCol
-        w="100%"
         style={{
-          flex: 1,
           width: "100%",
-          overflowY: "scroll",
+          height: "100%",
         }}
         bgColor="BASIC_WHITE"
       >
-        <S.Container>
-          <StepComponent />
-        </S.Container>
+        <StepComponent />
       </L.FlexCol>
     </StepContextProvider>
   );

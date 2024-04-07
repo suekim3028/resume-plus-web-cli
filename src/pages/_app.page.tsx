@@ -8,7 +8,7 @@ import { ThemeProvider } from "styled-components";
 import "../styles/global.style.css";
 import { AppHead, TopBar } from "@components";
 import { Layout as L } from "@design-system";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Flex } from "@chakra-ui/react";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -20,10 +20,27 @@ export default function App({ Component, pageProps }: AppProps) {
           >
             <RecoilRoot>
               <AppHead />
-              <L.FlexCol w={"100%"}>
+              <div
+                style={{
+                  height: "100vh",
+                  width: "100vw",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <TopBar />
-                <Component {...pageProps} />
-              </L.FlexCol>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    overflowY: "scroll",
+                    scrollbarWidth: "none",
+                  }}
+                >
+                  <Component {...pageProps} />
+                </div>
+              </div>
             </RecoilRoot>
           </IconContext.Provider>
         </ThemeProvider>
