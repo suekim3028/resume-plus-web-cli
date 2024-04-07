@@ -1,13 +1,22 @@
-import { Button, Flex, Stack } from "@chakra-ui/react";
+import { Button, Flex, Stack, Text } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
 import { DisplayMediaRecorder, MediaDeviceManager } from "@libs";
-import { commonHooks } from "@web-core";
+import { commonHooks, jsUtils } from "@web-core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Chat from "./components/Chat";
+import useInterviewAnswer from "./hooks/useInterviewAnswer";
 
 const InterviewMain = () => {
   const [cameraOn, setCameraOn] = useState(true);
   const [audioOn, setAudioOn] = useState(true);
   const [status, setStatus] = useState<"SHOW_CHAT" | "HIDE_CHAT">("HIDE_CHAT");
+
+  const { chats, answer, questionStep, startInterview } = useInterviewAnswer({
+    onQuestion: (question) => {
+      console.log(question);
+      // TODO: tts;
+    },
+  });
 
   const displayRecorder = new DisplayMediaRecorder();
 
@@ -20,6 +29,8 @@ const InterviewMain = () => {
   commonHooks.useAsyncEffect(async () => {
     await displayRecorder.init();
     displayRecorder.start();
+    await jsUtils.wait(2);
+    startInterview();
   }, []);
 
   const endInterview = () => {
@@ -32,9 +43,12 @@ const InterviewMain = () => {
   };
 
   return (
-    <Flex flex={1}>
+    <Flex w={"100%"} h={"100%"}>
       <a style={{ display: "none" }} ref={downloader} />
       <Flex flex={1} direction={"column"}>
+        <Flex h={"50px"}>
+          <Text>{questionStep}</Text>
+        </Flex>
         <Flex flex={1}>
           <Flex flex={1} style={{ backgroundColor: "black" }} h={"100%"} />
           <Flex flex={1} justifyContent={"center"} alignItems={"center"}>
@@ -62,7 +76,9 @@ const InterviewMain = () => {
       </Flex>
 
       {status === "SHOW_CHAT" && (
-        <Stack w={"35%"} backgroundColor={"gray"}></Stack>
+        <Stack w={"35%"} h={"100%"} backgroundColor={"gray"}>
+          <Chat answer={answer} chats={chats} />
+        </Stack>
       )}
     </Flex>
   );

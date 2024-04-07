@@ -39,6 +39,7 @@ export type Evaluation = ScoreEvaluation | CriteriaEvaluation;
 export type Feedback = {
   type: QuestionType;
   question: string;
+  questionId: number;
   user_answer: string;
   evaluation?: Evaluation;
 };
@@ -46,4 +47,9 @@ export type Feedback = {
 export type Question = {
   question: string;
   id: number;
+};
+
+export type Chat = {
+  isMine: boolean;
+  content: string;
 };

@@ -25,13 +25,21 @@ export const interviewQuestionsStore = selector({
   },
 });
 
-export const evaluationStore = atom<
-  Record<InterviewTypes.QuestionType, InterviewTypes.ScoreEvaluation[]>
->({
+export const evaluationStore = atom<InterviewTypes.Feedback[]>({
   key: "evaluation",
-  default: {
-    perQ: [],
-    techQ: [],
-    behavQ: [],
+  default: [],
+});
+
+export const evaluationFinished = selector({
+  key: "evaluationFinishedStore",
+  get: ({ get }) => {
+    const questions = get(interviewQuestionsStore);
+    const evaluation = get(evaluationStore);
+
+    if (!questions) return false;
+
+    return [...questions.behavQ, ...questions.perQ, ...questions.techQ].every(
+      ({ id }) => !!evaluation.find(({ questionId }) => id === questionId)
+    );
   },
 });

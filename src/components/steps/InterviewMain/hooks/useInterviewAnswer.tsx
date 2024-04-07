@@ -1,13 +1,8 @@
 import { interviewApis } from "@apis";
-import { interviewQuestionsStore } from "@store";
+import { evaluationStore, interviewQuestionsStore } from "@store";
 import { InterviewTypes } from "@types";
-import { useEffect, useMemo, useState } from "react";
-import { useRecoilValueLoadable } from "recoil";
-
-type Chat = {
-  isMine: boolean;
-  content: string;
-};
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 
 const QUESTION_STEPS: InterviewTypes.QuestionType[] = [
   "perQ",
@@ -15,7 +10,9 @@ const QUESTION_STEPS: InterviewTypes.QuestionType[] = [
   "techQ",
 ];
 
-const questionToChat = (question: InterviewTypes.Question): Chat => ({
+const questionToChat = (
+  question: InterviewTypes.Question
+): InterviewTypes.Chat => ({
   isMine: false,
   content: question.question,
 });
@@ -27,7 +24,9 @@ const useInterviewAnswer = ({
 }) => {
   const _questions = useRecoilValueLoadable(interviewQuestionsStore);
   const [questionIdx, setQuestionIdx] = useState<number>();
-  const [chats, setChats] = useState<Chat[]>([]);
+  const [chats, setChats] = useState<InterviewTypes.Chat[]>([]);
+
+  const setEvaluation = useSetRecoilState(evaluationStore);
 
   const questions = useMemo(() => {
     if (_questions.state !== "hasValue") return null;
@@ -44,21 +43,33 @@ const useInterviewAnswer = ({
     return questions[questionIdx];
   }, [questionIdx, !!_questions]);
 
+  const isLastQuestion =
+    !!questions &&
+    questionIdx != undefined &&
+    questionIdx === questions.length - 1;
+
   const questionStep = currentQuestion?.type || QUESTION_STEPS[0];
 
-  const start = () => {
+  const startInterview = () => {
     setQuestionIdx(0);
   };
 
   const answer = (answer: string) => {
     if (!currentQuestion) return;
     setChats((prev) => [...prev, { isMine: true, content: answer }]);
-    interviewApis.answerQuestion({
-      type: questionStep,
-      answer,
-      questionId: currentQuestion.id,
-    });
-    setQuestionIdx((idx) => (idx === undefined ? undefined : idx + 1));
+
+    (async () => {
+      const feedback = await interviewApis.answerQuestion({
+        type: questionStep,
+        answer,
+        questionId: currentQuestion.id,
+      });
+      setEvaluation((prev) => [...prev, feedback]);
+    })();
+
+    if (!isLastQuestion) {
+      setQuestionIdx((idx) => (idx === undefined ? undefined : idx + 1));
+    }
   };
 
   useEffect(() => {
@@ -68,7 +79,9 @@ const useInterviewAnswer = ({
     }
   }, [currentQuestion?.id]);
 
-  return { chats, questionStep, answer };
+  const waitForFeedback = async () => {};
+
+  return { chats, questionStep, answer, startInterview, waitForFeedback };
 };
 
 export default useInterviewAnswer;

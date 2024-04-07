@@ -1,5 +1,6 @@
 import { ApiTypes, InterviewTypes } from "@types";
 import API from "./API";
+import { jsUtils } from "@web-core";
 
 /**
  * CV 업로드
@@ -13,8 +14,14 @@ export const uploadCV = async (params: UploadCvParams) => {
   return API.post<ApiTypes.SuccessRes>("/cv", params);
 };
 
-const dummyQuestionGenerator = (length: number): InterviewTypes.Question[] =>
-  Array.from({ length }, (_, idx) => ({ id: idx, question: "ababababbaba" }));
+const dummyQuestionGenerator = (
+  length: number,
+  type: string
+): InterviewTypes.Question[] =>
+  Array.from({ length }, (_, idx) => ({
+    id: idx,
+    question: `${type} ${idx} 질문입니다.`,
+  }));
 
 /**
  * Common Questions 가져오기
@@ -42,8 +49,8 @@ export const getCommonQ = async (): Promise<GetCommonQResponse> => {
 
   await wait(1);
   return {
-    techQ: dummyQuestionGenerator(5),
-    behavQ: dummyQuestionGenerator(5),
+    techQ: dummyQuestionGenerator(5, "기술질문"),
+    behavQ: dummyQuestionGenerator(5, "인성질문"),
   };
 };
 
@@ -62,7 +69,7 @@ export const getPersonalQ = async (): Promise<GetPersonalQResponse> => {
   console.log("getPersonalQ");
   await wait(1);
   return {
-    perQ: dummyQuestionGenerator(5),
+    perQ: dummyQuestionGenerator(5, "개인질문"),
   };
 };
 
@@ -96,10 +103,14 @@ export const dummyAnswer = async ({
   type,
 }: AnswerQuestionParams & {
   type: InterviewTypes.QuestionType;
-}): Promise<InterviewTypes.Feedback> => ({
-  question: "aaaa",
-  user_answer: "bbbb",
-  type,
-});
+}): Promise<InterviewTypes.Feedback> => {
+  jsUtils.wait(Math.random() * 2);
+  return {
+    question: "aaaa",
+    user_answer: answer,
+    type,
+    questionId,
+  };
+};
 
 export const answerQuestion = dummyAnswer; // TODO: type에 따라 연결
