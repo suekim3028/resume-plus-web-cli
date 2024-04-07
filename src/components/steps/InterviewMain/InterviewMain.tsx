@@ -1,6 +1,7 @@
 import { Button, Flex, Stack } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
 import { DisplayMediaRecorder, MediaDeviceManager } from "@libs";
+import { commonHooks } from "@web-core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const InterviewMain = () => {
@@ -8,8 +9,7 @@ const InterviewMain = () => {
   const [audioOn, setAudioOn] = useState(true);
   const [status, setStatus] = useState<"SHOW_CHAT" | "HIDE_CHAT">("HIDE_CHAT");
 
-  const displayRecorder = useRef(DisplayMediaRecorder());
-  const [displayRecord, setDisplayRecord] = useState<string | null>(null);
+  const displayRecorder = new DisplayMediaRecorder();
 
   const downloader = useRef<HTMLAnchorElement>(null);
   const toggleChat = useCallback(
@@ -17,14 +17,16 @@ const InterviewMain = () => {
     []
   );
 
-  useEffect(() => {
-    displayRecorder.current.record({ onDataAvailable: setDisplayRecord });
+  commonHooks.useAsyncEffect(async () => {
+    await displayRecorder.init();
+    displayRecorder.start();
   }, []);
 
   const endInterview = () => {
-    displayRecorder.current.stop();
-    if (!downloader.current || !displayRecord) return;
-    downloader.current.href = displayRecord;
+    const url = displayRecorder.stop();
+
+    if (!downloader.current) return;
+    downloader.current.href = url;
     downloader.current.download = "test.mp4";
     downloader.current.click();
   };

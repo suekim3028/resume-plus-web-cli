@@ -1,29 +1,36 @@
-const DisplayMediaRecorder = () => {
-  let mediaRecorder: MediaRecorder;
-  const record = async ({
-    onDataAvailable,
-  }: {
-    onDataAvailable: (url: string) => void;
-  }) => {
+class DisplayMediaRecorder {
+  private mediaRecorder: MediaRecorder | null = null;
+  private mediaBlob: Blob[] = [];
+
+  public init = async () => {
     const displayMedia = await navigator.mediaDevices?.getDisplayMedia();
-
-    mediaRecorder = new MediaRecorder(displayMedia);
-    mediaRecorder.ondataavailable = (ev) => {
+    this.mediaRecorder = new MediaRecorder(displayMedia);
+    this.mediaRecorder.ondataavailable = (ev) => {
       if (ev.data.size <= 0) return;
-      const blob = new Blob([ev.data], {
-        type: "video/mp4",
-      });
-      const url = URL.createObjectURL(blob);
-      onDataAvailable(url);
+      this.mediaBlob.push(ev.data);
     };
-    mediaRecorder.start();
   };
 
-  const stop = () => {
-    mediaRecorder.stop();
+  public start = () => {
+    this.mediaRecorder?.start();
   };
 
-  return { record, stop };
-};
+  public stop = () => {
+    this.mediaRecorder?.stop();
+    const blob = new Blob(this.mediaBlob, {
+      type: "video/mp4",
+    });
+    const url = URL.createObjectURL(blob);
+    return url;
+  };
+
+  public pause = () => {
+    this.mediaRecorder?.pause();
+  };
+
+  public resume = () => {
+    this.mediaRecorder?.resume();
+  };
+}
 
 export default DisplayMediaRecorder;

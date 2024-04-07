@@ -57,7 +57,7 @@ const Evaluation = () => {
 
               {!!evaluation && isScoreEval(evaluation) && (
                 <>
-                  <InfoRow
+                  {/* <InfoRow
                     title={"score"}
                     body={`${evaluation.score}`}
                     mt={10}
@@ -67,7 +67,7 @@ const Evaluation = () => {
                     title={"rationale"}
                     body={evaluation.rationale}
                     mt={10}
-                  />
+                  /> */}
                 </>
               )}
 
@@ -86,7 +86,7 @@ const Evaluation = () => {
                         {idx !== 0 && (
                           <L.LayoutBase w={"100%"} h={1} bgColor="GRAY_200" />
                         )}
-                        <InfoRow
+                        {/* <InfoRow
                           title={"criteria"}
                           body={criteria || ""}
                           mt={20}
@@ -97,7 +97,7 @@ const Evaluation = () => {
                           mt={10}
                           bgColor={"PRIMARY_100"}
                         />
-                        <InfoRow title={"rationale"} body={rationale} mt={10} />
+                        <InfoRow title={"rationale"} body={rationale} mt={10} /> */}
                       </L.FlexCol>
                     );
                   })}{" "}
