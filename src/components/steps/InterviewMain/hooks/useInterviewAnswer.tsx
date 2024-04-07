@@ -1,7 +1,8 @@
+import { interviewApis } from "@apis";
 import { interviewQuestionsStore } from "@store";
 import { InterviewTypes } from "@types";
 import { useEffect, useMemo, useState } from "react";
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilValueLoadable } from "recoil";
 
 type Chat = {
   isMine: boolean;
@@ -25,7 +26,6 @@ const useInterviewAnswer = ({
   onQuestion: (question: InterviewTypes.Question) => void;
 }) => {
   const _questions = useRecoilValueLoadable(interviewQuestionsStore);
-
   const [questionIdx, setQuestionIdx] = useState<number>();
   const [chats, setChats] = useState<Chat[]>([]);
 
@@ -38,30 +38,35 @@ const useInterviewAnswer = ({
     );
   }, [_questions.state]);
 
-  const questionStep = useMemo(() => {
-    if (questionIdx === undefined || !questions) return null;
-    return questions[questionIdx].type;
-  }, [questionIdx, !!questions]);
+  const currentQuestion = useMemo(() => {
+    if (questionIdx === undefined) return null;
+    if (!questions) return null;
+    return questions[questionIdx];
+  }, [questionIdx, !!_questions]);
+
+  const questionStep = currentQuestion?.type || QUESTION_STEPS[0];
 
   const start = () => {
-    if (!questions) return;
     setQuestionIdx(0);
-    const question = questions[0];
-    onQuestion(question);
   };
 
   const answer = (answer: string) => {
+    if (!currentQuestion) return;
     setChats((prev) => [...prev, { isMine: true, content: answer }]);
+    interviewApis.answerQuestion({
+      type: questionStep,
+      answer,
+      questionId: currentQuestion.id,
+    });
     setQuestionIdx((idx) => (idx === undefined ? undefined : idx + 1));
   };
 
   useEffect(() => {
-    if (questionIdx !== undefined && !!questions) {
-      const question = questions[questionIdx];
-      setChats((chats) => [...chats, questionToChat(question)]);
-      onQuestion(question);
+    if (currentQuestion) {
+      setChats((prev) => [...prev, questionToChat(currentQuestion)]);
+      onQuestion(currentQuestion);
     }
-  }, [questionIdx]);
+  }, [currentQuestion?.id]);
 
   return { chats, questionStep, answer };
 };

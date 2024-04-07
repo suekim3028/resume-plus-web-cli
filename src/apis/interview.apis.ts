@@ -102,6 +102,4 @@ export const dummyAnswer = async ({
   type,
 });
 
-export const answerTechQ = dummyAnswer;
-export const answerBehavQ = dummyAnswer;
-export const answerPersonalQ = dummyAnswer;
+export const answerQuestion = dummyAnswer; // TODO: type에 따라 연결
