@@ -1,5 +1,7 @@
 // TODO: 하나씩 refactor
 export const STEPS = [
+  "INTERVIEW_MAIN",
+
   "UPLOAD_CV",
   "QUESTION_LOADING",
   "QUESTION_READY",
