@@ -24,10 +24,9 @@ const FrontCamera = () => {
           disableRemotePlayback
           disablePictureInPicture
           width={"100%"}
-          height={"100%"}
           id="videoElement"
           style={{
-            objectFit: "fill",
+            objectFit: "contain",
             transform: "rotateY(180deg)",
           }}
           muted

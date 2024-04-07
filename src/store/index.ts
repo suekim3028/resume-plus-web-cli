@@ -20,7 +20,6 @@ export const interviewQuestionsStore = selector({
 
     const { techQ, behavQ } = await interviewApis.getCommonQ();
     const { perQ } = await interviewApis.getPersonalQ();
-    console.log("===========");
 
     return { techQ, behavQ, perQ };
   },

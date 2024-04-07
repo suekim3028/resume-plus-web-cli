@@ -28,6 +28,7 @@ export type InterviewInfo = {
 export type QuestionType = "behavQ" | "techQ" | "perQ";
 
 export type CriteriaEvaluation = Record<string, [string, string]>;
+
 export type ScoreEvaluation = {
   score: number;
   rationale: string;

@@ -1,15 +1,21 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Flex, Stack } from "@chakra-ui/react";
 import { FrontCamera } from "@components";
 import { DisplayMediaRecorder, MediaDeviceManager } from "@libs";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const InterviewMain = () => {
   const [cameraOn, setCameraOn] = useState(true);
   const [audioOn, setAudioOn] = useState(true);
+  const [status, setStatus] = useState<"SHOW_CHAT" | "HIDE_CHAT">("HIDE_CHAT");
+
   const displayRecorder = useRef(DisplayMediaRecorder());
   const [displayRecord, setDisplayRecord] = useState<string | null>(null);
 
   const downloader = useRef<HTMLAnchorElement>(null);
+  const toggleChat = useCallback(
+    () => setStatus((s) => (s === "HIDE_CHAT" ? "SHOW_CHAT" : "HIDE_CHAT")),
+    []
+  );
 
   useEffect(() => {
     displayRecorder.current.record({ onDataAvailable: setDisplayRecord });
@@ -24,29 +30,16 @@ const InterviewMain = () => {
   };
 
   return (
-    <Stack direction={"row"}>
+    <Flex flex={1}>
       <a style={{ display: "none" }} ref={downloader} />
-      <Stack>
-        <Stack direction={"row"}>
-          <div
-            style={{
-              position: "relative",
-              width: 500,
-              height: 500,
-              backgroundColor: "black",
-            }}
-          />
-          <div
-            style={{
-              position: "relative",
-              width: 500,
-              height: 500,
-            }}
-          >
+      <Flex flex={1} direction={"column"}>
+        <Flex flex={1}>
+          <Flex flex={1} style={{ backgroundColor: "black" }} h={"100%"} />
+          <Flex flex={1} justifyContent={"center"} alignItems={"center"}>
             <FrontCamera />
-          </div>
-        </Stack>
-        <Stack direction={"row"}>
+          </Flex>
+        </Flex>
+        <Flex h={"50px"}>
           <Button
             onClick={() => {
               setCameraOn(MediaDeviceManager.toggleCamera());
@@ -61,10 +54,15 @@ const InterviewMain = () => {
           >
             {audioOn ? "마이크 끄기" : "마이크 켜기"}
           </Button>
-        </Stack>
-      </Stack>
-      <Button onClick={endInterview}>영상 끝내기 (dummy)</Button>
-    </Stack>
+          <Button onClick={endInterview}>영상 끝내기 (dummy)</Button>
+          <Button onClick={toggleChat}>채팅 on off</Button>
+        </Flex>
+      </Flex>
+
+      {status === "SHOW_CHAT" && (
+        <Stack w={"35%"} backgroundColor={"gray"}></Stack>
+      )}
+    </Flex>
   );
 };
 
