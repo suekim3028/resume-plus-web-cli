@@ -4,15 +4,15 @@ import { useUser } from "@hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useRef, useState } from "react";
-import { UserType } from "@types";
+import { UserTypes } from "@types";
 
 const Index = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const { signUp } = useUser();
   const router = useRouter();
 
-  const signUpUser = useRef<UserType.SignUpUser>({
-    username: "",
+  const signUpUser = useRef<UserTypes.SignUpUser>({
+    userId: "",
     password: "",
     email: "",
     name: "",
@@ -23,7 +23,7 @@ const Index = () => {
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
-    type: keyof UserType.SignUpUser
+    type: keyof UserTypes.SignUpUser
   ) => {
     signUpUser.current = {
       ...signUpUser.current,
@@ -74,8 +74,8 @@ const Index = () => {
             >
               <S.Input
                 aria-multiline={false}
-                placeholder="username"
-                onChange={(e) => handleChange(e, "username")}
+                placeholder="userId"
+                onChange={(e) => handleChange(e, "userId")}
               />
             </L.LayoutBase>
             <L.LayoutBase

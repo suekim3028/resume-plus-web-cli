@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { isScoreEval } from "./Evaluation.utils";
 
 const Evaluation = () => {
+  // const
   const [feedbacks, setFeedbacks] = useState<InterviewTypes.Feedback[] | null>(
     null
   );

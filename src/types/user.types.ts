@@ -1,5 +1,5 @@
 export type User = {
-  username: string;
+  userId: string;
   name: string;
   email: string;
   password: string;
@@ -7,4 +7,4 @@ export type User = {
 
 export type SignUpUser = User;
 
-export type SignInUser = Pick<User, "username" | "password">;
+export type SignInUser = Pick<User, "userId" | "password">;

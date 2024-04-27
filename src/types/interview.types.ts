@@ -5,23 +5,22 @@ export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 export type Company = {
   id: number;
   name: string;
-  thumbnailUrl: string;
+  // thumbnailUrl: string;
 };
 
-export type JobGroup = {
+export type JobDepartment = {
   id: number;
-  name: string;
-  jobs: Job[];
+  department: string;
 };
 
 export type Job = {
   id: number;
-  name: string;
+  job: string;
 };
 
 export type InterviewInfo = {
   companyId: number;
-  jobGroupId: number;
+  jobDepartmentId: number;
   jobId: number;
 };
 

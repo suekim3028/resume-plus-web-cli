@@ -59,7 +59,7 @@ const UploadCv = () => {
     await uploadPdf();
     setInterviewInfo({
       companyId: 1,
-      jobGroupId: 1,
+      jobDepartmentId: 1,
       jobId: 1,
     });
     _goNext();

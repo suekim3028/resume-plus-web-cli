@@ -1,8 +1,8 @@
 import { interviewApis } from "@apis";
-import { InterviewTypes } from "@types";
+import { InterviewTypes, UserTypes } from "@types";
 import { atom, selector } from "recoil";
 
-export const userStore = atom<null | { username: string }>({
+export const userStore = atom<null | Omit<UserTypes.User, "password">>({
   key: "user",
   default: null,
 });

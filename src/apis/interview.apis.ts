@@ -114,3 +114,19 @@ export const dummyAnswer = async ({
 };
 
 export const answerQuestion = dummyAnswer; // TODO: type에 따라 연결
+
+/**
+ * 기업 목록 요청
+ */
+
+type GetCompaniesResponse = InterviewTypes.Company[];
+export const getCompanies = () =>
+  API.get<GetCompaniesResponse>("/company/names");
+
+/**
+ * 직군 목록 요청
+ */
+
+type GetJobDepartmentsResponse = InterviewTypes.JobDepartment[];
+export const getJobDepartments = () =>
+  API.get<GetJobDepartmentsResponse>("/company/departments");

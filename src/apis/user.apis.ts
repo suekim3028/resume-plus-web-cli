@@ -1,18 +1,17 @@
-import { ApiTypes, UserType } from "@types";
+import { ApiTypes, UserTypes } from "@types";
 import API from "./API";
 
-type SignInResponse = {
-  access_token: string;
+export type SignInResponse = {
+  user: UserTypes.User;
+  token: {
+    grantType: string;
+    accessToken: string;
+    refreshToken: string;
+  };
 };
 
-export const signIn = async (params: UserType.SignInUser) => {
-  const { access_token } = await API.post<SignInResponse>(
-    `/auth/login`,
-    params
-    // { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-  );
-  API.setHeaderToken(access_token);
-};
+export const signIn = async (params: UserTypes.SignInUser) =>
+  API.post<SignInResponse>(`/users/login`, params);
 
-export const signUp = (data: UserType.SignUpUser) =>
-  API.post<ApiTypes.SuccessRes>("/auth", data);
+export const signUp = (data: UserTypes.SignUpUser) =>
+  API.post<SignInResponse>("/users/signup", data);

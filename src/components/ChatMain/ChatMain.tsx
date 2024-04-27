@@ -1,7 +1,7 @@
 import { StepContextProvider, useStepContext } from "@contexts";
 import { Layout as L } from "@design-system";
 import React from "react";
-import * as S from "./ChatMain.styles";
+
 import {
   EnvCheck,
   InterviewLoading,
@@ -10,6 +10,7 @@ import {
   QuestionReady,
   UploadCv,
   EvaluationLoading,
+  Evaluation,
 } from "@components/steps";
 
 const StepComponent = (): JSX.Element => {
@@ -30,7 +31,8 @@ const StepComponent = (): JSX.Element => {
       return <InterviewMain />;
     case "EVALUATION_LOADING":
       return <EvaluationLoading />;
-      case 
+    case "EVALUATION":
+      return <Evaluation />;
   }
 };
 
