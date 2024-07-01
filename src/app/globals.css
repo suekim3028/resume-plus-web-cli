@@ -1,1 +1,28 @@
+html {
+  max-width: 100vw;
+  border: 2px solid blue;
+  overflow-x: hidden;
+  background: "rgba(0,0,0,0.1)";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: white;
+  min-width: 1200px;
+  overflow-x: hidden;
+  min-height: 100dvh;
+  display: flex;
+  position: relative;
+  border: 2px solid green;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.min.css");
