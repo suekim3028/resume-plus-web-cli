@@ -1,5 +1,5 @@
-import { Grid } from "@chakra-ui/react";
-import { Flex, Text } from "@ui";
+import { GridItem } from "@chakra-ui/react";
+import { Flex, GridWrapper, Text } from "@ui";
 import Link from "next/link";
 import React from "react";
 import Icon from "../Icon/Icon";
@@ -7,29 +7,32 @@ import Logo from "../Logo/Logo";
 
 const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Flex w="100%" direction={"column"}>
-      <Grid h="40px" templateColumns="repeat(12, 1fr)" gap={4}>
-        <Flex isGridItem colSpan={2} alignItems={"center"}>
+    <Flex w="100%" direction={"column"} alignItems={"center"}>
+      <GridWrapper h={60}>
+        <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
           <Logo />
-        </Flex>
+        </GridItem>
         {Buttons.map(({ name, href }, idx) => (
-          <Flex
+          <GridItem
             key={name}
-            isGridItem
             colStart={9 + idx}
-            h={"40px"}
+            display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}
           >
             <Link href={""}>
               <Text type={"Body2_Normal"}>{name}</Text>
             </Link>
-          </Flex>
+          </GridItem>
         ))}
-        <Flex isGridItem justifyContent={"flex-end"} alignItems={"center"}>
+        <GridItem
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"flex-end"}
+        >
           <Icon name={"navigationMypage_LabelStrong"} size={24} href={"/"} />
-        </Flex>
-      </Grid>
+        </GridItem>
+      </GridWrapper>
       {children}
     </Flex>
   );

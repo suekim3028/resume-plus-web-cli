@@ -12,10 +12,14 @@ body {
   color: rgb(var(--foreground-rgb));
   background: white;
   min-width: 1200px;
+  width: 100%;
   overflow-x: hidden;
   min-height: 100dvh;
   display: flex;
   position: relative;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
 }
 
 * {

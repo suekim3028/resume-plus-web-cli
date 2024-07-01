@@ -1,5 +1,6 @@
-import { Stack, Text } from "@chakra-ui/react";
+import { GridItem } from "@chakra-ui/react";
 import { TopBarContainer } from "@components";
+import { Button, Flex, GridWrapper, Text } from "@ui";
 
 export default function Home() {
   // const router = useRouter();
@@ -7,17 +8,39 @@ export default function Home() {
 
   return (
     <TopBarContainer>
-      <Stack direction={"row"}>
-        <Stack>
-          <Text>나의 레쥬메를 기반으로 딱 맞는 화상 면접을 연습해보세요.</Text>
-          {/* <Button onClick={() => router.push("/interview")}>시작하기</Button>
-        {!hasUser && (
-          <Link as={NextLink} href="/interview">
-            비회원으로 시작하기
-          </Link>
-        )} */}
-        </Stack>
-      </Stack>
+      <Flex
+        w="100%"
+        py={200}
+        bgColor={"Background/Normal/Alternative"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
+        <GridWrapper>
+          <GridItem colSpan={5}>
+            <Flex flexDir={"column"} w="100%" alignItems={"center"}>
+              <Flex>
+                <Text type="Display2">카피 예정</Text>
+              </Flex>
+              <Button
+                mt={20}
+                type="Solid_Primary"
+                size="Large"
+                title={"면접 연습하러 가기"}
+              />
+            </Flex>
+          </GridItem>
+          <GridItem colSpan={7}>
+            <Flex
+              flexDir={"column"}
+              w="100%"
+              h={200}
+              bgColor="Line/Solid/Normal"
+            >
+              {/* <Flex bgColor={"Accent/Pink"} w={200} h={200}></Flex> */}
+            </Flex>
+          </GridItem>
+        </GridWrapper>
+      </Flex>
     </TopBarContainer>
   );
 }

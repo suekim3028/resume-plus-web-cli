@@ -1,3 +1,4 @@
+import { SpaceProps } from "@chakra-ui/react";
 import { Icon, IconNames } from "@components";
 import { UI } from "@constants";
 import Text, { FontType } from "@ui/Text/Text";
@@ -116,6 +117,7 @@ const Button = ({
   title,
   onClick,
   href,
+  ...flexProps
 }: ButtonProps) => {
   const {
     normalBgColor,
@@ -135,10 +137,9 @@ const Button = ({
 
   const Component = (
     <Flex
-      cursor={(onClick || href) && !disabled ? "pointer" : undefined}
-      w={stretch ? "100%" : undefined}
+      cursor={!disabled ? "pointer" : undefined}
+      w={stretch ? "100%" : "fit-content"}
       bgColor={disabled ? disabledBgColor : normalBgColor}
-      color={disabled ? disabledTextColor : normalTextColor}
       borderColor={currentBorderColor}
       borderStyle={"solid"}
       borderWidth={currentBorderColor ? 1 : 0}
@@ -147,9 +148,15 @@ const Button = ({
       gap={gap}
       borderRadius={borderRadius}
       onClick={disabled ? undefined : onClick}
+      {...flexProps}
     >
       {leftIcon && <Icon name={leftIcon} size={iconSize} />}
-      <Text type={fontType} fontWeight={fontWeight}>
+
+      <Text
+        type={fontType}
+        fontWeight={fontWeight}
+        color={disabled ? disabledTextColor : normalTextColor}
+      >
         {title}
       </Text>
 
@@ -179,6 +186,7 @@ type ButtonProps = {
   size: Sizes;
   onClick?: () => void;
   href?: string;
-} & { title: string };
+  title: string;
+} & SpaceProps;
 
 export default Button;
