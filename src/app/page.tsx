@@ -26,6 +26,7 @@ export default function Home() {
                 type="Solid_Primary"
                 size="Large"
                 title={"면접 연습하러 가기"}
+                href="/sign-in"
               />
             </Flex>
           </GridItem>

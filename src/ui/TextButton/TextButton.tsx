@@ -1,3 +1,4 @@
+import { SpaceProps } from "@chakra-ui/react";
 import { Icon, IconNames } from "@components";
 import { UI } from "@constants";
 import Text, { FontType } from "@ui/Text/Text";
@@ -21,8 +22,8 @@ const TYPE_SETTINGS: Record<
     normalTextColor: "Primary/Normal",
   },
   Assistive: {
-    disabledTextColor: "Label/Alternative",
-    normalTextColor: "Label/Disable",
+    normalTextColor: "Label/Alternative",
+    disabledTextColor: "Label/Disable",
   },
 };
 
@@ -41,16 +42,16 @@ const SIZE_SETTINGS: Record<
 > = {
   Medium: {
     iconSize: 20,
-    px: 4,
-    py: 0,
+    px: 0,
+    py: 4,
     gap: 4,
     fontType: "Body1_Normal",
     fontWeight: "600",
   },
   Small: {
     iconSize: 16,
-    px: 4,
-    py: 0,
+    px: 0,
+    py: 4,
     gap: 4,
     fontWeight: "600",
     fontType: "Label1_Normal",
@@ -67,6 +68,7 @@ const TextButton = ({
   title,
   onClick,
   href,
+  ...spaceProps
 }: ButtonProps) => {
   const { normalTextColor, disabledTextColor } = TYPE_SETTINGS[type];
 
@@ -76,14 +78,18 @@ const TextButton = ({
     <Flex
       cursor={(onClick || href) && !disabled ? "pointer" : undefined}
       w={stretch ? "100%" : undefined}
-      color={disabled ? disabledTextColor : normalTextColor}
       px={px}
       py={py}
       gap={gap}
       onClick={disabled ? undefined : onClick}
+      {...spaceProps}
     >
       {leftIcon && <Icon name={leftIcon} size={iconSize} />}
-      <Text type={fontType} fontWeight={fontWeight}>
+      <Text
+        type={fontType}
+        fontWeight={fontWeight}
+        color={disabled ? disabledTextColor : normalTextColor}
+      >
         {title}
       </Text>
       {rightIcon && <Icon name={rightIcon} size={iconSize} />}
@@ -113,6 +119,6 @@ type ButtonProps = {
   onClick?: () => void;
   href?: string;
   title: string;
-};
+} & SpaceProps;
 
 export default TextButton;

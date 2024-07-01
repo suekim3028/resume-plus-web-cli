@@ -1,7 +1,7 @@
 export const COLORS = {
   "Primary/Normal": "rgba(0, 102, 255, 1)",
   "Label/Strong": "rgba(0, 0, 0, 1)",
-  "Label/Normal": "rgba(247, 247, 248, 1)",
+  "Label/Normal": "rgba(23, 23, 25, 1)",
   "Label/Neutral": "rgba(46, 47, 51, 0.88)",
   "Label/Alternative": "rgba(55, 56, 60, 0.61)",
   "Label/Assistive": "rgba(55, 56, 60, 0.28)",

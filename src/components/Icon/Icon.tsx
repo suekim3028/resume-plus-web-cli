@@ -35,7 +35,7 @@ const Icon = ({ name, size, href, ...flexProps }: IconsProps) => {
   );
 };
 
-const SVG_ICON_NAMES = ["navigationMypage_LabelStrong"] as const;
+const SVG_ICON_NAMES = ["navigationMypage_LabelStrong", "logoGoogle"] as const;
 
 const PNG_ICON_NAMES = [""] as const;
 
