@@ -180,3 +180,5 @@ type ButtonProps = {
   onClick?: () => void;
   href?: string;
 } & { title: string };
+
+export default Button;

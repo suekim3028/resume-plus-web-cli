@@ -1,5 +1,6 @@
 import { Grid } from "@chakra-ui/react";
 import { Flex, Text } from "@ui";
+import Link from "next/link";
 import React from "react";
 import Icon from "../Icon/Icon";
 import Logo from "../Logo/Logo";
@@ -20,11 +21,13 @@ const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Text type={"Body2_Normal"}>{name}</Text>
+            <Link href={""}>
+              <Text type={"Body2_Normal"}>{name}</Text>
+            </Link>
           </Flex>
         ))}
         <Flex isGridItem justifyContent={"flex-end"} alignItems={"center"}>
-          <Icon name={"navigationMypage_LabelStrong"} size={24} />
+          <Icon name={"navigationMypage_LabelStrong"} size={24} href={"/"} />
         </Flex>
       </Grid>
       {children}

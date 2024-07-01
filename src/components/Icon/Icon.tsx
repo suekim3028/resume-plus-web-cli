@@ -4,7 +4,10 @@ import Link from "next/link";
 
 const Icon = ({ name, size, href, ...flexProps }: IconsProps) => {
   const Component = (
-    <Flex {...flexProps}>
+    <Flex
+      {...flexProps}
+      cursor={href || flexProps?.onClick ? "pointer" : undefined}
+    >
       <img
         src={`/icons/${name}.${
           PNG_ICON_NAMES.includes(name as any) ? "png" : "svg"
@@ -44,6 +47,9 @@ type IconsProps = {
   name: IconNames;
   size: number;
   href?: string;
-} & Pick<L.FlexProps, "m" | "mr" | "ml" | "mt" | "mb" | "mx" | "my">;
+} & Pick<
+  L.FlexProps,
+  "m" | "mr" | "ml" | "mt" | "mb" | "mx" | "my" | "onClick"
+>;
 
 export default Icon;
