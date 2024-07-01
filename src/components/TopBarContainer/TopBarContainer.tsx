@@ -8,7 +8,7 @@ const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <Flex w="100%" direction={"column"}>
       <Grid h="40px" templateColumns="repeat(12, 1fr)" gap={4}>
-        <Flex isGridItem colSpan={2}>
+        <Flex isGridItem colSpan={2} alignItems={"center"}>
           <Logo />
         </Flex>
         {Buttons.map(({ name, href }, idx) => (
@@ -21,7 +21,7 @@ const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Text type={"Body2_Normal"}>서비스 안내</Text>
+            <Text type={"Body2_Normal"}>{name}</Text>
           </Flex>
         ))}
         <Flex isGridItem justifyContent={"flex-end"} alignItems={"center"}>
@@ -39,11 +39,11 @@ const Buttons: { name: string; href: string }[] = [
     href: "",
   },
   {
-    name: "서비스 안내",
+    name: "면접 연습",
     href: "",
   },
   {
-    name: "서비스 안내",
+    name: "면접 결과",
     href: "",
   },
 ];
