@@ -1,8 +1,7 @@
-import { Button, Stack, Text } from "@chakra-ui/react";
+import { Button, Link, Stack, Text } from "@chakra-ui/react";
 import { useUser } from "@hooks";
-import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { Link } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
