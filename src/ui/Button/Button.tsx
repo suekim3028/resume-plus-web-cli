@@ -1,14 +1,15 @@
 import { Icon, IconNames } from "@components";
 import { UI } from "@constants";
+import Text, { FontType } from "@ui/Text/Text";
 import Link from "next/link";
-import { ReactNode } from "react";
 import Flex from "../Flex/Flex";
 
 type Types =
   | "Solid_Primary"
   | "Outlined_Primary"
   | "Outlined_Secondary"
-  | "Outlined_Asssertive";
+  | "Outlined_Asssertive"
+  | "Text_Primary";
 
 const TYPE_SETTINGS: Record<
   Types,
@@ -54,6 +55,12 @@ const TYPE_SETTINGS: Record<
     disabledTextColor: "Label/Disable",
     normalTextColor: "Inverse/Label",
   },
+  Text_Primary: {
+    normalBgColor: "Transparent",
+    disabledBgColor: "Transparent",
+    disabledTextColor: "Label/Disable",
+    normalTextColor: "Primary/Normal",
+  },
 };
 
 type Sizes = "Large" | "Medium" | "Small";
@@ -66,9 +73,13 @@ const SIZE_SETTINGS: Record<
     px: number;
     py: number;
     gap: number;
+    fontType: FontType;
+    fontWeight: string;
   }
 > = {
   Large: {
+    fontType: "Body1_Normal",
+    fontWeight: "600",
     borderRadius: 10,
     iconSize: 20,
     px: 28,
@@ -76,6 +87,8 @@ const SIZE_SETTINGS: Record<
     gap: 6,
   },
   Medium: {
+    fontType: "Body2_Normal",
+    fontWeight: "600",
     borderRadius: 8,
     iconSize: 18,
     px: 20,
@@ -83,6 +96,8 @@ const SIZE_SETTINGS: Record<
     gap: 5,
   },
   Small: {
+    fontType: "Label2",
+    fontWeight: "600",
     borderRadius: 6,
     iconSize: 16,
     px: 14,
@@ -98,7 +113,7 @@ const Button = ({
   disabled,
   leftIcon,
   rightIcon,
-  children,
+  title,
   onClick,
   href,
 }: ButtonProps) => {
@@ -114,7 +129,8 @@ const Button = ({
     disabledTextColor,
   } = TYPE_SETTINGS[type];
 
-  const { borderRadius, iconSize, px, py, gap } = SIZE_SETTINGS[size];
+  const { borderRadius, iconSize, px, py, gap, fontType, fontWeight } =
+    SIZE_SETTINGS[size];
   const currentBorderColor = disabled ? disabledBorderColor : borderColor;
 
   const Component = (
@@ -133,7 +149,10 @@ const Button = ({
       onClick={disabled ? undefined : onClick}
     >
       {leftIcon && <Icon name={leftIcon} size={iconSize} />}
-      {children}
+      <Text type={fontType} fontWeight={fontWeight}>
+        {title}
+      </Text>
+
       {rightIcon && <Icon name={rightIcon} size={iconSize} />}
     </Flex>
   );
@@ -160,4 +179,4 @@ type ButtonProps = {
   size: Sizes;
   onClick?: () => void;
   href?: string;
-} & { children: ReactNode };
+} & { title: string };

@@ -15,7 +15,6 @@ const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
           <Flex
             key={name}
             isGridItem
-            colSpan={1}
             colStart={9 + idx}
             h={"40px"}
             alignItems={"center"}

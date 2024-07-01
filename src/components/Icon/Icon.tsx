@@ -1,8 +1,9 @@
 import { Flex } from "@components";
 import { L } from "@web-core";
+import Link from "next/link";
 
-const Icon = ({ name, size, ...flexProps }: IconsProps) => {
-  return (
+const Icon = ({ name, size, href, ...flexProps }: IconsProps) => {
+  const Component = (
     <Flex {...flexProps}>
       <img
         src={`/icons/${name}.${
@@ -18,6 +19,17 @@ const Icon = ({ name, size, ...flexProps }: IconsProps) => {
       />
     </Flex>
   );
+
+  return href ? (
+    <Link
+      href={href}
+      //   target={openInNewTab ? "_blank" : undefined}
+    >
+      {Component}
+    </Link>
+  ) : (
+    Component
+  );
 };
 
 const SVG_ICON_NAMES = ["navigationMypage_LabelStrong"] as const;
@@ -31,6 +43,7 @@ export type IconNames = (typeof ICON_NAMES)[number];
 type IconsProps = {
   name: IconNames;
   size: number;
+  href?: string;
 } & Pick<L.FlexProps, "m" | "mr" | "ml" | "mt" | "mb" | "mx" | "my">;
 
 export default Icon;

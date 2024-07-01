@@ -35,6 +35,7 @@ export const COLORS = {
   "Fill/Strong": "rgba(112, 115, 124, 0.16)",
   "Fill/Alternative": "rgba(112, 115, 124, 0.05)",
   "Material/Dimmer": "rgba(23, 23, 25, 0.52)",
+  Transparent: "rgba(0,0,0,0)",
 } as const;
 
 export type ColorKeys = keyof typeof COLORS;
