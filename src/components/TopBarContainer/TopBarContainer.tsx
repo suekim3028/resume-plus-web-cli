@@ -1,21 +1,11 @@
-
+import React from "react";
 import Flex from "../Flex/Flex";
 
-const TopBarContainer = () => {
+const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Flex direction={"row"} w="100%" style={{ alignSelf: "flex-start" }}>
-      <Flex direction={"row"}
-        alignItems={"center"}
-        w={"100%"}
-        px={40}
-        py={20}
-        bgColor={"STATIC_WHITE"}
-      >
-        <Font.Title type={"24_semibold_single"} color={"BASIC_WHITE"} ml={10}>
-          Resume+
-        </Font.Title>
-      </L.FlexRow>
-    </L.FlexRow>
+    <Flex w="100%" h="100%" direction={"column"}>
+      {children}
+    </Flex>
   );
 };
 
