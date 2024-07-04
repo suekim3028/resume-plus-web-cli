@@ -26,19 +26,31 @@ const SignIn = () => {
           alignItems={"center"}
         >
           <Button
-            mt={64}
+            flexProps={{ mt: 64 }}
             type="Outlined_Primary"
             size="Large"
             title="구글 계정으로 로그인"
             leftIcon="logoGoogle"
             stretch
+            textProps={{
+              color: "Static/Black",
+              fontSize: 22,
+              fontWeight: "500",
+              lineHeight: "30.01px",
+            }}
           />
           <Button
-            mt={40}
+            flexProps={{ mt: 40 }}
             type="Outlined_Primary"
             size="Large"
             title="아이디로 로그인"
             stretch
+            textProps={{
+              color: "Static/Black",
+              fontSize: 22,
+              fontWeight: "500",
+              lineHeight: "30.01px",
+            }}
           />
           <Text
             color="Label/Alternative"

@@ -1,4 +1,4 @@
-import { SpaceProps } from "@chakra-ui/react";
+import { FlexProps, TextProps } from "@chakra-ui/react";
 import { Icon, IconNames } from "@components";
 import { UI } from "@constants";
 import Text, { FontType } from "@ui/Text/Text";
@@ -117,13 +117,11 @@ const Button = ({
   title,
   onClick,
   href,
-  ...flexProps
+  flexProps: _flexProps,
+  textProps: _textProps,
 }: ButtonProps) => {
   const {
     normalBgColor,
-    // hoveredBgColor,
-    // focusedBgColor,
-    // pressedBgColor,
     borderColor,
     disabledBgColor,
     disabledBorderColor,
@@ -131,15 +129,23 @@ const Button = ({
     disabledTextColor,
   } = TYPE_SETTINGS[type];
 
+  const { bgColor, ...flexProps } = _flexProps || {};
+  const { color, ...textProps } = _textProps || {};
+
   const { borderRadius, iconSize, px, py, gap, fontType, fontWeight } =
     SIZE_SETTINGS[size];
   const currentBorderColor = disabled ? disabledBorderColor : borderColor;
+  const currentBgColor =
+    bgColor || (disabled ? disabledBgColor : normalBgColor);
+
+  const currentColor =
+    color || (disabled ? disabledTextColor : normalTextColor);
 
   const Component = (
     <Flex
       cursor={!disabled ? "pointer" : undefined}
       w={stretch ? "100%" : "fit-content"}
-      bgColor={disabled ? disabledBgColor : normalBgColor}
+      bgColor={currentBgColor}
       borderColor={currentBorderColor}
       borderStyle={"solid"}
       borderWidth={currentBorderColor ? 1 : 0}
@@ -157,7 +163,8 @@ const Button = ({
       <Text
         type={fontType}
         fontWeight={fontWeight}
-        color={disabled ? disabledTextColor : normalTextColor}
+        color={currentColor}
+        {...textProps}
       >
         {title}
       </Text>
@@ -189,6 +196,8 @@ type ButtonProps = {
   onClick?: () => void;
   href?: string;
   title: string;
-} & SpaceProps;
+  flexProps?: Omit<FlexProps, "bgColor"> & { bgColor?: UI.ColorKeys };
+  textProps?: Omit<TextProps, "color"> & { color?: UI.ColorKeys };
+};
 
 export default Button;
