@@ -56,20 +56,28 @@ type AnswerQuestionParams = {
  * tech Q, behav Q, personal Q 답변하기
  */
 
-// export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
-//   API.post<InterviewTypes.Feedback>(`/submit_tech_answer/${questionId}`, {
-//     answer,
-//   });
+export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/answer/tech/${questionId}`, {
+    answer,
+  });
 
-// export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
-//   API.post<InterviewTypes.Feedback>(`/submit_behav_answer/${questionId}`, {
-//     answer,
-//   });
+export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/answer/behavior/${questionId}`, {
+    answer,
+  });
 
-// export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
-//   API.post<InterviewTypes.Feedback>(`/submit_personal_answer/${questionId}`, {
-//     answer,
-//   });
+export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/answer/personal/${questionId}`, {
+    answer,
+  });
+
+export const answerIntroduceQ = ({
+  questionId,
+  answer,
+}: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/answer/introduce/${questionId}`, {
+    answer,
+  });
 
 export const dummyAnswer = async ({
   questionId,

@@ -1,6 +1,6 @@
 import { GridItem } from "@chakra-ui/react";
 import { TopBarContainer } from "@components";
-import { Button, Flex, GridWrapper, Text } from "@ui";
+import { Button, Flex, GridWrapper, Text } from "@uis";
 
 export default function Home() {
   // const router = useRouter();
@@ -22,7 +22,7 @@ export default function Home() {
                 <Text type="Display2">카피 예정</Text>
               </Flex>
               <Button
-                mt={20}
+                flexProps={{ mt: 20 }}
                 type="Solid_Primary"
                 size="Large"
                 title={"면접 연습하러 가기"}

@@ -1,6 +1,6 @@
 import { GridItem } from "@chakra-ui/react";
 import { Logo } from "@components";
-import { Button, Flex, GridWrapper, Text, TextButton } from "@ui";
+import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
 
 const SignIn = () => {
   return (
@@ -55,7 +55,7 @@ const SignIn = () => {
           <Text
             color="Label/Alternative"
             type="Body1_Normal"
-            fontWeight={"600"}
+            fontWeight={"500"}
             mt={53}
           >
             로그인에 어려움을 겪으시나요?

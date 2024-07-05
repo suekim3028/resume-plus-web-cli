@@ -1,4 +1,4 @@
-import { Flex, Text } from "@ui";
+import { Flex, Text } from "@uis";
 
 const Logo = () => (
   <Flex w="186.77px">

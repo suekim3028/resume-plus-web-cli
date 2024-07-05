@@ -1,5 +1,5 @@
 import { GridItem } from "@chakra-ui/react";
-import { Flex, GridWrapper, Text } from "@ui";
+import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
 import React from "react";
 import Icon from "../Icon/Icon";
