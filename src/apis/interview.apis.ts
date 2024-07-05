@@ -1,78 +1,52 @@
 import { ApiTypes, InterviewTypes } from "@types";
-import API from "./API";
 import { jsUtils } from "@web-core";
+import API from "./API";
 
 /**
  * CV 업로드
  */
-// TODO: api 타입 다시 정의
 type UploadCvParams = {
   content: string;
-} & InterviewTypes.InterviewInfo;
-
-export const uploadCV = async (params: UploadCvParams) => {
-  return API.post<ApiTypes.SuccessRes>("/cv", params);
+  resume_name: string;
+  is_default: boolean;
 };
 
-const dummyQuestionGenerator = (
-  length: number,
-  type: string
-): InterviewTypes.Question[] =>
-  Array.from({ length }, (_, idx) => ({
-    id: idx,
-    question: `${type} ${idx} 질문입니다.`,
-  }));
+export const uploadCV = async (params: UploadCvParams) => {
+  return API.post<ApiTypes.SuccessRes>("/resume", params);
+};
 
 /**
  * Common Questions 가져오기
  */
-type GetCommonQResponse = Record<
-  Extract<InterviewTypes.QuestionType, "behavQ" | "techQ">,
-  InterviewTypes.Question[]
->;
 
-const wait = async (seconds: number) => {
-  await new Promise((resolver: (v: null) => void) => {
-    setTimeout(() => {
-      resolver(null);
-    }, seconds * 1000);
-  });
+type GetCommonQResponse = {
+  tech_questions: InterviewTypes.Question[];
+  behav_questions: InterviewTypes.Question[];
 };
 
-export const getCommonQ = async (): Promise<GetCommonQResponse> => {
-  // const { tech_questions: techQuestions, behav_questions: behavQuestions } =
-  // await API.get<{
-  //   tech_questions: InterviewTypes.Question[];
-  //   behav_questions: InterviewTypes.Question[];
-  // }>("/common_question");
-  console.log("getCommonQ");
-
-  await wait(1);
-  return {
-    techQ: dummyQuestionGenerator(5, "기술질문"),
-    behavQ: dummyQuestionGenerator(5, "인성질문"),
-  };
-};
+export const getCommonQ = async (interviewId: number) =>
+  API.get<GetCommonQResponse>(`/question/common/${interviewId}`);
 
 /**
  * Personal Questions 가져오기
  */
-type GetPersonalQResponse = Record<
-  Extract<InterviewTypes.QuestionType, "perQ">,
-  InterviewTypes.Question[]
->;
 
-export const getPersonalQ = async (): Promise<GetPersonalQResponse> => {
-  // const { personal_questions: personalQuestions } = await API.get<{
-  //   personal_questions: InterviewTypes.Question[];
-  // }>("/personal_question")
-  console.log("getPersonalQ");
-  await wait(1);
-  return {
-    perQ: dummyQuestionGenerator(5, "개인질문"),
-  };
-};
+type GetPersonalQResponse = { personal_questions: InterviewTypes.Question[] };
 
+export const getPersonalQ = async (interviewId: number) =>
+  API.get<GetPersonalQResponse>(`/question/personal/${interviewId}`);
+
+/**
+ * 자기소개 질문 가져오기
+ */
+type GetIntroduceQResponse = { introduce_questions: InterviewTypes.Question[] };
+
+export const getIntroduceQ = async (interviewId: number) =>
+  API.get<GetIntroduceQResponse>(`/question/introduce/${interviewId}`);
+
+/**
+ * 질문 답변 보내기
+ */
 type AnswerQuestionParams = {
   questionId: number;
   answer: string;
@@ -127,6 +101,38 @@ export const getCompanies = () =>
  * 직군 목록 요청
  */
 
-type GetJobDepartmentsResponse = InterviewTypes.JobDepartment[];
-export const getJobDepartments = () =>
-  API.get<GetJobDepartmentsResponse>("/company/departments");
+type GetDepartmentsResponse = InterviewTypes.JobDepartment[];
+export const getDepartments = () =>
+  API.get<GetDepartmentsResponse>("/company/departments");
+
+/**
+ * 직무 목록 요청
+ */
+
+type GetJobsResponse = InterviewTypes.Job[];
+export const getJobs = () => API.get<GetJobsResponse>("/company/jobs");
+
+const dummyQuestionGenerator = (
+  length: number,
+  type: string
+): InterviewTypes.Question[] =>
+  Array.from({ length }, (_, idx) => ({
+    id: idx,
+    question: `${type} ${idx} 질문입니다.`,
+  }));
+
+/**
+ * 면접 만들기
+ */
+type CreateInterviewReq = {
+  company_id: number;
+  department_id: number;
+  job_id: number;
+};
+
+type CreateInterviewRes = {
+  interview_id: number;
+};
+
+export const createInterview = (req: CreateInterviewReq) =>
+  API.post<CreateInterviewRes>("/interview", req);
