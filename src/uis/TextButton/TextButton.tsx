@@ -1,7 +1,7 @@
 import { SpaceProps } from "@chakra-ui/react";
 import { Icon, IconNames } from "@components";
 import { UI } from "@constants";
-import Text, { FontType } from "@ui/Text/Text";
+import Text, { FontType } from "@uis/Text/Text";
 import Link from "next/link";
 import Flex from "../Flex/Flex";
 
