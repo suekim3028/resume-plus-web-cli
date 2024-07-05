@@ -1,4 +1,4 @@
-import { Flex } from "@components";
+import { Flex } from "@uis";
 import { L } from "@web-core";
 import Link from "next/link";
 
@@ -35,7 +35,12 @@ const Icon = ({ name, size, href, ...flexProps }: IconsProps) => {
   );
 };
 
-const SVG_ICON_NAMES = ["navigationMypage_LabelStrong", "logoGoogle"] as const;
+const SVG_ICON_NAMES = [
+  "navigationMypage_LabelStrong",
+  "logoGoogle",
+  "normalEye",
+  "normalEyeSlash",
+] as const;
 
 const PNG_ICON_NAMES = [""] as const;
 

@@ -45,6 +45,7 @@ const SignIn = () => {
             size="Large"
             title="아이디로 로그인"
             stretch
+            href="/sign-in/email"
             textProps={{
               color: "Static/Black",
               fontSize: 22,
