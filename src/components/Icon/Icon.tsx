@@ -40,6 +40,8 @@ const SVG_ICON_NAMES = [
   "logoGoogle",
   "normalEye",
   "normalEyeSlash",
+  "normalCircleCheck",
+  "normalCircleCheckPrimary",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

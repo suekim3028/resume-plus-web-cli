@@ -16,6 +16,7 @@ export const COLORS = {
   "Interaction/Disable": "rgba(244, 244, 245, 1)",
   "Line/Normal/Normal": "rgba(112, 115, 124, 0.22)",
   "Line/Normal/Neutral": "rgba(112, 115, 124, 0.16)",
+  "Line/Normal/Strong": "rgba(112, 115, 124, 0.52)",
   "Line/Normal/Alternative": "rgba(112, 115, 124, 0.08)",
   "Line/Solid/Normal": "rgba(225, 226, 228, 1)",
   "Line/Solid/Neutral": "rgba(234, 235, 236, 1)",
