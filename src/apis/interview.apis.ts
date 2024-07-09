@@ -11,8 +11,8 @@ type UploadCvParams = {
   is_default: boolean;
 };
 
-export const uploadCV = async (params: UploadCvParams) => {
-  return API.post<ApiTypes.SuccessRes>("/resume", params);
+export const uploadCV = async (body: UploadCvParams) => {
+  return API.post<ApiTypes.SuccessRes>("/resume", { body });
 };
 
 /**
@@ -58,17 +58,23 @@ type AnswerQuestionParams = {
 
 export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
   API.post<InterviewTypes.Feedback>(`/answer/tech/${questionId}`, {
-    answer,
+    body: {
+      answer,
+    },
   });
 
 export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
   API.post<InterviewTypes.Feedback>(`/answer/behavior/${questionId}`, {
-    answer,
+    body: {
+      answer,
+    },
   });
 
 export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
   API.post<InterviewTypes.Feedback>(`/answer/personal/${questionId}`, {
-    answer,
+    body: {
+      answer,
+    },
   });
 
 export const answerIntroduceQ = ({
@@ -76,7 +82,9 @@ export const answerIntroduceQ = ({
   answer,
 }: AnswerQuestionParams) =>
   API.post<InterviewTypes.Feedback>(`/answer/introduce/${questionId}`, {
-    answer,
+    body: {
+      answer,
+    },
   });
 
 export const dummyAnswer = async ({
@@ -142,5 +150,5 @@ type CreateInterviewRes = {
   interview_id: number;
 };
 
-export const createInterview = (req: CreateInterviewReq) =>
-  API.post<CreateInterviewRes>("/interview", req);
+export const createInterview = (body: CreateInterviewReq) =>
+  API.post<CreateInterviewRes>("/interview", { body });

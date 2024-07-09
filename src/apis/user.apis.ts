@@ -9,8 +9,8 @@ export type UserResponse = {
 /**
  * 이메일 로그인
  */
-export const emailSignIn = async (params: UserTypes.SignInUser) =>
-  API.post<UserResponse>(`/users/login`, params);
+export const emailSignIn = async (body: UserTypes.SignInUser) =>
+  API.post<UserResponse>(`/users/login`, { body });
 
 /**
  * 구글 로그인 (회원가입 안돼있는 경우 자동 회원가입)
@@ -20,26 +20,28 @@ type GoogleSignInReq = {
   id_token: string;
 } & Pick<UserTypes.User, "email" | "name">;
 
-export const googleSignIn = async (params: GoogleSignInReq) =>
-  API.post<UserResponse>(`/oauth2/code/google`, params);
+export const googleSignIn = async (body: GoogleSignInReq) =>
+  API.post<UserResponse>(`/oauth2/code/google`, { body });
 
 /**
  * 이메일 회원가입
  */
 
-export const signUp = (data: UserTypes.SignUpUser) =>
-  API.post<UserResponse>("/users/signup", data);
+export const signUp = (body: UserTypes.SignUpUser) =>
+  API.post<UserResponse>("/users/signup", { body });
 
 /**
  * token refresh
  */
 
 export const refreshToken = (refreshToken: string) =>
-  API.post<UserTypes.Token>("/users/refresh-token", { token: refreshToken });
+  API.post<UserTypes.Token>("/users/refresh-token", {
+    body: { token: refreshToken },
+  });
 
 /**
  * 이메일 중복 확인
  */
 
 export const checkDuplicatedEmail = (email: string) =>
-  API.post<boolean>("/users/duplicate-email", { email });
+  API.post<boolean>("/users/duplicate-email", { body: { email } });
