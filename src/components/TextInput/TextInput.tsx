@@ -2,20 +2,32 @@
 import { Flex, Text } from "@uis";
 
 import { SpaceProps } from "@chakra-ui/react";
-import { ChangeEventHandler, useCallback, useRef, useState } from "react";
+import { UI } from "@constants";
+import React, {
+  ChangeEventHandler,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import Icon from "../Icon/Icon";
 
-const TextInput = ({
-  placeholder,
-  title,
-  validate,
-  defaultValue,
-  hidden: hiddenSetting,
-  onStateChange,
-  ...spaceProps
-}: TextInputProps) => {
-  const text = useRef("");
-
+const TextInputComponent: React.ForwardRefRenderFunction<
+  TextInputRef,
+  TextInputProps
+> = (
+  {
+    placeholder,
+    title,
+    validate,
+    defaultValue,
+    hidden: hiddenSetting,
+    onChange,
+    disabled,
+    ...spaceProps
+  },
+  ref
+) => {
   const [hidden, setHidden] = useState(hiddenSetting);
 
   const defaultState: InputState = useRef({
@@ -25,33 +37,53 @@ const TextInput = ({
     isValidating: false,
   }).current;
 
-  const [inputState, _setInputState] = useState<InputState>(defaultState);
+  const [{ isError, isValidating, errorText, text }, _setInputState] =
+    useState<InputState>(defaultState);
   const inputStateRef = useRef<InputState>(defaultState);
+  const inputComponentRef = useRef<HTMLInputElement>(null);
 
-  const setInputState = (state: InputState) => {
-    inputStateRef.current = state;
-    _setInputState(state);
-    onStateChange && onStateChange(state);
-  };
+  const setInputState = useCallback(
+    (state: InputState) => {
+      inputStateRef.current = state;
+      _setInputState(state);
+      onChange && onChange(state);
+    },
+    [onChange]
+  );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     async (e) => {
-      const text = e.target.value;
-      if (!text) {
+      const value = e.target.value;
+      if (!value) {
         setInputState(defaultState);
       }
 
       if (validate) {
         setInputState({ ...inputStateRef.current, isValidating: true });
-        const { isError, errorText } = await validate(text);
-        setInputState({ text, isError, isValidating: false, errorText });
+        const { isError, errorText } = await validate(value);
+        setInputState({ text: value, isError, isValidating: false, errorText });
       } else {
-        setInputState({ ...defaultState, text });
+        setInputState({ ...defaultState, text: value });
       }
     },
-    [validate]
+    [validate, setInputState]
   );
 
+  useImperativeHandle(
+    ref,
+    useCallback(
+      () => ({
+        setValue: (text: string) => {
+          if (inputComponentRef.current) {
+            inputComponentRef.current.value = text;
+          }
+        },
+      }),
+      []
+    )
+  );
+
+  console.log(errorText);
   return (
     <Flex direction="column" w="100%" {...spaceProps}>
       {!!title && (
@@ -65,13 +97,20 @@ const TextInput = ({
         </Text>
       )}
       <Flex
-        border="1px solid rgba(112, 115, 124, 0.52)"
         py={9}
+        borderWidth={1}
+        borderStyle={"solid"}
+        borderColor={
+          !!text && isError
+            ? UI.COLORS["Status/Negative"]
+            : "rgba(112, 115, 124, 0.52)"
+        }
         px={20}
         borderRadius={8}
         alignItems={"center"}
       >
         <input
+          ref={inputComponentRef}
           onChange={handleChange}
           type={hidden ? "password" : "text"}
           placeholder={placeholder}
@@ -85,6 +124,7 @@ const TextInput = ({
             display: "flex",
             flex: 1,
           }}
+          disabled={disabled}
         />
         {hiddenSetting && (
           <Icon
@@ -95,16 +135,17 @@ const TextInput = ({
           />
         )}
       </Flex>
-      {!!inputState?.errorText && (
+      {/* {isValidating && <>validating</>} */}
+
+      {!!text && !isValidating && isError && !!errorText && (
         <Flex flex={1} flexWrap={"wrap"} mt={12}>
           <Text
             type="Body1_Normal"
             color="Status/Negative"
             fontWeight={"500"}
             wordBreak={"break-all"}
-            hidden={hidden}
           >
-            aweifja;oeifj;aowiejfawefoija;eofija;fjiawa;oifjaw;oeijfa;oeifjao;eijfoa;
+            {errorText}
           </Text>
         </Flex>
       )}
@@ -112,13 +153,19 @@ const TextInput = ({
   );
 };
 
+const TextInput = React.forwardRef<TextInputRef, TextInputProps>(
+  TextInputComponent
+);
+
 type TextInputProps = {
   title?: string;
   placeholder?: string;
   validate?: (text: string) => Promise<InputValidation>;
   defaultValue?: string;
   hidden?: boolean;
-  onStateChange?: (state: InputState) => void;
+  onChange?: (state: InputState) => void;
+  onChangeText?: (text: string) => void;
+  disabled?: boolean;
 } & SpaceProps;
 
 export type InputValidation = {
@@ -126,13 +173,15 @@ export type InputValidation = {
   errorText?: string;
 };
 
-type InputState = {
+export type InputState = {
   isError: boolean;
   errorText?: string;
   text: string;
   isValidating: boolean;
 };
 
-export type TextInputRef = {};
+export type TextInputRef = {
+  setValue: (value: string) => void;
+};
 
 export default TextInput;

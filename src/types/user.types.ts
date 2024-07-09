@@ -4,7 +4,6 @@ export type User = {
   id: number;
   name: string;
   email: string;
-  user_id: string;
   login_type: LoginType;
   default_resume: string;
   remain_interview: number;
@@ -16,7 +15,7 @@ export type Token = {
   refresh_token: string;
 };
 
-export type SignUpUser = Pick<User, "name" | "email" | "user_id"> & {
+export type SignUpUser = Pick<User, "name" | "email"> & {
   password: string;
 };
 

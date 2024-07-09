@@ -1,5 +1,5 @@
 export const withErrorHandling = async <
-  F extends (...args: any) => Promise<any>,
+  F extends (...args: any) => Promise<any>
 >(
   fn: F,
   onError?: (error: { userMessage?: string; userTitle?: string }) => void
@@ -24,3 +24,5 @@ export const withErrorHandling = async <
     };
   }
 };
+
+export * as inputUtils from "./input";

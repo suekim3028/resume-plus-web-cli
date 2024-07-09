@@ -134,7 +134,11 @@ const Button = ({
 
   const { borderRadius, iconSize, px, py, gap, fontType, fontWeight } =
     SIZE_SETTINGS[size];
-  const currentBorderColor = disabled ? disabledBorderColor : borderColor;
+
+  const currentBorderColor: UI.ColorKeys | undefined = disabled
+    ? disabledBorderColor
+    : borderColor;
+
   const currentBgColor =
     bgColor || (disabled ? disabledBgColor : normalBgColor);
 
@@ -146,10 +150,13 @@ const Button = ({
       cursor={!disabled ? "pointer" : undefined}
       w={stretch ? "100%" : "fit-content"}
       bgColor={currentBgColor}
-      borderColor={currentBorderColor}
+      borderColor={
+        currentBorderColor ? UI.COLORS[currentBorderColor] : undefined
+      }
       borderStyle={"solid"}
       borderWidth={currentBorderColor ? 1 : 0}
       px={px}
+      h={"fit-content"}
       alignItems={"center"}
       justifyContent={"center"}
       py={py}

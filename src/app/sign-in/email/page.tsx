@@ -42,14 +42,14 @@ const EmailSignIn = () => {
             title="아이디"
             placeholder="아이디를 입력해주세요"
             mt={56}
-            onStateChange={handleChangeEmail}
+            onChange={handleChangeEmail}
           />
           <TextInput
             mt={24}
             title="비밀번호"
             placeholder="비밀번호를 입력해주세요"
             hidden
-            onStateChange={handleChangePassword}
+            onChange={handleChangePassword}
           />
           <Button
             type={"Solid_Primary"}
@@ -76,7 +76,12 @@ const EmailSignIn = () => {
             >
               Interview+가 처음이라면?
             </Text>
-            <TextButton type={"Assistive"} title="회원가입" size={"Medium"} />
+            <TextButton
+              type={"Assistive"}
+              title="회원가입"
+              size={"Medium"}
+              href="/sign-up/email"
+            />
           </Flex>
         </GridItem>
       </GridWrapper>
