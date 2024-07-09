@@ -1,5 +1,6 @@
 import Icon, { type IconNames } from "./Icon/Icon";
 import Logo from "./Logo/Logo";
+import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
 import TextInput, {
   type InputState,
   type InputValidation,
@@ -13,6 +14,7 @@ export {
   InputState,
   InputValidation,
   Logo,
+  RecoilRootWrapper,
   TextInput,
   TextInputRef,
   TopBarContainer,

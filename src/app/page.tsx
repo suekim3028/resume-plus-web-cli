@@ -3,9 +3,6 @@ import { TopBarContainer } from "@components";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 
 export default function Home() {
-  // const router = useRouter();
-  // const { hasUser } = useUser();
-
   return (
     <TopBarContainer>
       <Flex
@@ -26,7 +23,7 @@ export default function Home() {
                 type="Solid_Primary"
                 size="Large"
                 title={"면접 연습하러 가기"}
-                href="/sign-in"
+                href={"/sign-in"}
               />
             </Flex>
           </GridItem>

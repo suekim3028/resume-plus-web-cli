@@ -1,11 +1,6 @@
-import { interviewApis } from "@apis";
+import { userApis } from "@apis";
 import { InterviewTypes, UserTypes } from "@types";
 import { atom, selector } from "recoil";
-
-export const userStore = atom<null | Omit<UserTypes.User, "password">>({
-  key: "user",
-  default: null,
-});
 
 export const interviewInfoStore = atom<null | InterviewTypes.InterviewInfo>({
   key: "interviewInfo",
@@ -18,10 +13,10 @@ export const interviewQuestionsStore = selector({
     const interviewInfo = get(interviewInfoStore);
     if (!interviewInfo) return null;
 
-    const { techQ, behavQ } = await interviewApis.getCommonQ();
-    const { perQ } = await interviewApis.getPersonalQ();
+    // const { techQ, behavQ } = await interviewApis.getCommonQ();
+    // const { perQ } = await interviewApis.getPersonalQ();
 
-    return { techQ, behavQ, perQ };
+    // return { techQ, behavQ, perQ };
   },
 });
 
@@ -38,8 +33,30 @@ export const evaluationFinished = selector({
 
     if (!questions) return false;
 
-    return [...questions.behavQ, ...questions.perQ, ...questions.techQ].every(
-      ({ id }) => !!evaluation.find(({ questionId }) => id === questionId)
-    );
+    // return [...questions.behavQ, ...questions.perQ, ...questions.techQ].every(
+    //   ({ id }) => !!evaluation.find(({ questionId }) => id === questionId)
+    // );
+  },
+});
+
+export const userStoreRefresher = atom<number>({
+  key: "userRefresher",
+  default: 0,
+});
+
+export const userStore = selector<UserTypes.User | null>({
+  key: "user",
+  get: async ({ get }) => {
+    get(userStoreRefresher);
+    const { data, isError } = await userApis.tokenLogin();
+    console.log("[LOGIN] no user.");
+    if (isError) return null;
+
+    console.log(`[LOGIN] logged in with user id ${data.user.id}`);
+
+    return data.user;
+  },
+  set: async ({ set }, newVal) => {
+    set(userStore, newVal);
   },
 });

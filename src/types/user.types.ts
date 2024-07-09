@@ -19,4 +19,4 @@ export type SignUpUser = Pick<User, "name" | "email"> & {
   password: string;
 };
 
-export type SignInUser = Pick<User, "id"> & { password: string };
+export type EmailSignInUser = Pick<User, "email"> & { password: string };
