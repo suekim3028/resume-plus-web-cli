@@ -52,19 +52,19 @@ export const checkDuplicatedEmail = (email: string) =>
 
 export const tokenLogin = () =>
   API.get<UserResponse>("users/current-user", undefined, {
-    dummyData: {
-      token: {
-        access_token: "accessToken",
-        grant_type: "Bearer",
-        refresh_token: "refresh",
-      },
-      user: {
-        default_resume: "이력서.pdf",
-        email: "k.sue3028@gmail.com",
-        id: 1,
-        login_type: "EMAIL",
-        name: "김수빈",
-        remain_interview: 4,
-      },
-    },
+    // dummyData: {
+    //   token: {
+    //     access_token: "accessToken",
+    //     grant_type: "Bearer",
+    //     refresh_token: "refresh",
+    //   },
+    //   user: {
+    //     default_resume: "이력서.pdf",
+    //     email: "k.sue3028@gmail.com",
+    //     id: 1,
+    //     login_type: "EMAIL",
+    //     name: "김수빈",
+    //     remain_interview: 4,
+    //   },
+    // },
   });

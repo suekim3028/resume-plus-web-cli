@@ -3,14 +3,22 @@ import { GridItem } from "@chakra-ui/react";
 import { userStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import {
+  ForwardRefRenderFunction,
+  ReactNode,
+  Suspense,
+  forwardRef,
+} from "react";
 import { useRecoilValue } from "recoil";
 import Icon from "../Icon/Icon";
 import Logo from "../Logo/Logo";
 
-const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
+const TopBarContainerComponent: ForwardRefRenderFunction<
+  HTMLDivElement,
+  { children: ReactNode }
+> = ({ children }, ref) => {
   return (
-    <Flex w="100%" direction={"column"} alignItems={"center"}>
+    <Flex w="100%" direction={"column"} alignItems={"center"} ref={ref}>
       <GridWrapper h={60}>
         <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
           <Logo />
@@ -32,6 +40,10 @@ const TopBarContainer = ({ children }: { children: React.ReactNode }) => {
     </Flex>
   );
 };
+
+const TopBarContainer = forwardRef<HTMLDivElement, { children: ReactNode }>(
+  TopBarContainerComponent
+);
 
 const UserButtonList = () => {
   const user = useRecoilValue(userStore);

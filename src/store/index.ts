@@ -1,4 +1,5 @@
 import { userApis } from "@apis";
+import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
 import { atom, selector } from "recoil";
 
@@ -47,7 +48,14 @@ export const userStoreRefresher = atom<number>({
 export const userStore = selector<UserTypes.User | null>({
   key: "user",
   get: async ({ get }) => {
+    const token = TokenStorage.get();
+    const hasToken = !!token && !!token.access_token && !!token.refresh_token;
+    if (!hasToken) {
+      console.log("[USER STORE] no token.");
+      return null;
+    }
     get(userStoreRefresher);
+    if (1 == 1) return null;
     const { data, isError } = await userApis.tokenLogin();
     console.log("[LOGIN] no user.");
     if (isError) return null;
@@ -59,4 +67,9 @@ export const userStore = selector<UserTypes.User | null>({
   set: async ({ set }, newVal) => {
     set(userStore, newVal);
   },
+});
+
+export const authRouteStore = atom<string | null>({
+  key: "authRouteStore",
+  default: null,
 });

@@ -1,10 +1,18 @@
 "use client";
+import { userApis } from "@apis";
 import { GridItem } from "@chakra-ui/react";
 import { Logo, TextInput } from "@components";
+import { useUser } from "@hooks";
+import { authRouteStore } from "@store";
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 
 const EmailSignIn = () => {
+  const { handleUser } = useUser();
+  const router = useRouter();
+  const [authRouter, setAuthRouter] = useRecoilState(authRouteStore);
   const [canSubmit, setCanSubmit] = useState(false);
 
   const inputValue = useRef({
@@ -25,6 +33,19 @@ const EmailSignIn = () => {
     inputValue.current = { ...inputValue.current, password };
     checkSubmitPossible();
   };
+
+  const submit = async () => {
+    const { email, password } = inputValue.current;
+    const { data, isError } = await userApis.emailSignIn({ email, password });
+    if (isError) return alert("다시");
+
+    handleUser(data);
+    router.replace(authRouter || "/");
+  };
+
+  useEffect(() => {
+    return () => setAuthRouter(null);
+  }, []);
 
   return (
     <Flex flex={1} alignItems={"center"} justifyContent={"center"}>
@@ -58,6 +79,7 @@ const EmailSignIn = () => {
             stretch
             flexProps={{ mt: 32 }}
             disabled={!canSubmit}
+            onClick={submit}
           />
           <TextButton
             type={"Assistive"}

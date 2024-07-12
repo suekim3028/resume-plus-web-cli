@@ -4,13 +4,13 @@ import { Flex, Text } from "@uis";
 import React, { ReactElement, Ref, useImperativeHandle, useState } from "react";
 import Icon from "../Icon/Icon";
 
-const ListSelectorComponent = <T extends any>(
-  props: ListSelectorItemProps<T>,
-  ref: Ref<ListSelectorRef>
+const TypingSelectorComponent = <T extends any>(
+  props: TypingSelectorItemProps<T>,
+  ref: Ref<TypingSelectorRef>
 ) => {
   const { itemList, placeholder, onSelect } = props;
   const [showList, setShowList] = useState(false);
-  const [selected, setSelected] = useState<ListSelectorItem<T> | null>(null);
+  const [selected, setSelected] = useState<TypingSelectorItem<T> | null>(null);
   const [isError, setIsError] = useState(false);
 
   const close = () => {
@@ -92,23 +92,26 @@ const ListSelectorComponent = <T extends any>(
 };
 
 // Cast the output
-const ListSelector = React.forwardRef(ListSelectorComponent) as <T extends any>(
-  p: ListSelectorItemProps<T> & {
-    ref?: Ref<ListSelectorRef>;
+const TypingSelector = React.forwardRef(TypingSelectorComponent) as <
+  T extends any
+>(
+  p: TypingSelectorItemProps<T> & {
+    ref?: Ref<TypingSelectorRef>;
   }
 ) => ReactElement;
 
-export type ListSelectorItem<T> = { label: string; value: T };
-type ListSelectorItemProps<T> = {
-  itemList: ListSelectorItem<T>[];
+export type TypingSelectorItem<T> = { label: string; value: T };
+type TypingSelectorItemProps<T> = {
+  itemList: TypingSelectorItem<T>[];
   placeholder: string;
   onSelect: (value: T | null) => void;
+  onTypingSelect: (value: string) => void;
 };
 
-export type ListSelectorRef = {
+export type TypingSelectorRef = {
   close: () => void;
 };
 
-export default ListSelector;
+export default TypingSelector;
 // options has type { value: number; label: string; flag: boolean; }[]
 // , so we have made FRefOutputComp generic!
