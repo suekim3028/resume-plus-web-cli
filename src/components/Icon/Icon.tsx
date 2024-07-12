@@ -42,6 +42,12 @@ const SVG_ICON_NAMES = [
   "normalEyeSlash",
   "normalCircleCheck",
   "normalCircleCheckPrimary",
+  "chevronDownAssistive",
+  "chevronDownNormal",
+  "chevronUpAssistive",
+  "chevronUpNormal",
+  "chevronUpNegative",
+  "chevronDownNegative",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;
