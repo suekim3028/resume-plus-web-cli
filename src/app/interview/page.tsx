@@ -14,6 +14,7 @@ import { UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRef, useState } from "react";
+import { pdfjs } from "react-pdf";
 
 type InputValue = {
   company: InterviewTypes.Company | null | string;
@@ -52,15 +53,26 @@ const Interview = () => {
     department: null,
     job: null,
   });
-  const resumeRef = useRef();
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
 
-  const onValueChange = <T extends keyof InputValue>(
-    key: T,
-    value: InputValue[T]
+  const fileRef = useRef<HTMLInputElement>(null);
+  const resumeRef = useRef<File | null>(null);
+
+  const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
   ) => {
-    valueRef.current = { ...valueRef.current, [key]: value };
+    const { files } = e.target;
+    if (!files || files.length == 0) {
+      resumeRef.current = null;
+    } else {
+      resumeRef.current = files[0];
+    }
+
+    checkCanSubmit();
+  };
+
+  const checkCanSubmit = () => {
     setCanSubmit(
       Object.keys(valueRef.current).every(
         (v) => !!valueRef.current[v as keyof InputValue]
@@ -68,6 +80,36 @@ const Interview = () => {
     );
   };
 
+  const onValueChange = <T extends keyof InputValue>(
+    key: T,
+    value: InputValue[T]
+  ) => {
+    valueRef.current = { ...valueRef.current, [key]: value };
+    checkCanSubmit();
+  };
+
+  const getText = async (): Promise<string> => {
+    if (!resumeRef.current) return "";
+
+    pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+    const document = await pdfjs.getDocument(
+      await resumeRef.current.arrayBuffer()
+    ).promise;
+
+    const textArr: string[] = [];
+
+    for (let index of Array.from({ length: document.numPages }, (_, i) => i)) {
+      const page = await document.getPage(index + 1);
+      const pageContent = await page.getTextContent();
+      pageContent.items.map((item) => {
+        if ("str" in item) {
+          textArr.push(item.str);
+        }
+      });
+    }
+    return textArr.join(" ");
+  };
   return (
     <TopBarContainer ref={wrapperRef}>
       <Flex
@@ -198,6 +240,15 @@ const Interview = () => {
               >
                 *
               </Text>
+
+              <input
+                type={"file"}
+                accept=".pdf"
+                id="image_uploads"
+                ref={fileRef}
+                onChange={handleOnFileChange}
+                multiple={false}
+              />
             </Flex>
 
             <Flex
