@@ -10,8 +10,13 @@ const ListSelectorComponent = <T extends any>(
 ) => {
   const { itemList, placeholder, onSelect } = props;
   const [showList, setShowList] = useState(false);
-  const [selected, setSelected] = useState<ListSelectorItem<T> | null>(null);
+  const [selected, _setSelected] = useState<ListSelectorItem<T> | null>(null);
   const [isError, setIsError] = useState(false);
+
+  const setSelected = (value: ListSelectorItem<T> | null) => {
+    _setSelected(value);
+    onSelect(value ? value.value : null);
+  };
 
   const close = () => {
     console.log("close!");

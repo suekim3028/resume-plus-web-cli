@@ -16,7 +16,11 @@ const TypingSelectorComponent = <T extends any>(
   const { itemList, placeholder, onSelect } = props;
   const [bottomList, setBottomList] = useState<TypingSelectorItem<T>[]>([]);
 
-  const [selected, setSelected] = useState<TypingSelectorItem<T> | null>(null);
+  const [selected, _setSelected] = useState<TypingSelectorItem<T> | null>(null);
+  const setSelected = (value: TypingSelectorItem<T> | null) => {
+    _setSelected(value);
+    onSelect(value ? value.value : null);
+  };
   const [isError, setIsError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const close = () => {

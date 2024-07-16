@@ -13,7 +13,7 @@ import {
 import { UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
 
 type InputValue = {
@@ -54,10 +54,20 @@ const Interview = () => {
     job: null,
   });
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [checker, setChecker] = useState(0);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const resumeRef = useRef<File | null>(null);
+
+  const canSubmit = useMemo(() => {
+    return (
+      Object.keys(valueRef.current).every(
+        (v) => !!valueRef.current[v as keyof InputValue]
+      ) &&
+      !!resumeRef.current &&
+      privacyAgreed
+    );
+  }, [checker, privacyAgreed]);
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -73,21 +83,10 @@ const Interview = () => {
   };
 
   const checkCanSubmit = () => {
-    setCanSubmit(
-      Object.keys(valueRef.current).every(
-        (v) => !!valueRef.current[v as keyof InputValue]
-      ) && !!resumeRef.current
-    );
+    setChecker((p) => p + 1);
   };
 
-  const onValueChange = <T extends keyof InputValue>(
-    key: T,
-    value: InputValue[T]
-  ) => {
-    valueRef.current = { ...valueRef.current, [key]: value };
-    checkCanSubmit();
-  };
-
+  console.log(valueRef.current, resumeRef.current, privacyAgreed);
   const getText = async (): Promise<string> => {
     if (!resumeRef.current) return "";
 
@@ -110,6 +109,16 @@ const Interview = () => {
     }
     return textArr.join(" ");
   };
+
+  const onValueChange = <T extends keyof InputValue>(
+    key: T,
+    value: InputValue[T]
+  ) => {
+    console.log(value);
+    valueRef.current = { ...valueRef.current, [key]: value };
+    checkCanSubmit();
+  };
+
   return (
     <TopBarContainer ref={wrapperRef}>
       <Flex
@@ -117,7 +126,7 @@ const Interview = () => {
         alignItems={"center"}
         justifyContent={"center"}
         onClick={(e) => {
-          console.log("!!");
+          // console.log("!!");
           refs.forEach((r) => r?.close());
         }}
       >
@@ -145,20 +154,20 @@ const Interview = () => {
               ref={companyRef}
               placeholder="기업명을 입력해주세요"
               itemList={dummyCompanies}
-              onSelect={(v) => (valueRef.current.company = v)}
+              onSelect={(v) => onValueChange("company", v)}
               onTypingSelect={(v) => (valueRef.current.company = v)}
             />
             <ListSelector<InterviewTypes.JobDepartment>
               ref={departmentRef}
               itemList={dummyDeps}
               placeholder="직군을 선택해주세요"
-              onSelect={(v) => (valueRef.current.department = v)}
+              onSelect={(v) => onValueChange("department", v)}
             />
             <ListSelector<InterviewTypes.Job>
               ref={jobRef}
               itemList={dummyJobs}
               placeholder="직무를 선택해주세요"
-              onSelect={(v) => (valueRef.current.job = v)}
+              onSelect={(v) => onValueChange("job", v)}
             />
             <Text type="Heading2" fontWeight={"600"} mt={60}>
               면접 상세 설정
@@ -244,7 +253,7 @@ const Interview = () => {
               <input
                 type={"file"}
                 accept=".pdf"
-                id="image_uploads"
+                id="resume_upload"
                 ref={fileRef}
                 onChange={handleOnFileChange}
                 multiple={false}
@@ -256,7 +265,9 @@ const Interview = () => {
               mt={24}
               alignItems={"center"}
               py={4}
-              onClick={() => setPrivacyAgreed((p) => !p)}
+              onClick={() => {
+                setPrivacyAgreed((p) => !p);
+              }}
               cursor={"pointer"}
             >
               <Icon
