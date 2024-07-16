@@ -1,61 +1,68 @@
 "use client";
 import { UI } from "@constants";
 import { Flex, Text } from "@uis";
-import React, { ReactElement, Ref, useImperativeHandle, useState } from "react";
-import Icon from "../Icon/Icon";
+import React, {
+  ReactElement,
+  Ref,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 const TypingSelectorComponent = <T extends any>(
   props: TypingSelectorItemProps<T>,
   ref: Ref<TypingSelectorRef>
 ) => {
   const { itemList, placeholder, onSelect } = props;
-  const [showList, setShowList] = useState(false);
+  const [bottomList, setBottomList] = useState<TypingSelectorItem<T>[]>([]);
+
   const [selected, setSelected] = useState<TypingSelectorItem<T> | null>(null);
   const [isError, setIsError] = useState(false);
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const close = () => {
     console.log("close!");
-    setShowList(false);
+    setBottomList([]);
   };
 
   useImperativeHandle(ref, () => ({ close }));
 
   return (
-    <Flex w="100%" position={"relative"}>
+    <Flex w="100%" position={"relative"} py={20}>
       <Flex
         cursor={"pointer"}
-        onClick={(e) => {
-          setShowList((p) => !p);
-          e.stopPropagation();
-        }}
         px={8}
         py={10}
         w="100%"
         overflow={"hidden"}
         bgColor={"Background/Normal/Normal"}
         borderColor={
-          UI.COLORS[showList ? "Label/Normal" : "Line/Normal/Normal"]
+          UI.COLORS[!!bottomList.length ? "Label/Normal" : "Line/Normal/Normal"]
         }
         // borderBottomWidth={1}
         borderWidth={"0px 0px 1px 0px"}
         borderStyle={"solid"}
         justifyContent={"space-between"}
       >
-        <Text
-          type="Body1_Normal"
-          fontWeight={"400"}
-          color={selected ? "Label/Normal" : "Label/Assistive"}
-        >
-          {selected ? selected.label : placeholder}
-        </Text>
-        <Icon
-          name={`chevron${showList ? "Up" : "Down"}${
-            isError ? "Negative" : selected ? "Normal" : "Assistive"
-          }`}
-          size={24}
+        <input
+          ref={inputRef}
+          style={{
+            fontFamily: "Pretendard JP",
+            fontSize: 16,
+            lineHeight: "150%",
+            borderStyle: "none",
+            flex: 1,
+          }}
+          onChange={(e) => {
+            const text = e.target.value;
+            if (!text) {
+              return setBottomList([]);
+            }
+            setBottomList(itemList.filter((v) => v.label.startsWith(text)));
+          }}
+          placeholder={placeholder}
         />
       </Flex>
-      {showList && (
+      {!!bottomList.length && (
         <Flex
           position={"absolute"}
           direction={"column"}
@@ -64,14 +71,16 @@ const TypingSelectorComponent = <T extends any>(
           right={0}
           zIndex={2}
           boxShadow={"0px 1px 4px rgba(0, 0, 0, 0.08)"}
+          bgColor={"Static/White"}
         >
-          {itemList.map((item) => (
+          {bottomList.map((item) => (
             <Flex
               key={item.label}
               px={8}
               py={6}
               cursor={"pointer"}
               onClick={() => {
+                if (inputRef.current) inputRef.current.value = item.label;
                 setSelected(item);
                 close();
               }}

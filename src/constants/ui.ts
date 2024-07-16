@@ -28,6 +28,7 @@ export const COLORS = {
   "Accent/Cyan": "rgba(0, 189, 222, 1)",
   "Accent/Light Blue": "rgba(0, 174, 255, 1)",
   "Accent/Violet": "rgba(101, 65, 242, 1)",
+  "Accent/Red Orange": "rgba(255, 94, 0, 1)",
   "Accent/Pink": "rgba(245, 83, 218, 1)",
   "Inverse/Primary": "rgba(51, 133, 255, 1)",
   "Inverse/Background": "rgba(27, 28, 30, 1)",

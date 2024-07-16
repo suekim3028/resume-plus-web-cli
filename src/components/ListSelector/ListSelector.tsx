@@ -21,7 +21,7 @@ const ListSelectorComponent = <T extends any>(
   useImperativeHandle(ref, () => ({ close }));
 
   return (
-    <Flex w="100%" position={"relative"}>
+    <Flex w="100%" position={"relative"} py={20}>
       <Flex
         cursor={"pointer"}
         onClick={(e) => {
@@ -60,6 +60,7 @@ const ListSelectorComponent = <T extends any>(
           position={"absolute"}
           direction={"column"}
           top={"100%"}
+          bgColor={"Static/White"}
           left={0}
           right={0}
           zIndex={2}
