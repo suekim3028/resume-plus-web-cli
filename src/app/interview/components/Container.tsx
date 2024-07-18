@@ -15,7 +15,13 @@ const Container = ({
   bgColor?: UI.ColorKeys;
 }) => {
   return (
-    <Flex bgColor={bgColor || "Static/White"} w="100dvw" h="100dvh">
+    <Flex
+      bgColor={bgColor || "Static/White"}
+      w="100dvw"
+      h="100dvh"
+      // alignItems={"center"}
+      justifyContent={"center"}
+    >
       <GridWrapper h="100dvh">
         <GridItem
           py={200}

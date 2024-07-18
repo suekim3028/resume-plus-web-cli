@@ -1,7 +1,9 @@
 "use client";
+import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import EnterWaiting from "../components/EnterWaiting";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
@@ -22,6 +24,15 @@ type Step = (typeof STEPS)[number];
 
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
+  const interview: {
+    company: InterviewTypes.Company;
+    job: InterviewTypes.Job;
+    department: InterviewTypes.JobDepartment;
+  } = {
+    company: { id: 0, name: "테스트 회사" },
+    job: { id: 0, job: "테스트 직무" },
+    department: { id: 0, department: "테스트 직군" },
+  };
   const router = useRouter();
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interviewData = useRef<{
@@ -46,6 +57,11 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     setStep("2_STEP_CHECK");
   }, []);
 
+  // if (1 == 1)
+  //   return (
+  //     <EnterWaiting {...interview} goNext={() => setStep("5_INTERVIEW")} />
+  //   );
+
   switch (step) {
     case "1_QUESTION_WAITING":
       return <QuestionWaiting ref={questionWaitingRef} />;
@@ -59,6 +75,10 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
     case "3_SETTING_CHECK":
       return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
+    case "4_ENTER_WAITING":
+      return (
+        <EnterWaiting {...interview} goNext={() => setStep("5_INTERVIEW")} />
+      );
     default:
       break;
   }
