@@ -13,6 +13,7 @@ import {
 import { UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
+import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
 
@@ -58,6 +59,7 @@ const Interview = () => {
   const [checker, setChecker] = useState(0);
   const [resume, setResume] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const canSubmit = useMemo(() => {
     return (
@@ -406,6 +408,7 @@ const Interview = () => {
               stretch
               flexProps={{ mt: 32 }}
               disabled={!canSubmit}
+              onClick={() => router.replace(`interview/${1}`)}
             />
           </GridItem>
         </GridWrapper>

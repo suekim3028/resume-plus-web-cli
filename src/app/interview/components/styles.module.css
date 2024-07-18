@@ -1,0 +1,8 @@
+.question-waiting-bar {
+  transition: all 20s ease-in-out;
+  transform: translateX(100%);
+}
+.question-end-bar {
+  transition: all 1.5s ease-in-out;
+  transform: translateX(100%);
+}

@@ -24,8 +24,20 @@ type GetCommonQResponse = {
   behav_questions: InterviewTypes.Question[];
 };
 
+const genQ = (name: string) =>
+  Array.from(
+    { length: 2 },
+    (_, i): InterviewTypes.Question => ({ id: i, question: `${name} ${i}번` })
+  );
+
 export const getCommonQ = async (interviewId: number) =>
-  API.get<GetCommonQResponse>(`/question/common/${interviewId}`);
+  API.get<GetCommonQResponse>(`/question/common/${interviewId}`, undefined, {
+    dummyData: {
+      tech_questions: genQ("tech"),
+      behav_questions: genQ("behav"),
+    },
+    dummyWaitSecs: 4,
+  });
 
 /**
  * Personal Questions 가져오기
@@ -34,7 +46,14 @@ export const getCommonQ = async (interviewId: number) =>
 type GetPersonalQResponse = { personal_questions: InterviewTypes.Question[] };
 
 export const getPersonalQ = async (interviewId: number) =>
-  API.get<GetPersonalQResponse>(`/question/personal/${interviewId}`);
+  API.get<GetPersonalQResponse>(
+    `/question/personal/${interviewId}`,
+    undefined,
+    {
+      dummyData: { personal_questions: genQ("personal") },
+      dummyWaitSecs: 4,
+    }
+  );
 
 /**
  * 자기소개 질문 가져오기
@@ -42,7 +61,11 @@ export const getPersonalQ = async (interviewId: number) =>
 type GetIntroduceQResponse = { introduce_questions: InterviewTypes.Question[] };
 
 export const getIntroduceQ = async (interviewId: number) =>
-  API.get<GetIntroduceQResponse>(`/question/introduce/${interviewId}`);
+  API.get<GetIntroduceQResponse>(
+    `/question/introduce/${interviewId}`,
+    undefined,
+    { dummyData: { introduce_questions: genQ("introduce") }, dummyWaitSecs: 4 }
+  );
 
 /**
  * 질문 답변 보내기
@@ -50,38 +73,23 @@ export const getIntroduceQ = async (interviewId: number) =>
 type AnswerQuestionParams = {
   questionId: number;
   answer: string;
+  type: InterviewTypes.QuestionType;
 };
 
 /**
  * tech Q, behav Q, personal Q 답변하기
  */
 
-export const answerTechQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/answer/tech/${questionId}`, {
-    body: {
-      answer,
-    },
-  });
-
-export const answerBehavQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/answer/behavior/${questionId}`, {
-    body: {
-      answer,
-    },
-  });
-
-export const answerPersonalQ = ({ questionId, answer }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/answer/personal/${questionId}`, {
-    body: {
-      answer,
-    },
-  });
-
-export const answerIntroduceQ = ({
+export const answerQuestion = ({
   questionId,
+  type,
   answer,
-}: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/answer/introduce/${questionId}`, {
+}: {
+  questionId: number;
+  type: InterviewTypes.QuestionType;
+  answer: string;
+}) =>
+  API.post<InterviewTypes.Feedback>(`/answer/${type}/${questionId}`, {
     body: {
       answer,
     },
@@ -102,8 +110,6 @@ export const dummyAnswer = async ({
     questionId,
   };
 };
-
-export const answerQuestion = dummyAnswer; // TODO: type에 따라 연결
 
 /**
  * 기업 목록 요청
