@@ -8,15 +8,17 @@ const Container = ({
   colSpan,
   colStart,
   bgColor,
+  bgRgbColor,
 }: {
   children: ReactNode;
   colSpan: number;
   colStart: number;
   bgColor?: UI.ColorKeys;
+  bgRgbColor?: string;
 }) => {
   return (
     <Flex
-      bgColor={bgColor || "Static/White"}
+      bgRgbColor={bgRgbColor || UI.COLORS[bgColor || "Static/White"]}
       w="100dvw"
       h="100dvh"
       // alignItems={"center"}

@@ -9,10 +9,7 @@ const EnterWaiting = ({
   job,
   department,
   goNext,
-}: {
-  company: InterviewTypes.Company;
-  job: InterviewTypes.Job;
-  department: InterviewTypes.JobDepartment;
+}: InterviewTypes.InterviewInfo & {
   goNext: () => void;
 }) => {
   const [leftSeconds, setLeftSeconds] = useState(10);

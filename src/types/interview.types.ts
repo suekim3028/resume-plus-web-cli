@@ -19,9 +19,9 @@ export type Job = {
 };
 
 export type InterviewInfo = {
-  companyId: number;
-  jobDepartmentId: number;
-  jobId: number;
+  company: Company;
+  department: JobDepartment;
+  job: Job;
 };
 
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";

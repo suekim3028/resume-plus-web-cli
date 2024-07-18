@@ -50,6 +50,7 @@ const SVG_ICON_NAMES = [
   "chevronDownNegative",
   "normalUpload",
   "normalClose",
+  "recording",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

@@ -4,6 +4,7 @@ import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import EnterWaiting from "../components/EnterWaiting";
+import InterviewScreen from "../components/InterviewScreen";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
@@ -24,11 +25,7 @@ type Step = (typeof STEPS)[number];
 
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
-  const interview: {
-    company: InterviewTypes.Company;
-    job: InterviewTypes.Job;
-    department: InterviewTypes.JobDepartment;
-  } = {
+  const interview: InterviewTypes.InterviewInfo = {
     company: { id: 0, name: "테스트 회사" },
     job: { id: 0, job: "테스트 직무" },
     department: { id: 0, department: "테스트 직군" },
@@ -57,10 +54,13 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     setStep("2_STEP_CHECK");
   }, []);
 
-  // if (1 == 1)
-  //   return (
-  //     <EnterWaiting {...interview} goNext={() => setStep("5_INTERVIEW")} />
-  //   );
+  if (1 == 1)
+    return (
+      <InterviewScreen
+        interviewInfo={interview}
+        questions={interviewData.current?.questions || []}
+      />
+    );
 
   switch (step) {
     case "1_QUESTION_WAITING":
@@ -78,6 +78,13 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     case "4_ENTER_WAITING":
       return (
         <EnterWaiting {...interview} goNext={() => setStep("5_INTERVIEW")} />
+      );
+    case "5_INTERVIEW":
+      return (
+        <InterviewScreen
+          interviewInfo={interview}
+          questions={interviewData.current?.questions || []}
+        />
       );
     default:
       break;
