@@ -51,6 +51,15 @@ const SVG_ICON_NAMES = [
   "normalUpload",
   "normalClose",
   "recording",
+  "button_chat_off",
+  "button_chat_on",
+  "button_exit",
+  "button_mic_off",
+  "button_mic_on",
+  "button_screen_off",
+  "button_screen",
+  "button_video_off",
+  "button_video_on",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

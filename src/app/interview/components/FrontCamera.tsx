@@ -5,7 +5,13 @@ import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useState } from "react";
 
-const FrontCamera = ({ borderRadius }: { borderRadius?: number }) => {
+const FrontCamera = ({
+  borderRadius,
+  muted,
+}: {
+  borderRadius?: number;
+  muted?: boolean;
+}) => {
   const [cameraReady, setCameraReady] = useState(false);
 
   commonHooks.useAsyncEffect(async () => {
@@ -37,7 +43,7 @@ const FrontCamera = ({ borderRadius }: { borderRadius?: number }) => {
           transform: "rotateY(180deg)",
           borderRadius,
         }}
-        muted
+        muted={muted}
         controls={false}
         playsInline
       />

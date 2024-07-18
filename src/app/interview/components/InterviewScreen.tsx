@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Grid, GridItem } from "@chakra-ui/react";
-import { Icon } from "@components";
+import { Icon, IconNames } from "@components";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useState } from "react";
 import { RandomQuestion } from "../types";
 import Container from "./Container";
+import FrontCamera from "./FrontCamera";
 
 const InterviewScreen = ({
   interviewInfo,
@@ -15,7 +16,26 @@ const InterviewScreen = ({
   questions: RandomQuestion[];
 }) => {
   const { company, job, department } = interviewInfo;
-  const [showChat, setShowChat] = useState();
+  const [setting, setSetting] = useState({
+    mic: false,
+    video: false,
+    chat: false,
+  });
+
+  const buttons: ButtonProps[] = [
+    {
+      icon: `button_mic_${setting.mic ? "on" : "off"}`,
+      onClick: () => setSetting((p) => ({ ...p, mic: !p.mic })),
+    },
+    {
+      icon: `button_video_${setting.video ? "on" : "off"}`,
+      onClick: () => setSetting((p) => ({ ...p, video: !p.video })),
+    },
+    {
+      icon: `button_chat_${setting.chat ? "on" : "off"}`,
+      onClick: () => setSetting((p) => ({ ...p, chat: !p.chat })),
+    },
+  ];
 
   return (
     <Container colSpan={12} colStart={1}>
@@ -109,33 +129,55 @@ const InterviewScreen = ({
               ></Flex>
               <Flex
                 flex={1}
+                overflow={"hidden"}
                 maxWidth={"500px"}
                 maxHeight="500px"
                 bgRgbColor={"rgba(217, 217, 217, 1)"}
-              ></Flex>
+              >
+                {setting.video && <FrontCamera muted={setting.mic} />}
+              </Flex>
             </Flex>
             <Flex mt={43} gap={24}>
-              <Button />
-              <Button />
-              <Button />
-              <Button />
+              {buttons.map((button) => (
+                <Button {...button} key={button.icon} />
+              ))}
+              <Button
+                icon="button_exit"
+                onClick={() => {
+                  //
+                }}
+              />
             </Flex>
           </Flex>
-          {!showChat && <Flex h="100%" w={288} bgColor={"Static/White"}></Flex>}
+          {setting.chat && (
+            <Flex h="100%" w={288} bgColor={"Static/White"}></Flex>
+          )}
         </Flex>
       </Flex>
     </Container>
   );
 };
 
-const Button = () => {
+const Button = ({ icon, onClick }: ButtonProps) => {
   return (
     <Flex
       w={64}
       h={64}
+      cursor={"pointer"}
+      onClick={onClick}
       borderRadius={32}
       bgRgbColor="rgba(217, 217, 217, 0.2)"
-    ></Flex>
+      alignItems={"center"}
+      justifyContent={"center"}
+    >
+      <Icon name={icon} size={24} />
+    </Flex>
   );
 };
+
+type ButtonProps = {
+  icon: IconNames;
+  onClick: () => void;
+};
+
 export default InterviewScreen;
