@@ -1,6 +1,6 @@
-import { GridItem } from "@chakra-ui/react";
-import { Button, Flex, GridWrapper, Text } from "@uis";
+import { Button, Flex, Text } from "@uis";
 import { QuestionPart } from "../types";
+import Container from "./Container";
 
 const StepCheck = ({
   questionParts,
@@ -10,59 +10,50 @@ const StepCheck = ({
   goNext: () => void;
 }) => {
   return (
-    <GridWrapper h="100dvh">
-      <GridItem colSpan={8} colStart={3} display={"flex"} h="100%">
-        <Flex
-          direction={"column"}
-          alignItems={"center"}
-          w="100%"
-          justifyContent={"center"}
-          flex={1}
+    <Container colSpan={8} colStart={3}>
+      <Flex>
+        <Text type={"Title2"} fontWeight={"500"} color={"Static/Black"}>
+          {`총`}
+        </Text>
+        <Text
+          type={"Title2"}
+          fontWeight={"500"}
+          color={"Primary/Normal"}
+          ml={8}
         >
-          <Flex>
-            <Text type={"Title2"} fontWeight={"500"} color={"Static/Black"}>
-              {`총`}
-            </Text>
-            <Text
-              type={"Title2"}
-              fontWeight={"500"}
-              color={"Primary/Normal"}
-              ml={8}
-            >
-              {`${9}개`}
-            </Text>
-            <Text type={"Title2"} fontWeight={"500"} ml={8}>
-              질문으로
-            </Text>
-            <Text
-              type={"Title2"}
-              fontWeight={"500"}
-              ml={8}
-              color={"Primary/Normal"}
-            >
-              {`${25}분`}
-            </Text>
-            <Text type={"Title2"} fontWeight={"500"}>
-              간 면접이 진행될 예정이에요
-            </Text>
-          </Flex>
-          <Text type={"Title2"} fontWeight={"500"}>
-            면접 순서를 확인해주세요
-          </Text>
-          <Flex direction={"column"} gap={10} mt={24} mb={96} w="100%">
-            {questionParts.map((part) => (
-              <PartRow {...part} key={part.name} />
-            ))}
-          </Flex>
-          <Button
-            type="Solid_Primary"
-            size="Large"
-            title="면접 환경 확인하기"
-            flexProps={{ width: 384 }}
-          />
-        </Flex>
-      </GridItem>
-    </GridWrapper>
+          {`${9}개`}
+        </Text>
+        <Text type={"Title2"} fontWeight={"500"} ml={8}>
+          질문으로
+        </Text>
+        <Text
+          type={"Title2"}
+          fontWeight={"500"}
+          ml={8}
+          color={"Primary/Normal"}
+        >
+          {`${25}분`}
+        </Text>
+        <Text type={"Title2"} fontWeight={"500"}>
+          간 면접이 진행될 예정이에요
+        </Text>
+      </Flex>
+      <Text type={"Title2"} fontWeight={"500"}>
+        면접 순서를 확인해주세요
+      </Text>
+      <Flex direction={"column"} gap={10} mt={24} mb={96} w="100%">
+        {questionParts.map((part) => (
+          <PartRow {...part} key={part.name} />
+        ))}
+      </Flex>
+      <Button
+        onClick={goNext}
+        type="Solid_Primary"
+        size="Large"
+        title="면접 환경 확인하기"
+        flexProps={{ width: 384 }}
+      />
+    </Container>
   );
 };
 

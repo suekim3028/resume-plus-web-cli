@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
+import SettingCheck from "../components/SettingCheck";
 import StepCheck from "../components/StepCheck";
 import { QuestionPart, RandomQuestion } from "../types";
 import { getQuestions } from "../utils";
@@ -55,6 +56,9 @@ const Interview = ({ params }: { params: { slug: number } }) => {
           questionParts={interviewData.current?.questionParts || []}
         />
       );
+
+    case "3_SETTING_CHECK":
+      return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
     default:
       break;
   }

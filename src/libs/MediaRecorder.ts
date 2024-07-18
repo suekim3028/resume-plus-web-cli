@@ -8,6 +8,7 @@ const CurrentMediaRecorder = () => {
     onDataAvailable: (url: string) => void;
   }) => {
     const mediaStream = await mediaDeviceManager.getMediaStream();
+    console.log({ mediaStream });
     if (!mediaStream) return null;
 
     mediaRecorder = new MediaRecorder(mediaStream);
@@ -18,7 +19,8 @@ const CurrentMediaRecorder = () => {
       const blob = new Blob([ev.data], {
         type: "video/webm",
       });
-      const url = URL.createObjectURL(blob);
+
+      const url = window.URL.createObjectURL(blob);
       onDataAvailable(url);
     };
     mediaRecorder.start();
