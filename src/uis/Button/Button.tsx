@@ -199,6 +199,7 @@ type ButtonProps = {
   disabled?: boolean;
   leftIcon?: IconNames;
   rightIcon?: IconNames;
+
   size: Sizes;
   onClick?: () => void;
   href?: string;

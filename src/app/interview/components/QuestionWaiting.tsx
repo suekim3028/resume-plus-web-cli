@@ -38,8 +38,14 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   }, []);
 
   return (
-    <GridWrapper>
-      <GridItem colSpan={6} colStart={4}>
+    <GridWrapper h="100dvh">
+      <GridItem
+        colSpan={6}
+        colStart={4}
+        display={"flex"}
+        flex={1}
+        alignItems={"center"}
+      >
         <Flex direction={"column"} alignItems={"center"}>
           <Text type="Title3" fontWeight={"500"} color={"Static/Black"} mb={24}>
             {"장준혁"}님의 정보를 바탕으로 맞춤형 질문을 만들고 있어요!

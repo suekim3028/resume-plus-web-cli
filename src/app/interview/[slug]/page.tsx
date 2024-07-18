@@ -1,11 +1,12 @@
 "use client";
-import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
+import StepCheck from "../components/StepCheck";
+import { QuestionPart, RandomQuestion } from "../types";
 import { getQuestions } from "../utils";
 
 const STEPS = [
@@ -17,15 +18,15 @@ const STEPS = [
 ] as const;
 
 type Step = (typeof STEPS)[number];
-type RandomQuestion = {
-  type: InterviewTypes.QuestionType;
-} & InterviewTypes.Question;
 
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
   const router = useRouter();
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
-  const questions = useRef<RandomQuestion[]>([]);
+  const interviewData = useRef<{
+    questions: RandomQuestion[];
+    questionParts: QuestionPart[];
+  }>();
 
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
@@ -37,17 +38,23 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return router.back();
     }
 
-    questions.current = data;
-    console.log({ questions: questions.current });
+    interviewData.current = data;
+
     questionWaitingRef.current &&
       (await questionWaitingRef.current.animStart());
-    // setStep("2_STEP_CHECK");
+    setStep("2_STEP_CHECK");
   }, []);
 
   switch (step) {
     case "1_QUESTION_WAITING":
       return <QuestionWaiting ref={questionWaitingRef} />;
-
+    case "2_STEP_CHECK":
+      return (
+        <StepCheck
+          goNext={() => setStep("3_SETTING_CHECK")}
+          questionParts={interviewData.current?.questionParts || []}
+        />
+      );
     default:
       break;
   }
