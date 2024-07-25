@@ -16,6 +16,7 @@ import {
 } from "react";
 import { RandomQuestion } from "../types";
 import FrontCamera from "./FrontCamera";
+import S from "./styles.module.css";
 
 const InterviewScreen = ({
   interviewInfo,
@@ -284,6 +285,7 @@ const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
           justifyContent={"space-between"}
           px={16}
           py={13}
+          borderRadius={12}
         >
           <input
             ref={inputRef}
@@ -300,6 +302,7 @@ const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
 
               color: "white",
             }}
+            className={S["chat-input"]}
           />
           <Flex p={3} onClick={handleClickSend}>
             <Icon name="button_chat_off" size={16} />

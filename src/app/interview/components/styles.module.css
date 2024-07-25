@@ -6,3 +6,12 @@
   transition: all 1.5s ease-in-out;
   transform: translateX(100%);
 }
+
+.chat-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.chat-input {
+  border-style: none;
+}
