@@ -4,15 +4,15 @@ export type User = {
   id: number;
   name: string;
   email: string;
-  login_type: LoginType;
-  default_resume: string;
-  remain_interview: number;
+  loginType: LoginType;
+  defaultResume: string;
+  remainInterview: number;
 };
 
 export type Token = {
-  grant_type: string;
-  access_token: string;
-  refresh_token: string;
+  grantType: string;
+  accessToken: string;
+  refreshToken: string;
 };
 
 export type SignUpUser = Pick<User, "name" | "email"> & {

@@ -10,7 +10,7 @@ export type UserResponse = {
  * 이메일 로그인
  */
 export const emailSignIn = async (body: UserTypes.EmailSignInUser) =>
-  API.post<UserResponse>(`/users/login`, { body });
+  API.post<UserResponse>(`/users/email-login`, { body });
 
 /**
  * 구글 로그인 (회원가입 안돼있는 경우 자동 회원가입)
@@ -21,14 +21,14 @@ type GoogleSignInReq = {
 } & Pick<UserTypes.User, "email" | "name">;
 
 export const googleSignIn = async (body: GoogleSignInReq) =>
-  API.post<UserResponse>(`/oauth2/code/google`, { body });
+  API.post<UserResponse>(`/users/google-login`, { body });
 
 /**
  * 이메일 회원가입
  */
 
 export const signUp = (body: UserTypes.SignUpUser) =>
-  API.post<UserResponse>("/users/signup", { body });
+  API.post<UserResponse>("/users/", { body });
 
 /**
  * token refresh
@@ -51,12 +51,12 @@ export const checkDuplicatedEmail = (email: string) =>
  */
 
 export const tokenLogin = () =>
-  API.get<UserResponse>("users/current-user", undefined, {
+  API.get<UserTypes.User>("users/current-user", undefined, {
     // dummyData: {
     //   token: {
-    //     access_token: "accessToken",
+    //     accessToken: "accessToken",
     //     grant_type: "Bearer",
-    //     refresh_token: "refresh",
+    //     refreshToken: "refresh",
     //   },
     //   user: {
     //     default_resume: "이력서.pdf",
