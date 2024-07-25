@@ -5,6 +5,7 @@ import React, {
   ReactElement,
   Ref,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -13,22 +14,30 @@ const TypingSelectorComponent = <T extends any>(
   props: TypingSelectorItemProps<T>,
   ref: Ref<TypingSelectorRef>
 ) => {
-  const { itemList, placeholder, onSelect } = props;
-  const [bottomList, setBottomList] = useState<TypingSelectorItem<T>[]>([]);
+  const { itemList, placeholder, onSelect, onTypingSelect } = props;
+  const [value, setValue] = useState("");
 
-  const [selected, _setSelected] = useState<TypingSelectorItem<T> | null>(null);
-  const setSelected = (value: TypingSelectorItem<T> | null) => {
-    _setSelected(value);
-    onSelect(value ? value.value : null);
-  };
-  const [isError, setIsError] = useState(false);
+  const bottomList = useMemo(() => {
+    return itemList.filter((v) => v.label.startsWith(value));
+  }, [value]);
+
+  const [showBottomList, setShowBottomList] = useState(false);
+
+  const showTextSelector = useMemo(
+    () => !itemList.find((v) => v.label === value),
+    [value]
+  );
+
   const inputRef = useRef<HTMLInputElement>(null);
   const close = () => {
-    console.log("close!");
-    setBottomList([]);
+    setShowBottomList(false);
   };
 
-  useImperativeHandle(ref, () => ({ close }));
+  const clear = () => {
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  useImperativeHandle(ref, () => ({ close, clear }));
 
   return (
     <Flex w="100%" position={"relative"} py={20}>
@@ -58,15 +67,14 @@ const TypingSelectorComponent = <T extends any>(
           }}
           onChange={(e) => {
             const text = e.target.value;
-            if (!text) {
-              return setBottomList([]);
-            }
-            setBottomList(itemList.filter((v) => v.label.startsWith(text)));
+            setValue(text);
+            setShowBottomList(!!text);
           }}
           placeholder={placeholder}
         />
       </Flex>
-      {!!bottomList.length && (
+
+      {showBottomList && !!value && (
         <Flex
           position={"absolute"}
           direction={"column"}
@@ -77,6 +85,25 @@ const TypingSelectorComponent = <T extends any>(
           boxShadow={"0px 1px 4px rgba(0, 0, 0, 0.08)"}
           bgColor={"Static/White"}
         >
+          {showTextSelector && (
+            <Flex
+              px={8}
+              py={6}
+              cursor={"pointer"}
+              onClick={() => {
+                onTypingSelect(value);
+                close();
+              }}
+            >
+              <Text
+                type={"Label1_Normal"}
+                fontWeight={"500"}
+                color={"Label/Alternative"}
+              >
+                {`'${value}' 사용하기`}
+              </Text>
+            </Flex>
+          )}
           {bottomList.map((item) => (
             <Flex
               key={item.label}
@@ -85,7 +112,7 @@ const TypingSelectorComponent = <T extends any>(
               cursor={"pointer"}
               onClick={() => {
                 if (inputRef.current) inputRef.current.value = item.label;
-                setSelected(item);
+                onSelect(item.value);
                 close();
               }}
             >
@@ -123,6 +150,7 @@ type TypingSelectorItemProps<T> = {
 
 export type TypingSelectorRef = {
   close: () => void;
+  clear: () => void;
 };
 
 export default TypingSelector;

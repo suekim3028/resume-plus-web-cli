@@ -83,7 +83,6 @@ const TextInputComponent: React.ForwardRefRenderFunction<
     )
   );
 
-  console.log(errorText);
   return (
     <Flex direction="column" w="100%" {...spaceProps}>
       {!!title && (
