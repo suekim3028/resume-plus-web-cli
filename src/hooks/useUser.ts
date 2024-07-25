@@ -16,38 +16,45 @@ export const useUser = () => {
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const { token_type, access_token } = tokenResponse;
+      try {
+        const { token_type, access_token } = tokenResponse;
 
-      const myHeaders = new Headers();
-      myHeaders.append("Authorization", `${token_type} ${access_token}`);
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", `${token_type} ${access_token}`);
 
-      const data = await fetch(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        {
-          method: "GET",
-          headers: myHeaders,
-          redirect: "follow",
-        }
-      );
-      const user = await data.json();
-      const email = user?.email;
-      const name = user?.name;
+        const data = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+          }
+        );
+        const user = await data.json();
+        const email = user?.email;
+        const name = user?.name;
 
-      if (!!email && !!name) {
-        const { data, isError } = await userApis.googleSignIn({
-          email,
-          name,
-          id_token: access_token,
-        });
+        if (!!email && !!name) {
+          const { data, isError } = await userApis.googleSignIn({
+            email,
+            name,
+            id_token: access_token,
+          });
 
-        if (isError) {
+          if (isError) {
+            throw new Error();
+          }
+
+          handleUser(data);
+        } else {
           throw new Error();
         }
-
-        handleUser(data);
-      } else {
-        throw new Error();
+      } catch (e) {
+        alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
       }
+    },
+    onError: () => {
+      alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
     },
   });
 
