@@ -176,17 +176,17 @@ const Recorded = ({
         <video
           src={url}
           autoPlay
-          // disableRemotePlayback
+          disableRemotePlayback
           disablePictureInPicture
           width={"100%"}
-          id="videoElement"
+          height={"100%"}
           style={{
             objectFit: "contain",
             transform: "rotateY(180deg)",
             borderRadius: 28,
           }}
-          muted
-          controls
+          controls={false}
+          loop
           playsInline
         />
       </Flex>

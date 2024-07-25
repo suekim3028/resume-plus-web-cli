@@ -37,13 +37,14 @@ const FrontCamera = ({
         disableRemotePlayback
         disablePictureInPicture
         width={"100%"}
+        height={"100%"}
         id="videoElement"
         style={{
           objectFit: "contain",
           transform: "rotateY(180deg)",
           borderRadius,
         }}
-        muted={muted}
+        muted
         controls={false}
         playsInline
       />
