@@ -168,10 +168,10 @@ const Button = ({
       {leftIcon && <Icon name={leftIcon} size={iconSize} />}
 
       <Text
+        {...textProps}
         type={fontType}
         fontWeight={fontWeight}
         color={currentColor}
-        {...textProps}
       >
         {title}
       </Text>
@@ -183,7 +183,11 @@ const Button = ({
   return href ? (
     <Link
       href={href}
-      style={{ width: stretch ? "100%" : "fit-content" }}
+      style={{
+        width: stretch ? "100%" : "fit-content",
+        textDecoration: "none",
+        color: currentColor,
+      }}
       //   target={openInNewTab ? "_blank" : undefined}
     >
       {Component}
