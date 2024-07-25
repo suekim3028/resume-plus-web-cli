@@ -9,12 +9,14 @@ const Container = ({
   colStart,
   bgColor,
   bgRgbColor,
+  py,
 }: {
   children: ReactNode;
   colSpan: number;
   colStart: number;
   bgColor?: UI.ColorKeys;
   bgRgbColor?: string;
+  py?: number;
 }) => {
   return (
     <Flex
@@ -26,7 +28,7 @@ const Container = ({
     >
       <GridWrapper h="100dvh">
         <GridItem
-          py={200}
+          py={py ?? 200}
           colSpan={colSpan}
           colStart={colStart}
           display={"flex"}
