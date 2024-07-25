@@ -67,6 +67,7 @@ const TypingSelectorComponent = <T extends any>(
           }}
           onChange={(e) => {
             const text = e.target.value;
+            onSelect(null);
             setValue(text);
             setShowBottomList(!!text);
           }}

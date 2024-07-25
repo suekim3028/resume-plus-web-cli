@@ -114,6 +114,7 @@ const Interview = () => {
   ) => {
     console.log(value);
     valueRef.current = { ...valueRef.current, [key]: value };
+
     checkCanSubmit();
   };
 
@@ -124,8 +125,10 @@ const Interview = () => {
         alignItems={"center"}
         justifyContent={"center"}
         onClick={(e) => {
-          // console.log("!!");
           refs.forEach((r) => r?.close());
+          if (!valueRef.current.company) {
+            companyRef.current?.clear();
+          }
         }}
       >
         <GridWrapper>
@@ -153,7 +156,7 @@ const Interview = () => {
               placeholder="기업명을 입력해주세요"
               itemList={dummyCompanies}
               onSelect={(v) => onValueChange("company", v)}
-              onTypingSelect={(v) => (valueRef.current.company = v)}
+              onTypingSelect={(v) => onValueChange("company", v)}
             />
             <ListSelector<InterviewTypes.JobDepartment>
               ref={departmentRef}
@@ -177,22 +180,55 @@ const Interview = () => {
             >
               초기 설정 외 다른 기능은 사용할 수 없어요
             </Text>
-            <Text type="Body2_Normal" fontWeight={"500"} mt={16}>
+            <Text type="Body2_Normal" fontWeight={"500"} mt={16} mb={24}>
               면접 상세 설정
             </Text>
-            <Flex>
-              {
-                //버튼들
-              }
-            </Flex>
-            <Text type="Body2_Normal" fontWeight={"500"} mt={24}>
+
+            <TemporaryButtons
+              list={[
+                {
+                  label: "1차 면접",
+                  selected: true,
+                },
+                {
+                  label: "2차 면접",
+                  selected: false,
+                },
+                {
+                  label: "3차 면접",
+                  selected: false,
+                },
+                {
+                  label: "최종 면접",
+                  selected: false,
+                },
+              ]}
+            />
+            <Text type="Body2_Normal" fontWeight={"500"} my={24}>
               면접 대상을 선택해주세요
             </Text>
-            <Flex>
-              {
-                //버튼들
-              }
-            </Flex>
+
+            <TemporaryButtons
+              list={[
+                {
+                  label: "AI 면접",
+                  selected: false,
+                },
+                {
+                  label: "실무진 면접",
+                  selected: true,
+                },
+                {
+                  label: "임원/대표 면접",
+                  selected: false,
+                },
+                {
+                  label: "HR 면접",
+                  selected: false,
+                },
+              ]}
+            />
+
             <Flex w="100%" mt={24}>
               <Flex direction={"column"} flex={1}>
                 <Text type="Body2_Normal" fontWeight={"500"}>
@@ -414,6 +450,35 @@ const Interview = () => {
         </GridWrapper>
       </Flex>
     </TopBarContainer>
+  );
+};
+
+const TemporaryButtons = ({
+  list,
+}: {
+  list: { label: string; selected: boolean }[];
+}) => {
+  return (
+    <Flex w="100%" gap={8} py={8} px={9.5}>
+      {list.map(({ label, selected }) => {
+        const color = selected ? "Primary/Normal" : "Label/Disable";
+        return (
+          <Flex
+            key={label}
+            flex={1}
+            borderRadius={10}
+            justifyContent={"center"}
+            alignItems={"center"}
+            py={12}
+            border={`1px solid ${UI.COLORS[color]}`}
+          >
+            <Text type={"Body2_Normal"} color={color}>
+              {label}
+            </Text>
+          </Flex>
+        );
+      })}
+    </Flex>
   );
 };
 

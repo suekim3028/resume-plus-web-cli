@@ -19,7 +19,6 @@ const ListSelectorComponent = <T extends any>(
   };
 
   const close = () => {
-    console.log("close!");
     setShowList(false);
   };
 

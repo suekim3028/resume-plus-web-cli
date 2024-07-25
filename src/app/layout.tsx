@@ -12,7 +12,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RecoilRootWrapper>
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_API_SERVER}>
+          <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
             <StrictMode>{children}</StrictMode>
           </GoogleOAuthProvider>
         </RecoilRootWrapper>
