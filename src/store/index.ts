@@ -49,21 +49,23 @@ export const userStore = selector<UserTypes.User | null>({
   key: "user",
   get: async ({ get }) => {
     const token = TokenStorage.get();
-    const hasToken = !!token && !!token.access_token && !!token.refresh_token;
+    const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
     if (!hasToken) {
       console.log("[USER STORE] no token.");
       return null;
     }
     get(userStoreRefresher);
     const { data, isError } = await userApis.tokenLogin();
-    console.log("[LOGIN] no user.");
-    if (isError) return null;
 
-    console.log(`[LOGIN] logged in with user id ${data.user.id}`);
+    if (isError) {
+      return null;
+    }
 
-    return data.user;
+    console.log(`[LOGIN] logged in with user id ${data.userId}`);
+
+    return data;
   },
-  set: async ({ set }, newVal) => {
+  set: ({ set }, newVal) => {
     set(userStore, newVal);
   },
 });

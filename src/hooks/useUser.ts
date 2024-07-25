@@ -2,15 +2,16 @@
 import { userApis } from "@apis";
 import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
-import { userStore } from "@store";
+import { userStore, userStoreRefresher } from "@store";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 
 export const useUser = () => {
-  const setUser = useSetRecoilState(userStore);
+  const refreshUser = useSetRecoilState(userStoreRefresher);
+
   const loadableUser = useRecoilValueLoadable(userStore);
 
   const handleUser = ({ user, token }: userApis.UserResponse) => {
-    setUser(user);
+    refreshUser((p) => p + 1);
     TokenStorage.set(token);
   };
 
@@ -77,5 +78,19 @@ export const useUser = () => {
     handleUser(data);
   };
 
-  return { loadableUser, loginWithGoogle, loginWithEmail };
+  const signUpWithEmail = async (params: {
+    email: string;
+    password: string;
+    name: string;
+  }) => {
+    const { data, isError } = await userApis.signUp(params);
+
+    if (isError) {
+      throw new Error();
+    }
+
+    handleUser(data);
+  };
+
+  return { loadableUser, loginWithGoogle, loginWithEmail, signUpWithEmail };
 };

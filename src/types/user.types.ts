@@ -1,7 +1,7 @@
 export type LoginType = "GOOGLE" | "EMAIL";
 
 export type User = {
-  id: number;
+  userId: number;
   name: string;
   email: string;
   loginType: LoginType;

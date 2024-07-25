@@ -2,6 +2,7 @@
 import { GridItem } from "@chakra-ui/react";
 import { Icon, InputState, Logo, TextInput, TextInputRef } from "@components";
 import { UI } from "@constants";
+import { useUser } from "@hooks";
 import { UserTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { inputUtils } from "@utils";
@@ -23,6 +24,8 @@ const EmailSignIn = () => {
     authNumber: false,
     all: false,
   });
+
+  const { signUpWithEmail } = useUser();
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
 
   const [authNumberState, _setAuthNumberState] = useState<
@@ -178,7 +181,6 @@ const EmailSignIn = () => {
             hidden
             onChange={handleChangeState("passwordConfirmation")}
             validate={async (cf) => {
-              console.log(inputValue.current.password.text, cf);
               const confirmed = !!cf && cf === inputValue.current.password.text;
               return {
                 isError: !confirmed,
@@ -251,6 +253,20 @@ const EmailSignIn = () => {
             stretch
             flexProps={{ mt: 32 }}
             disabled={!canSubmit.all || !agreedPrivacy}
+            onClick={() => {
+              const { email, name, password } = inputValue.current;
+
+              console.log({
+                email: email.text,
+                name: name.text,
+                password: password.text,
+              });
+              signUpWithEmail({
+                email: email.text,
+                name: name.text,
+                password: password.text,
+              });
+            }}
           />
         </GridItem>
       </GridWrapper>

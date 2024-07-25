@@ -22,7 +22,10 @@ export const validateEmail = async (
 export const validateName = async (name: string): Promise<InputValidation> => {
   const _name = name.replaceAll(" ", "");
 
-  if (_name !== name || !validateUtils.testKoreanName(_name)) {
+  if (
+    _name.length !== name.length
+    //TODO
+  ) {
     return {
       errorText: "이름에는 공백과 특수문자가 포함될 수 없습니다",
       isError: true,

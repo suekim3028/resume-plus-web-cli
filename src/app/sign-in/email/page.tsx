@@ -1,5 +1,4 @@
 "use client";
-import { userApis } from "@apis";
 import { GridItem } from "@chakra-ui/react";
 import { Logo, TextInput } from "@components";
 import { useUser } from "@hooks";
@@ -10,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 
 const EmailSignIn = () => {
-  const { handleUser } = useUser();
+  const { loginWithEmail } = useUser();
   const router = useRouter();
   const [authRouter, setAuthRouter] = useRecoilState(authRouteStore);
   const [canSubmit, setCanSubmit] = useState(false);
@@ -36,10 +35,7 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     const { email, password } = inputValue.current;
-    const { data, isError } = await userApis.emailSignIn({ email, password });
-    if (isError) return alert("다시");
-
-    handleUser(data);
+    await loginWithEmail({ email, password });
     router.replace(authRouter || "/");
   };
 
