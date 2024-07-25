@@ -1,8 +1,12 @@
+"use client";
 import { GridItem } from "@chakra-ui/react";
 import { Logo } from "@components";
+import { useUser } from "@hooks";
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
 
 const SignIn = () => {
+  const { loginWithGoogle } = useUser();
+
   return (
     <Flex flex={1} alignItems={"center"}>
       <GridWrapper>
@@ -32,6 +36,7 @@ const SignIn = () => {
             title="구글 계정으로 로그인"
             leftIcon="logoGoogle"
             stretch
+            onClick={loginWithGoogle}
             textProps={{
               color: "Static/Black",
               fontSize: 22,
