@@ -23,18 +23,10 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
         <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
           <Logo />
         </GridItem>
-        <Button name={"서비스 안내"} href={""} idx={0} />
+
         <Suspense fallback={<></>}>
           <UserButtonList />
         </Suspense>
-        <GridItem
-          display={"flex"}
-          alignItems={"center"}
-          justifyContent={"flex-end"}
-          colStart={12}
-        >
-          <Icon name={"navigationMypage_LabelStrong"} size={24} href={"/"} />
-        </GridItem>
       </GridWrapper>
       {children}
     </Flex>
@@ -50,16 +42,34 @@ const UserButtonList = () => {
 
   return (
     <>
+      <Button name={"서비스 안내"} href={"/"} colStart={9} />
       <Button
         name={"면접 연습"}
         href={user ? "/interview" : "/sign-in"}
-        idx={1}
+        colStart={10}
       />
       <Button
         name={"면접 결과"}
         href={user ? "/interview" : "/sign-in"}
-        idx={2}
+        colStart={11}
       />
+
+      {user ? (
+        <GridItem
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"flex-end"}
+          colStart={12}
+        >
+          <Icon name={"navigationMypage_LabelStrong"} size={24} href={"/"} />
+        </GridItem>
+      ) : (
+        <Button
+          name={"로그인"}
+          href={user ? "/interview" : "/sign-in"}
+          colStart={12}
+        />
+      )}
     </>
   );
 };
@@ -67,24 +77,26 @@ const UserButtonList = () => {
 const Button = ({
   name,
   href,
-  idx,
+  colStart,
 }: {
   name: string;
   href: string;
-  idx: number;
+  colStart: number;
 }) => {
   return (
-    <GridItem
-      key={name}
-      colStart={9 + idx}
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"center"}
-    >
-      <Link href={href}>
-        <Text type={"Body2_Normal"}>{name}</Text>
-      </Link>
-    </GridItem>
+    <>
+      <GridItem
+        key={name}
+        colStart={colStart}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
+        <Link href={href} style={{ textDecoration: "none", color: "black" }}>
+          <Text type={"Body2_Normal"}>{name}</Text>
+        </Link>
+      </GridItem>
+    </>
   );
 };
 
