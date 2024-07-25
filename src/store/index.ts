@@ -55,7 +55,6 @@ export const userStore = selector<UserTypes.User | null>({
       return null;
     }
     get(userStoreRefresher);
-    if (1 == 1) return null;
     const { data, isError } = await userApis.tokenLogin();
     console.log("[LOGIN] no user.");
     if (isError) return null;

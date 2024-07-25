@@ -34,7 +34,7 @@ export default function Home() {
               h={200}
               bgColor="Line/Solid/Normal"
             >
-              {/* <Flex bgColor={"Accent/Pink"} w={200} h={200}></Flex> */}
+              <Flex bgColor={"Accent/Pink"} w={200} h={200}></Flex>
             </Flex>
           </GridItem>
         </GridWrapper>
