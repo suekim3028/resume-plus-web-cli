@@ -57,6 +57,7 @@ export type CompletedInterviewResult = {
   jobId: number;
   departmentId: number;
   createdAt: string;
+  interviewId: number;
   introduce: Feedback[];
   personal: Feedback[];
   tech: Feedback[];
@@ -67,5 +68,6 @@ export type PendingInterviewResult = {
   companyId: number;
   jobId: number;
   departmentId: number;
+  interviewId: number;
   createdAt: string;
 };

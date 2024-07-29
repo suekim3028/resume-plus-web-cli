@@ -97,6 +97,27 @@ export const completedResultStore = selector<
   },
 });
 
+export const pendingResultStoreRefresher = atom<number>({
+  key: "pendingResultRefresher",
+  default: 0,
+});
+
+export const pendingResultStore = selector<
+  InterviewTypes.PendingInterviewResult[]
+>({
+  key: "pendingResult",
+  get: async ({ get }) => {
+    get(pendingResultStoreRefresher);
+    const { data, isError } = await interviewApis.getPendingResultList();
+
+    if (isError) {
+      return [];
+    }
+
+    return data.resultList;
+  },
+});
+
 export const companyDataStore = selector<{
   companies: InterviewTypes.Company[];
   departments: InterviewTypes.JobDepartment[];

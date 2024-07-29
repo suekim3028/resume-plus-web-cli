@@ -178,6 +178,24 @@ export const getCompletedInterviewResultList = () =>
         introduce: [],
         personal: [],
         tech: [],
+        interviewId: idx,
+      })),
+    },
+  });
+
+type GetPendingREsultListResponse = {
+  resultList: InterviewTypes.PendingInterviewResult[];
+};
+
+export const getPendingResultList = () =>
+  API.get<GetPendingREsultListResponse>("", undefined, {
+    dummyData: {
+      resultList: Array.from({ length: 10 }, (_, idx) => ({
+        companyId: idx,
+        jobId: idx,
+        departmentId: idx,
+        interviewId: idx,
+        createdAt: "2024. 3. 25 (토) 23:31",
       })),
     },
   });
