@@ -60,6 +60,7 @@ const SVG_ICON_NAMES = [
   "button_screen",
   "button_video_off",
   "button_video_on",
+  "circleQuestionFill",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

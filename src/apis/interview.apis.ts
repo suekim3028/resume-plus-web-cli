@@ -1,5 +1,4 @@
 import { ApiTypes, InterviewTypes } from "@types";
-import { jsUtils } from "@web-core";
 import API from "./API";
 
 /**
@@ -95,29 +94,18 @@ export const answerQuestion = ({
     },
   });
 
-export const dummyAnswer = async ({
-  questionId,
-  answer,
-  type,
-}: AnswerQuestionParams & {
-  type: InterviewTypes.QuestionType;
-}): Promise<InterviewTypes.Feedback> => {
-  jsUtils.wait(Math.random() * 2);
-  return {
-    question: "aaaa",
-    user_answer: answer,
-    type,
-    questionId,
-  };
-};
-
 /**
  * 기업 목록 요청
  */
 
 type GetCompaniesResponse = InterviewTypes.Company[];
 export const getCompanies = () =>
-  API.get<GetCompaniesResponse>("/company/names");
+  API.get<GetCompaniesResponse>("/company/names", undefined, {
+    dummyData: Array.from({ length: 20 }, (_, idx) => ({
+      id: idx,
+      name: `회사wefwefweffwefwefwefewfwfwefwefwwef ${idx}번`,
+    })),
+  });
 
 /**
  * 직군 목록 요청
@@ -125,14 +113,25 @@ export const getCompanies = () =>
 
 type GetDepartmentsResponse = InterviewTypes.JobDepartment[];
 export const getDepartments = () =>
-  API.get<GetDepartmentsResponse>("/company/departments");
+  API.get<GetDepartmentsResponse>("/company/departments", undefined, {
+    dummyData: Array.from({ length: 20 }, (_, idx) => ({
+      id: idx,
+      department: `직군awefawefawef ${idx}번`,
+    })),
+  });
 
 /**
  * 직무 목록 요청
  */
 
 type GetJobsResponse = InterviewTypes.Job[];
-export const getJobs = () => API.get<GetJobsResponse>("/company/jobs");
+export const getJobs = () =>
+  API.get<GetJobsResponse>("/company/jobs", undefined, {
+    dummyData: Array.from({ length: 20 }, (_, idx) => ({
+      id: idx,
+      job: `직무aefwawefawfewafewafewfa ${idx}번`,
+    })),
+  });
 
 const dummyQuestionGenerator = (
   length: number,
@@ -158,3 +157,27 @@ type CreateInterviewRes = {
 
 export const createInterview = (body: CreateInterviewReq) =>
   API.post<CreateInterviewRes>("/interview", { body });
+
+/**
+ *
+ */
+
+type GetCompletedInterviewResultListResponse = {
+  resultList: InterviewTypes.CompletedInterviewResult[];
+};
+
+export const getCompletedInterviewResultList = () =>
+  API.get<GetCompletedInterviewResultListResponse>("", undefined, {
+    dummyData: {
+      resultList: Array.from({ length: 10 }, (_, idx) => ({
+        companyId: idx,
+        jobId: idx,
+        departmentId: idx,
+        createdAt: "2024. 3. 25 (토) 23:31",
+        behavior: [],
+        introduce: [],
+        personal: [],
+        tech: [],
+      })),
+    },
+  });

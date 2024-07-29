@@ -36,7 +36,6 @@ export type ScoreEvaluation = {
 export type Evaluation = ScoreEvaluation | CriteriaEvaluation;
 
 export type Feedback = {
-  // type: QuestionType;
   question: string;
   questionId: number;
   user_answer: string;
@@ -51,4 +50,22 @@ export type Question = {
 export type Chat = {
   isMine: boolean;
   content: string;
+};
+
+export type CompletedInterviewResult = {
+  companyId: number;
+  jobId: number;
+  departmentId: number;
+  createdAt: string;
+  introduce: Feedback[];
+  personal: Feedback[];
+  tech: Feedback[];
+  behavior: Feedback[];
+};
+
+export type PendingInterviewResult = {
+  companyId: number;
+  jobId: number;
+  departmentId: number;
+  createdAt: string;
 };

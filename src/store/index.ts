@@ -1,4 +1,4 @@
-import { userApis } from "@apis";
+import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
 import { atom, selector } from "recoil";
@@ -73,4 +73,52 @@ export const userStore = selector<UserTypes.User | null>({
 export const authRouteStore = atom<string | null>({
   key: "authRouteStore",
   default: null,
+});
+
+export const completedResultStoreRefresher = atom<number>({
+  key: "completedResultRefresher",
+  default: 0,
+});
+
+export const completedResultStore = selector<
+  InterviewTypes.CompletedInterviewResult[]
+>({
+  key: "completedResult",
+  get: async ({ get }) => {
+    get(completedResultStoreRefresher);
+    const { data, isError } =
+      await interviewApis.getCompletedInterviewResultList();
+
+    if (isError) {
+      return [];
+    }
+
+    return data.resultList;
+  },
+});
+
+export const companyDataStore = selector<{
+  companies: InterviewTypes.Company[];
+  departments: InterviewTypes.JobDepartment[];
+  jobs: InterviewTypes.Job[];
+} | null>({
+  key: "companyData",
+  get: async ({ get }) => {
+    get(completedResultStoreRefresher);
+    const [
+      { data: companies, isError: companyError },
+      { data: departments, isError: depError },
+      { data: jobs, isError: jobError },
+    ] = await Promise.all([
+      interviewApis.getCompanies(),
+      interviewApis.getDepartments(),
+      interviewApis.getJobs(),
+    ]);
+
+    if (companyError || depError || jobError) {
+      return null;
+    }
+
+    return { companies, departments, jobs };
+  },
 });
