@@ -1,6 +1,8 @@
+"use client";
 import { companyDataStore } from "@store";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
+import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { getScoreStat } from "../utils";
 import ScoreBadge from "./ScoreBadge";
@@ -8,8 +10,9 @@ import ScoreBadge from "./ScoreBadge";
 const CompletedResultCard = (
   result: InterviewTypes.CompletedInterviewResult
 ) => {
+  const router = useRouter();
   const companyData = useRecoilValue(companyDataStore);
-  const { companyId, jobId, departmentId, createdAt } = result;
+  const { companyId, jobId, departmentId, createdAt, interviewId } = result;
 
   const company = companyData?.companies.find(({ id }) => id === companyId);
   const department = companyData?.departments.find(
@@ -28,6 +31,9 @@ const CompletedResultCard = (
       w={282}
       borderRadius={12}
       border={`2px solid rgba(112, 115, 124, 0.52)`}
+      onClick={() => {
+        router.push(`/result/${interviewId}`);
+      }}
     >
       <Flex w="100%" flex={0} h={128} mb={14}>
         <Flex

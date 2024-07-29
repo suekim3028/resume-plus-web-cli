@@ -1,15 +1,19 @@
-import { Grid } from "@chakra-ui/react";
+import { Grid, GridProps } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 const GridWrapper = ({
   children,
-  h,
+  ...gridProps
 }: {
   children: ReactNode;
-  h?: number | string;
-}) => {
+} & GridProps) => {
   return (
-    <Grid templateColumns={"repeat(12, 1fr)"} w="1200px" gap={24} h={h}>
+    <Grid
+      templateColumns={"repeat(12, 1fr)"}
+      w="1200px"
+      gap={24}
+      {...gridProps}
+    >
       {children}
     </Grid>
   );

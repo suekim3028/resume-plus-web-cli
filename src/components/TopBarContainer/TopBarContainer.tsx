@@ -19,15 +19,22 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
 > = ({ children }, ref) => {
   return (
     <Flex w="100%" direction={"column"} alignItems={"center"} ref={ref}>
-      <GridWrapper h={60}>
-        <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
-          <Logo />
-        </GridItem>
+      <Flex
+        w="100%"
+        alignItems={"center"}
+        justifyContent={"center"}
+        borderBottom={"1px solid rgba(225, 226, 228, 1)"}
+      >
+        <GridWrapper h={60}>
+          <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
+            <Logo />
+          </GridItem>
 
-        <Suspense fallback={<></>}>
-          <UserButtonList />
-        </Suspense>
-      </GridWrapper>
+          <Suspense fallback={<></>}>
+            <UserButtonList />
+          </Suspense>
+        </GridWrapper>
+      </Flex>
       {children}
     </Flex>
   );

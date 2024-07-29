@@ -1,0 +1,74 @@
+"use client";
+import { GridItem } from "@chakra-ui/react";
+import { Icon, TopBarContainer } from "@components";
+import { companyDataStore, completedResultStore } from "@store";
+import { Flex, GridWrapper, Text } from "@uis";
+import { Suspense } from "react";
+import { useRecoilValue } from "recoil";
+import { getScoreStat } from "../utils";
+import InterviewInfoCard from "./components/InterviewInfoCard";
+import ScoreCalcInfo from "./components/ScoreCalcInfo";
+
+const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
+  const interviewId = params.slug;
+
+  const resultInterviews = useRecoilValue(completedResultStore);
+  const companyData = useRecoilValue(companyDataStore);
+
+  const interview = resultInterviews.find((i) => {
+    return i.interviewId === Number(interviewId);
+  });
+
+  console.log({ interview, resultInterviews, companyData });
+  if (!interview) return <></>;
+
+  const { companyId, jobId, departmentId, createdAt } = interview;
+
+  const company = companyData?.companies.find(({ id }) => id === companyId);
+  const department = companyData?.departments.find(
+    ({ id }) => id === departmentId
+  );
+  const job = companyData?.jobs.find(({ id }) => id === jobId);
+  const { totalMean } = getScoreStat(interview);
+
+  return (
+    <TopBarContainer>
+      <GridWrapper>
+        <GridItem colSpan={2}>
+          <Flex gap={4} my={60}>
+            <Icon name="normalArrowLeft" size={16} />
+            <Text
+              type={"Label1_Normal"}
+              color={"Label/Alternative"}
+              fontWeight={"600"}
+            >
+              목록으로 돌아가기
+            </Text>
+          </Flex>
+        </GridItem>
+      </GridWrapper>
+      <GridWrapper>
+        <GridItem colSpan={2}>
+          <Flex direction={"column"} w="100%" gap={24}>
+            <InterviewInfoCard
+              companyName={company?.name || ""}
+              jobName={job?.job || ""}
+              departmentName={department?.department || ""}
+              meanScore={totalMean}
+              createdAt={createdAt}
+            />
+            <ScoreCalcInfo />
+          </Flex>
+        </GridItem>
+      </GridWrapper>
+    </TopBarContainer>
+  );
+};
+
+export default function ResultDetail({ params }: { params: { slug: number } }) {
+  return (
+    <Suspense>
+      <ResultDetailComponent {...{ params }} />
+    </Suspense>
+  );
+}
