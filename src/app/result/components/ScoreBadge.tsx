@@ -27,8 +27,8 @@ const ScoreBadge = ({
       borderWidth={1}
       borderStyle={"solid"}
       borderRadius={10}
-      px={size === "medium" ? 8 : 0}
-      bgRgbColor={color}
+      px={size === "medium" ? 8 : 3}
+      bgRgbColor={size === "small" ? "white" : color}
     >
       <Text
         color={borderColor}

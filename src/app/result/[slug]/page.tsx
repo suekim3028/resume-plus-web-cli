@@ -6,6 +6,7 @@ import { Flex, GridWrapper, Text } from "@uis";
 import { Suspense } from "react";
 import { useRecoilValue } from "recoil";
 import { getScoreStat } from "../utils";
+import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
 import ScoreCalcInfo from "./components/ScoreCalcInfo";
 
@@ -59,6 +60,9 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
             />
             <ScoreCalcInfo />
           </Flex>
+        </GridItem>
+        <GridItem colSpan={10} colStart={3}>
+          <FeedbackList {...interview} />
         </GridItem>
       </GridWrapper>
     </TopBarContainer>

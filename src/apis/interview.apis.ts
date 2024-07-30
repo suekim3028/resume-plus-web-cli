@@ -174,10 +174,10 @@ export const getCompletedInterviewResultList = () =>
         jobId: idx,
         departmentId: idx,
         createdAt: "2024. 3. 25 (토) 23:31",
-        behavior: [],
-        introduce: [],
-        personal: [],
-        tech: [],
+        behavior: genEvaluation1(),
+        introduce: genEvaluation1(),
+        personal: genEvaluation2(),
+        tech: genEvaluation2(),
         interviewId: idx,
       })),
     },
@@ -199,3 +199,30 @@ export const getPendingResultList = () =>
       })),
     },
   });
+
+const genEvaluation1 = () =>
+  Array.from(
+    { length: 8 },
+    (_, idx): InterviewTypes.Feedback => ({
+      question: `질문 ${idx}`,
+      questionId: idx,
+      user_answer: `대답 ${idx}`,
+      evaluation: {
+        criteria1: [`${idx}`, `이유이유이유이유 ${idx}`],
+        criteria2: [`${idx}`, `이유이유이유이유 ${idx}`],
+        criteria3: [`${idx}`, `이유이유이유이유 ${idx}`],
+        criteria4: [`${idx}`, `이유이유이유이유 ${idx}`],
+      },
+    })
+  );
+
+const genEvaluation2 = () =>
+  Array.from(
+    { length: 8 },
+    (_, idx): InterviewTypes.Feedback => ({
+      question: `질문 ${idx}`,
+      questionId: idx,
+      user_answer: `대답 ${idx}`,
+      evaluation: { rationale: `이유이유이유 ${idx}`, score: idx },
+    })
+  );

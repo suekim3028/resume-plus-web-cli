@@ -1,7 +1,10 @@
 import { InterviewTypes } from "@types";
 
 export const getScoreStat = (
-  result: InterviewTypes.CompletedInterviewResult
+  result: Pick<
+    InterviewTypes.CompletedInterviewResult,
+    "behavior" | "introduce" | "personal" | "tech"
+  >
 ) => {
   const { tech, introduce, personal, behavior } = result;
 
