@@ -20,7 +20,6 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
     return i.interviewId === Number(interviewId);
   });
 
-  console.log({ interview, resultInterviews, companyData });
   if (!interview) return <></>;
 
   const { companyId, jobId, departmentId, createdAt } = interview;
@@ -48,7 +47,7 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
           </Flex>
         </GridItem>
       </GridWrapper>
-      <GridWrapper>
+      <GridWrapper pb={230}>
         <GridItem colSpan={2}>
           <Flex direction={"column"} w="100%" gap={24}>
             <InterviewInfoCard

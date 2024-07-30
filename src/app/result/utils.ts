@@ -29,7 +29,12 @@ const getFeedbackListMean = (arr: InterviewTypes.Feedback[]) => {
     if (isScoreEvaluation(f.evaluation)) {
       return prev + f.evaluation.score;
     } else {
-      return prev + Number(f.evaluation[0]);
+      const feedbackMean = Object.keys(f.evaluation).length
+        ? Object.values(f.evaluation).reduce((prev, curr) => {
+            return prev + Number(curr[0]);
+          }, 0) / Object.keys(f.evaluation).length
+        : 0;
+      return prev + feedbackMean;
     }
   }, 0);
 
