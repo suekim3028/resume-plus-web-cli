@@ -1,8 +1,7 @@
-import { CurrentMediaRecorder } from "@libs";
 import { Button, Flex, Text } from "@uis";
+import { commonHooks } from "@web-core";
 import { useEffect, useRef, useState } from "react";
 import Container from "./Container";
-import FrontCamera from "./FrontCamera";
 type Status = "IDLE" | "RECORDING" | "RECORDED";
 
 const SettingCheck = ({ goNext }: { goNext: () => void }) => {
@@ -77,19 +76,41 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
     "READY"
   );
 
-  const recorder = useRef(CurrentMediaRecorder()).current;
+  const mediaStream = useRef<MediaStream>();
+  const recorder = useRef<MediaRecorder>();
+  const videoElement = useRef<HTMLVideoElement>(null);
 
   const record = () => {
+    if (!mediaStream.current || !recorder.current) return;
     setRecordingStatus("RECORDING");
-    recorder.record({
-      onDataAvailable: onRecord,
-    });
+    recorder.current.start();
   };
 
   const stopRecording = () => {
-    console.log("??????");
-    recorder.stop();
+    recorder.current?.stop();
   };
+
+  commonHooks.useAsyncEffect(async () => {
+    mediaStream.current = await navigator.mediaDevices?.getUserMedia({
+      video: {
+        facingMode: { ideal: "user" },
+      },
+      audio: true,
+    });
+    if (videoElement.current)
+      videoElement.current.srcObject = mediaStream.current;
+
+    recorder.current = new MediaRecorder(mediaStream.current);
+    recorder.current.ondataavailable = (ev) => {
+      if (ev.data.size <= 0) return;
+      const blob = new Blob([ev.data], {
+        type: "video/webm",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      onRecord(url);
+    };
+  }, []);
 
   return (
     <Flex
@@ -106,8 +127,27 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
         width={384}
         height={384}
         borderRadius={28}
+        overflow={"hidden"}
       >
-        <FrontCamera borderRadius={28} />
+        <video
+          autoPlay
+          disableRemotePlayback
+          disablePictureInPicture
+          width={"100%"}
+          height={"100%"}
+          ref={videoElement}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            transform: "rotateY(180deg)",
+            borderRadius: 28,
+            overflow: "hidden",
+          }}
+          muted
+          controls={false}
+          playsInline
+        />
       </Flex>
       {recordingStatus === "READY" ? (
         <Flex direction={"column"} alignItems={"center"}>

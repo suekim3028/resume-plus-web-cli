@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { interviewApis } from "@apis";
-import { Grid, GridItem } from "@chakra-ui/react";
 import { Icon, IconNames } from "@components";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
@@ -14,8 +13,9 @@ import {
   useRef,
   useState,
 } from "react";
+import { useInterview } from "../hooks";
 import { RandomQuestion } from "../types";
-import FrontCamera from "./FrontCamera";
+import FrontCamera, { FrontCameraRef } from "./FrontCamera";
 import S from "./styles.module.css";
 
 const InterviewScreen = ({
@@ -30,12 +30,15 @@ const InterviewScreen = ({
 
   const [setting, setSetting] = useState({
     mic: false,
-    video: false,
+    video: true,
     chat: false,
   });
   //   const client = new SpeechClient();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { speechToText } = useInterview();
+  const cameraRef = useRef<FrontCameraRef>(null);
 
   const CAM_SIZE = useMemo(() => {
     if (!window) return 0;
@@ -43,7 +46,7 @@ const InterviewScreen = ({
     const height = window.height - BOTTOM_BAR_HEIGHT - TOP_BAR_HEIGHT - CAM_MT;
     const width =
       (window.width * (setting.chat ? 0.75 : 1) - CAM_GAP - CAM_MX * 2) / 2;
-    console.log({ height, width });
+
     return Math.min(height, width);
   }, [window?.height, window?.width, setting.chat]);
 
@@ -54,7 +57,14 @@ const InterviewScreen = ({
     },
     {
       icon: `button_video_${setting.video ? "on" : "off"}`,
-      onClick: () => setSetting((p) => ({ ...p, video: !p.video })),
+      onClick: () => {
+        if (setting.video) {
+          cameraRef.current?.stop();
+        } else {
+          cameraRef.current?.resume();
+        }
+        setSetting((p) => ({ ...p, video: !p.video }));
+      },
     },
     {
       icon: `button_chat_${setting.chat ? "on" : "off"}`,
@@ -97,8 +107,9 @@ const InterviewScreen = ({
   return (
     <Flex
       // flex={1}
-      position={"absolute"}
+      position={"fixed"}
       left={0}
+      minWidth={1000}
       right={0}
       top={0}
       bottom={0}
@@ -107,60 +118,46 @@ const InterviewScreen = ({
       // overflow={"hidden"}
     >
       <Flex
+        px={16}
         justifyContent={"space-between"}
         bgColor={"Line/Solid/Normal"}
         zIndex={2}
+        alignItems={"center"}
       >
-        <Grid templateColumns={"repeat(12, 1fr)"} w="100%" gap={24}>
-          <GridItem colStart={1} alignItems={"center"} display={"flex"}>
-            {
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                width={64}
-                height={64}
-                src={""}
-                style={{ width: 64, height: 64 }}
-              />
-            }
-          </GridItem>
-          <GridItem colStart={2} alignItems={"center"} display={"flex"}>
-            <Text
-              type="Body1_Normal"
-              color={"Label/Alternative"}
-              fontWeight={"600"}
-            >
-              {company.name}
-            </Text>
-          </GridItem>
-          <GridItem colStart={3} alignItems={"center"} display={"flex"}>
-            <Text
-              type="Body1_Normal"
-              color={"Label/Alternative"}
-              fontWeight={"600"}
-            >
-              {department.department}
-            </Text>
-          </GridItem>
-          <GridItem colStart={11} alignItems={"center"} display={"flex"}>
-            <Icon name="recording" size={32} />
-            <Text
-              type="Body1_Normal"
-              color={"Label/Alternative"}
-              fontWeight={"600"}
-            >
-              녹화중
-            </Text>
-          </GridItem>
-          <GridItem colStart={12} alignItems={"center"} display={"flex"}>
-            <Text
-              type="Body1_Normal"
-              color={"Label/Alternative"}
-              fontWeight={"600"}
-            >
-              {"00:00"}
-            </Text>
-          </GridItem>
-        </Grid>
+        <Flex alignItems={"center"} gap={12}>
+          {
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              width={64}
+              height={64}
+              src={""}
+              style={{ width: 64, height: 64 }}
+            />
+          }
+          <Text
+            type="Body1_Normal"
+            color={"Label/Alternative"}
+            fontWeight={"600"}
+          >
+            {company.name}
+          </Text>
+          <Text
+            type="Body1_Normal"
+            color={"Label/Alternative"}
+            fontWeight={"600"}
+          >
+            {department.department}
+          </Text>
+        </Flex>
+        <Flex alignItems={"center"} gap={16}>
+          <Text
+            type="Body1_Normal"
+            color={"Label/Alternative"}
+            fontWeight={"600"}
+          >
+            {"00:00"}
+          </Text>
+        </Flex>
       </Flex>
       <Flex flex={1}>
         <Flex
@@ -192,7 +189,7 @@ const InterviewScreen = ({
               bgRgbColor={"rgba(217, 217, 217, 1)"}
               borderRadius={12}
             >
-              {setting.video && <FrontCamera muted={setting.mic} />}
+              <FrontCamera muted={setting.mic} ref={cameraRef} />
             </Flex>
           </Flex>
           <Flex h={BOTTOM_BAR_HEIGHT} pt={43} gap={24}>
@@ -217,7 +214,7 @@ const BOTTOM_BAR_HEIGHT = 148;
 const TOP_BAR_HEIGHT = 60;
 const CAM_MT = 88;
 const CAM_GAP = 24;
-const CAM_MX = 8;
+const CAM_MX = 20;
 const ChatButton = (chat: { isMine: boolean; text: string }) => {};
 
 type ChatRef = {
