@@ -100,14 +100,14 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
             color={"Label/Alternative"}
             fontWeight={"600"}
           >
-            {company.name}
+            {company.companyName}
           </Text>
           <Text
             type="Body1_Normal"
             color={"Label/Alternative"}
             fontWeight={"600"}
           >
-            {department.department}
+            {department.companyDept}
           </Text>
         </Flex>
         <Flex alignItems={"center"} gap={16}>

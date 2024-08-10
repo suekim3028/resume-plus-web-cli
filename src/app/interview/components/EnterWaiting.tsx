@@ -42,7 +42,7 @@ const EnterWaiting = ({
         mt={32}
         type="Title2"
         fontWeight={"500"}
-      >{`${company.name} ${department.department} 직군 ${job.job} 인터뷰`}</Text>
+      >{`${company.companyName} ${department.companyDept} 직군 ${job.companyJob} 인터뷰`}</Text>
       {leftSeconds ? (
         <Flex>
           <Text

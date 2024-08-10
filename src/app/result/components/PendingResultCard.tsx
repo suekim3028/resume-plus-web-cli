@@ -6,12 +6,13 @@ import { useRecoilValue } from "recoil";
 const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
   const companyData = useRecoilValue(companyDataStore);
   const { companyId, jobId, departmentId, createdAt } = result;
-
-  const company = companyData?.companies.find(({ id }) => id === companyId);
-  const department = companyData?.departments.find(
-    ({ id }) => id === departmentId
+  const company = companyData?.companies.find(
+    ({ companyId: id }) => id === companyId
   );
-  const job = companyData?.jobs.find(({ id }) => id === jobId);
+  const department = companyData?.departments.find(
+    ({ companyDeptId: id }) => id === departmentId
+  );
+  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
 
   return (
     <Flex
@@ -52,7 +53,7 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             width={"100%"}
             color={"Label/Assistive"}
           >
-            {company?.name || ""}
+            {company?.companyName || ""}
           </Text>
 
           <Text
@@ -64,7 +65,7 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             color={"Label/Assistive"}
             mb={4}
           >
-            {department?.department || ""}
+            {department?.companyDept || ""}
           </Text>
 
           <Text
@@ -75,7 +76,7 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             wordBreak={"break-all"}
             fontWeight={"400"}
           >
-            {job?.job || ""}
+            {job?.companyJob || ""}
           </Text>
         </Flex>
       </Flex>

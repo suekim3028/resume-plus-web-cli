@@ -14,11 +14,13 @@ const CompletedResultCard = (
   const companyData = useRecoilValue(companyDataStore);
   const { companyId, jobId, departmentId, createdAt, interviewId } = result;
 
-  const company = companyData?.companies.find(({ id }) => id === companyId);
-  const department = companyData?.departments.find(
-    ({ id }) => id === departmentId
+  const company = companyData?.companies.find(
+    ({ companyId: id }) => id === companyId
   );
-  const job = companyData?.jobs.find(({ id }) => id === jobId);
+  const department = companyData?.departments.find(
+    ({ companyDeptId: id }) => id === departmentId
+  );
+  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
   const { totalMean } = getScoreStat(result);
 
   return (
@@ -61,7 +63,7 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             width={"100%"}
           >
-            {company?.name || ""}
+            {company?.companyName || ""}
           </Text>
 
           <Text
@@ -72,7 +74,7 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             mb={4}
           >
-            {department?.department || ""}
+            {department?.companyDept || ""}
           </Text>
 
           <Text
@@ -82,7 +84,7 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             fontWeight={"400"}
           >
-            {job?.job || ""}
+            {job?.companyJob || ""}
           </Text>
         </Flex>
       </Flex>

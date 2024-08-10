@@ -25,11 +25,13 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
 
   const { companyId, jobId, departmentId, createdAt } = interview;
 
-  const company = companyData?.companies.find(({ id }) => id === companyId);
-  const department = companyData?.departments.find(
-    ({ id }) => id === departmentId
+  const company = companyData?.companies.find(
+    ({ companyId: id }) => id === companyId
   );
-  const job = companyData?.jobs.find(({ id }) => id === jobId);
+  const department = companyData?.departments.find(
+    ({ companyDeptId: id }) => id === departmentId
+  );
+  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
   const { totalMean } = getScoreStat(interview);
 
   return (
@@ -52,9 +54,9 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
         <GridItem colSpan={2}>
           <Flex direction={"column"} w="100%" gap={24}>
             <InterviewInfoCard
-              companyName={company?.name || ""}
-              jobName={job?.job || ""}
-              departmentName={department?.department || ""}
+              companyName={company?.companyName || ""}
+              jobName={job?.companyJob || ""}
+              departmentName={department?.companyDept || ""}
               meanScore={totalMean}
               createdAt={createdAt}
             />
