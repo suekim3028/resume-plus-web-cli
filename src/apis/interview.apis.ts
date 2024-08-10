@@ -6,13 +6,13 @@ import API from "./API";
  */
 type UploadCvParams = {
   content: string;
-  resume_name: string;
-  is_default: boolean;
+  name: string;
+  isDefault: boolean;
+  position: "FRONTEND_DEVELOPER";
 };
 
-export const uploadCV = async (body: UploadCvParams) => {
-  return API.post<{ resumeId: number }>("/resume", { body });
-};
+export const uploadCV = async (body: UploadCvParams) =>
+  API.post<{ resumeId: number }>("/resume", { body });
 
 /**
  * Common Questions 가져오기

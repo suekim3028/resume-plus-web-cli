@@ -125,8 +125,9 @@ const Interview = () => {
     const { isError: resumeError, data: resumeData } =
       await interviewApis.uploadCV({
         content: await getText(resume),
-        is_default: defaultResume,
-        resume_name: resume.name,
+        isDefault: defaultResume,
+        name: resume.name,
+        position: "FRONTEND_DEVELOPER",
       });
     if (resumeError) return;
 
