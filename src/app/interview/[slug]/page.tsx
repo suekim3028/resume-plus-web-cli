@@ -37,6 +37,10 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     questionParts: QuestionPart[];
   }>();
 
+  const [data, setData] = useState<{
+    questions: RandomQuestion[];
+    questionParts: QuestionPart[];
+  }>();
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
   commonHooks.useAsyncEffect(async () => {
@@ -47,18 +51,20 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return router.back();
     }
 
+    console.log(data);
     interviewData.current = data;
+    setData(data);
 
     questionWaitingRef.current &&
       (await questionWaitingRef.current.animStart());
     setStep("2_STEP_CHECK");
   }, []);
 
-  if (1 == 1)
+  if (data)
     return (
       <InterviewScreen
         interviewInfo={interview}
-        questions={interviewData.current?.questions || []}
+        questions={data?.questions || []}
       />
     );
 

@@ -1,5 +1,5 @@
-import MediaDeviceManager from "./MediaDeviceManager";
-import CurrentMediaRecorder from "./MediaRecorder";
 import DisplayMediaRecorder from "./DisplayMediaRecorder";
+import MediaDeviceManager from "./MediaDeviceManager";
+import UserMediaRecorder from "./UserMediaRecorder";
 
-export { MediaDeviceManager, CurrentMediaRecorder, DisplayMediaRecorder };
+export { DisplayMediaRecorder, MediaDeviceManager, UserMediaRecorder };

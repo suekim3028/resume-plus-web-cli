@@ -3,6 +3,7 @@ import { GridItem } from "@chakra-ui/react";
 import { Icon, TopBarContainer } from "@components";
 import { companyDataStore, completedResultStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
+import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { useRecoilValue } from "recoil";
 import { getScoreStat } from "../utils";
@@ -15,7 +16,7 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
 
   const resultInterviews = useRecoilValue(completedResultStore);
   const companyData = useRecoilValue(companyDataStore);
-
+  const router = useRouter();
   const interview = resultInterviews.find((i) => {
     return i.interviewId === Number(interviewId);
   });
@@ -35,7 +36,7 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
     <TopBarContainer>
       <GridWrapper>
         <GridItem colSpan={2}>
-          <Flex gap={4} my={60}>
+          <Flex gap={4} my={60} onClick={router.back}>
             <Icon name="normalArrowLeft" size={16} />
             <Text
               type={"Label1_Normal"}

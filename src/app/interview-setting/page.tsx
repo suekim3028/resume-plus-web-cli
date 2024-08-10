@@ -3,19 +3,19 @@ import { GridItem } from "@chakra-ui/react";
 import {
   Icon,
   ListSelector,
-  ListSelectorItem,
   ListSelectorRef,
   TopBarContainer,
   TypingSelector,
-  TypingSelectorItem,
   TypingSelectorRef,
 } from "@components";
 import { UI } from "@constants";
+import { companyDataStore } from "@store";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
+import { useRecoilValue } from "recoil";
 
 type InputValue = {
   company: InterviewTypes.Company | null | string;
@@ -24,24 +24,8 @@ type InputValue = {
 };
 
 const Interview = () => {
-  const dummyCompanies: TypingSelectorItem<InterviewTypes.Company>[] =
-    Array.from({ length: 20 }, (_, idx) => ({
-      value: { id: idx, name: `회사 ${idx}번` },
-      label: `회사 ${idx}번`,
-    }));
+  const companyData = useRecoilValue(companyDataStore);
 
-  const dummyDeps: ListSelectorItem<InterviewTypes.JobDepartment>[] =
-    Array.from({ length: 20 }, (_, idx) => ({
-      value: { department: `직군 ${idx}번`, id: idx },
-      label: `직군 ${idx}번`,
-    }));
-  const dummyJobs: ListSelectorItem<InterviewTypes.Job>[] = Array.from(
-    { length: 20 },
-    (_, idx) => ({
-      value: { job: `직무 ${idx}번`, id: idx },
-      label: `직무 ${idx}번`,
-    })
-  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const companyRef = useRef<TypingSelectorRef>(null);
   const departmentRef = useRef<ListSelectorRef>(null);
@@ -151,25 +135,38 @@ const Interview = () => {
                 *
               </Text>
             </Flex>
-            <TypingSelector<InterviewTypes.Company>
-              ref={companyRef}
-              placeholder="기업명을 입력해주세요"
-              itemList={dummyCompanies}
-              onSelect={(v) => onValueChange("company", v)}
-              onTypingSelect={(v) => onValueChange("company", v)}
-            />
-            <ListSelector<InterviewTypes.JobDepartment>
-              ref={departmentRef}
-              itemList={dummyDeps}
-              placeholder="직군을 선택해주세요"
-              onSelect={(v) => onValueChange("department", v)}
-            />
-            <ListSelector<InterviewTypes.Job>
-              ref={jobRef}
-              itemList={dummyJobs}
-              placeholder="직무를 선택해주세요"
-              onSelect={(v) => onValueChange("job", v)}
-            />
+            {!!companyData && (
+              <>
+                <TypingSelector<InterviewTypes.Company>
+                  ref={companyRef}
+                  placeholder="기업명을 입력해주세요"
+                  itemList={companyData.companies.map((value) => ({
+                    label: value.name,
+                    value,
+                  }))}
+                  onSelect={(v) => onValueChange("company", v)}
+                  onTypingSelect={(v) => onValueChange("company", v)}
+                />
+                <ListSelector<InterviewTypes.JobDepartment>
+                  ref={departmentRef}
+                  itemList={companyData.departments.map((value) => ({
+                    label: value.department,
+                    value,
+                  }))}
+                  placeholder="직군을 선택해주세요"
+                  onSelect={(v) => onValueChange("department", v)}
+                />
+                <ListSelector<InterviewTypes.Job>
+                  ref={jobRef}
+                  itemList={companyData.jobs.map((value) => ({
+                    label: value.job,
+                    value,
+                  }))}
+                  placeholder="직무를 선택해주세요"
+                  onSelect={(v) => onValueChange("job", v)}
+                />
+              </>
+            )}
             <Text type="Heading2" fontWeight={"600"} mt={60}>
               면접 상세 설정
             </Text>

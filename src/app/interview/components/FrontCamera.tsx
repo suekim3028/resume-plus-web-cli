@@ -18,7 +18,6 @@ const FrontCameraComponent: ForwardRefRenderFunction<
   const video = useRef<HTMLVideoElement>(null);
 
   const getFrontCameraStream = async () => {
-    console.log("get !!");
     const userMedia = await navigator.mediaDevices?.getUserMedia({
       video: {
         facingMode: { ideal: "user" },

@@ -1,43 +1,32 @@
+"use client";
 /* eslint-disable jsx-a11y/alt-text */
-import { interviewApis } from "@apis";
 import { Icon, IconNames } from "@components";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
-import {
-  forwardRef,
-  ForwardRefRenderFunction,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useInterview } from "../hooks";
-import { RandomQuestion } from "../types";
-import FrontCamera, { FrontCameraRef } from "./FrontCamera";
-import S from "./styles.module.css";
+import { useMemo, useRef, useState } from "react";
 
-const InterviewScreen = ({
-  interviewInfo,
-  questions,
-}: {
-  interviewInfo: InterviewTypes.InterviewInfo;
-  questions: RandomQuestion[];
-}) => {
+import { UI } from "@constants";
+import InterviewContextProvider, {
+  useInterviewContext,
+} from "../InterviewContext";
+import { RandomQuestion } from "../types";
+import ChatSection, { ChatRef } from "./ChatSection";
+import FrontCamera, { FrontCameraRef } from "./FrontCamera";
+
+const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
   const { company, job, department } = interviewInfo;
   const window = commonHooks.useWindowSize({});
 
   const [setting, setSetting] = useState({
-    mic: false,
+    mic: true,
     video: true,
-    chat: false,
+    chat: true,
   });
-  //   const client = new SpeechClient();
 
+  const { talkingSide } = useInterviewContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { speechToText } = useInterview();
   const cameraRef = useRef<FrontCameraRef>(null);
 
   const CAM_SIZE = useMemo(() => {
@@ -53,7 +42,9 @@ const InterviewScreen = ({
   const buttons: ButtonProps[] = [
     {
       icon: `button_mic_${setting.mic ? "on" : "off"}`,
-      onClick: () => setSetting((p) => ({ ...p, mic: !p.mic })),
+      onClick: async () => {
+        setSetting((p) => ({ ...p, mic: !p.mic }));
+      },
     },
     {
       icon: `button_video_${setting.video ? "on" : "off"}`,
@@ -73,36 +64,6 @@ const InterviewScreen = ({
   ];
 
   const chatRef = useRef<ChatRef>(null);
-
-  const submitAnswer = async (answer: string) => {
-    if (!currentQuestion.current) return;
-    interviewApis.answerQuestion({
-      questionId: currentQuestion.current.id,
-      answer,
-      type: currentQuestion.current.type,
-    });
-    getNextQuestion();
-  };
-
-  const currentQuestion = useRef<RandomQuestion>();
-  const remainQuestions = useRef(questions);
-
-  const getNextQuestion = () => {
-    chatRef.current?.disable();
-    currentQuestion.current = remainQuestions.current.shift();
-    setTimeout(() => {
-      chatRef.current?.enable();
-    }, 2000);
-  };
-
-  const answerWithInput = (answer: string) => {
-    submitAnswer(answer);
-    getNextQuestion();
-  };
-
-  useEffect(() => {
-    getNextQuestion();
-  }, []);
 
   return (
     <Flex
@@ -180,12 +141,22 @@ const InterviewScreen = ({
               height={CAM_SIZE}
               bgRgbColor={"rgba(217, 217, 217, 1)"}
               borderRadius={12}
+              border={
+                talkingSide === "COMPANY"
+                  ? `3px solid ${UI.COLORS["Primary/Normal"]}`
+                  : undefined
+              }
             ></Flex>
             <Flex
               overflow={"hidden"}
               // flex={0}
               height={CAM_SIZE}
               width={CAM_SIZE}
+              border={
+                talkingSide === "ME"
+                  ? `3px solid ${UI.COLORS["Primary/Normal"]}`
+                  : undefined
+              }
               bgRgbColor={"rgba(217, 217, 217, 1)"}
               borderRadius={12}
             >
@@ -204,7 +175,7 @@ const InterviewScreen = ({
             />
           </Flex>
         </Flex>
-        {setting.chat && <Chat answerWithInput={answerWithInput} />}
+        {setting.chat && <ChatSection answerWithInput={() => {}} />}
       </Flex>
     </Flex>
   );
@@ -216,101 +187,6 @@ const CAM_MT = 88;
 const CAM_GAP = 24;
 const CAM_MX = 20;
 const ChatButton = (chat: { isMine: boolean; text: string }) => {};
-
-type ChatRef = {
-  addQuestion: (question: string) => void;
-  appendAnswer: (answer: string) => void;
-  disable: () => void;
-  enable: () => void;
-};
-type ChatProps = {
-  answerWithInput: (answer: string) => void;
-};
-
-const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
-  { answerWithInput },
-  ref
-) => {
-  const [chats, setChats] = useState<{ isMine: boolean; text: string }[]>([]);
-  const [inputDisabled, setInputDisabled] = useState(false);
-
-  const addQuestion = (question: string) => {
-    setChats((c) => [...c, { isMine: false, text: question }]);
-  };
-
-  const appendAnswer = (answer: string) => {
-    if (!inputRef.current) return;
-    inputRef.current.value = [inputRef.current.value, answer].join("");
-  };
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleClickSend = () => {
-    if (!inputRef.current) return;
-    answerWithInput(inputRef.current.value);
-  };
-
-  const disable = () => {
-    if (inputRef.current) inputRef.current.value = "";
-    setInputDisabled(true);
-  };
-
-  const enable = () => {
-    setInputDisabled(false);
-  };
-
-  useImperativeHandle(ref, () => ({
-    disable,
-    enable,
-    appendAnswer,
-    addQuestion,
-  }));
-
-  return (
-    <Flex
-      h="100%"
-      w="25%"
-      bgColor={"Static/White"}
-      direction={"column"}
-      pb={24}
-    >
-      <Flex flex={1} w="100%" direction={"column"}></Flex>
-      <Flex width="100%" px={16}>
-        <Flex
-          bgColor={"Primary/Normal"}
-          w="100%"
-          justifyContent={"space-between"}
-          px={16}
-          py={13}
-          borderRadius={12}
-        >
-          <input
-            ref={inputRef}
-            disabled={inputDisabled}
-            placeholder="답변을 입력하세요"
-            color="white"
-            style={{
-              fontFamily: "Pretendard JP",
-              fontSize: 15,
-              lineHeight: "22.01px",
-
-              border: "none",
-              backgroundColor: "transparent",
-
-              color: "white",
-            }}
-            className={S["chat-input"]}
-          />
-          <Flex p={3} onClick={handleClickSend}>
-            <Icon name="button_chat_off" size={16} />
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-};
-
-const Chat = forwardRef(ChatComponent);
 
 const Button = ({ icon, onClick }: ButtonProps) => {
   return (
@@ -334,4 +210,16 @@ type ButtonProps = {
   onClick: () => void;
 };
 
+type InterviewScreenProps = {
+  interviewInfo: InterviewTypes.InterviewInfo;
+  questions: RandomQuestion[];
+};
+
+const InterviewScreen = (props: InterviewScreenProps) => {
+  return (
+    <InterviewContextProvider questions={props.questions}>
+      <InterviewScreenComponent {...props} />
+    </InterviewContextProvider>
+  );
+};
 export default InterviewScreen;

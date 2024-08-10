@@ -10,3 +10,5 @@ export type QuestionPart = {
   questionCount: number;
   duration: number;
 };
+
+export type Chat = { isMine: boolean; text: string };
