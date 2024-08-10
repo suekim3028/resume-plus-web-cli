@@ -1,4 +1,5 @@
 "use client";
+import { interviewApis } from "@apis";
 import { GridItem } from "@chakra-ui/react";
 import {
   Icon,
@@ -17,10 +18,20 @@ import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
 import { useRecoilValue } from "recoil";
 
+type SubmittableValue = {
+  company: InterviewTypes.Company | string;
+  department: InterviewTypes.JobDepartment;
+  job: InterviewTypes.Job;
+};
+
 type InputValue = {
-  company: InterviewTypes.Company | null | string;
-  department: InterviewTypes.JobDepartment | null;
-  job: InterviewTypes.Job | null;
+  [key in keyof SubmittableValue]: SubmittableValue[key] | null;
+};
+
+const isInputValueSubmittable = (
+  value: InputValue
+): value is SubmittableValue => {
+  return Object.keys(value).every((v) => !!value[v as keyof InputValue]);
 };
 
 const Interview = () => {
@@ -45,15 +56,22 @@ const Interview = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const canSubmit = useMemo(() => {
-    return (
-      Object.keys(valueRef.current).every(
-        (v) => !!valueRef.current[v as keyof InputValue]
-      ) &&
-      !!resume &&
-      privacyAgreed
-    );
-  }, [checker, privacyAgreed, !!resume]);
+  const submitValue = useMemo(():
+    | { canSubmit: true; value: SubmittableValue & { resume: File } }
+    | { canSubmit: false; value: null } => {
+    const value = valueRef.current;
+    if (isInputValueSubmittable(value) && !!resume && privacyAgreed) {
+      return {
+        canSubmit: true,
+        value: { ...value, resume },
+      };
+    } else {
+      return {
+        canSubmit: false,
+        value: null,
+      };
+    }
+  }, [checker, privacyAgreed, resume]);
 
   const handleOnFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -70,13 +88,10 @@ const Interview = () => {
     setChecker((p) => p + 1);
   };
 
-  const getText = async (): Promise<string> => {
-    if (!resume) return "";
-
+  const getText = async (file: File): Promise<string> => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
-    const document = await pdfjs.getDocument(await resume.arrayBuffer())
-      .promise;
+    const document = await pdfjs.getDocument(await file.arrayBuffer()).promise;
 
     const textArr: string[] = [];
 
@@ -100,6 +115,31 @@ const Interview = () => {
     valueRef.current = { ...valueRef.current, [key]: value };
 
     checkCanSubmit();
+  };
+
+  const submit = async () => {
+    if (!submitValue.canSubmit) return;
+
+    const { company, job, department, resume } = submitValue.value;
+
+    const { isError: resumeError, data: resumeData } =
+      await interviewApis.uploadCV({
+        content: await getText(resume),
+        is_default: defaultResume,
+        resume_name: resume.name,
+      });
+    if (resumeError) return;
+
+    const { isError, data } = await interviewApis.createInterview({
+      companyId: typeof company === "string" ? 0 : company.id,
+      departmentId: department.id,
+      interviewRound: "1차 면접",
+      jobId: job.id,
+      resumeId: resumeData.resumeId,
+    });
+
+    if (isError) throw new Error();
+    router.replace(`interview/${data.interviewId}`);
   };
 
   return (
@@ -440,7 +480,7 @@ const Interview = () => {
               title={"면접 시작하기"}
               stretch
               flexProps={{ mt: 32 }}
-              disabled={!canSubmit}
+              disabled={!submitValue.canSubmit}
               onClick={() => router.replace(`interview/${1}`)}
             />
           </GridItem>

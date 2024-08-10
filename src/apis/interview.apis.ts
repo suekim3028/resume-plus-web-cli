@@ -1,4 +1,4 @@
-import { ApiTypes, InterviewTypes } from "@types";
+import { InterviewTypes } from "@types";
 import API from "./API";
 
 /**
@@ -11,7 +11,7 @@ type UploadCvParams = {
 };
 
 export const uploadCV = async (body: UploadCvParams) => {
-  return API.post<ApiTypes.SuccessRes>("/resume", { body });
+  return API.post<{ resumeId: number }>("/resume", { body });
 };
 
 /**
@@ -145,14 +145,16 @@ const dummyQuestionGenerator = (
 /**
  * 면접 만들기
  */
-type CreateInterviewReq = {
-  company_id: number;
-  department_id: number;
-  job_id: number;
+export type CreateInterviewReq = {
+  companyId: number;
+  departmentId: number;
+  jobId: number;
+  interviewRound: "1차 면접";
+  resumeId: number;
 };
 
 type CreateInterviewRes = {
-  interview_id: number;
+  interviewId: number;
 };
 
 export const createInterview = (body: CreateInterviewReq) =>
