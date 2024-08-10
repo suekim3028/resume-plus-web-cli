@@ -37,6 +37,8 @@ const TextInputComponent: React.ForwardRefRenderFunction<
     isValidating: false,
   }).current;
 
+  const currentValue = useRef(defaultValue || "");
+
   const [{ isError, isValidating, errorText, text }, _setInputState] =
     useState<InputState>(defaultState);
   const inputStateRef = useRef<InputState>(defaultState);
@@ -54,7 +56,8 @@ const TextInputComponent: React.ForwardRefRenderFunction<
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     async (e) => {
       const value = e.target.value;
-      if (!value) {
+      currentValue.current = value;
+      if (!currentValue.current) {
         setInputState(defaultState);
       }
 
@@ -65,7 +68,14 @@ const TextInputComponent: React.ForwardRefRenderFunction<
           isValidating: true,
         });
         const { isError, errorText } = await validate(value);
-        setInputState({ text: value, isError, isValidating: false, errorText });
+
+        if (value === currentValue.current)
+          setInputState({
+            text: value,
+            isError,
+            isValidating: false,
+            errorText,
+          });
       } else {
         setInputState({ ...defaultState, text: value });
       }

@@ -11,8 +11,8 @@ export const useUser = () => {
   const loadableUser = useRecoilValueLoadable(userStore);
 
   const handleUser = ({ user, token }: userApis.UserResponse) => {
-    refreshUser((p) => p + 1);
     TokenStorage.set(token);
+    refreshUser((p) => p + 1);
   };
 
   const loginWithGoogle = useGoogleLogin({

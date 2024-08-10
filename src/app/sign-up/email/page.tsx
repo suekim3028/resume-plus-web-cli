@@ -6,6 +6,7 @@ import { useUser } from "@hooks";
 import { UserTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { inputUtils } from "@utils";
+import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
 
 type InputKey =
@@ -24,6 +25,7 @@ const EmailSignIn = () => {
     authNumber: false,
     all: false,
   });
+  const router = useRouter();
 
   const { signUpWithEmail } = useUser();
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
@@ -254,7 +256,7 @@ const EmailSignIn = () => {
             stretch
             flexProps={{ mt: 32 }}
             disabled={!canSubmit.all || !agreedPrivacy}
-            onClick={() => {
+            onClick={async () => {
               const { email, name, password } = inputValue.current;
 
               console.log({
@@ -262,11 +264,13 @@ const EmailSignIn = () => {
                 name: name.text,
                 password: password.text,
               });
-              signUpWithEmail({
+              // TODO: loading
+              await signUpWithEmail({
                 email: email.text,
                 name: name.text,
                 password: password.text,
               });
+              router.replace("/");
             }}
           />
         </GridItem>

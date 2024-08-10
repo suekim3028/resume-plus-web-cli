@@ -4,11 +4,12 @@ import { Logo, TextInput } from "@components";
 import { useUser } from "@hooks";
 import { authRouteStore } from "@store";
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
+import { ErrorBoundary } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 
-const EmailSignIn = () => {
+const EmailSignInComponent = () => {
   const { loginWithEmail } = useUser();
   const router = useRouter();
   const [authRouter, setAuthRouter] = useRecoilState(authRouteStore);
@@ -104,6 +105,17 @@ const EmailSignIn = () => {
         </GridItem>
       </GridWrapper>
     </Flex>
+  );
+};
+
+const EmailSignIn = () => {
+  const onError = () => {
+    alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
+  };
+  return (
+    <ErrorBoundary onError={onError} fallback={<></>}>
+      <EmailSignInComponent />
+    </ErrorBoundary>
   );
 };
 
