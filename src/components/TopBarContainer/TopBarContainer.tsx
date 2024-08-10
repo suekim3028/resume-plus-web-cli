@@ -3,11 +3,13 @@ import { GridItem } from "@chakra-ui/react";
 import { userStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ForwardRefRenderFunction,
   ReactNode,
   Suspense,
   forwardRef,
+  useState,
 } from "react";
 import { useRecoilValue } from "recoil";
 import Icon from "../Icon/Icon";
@@ -17,6 +19,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
   HTMLDivElement,
   { children: ReactNode }
 > = ({ children }, ref) => {
+  const router = useRouter();
   return (
     <Flex w="100%" direction={"column"} alignItems={"center"} ref={ref}>
       <Flex
@@ -26,7 +29,12 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
         borderBottom={"1px solid rgba(225, 226, 228, 1)"}
       >
         <GridWrapper h={60}>
-          <GridItem colSpan={2} alignItems={"center"} display={"flex"}>
+          <GridItem
+            colSpan={2}
+            alignItems={"center"}
+            display={"flex"}
+            onClick={() => router.push("")}
+          >
             <Logo />
           </GridItem>
 
@@ -46,6 +54,8 @@ const TopBarContainer = forwardRef<HTMLDivElement, { children: ReactNode }>(
 
 const UserButtonList = () => {
   const user = useRecoilValue(userStore);
+  const router = useRouter();
+  const [userMenuVisible, setUserMenuVisible] = useState(false);
 
   return (
     <>
@@ -61,14 +71,57 @@ const UserButtonList = () => {
         colStart={11}
       />
 
-      {user ? (
+      {!user ? (
         <GridItem
           display={"flex"}
           alignItems={"center"}
           justifyContent={"flex-end"}
           colStart={12}
         >
-          <Icon name={"navigationMypage_LabelStrong"} size={24} href={"/"} />
+          <Flex position={"relative"}>
+            <Icon
+              name={"navigationMypage_LabelStrong"}
+              size={24}
+              onClick={() => setUserMenuVisible((p) => !p)}
+            />
+            {userMenuVisible && (
+              <Flex
+                flexDirection={"column"}
+                borderRadius={8}
+                border={"1px solid black"}
+                position={"absolute"}
+                top={"100%"}
+                right={0}
+                bgColor={"Static/White"}
+                whiteSpace={"nowrap"}
+                width={78}
+              >
+                <Flex
+                  py={10}
+                  w="100%"
+                  justifyContent={"center"}
+                  cursor={"pointer"}
+                  onClick={() => router.push("/profile")}
+                >
+                  <Text type="Label1_Normal" fontWeight={"500"}>
+                    프로필
+                  </Text>
+                </Flex>
+                <Flex h={1} w={"100%"} bgColor={"Line/Normal/Strong"} />
+                <Flex
+                  py={10}
+                  cursor={"pointer"}
+                  justifyContent={"center"}
+                  w="100%"
+                  onClick={() => router.push("/profile")}
+                >
+                  <Text type="Label1_Normal" fontWeight={"500"}>
+                    로그아웃
+                  </Text>
+                </Flex>
+              </Flex>
+            )}
+          </Flex>
         </GridItem>
       ) : (
         <Button
