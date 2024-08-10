@@ -128,16 +128,16 @@ const Interview = () => {
         content: await getText(resume),
         isDefault: defaultResume,
         name: resume.name,
-        position: job.job,
+        position: job.companyJob,
       });
-    if (resumeError) return;
+    // if (resumeError) return;
 
     const { isError, data } = await interviewApis.createInterview({
-      companyId: typeof company === "string" ? 0 : company.id,
-      departmentId: department.id,
+      companyId: typeof company === "string" ? 0 : company.companyId,
+      departmentId: department.companyDeptId,
       interviewRound: "1차 면접",
-      jobId: job.id,
-      resumeId: resumeData.resumeId,
+      jobId: job.companyJobId,
+      resumeId: 1,
     });
 
     if (isError) throw new Error();
@@ -183,7 +183,7 @@ const Interview = () => {
                   ref={companyRef}
                   placeholder="기업명을 입력해주세요"
                   itemList={companyData.companies.map((value) => ({
-                    label: value.name,
+                    label: value.companyName,
                     value,
                   }))}
                   onSelect={(v) => onValueChange("company", v)}
@@ -192,7 +192,7 @@ const Interview = () => {
                 <ListSelector<InterviewTypes.JobDepartment>
                   ref={departmentRef}
                   itemList={companyData.departments.map((value) => ({
-                    label: value.department,
+                    label: value.companyDept,
                     value,
                   }))}
                   placeholder="직군을 선택해주세요"
@@ -201,7 +201,7 @@ const Interview = () => {
                 <ListSelector<InterviewTypes.Job>
                   ref={jobRef}
                   itemList={companyData.jobs.map((value) => ({
-                    label: value.job,
+                    label: value.companyJob,
                     value,
                   }))}
                   placeholder="직무를 선택해주세요"

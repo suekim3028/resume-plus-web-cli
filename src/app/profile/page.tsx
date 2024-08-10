@@ -62,7 +62,7 @@ const Row = ({ title, body }: { title: string; body: string }) => {
           {title}
         </Text>
       </GridItem>
-      <GridItem colStart={7}>
+      <GridItem colStart={7} colSpan={5}>
         <Text type={"Title2"} color={"Label/Alternative"} fontWeight={"500"}>
           {body}
         </Text>

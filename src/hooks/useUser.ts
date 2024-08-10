@@ -15,6 +15,11 @@ export const useUser = () => {
     refreshUser((p) => p + 1);
   };
 
+  const logout = () => {
+    TokenStorage.remove();
+    refreshUser((p) => p + 1);
+  };
+
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -92,5 +97,11 @@ export const useUser = () => {
     handleUser(data);
   };
 
-  return { loadableUser, loginWithGoogle, loginWithEmail, signUpWithEmail };
+  return {
+    loadableUser,
+    loginWithGoogle,
+    loginWithEmail,
+    signUpWithEmail,
+    logout,
+  };
 };

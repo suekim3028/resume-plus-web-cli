@@ -48,13 +48,14 @@ export const userStoreRefresher = atom<number>({
 export const userStore = selector<UserTypes.User | null>({
   key: "user",
   get: async ({ get }) => {
+    console.log("?????");
+    get(userStoreRefresher);
     const token = TokenStorage.get();
     const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
     if (!hasToken) {
       console.log("[USER STORE] no token.");
       return null;
     }
-    get(userStoreRefresher);
     const { data, isError } = await userApis.tokenLogin();
 
     if (isError) {

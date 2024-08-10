@@ -12,7 +12,7 @@ type UploadCvParams = {
 };
 
 export const uploadCV = async (body: UploadCvParams) =>
-  API.post<{ resumeId: number }>("/resume", { body });
+  API.post<{ resumeId: number }>("/resume/", { body });
 
 /**
  * Common Questions 가져오기
@@ -100,11 +100,12 @@ export const answerQuestion = ({
 
 type GetCompaniesResponse = InterviewTypes.Company[];
 export const getCompanies = () =>
-  API.get<GetCompaniesResponse>("/company/names", undefined, {
+  API.get<GetCompaniesResponse>("/company/name", undefined, {
     dummyData: Array.from({ length: 20 }, (_, idx) => ({
-      id: idx,
-      name: `회사wefwefweffwefwefwefewfwfwefwefwwef ${idx}번`,
+      companyId: idx,
+      companyName: `회사wefwefweffwefwefwefewfwfwefwefwwef ${idx}번`,
     })),
+    useDummy: false,
   });
 
 /**
@@ -113,11 +114,12 @@ export const getCompanies = () =>
 
 type GetDepartmentsResponse = InterviewTypes.JobDepartment[];
 export const getDepartments = () =>
-  API.get<GetDepartmentsResponse>("/company/departments", undefined, {
+  API.get<GetDepartmentsResponse>("/company/department", undefined, {
     dummyData: Array.from({ length: 20 }, (_, idx) => ({
-      id: idx,
-      department: `직군awefawefawef ${idx}번`,
+      companyDeptId: idx,
+      companyDept: `직군awefawefawef ${idx}번`,
     })),
+    useDummy: false,
   });
 
 /**
@@ -126,11 +128,12 @@ export const getDepartments = () =>
 
 type GetJobsResponse = InterviewTypes.Job[];
 export const getJobs = () =>
-  API.get<GetJobsResponse>("/company/jobs", undefined, {
+  API.get<GetJobsResponse>("/company/job", undefined, {
     dummyData: Array.from({ length: 20 }, (_, idx) => ({
-      id: idx,
-      job: `직무aefwawefawfewafewafewfa ${idx}번`,
+      companyJobId: idx,
+      companyJob: `직무aefwawefawfewafewafewfa ${idx}번`,
     })),
+    useDummy: false,
   });
 
 const dummyQuestionGenerator = (
@@ -158,7 +161,7 @@ type CreateInterviewRes = {
 };
 
 export const createInterview = (body: CreateInterviewReq) =>
-  API.post<CreateInterviewRes>("/interview", { body });
+  API.post<CreateInterviewRes>("/interview/", { body });
 
 /**
  *

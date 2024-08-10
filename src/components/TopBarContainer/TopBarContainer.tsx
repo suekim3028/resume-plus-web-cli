@@ -1,5 +1,6 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
+import { useUser } from "@hooks";
 import { userStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
@@ -33,7 +34,8 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             colSpan={2}
             alignItems={"center"}
             display={"flex"}
-            onClick={() => router.push("")}
+            onClick={() => router.push("/")}
+            cursor={"pointer"}
           >
             <Logo />
           </GridItem>
@@ -54,6 +56,7 @@ const TopBarContainer = forwardRef<HTMLDivElement, { children: ReactNode }>(
 
 const UserButtonList = () => {
   const user = useRecoilValue(userStore);
+  const { logout } = useUser();
   const router = useRouter();
   const [userMenuVisible, setUserMenuVisible] = useState(false);
 
@@ -62,12 +65,12 @@ const UserButtonList = () => {
       <Button name={"서비스 안내"} href={"/"} colStart={9} />
       <Button
         name={"면접 연습"}
-        href={user ? "/interview" : "/sign-in"}
+        href={user ? "/interview-setting" : "/sign-in"}
         colStart={10}
       />
       <Button
         name={"면접 결과"}
-        href={user ? "/interview" : "/sign-in"}
+        href={user ? "/result" : "/sign-in"}
         colStart={11}
       />
 
@@ -113,7 +116,7 @@ const UserButtonList = () => {
                   cursor={"pointer"}
                   justifyContent={"center"}
                   w="100%"
-                  onClick={() => router.push("/profile")}
+                  onClick={logout}
                 >
                   <Text type="Label1_Normal" fontWeight={"500"}>
                     로그아웃

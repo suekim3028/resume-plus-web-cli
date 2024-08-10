@@ -3,19 +3,19 @@ import { INTERVIEW_CONSTS } from "@constants";
 export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 
 export type Company = {
-  id: number;
-  name: string;
+  companyId: number;
+  companyName: string;
   // thumbnailUrl: string;
 };
 
 export type JobDepartment = {
-  id: number;
-  department: string;
+  companyDeptId: number;
+  companyDept: string;
 };
 
 export type Job = {
-  id: number;
-  job: string;
+  companyJobId: number;
+  companyJob: string;
 };
 
 export type InterviewInfo = {
