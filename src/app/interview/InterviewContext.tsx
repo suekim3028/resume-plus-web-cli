@@ -81,6 +81,14 @@ const InterviewContextProvider = ({
       }
       setChats((c) => [...c, { isMine: true, text }]);
 
+      if (!currentQuestion.current) return;
+
+      interviewApis.answerQuestion({
+        questionId: currentQuestion.current.questionId,
+        answer: text,
+        type: currentQuestion.current.type,
+      });
+
       getNextQuestion();
       console.log({ text });
     };
