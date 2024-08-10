@@ -31,7 +31,7 @@ const InterviewContextProvider = ({
   const submitAnswer = async (answer: string) => {
     if (!currentQuestion.current) return;
     interviewApis.answerQuestion({
-      questionId: currentQuestion.current.id,
+      questionId: currentQuestion.current.questionId,
       answer,
       type: currentQuestion.current.type,
     });
@@ -46,16 +46,15 @@ const InterviewContextProvider = ({
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
     setTalkingSide("COMPANY");
     const data = await textToSpeech(nextQuestion.question);
-    if (!data) return;
+    if (!data) {
+      // startRecord();
+      return;
+    }
     const audio = new Audio(data);
     audio.onended = () => {
       startRecord();
     };
     audio.play();
-
-    // sampleAudio(() => {
-    //   startRecord();
-    // });
   };
 
   const resetMediaRecorder = () => {
@@ -75,6 +74,12 @@ const InterviewContextProvider = ({
       const base64Audio = await audioBlobToBase64(blob);
 
       const text = await speechToText(base64Audio);
+
+      if (!text) {
+        startRecord();
+        return;
+      }
+      setChats((c) => [...c, { isMine: true, text }]);
 
       getNextQuestion();
       console.log({ text });

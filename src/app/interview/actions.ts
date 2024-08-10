@@ -1,6 +1,7 @@
 "use server";
 
 export const speechToText = async (base64Audio: string) => {
+  if (1 == 1) return "대답대답대답";
   const apiKey = process.env.GOOGLE_SPEECH_API_KEY;
 
   const response = await fetch(
@@ -29,6 +30,7 @@ export const speechToText = async (base64Audio: string) => {
 };
 
 export const textToSpeech = async (text: string) => {
+  if (1 == 1) return "";
   const apiKey = process.env.GOOGLE_SPEECH_API_KEY;
   console.log({ text, apiKey });
   const response = await fetch(

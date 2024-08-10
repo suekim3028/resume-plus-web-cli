@@ -14,31 +14,33 @@ export const getQuestions = async (
     }
 > => {
   const [
-    { isError: commonQError, data: commonQData },
+    { isError: techQError, data: techQData },
+    { isError: behaviorQError, data: behaviorQData },
     { isError: personalQError, data: personalQData },
     { isError: introduceQError, data: introduceQData },
   ] = await Promise.all([
-    interviewApis.getCommonQ(interviewId),
+    interviewApis.getTechQ(interviewId),
+    interviewApis.getBehaviorQ(interviewId),
     interviewApis.getPersonalQ(interviewId),
     interviewApis.getIntroduceQ(interviewId),
   ]);
 
-  if (commonQError || personalQError || introduceQError) {
+  if (techQError || behaviorQError || personalQError || introduceQError) {
     return { isError: true, data: null };
   }
-  const introduceQs: RandomQuestion[] = introduceQData.introduce_questions.map(
+  const introduceQs: RandomQuestion[] = introduceQData.map(
     (q): RandomQuestion => ({ type: "introduce", ...q })
   );
 
-  const techQs: RandomQuestion[] = commonQData.tech_questions.map(
+  const techQs: RandomQuestion[] = techQData.map(
     (q): RandomQuestion => ({ type: "tech", ...q })
   );
 
-  const behavQs: RandomQuestion[] = commonQData.behav_questions.map(
+  const behavQs: RandomQuestion[] = behaviorQData.map(
     (q): RandomQuestion => ({ type: "behavior", ...q })
   );
 
-  const personalQs: RandomQuestion[] = personalQData.personal_questions.map(
+  const personalQs: RandomQuestion[] = personalQData.map(
     (q): RandomQuestion => ({ type: "personal", ...q })
   );
   const questions = [...introduceQs, ...personalQs, ...techQs, ...behavQs];

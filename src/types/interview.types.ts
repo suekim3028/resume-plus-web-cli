@@ -45,7 +45,7 @@ export type Feedback = {
 
 export type Question = {
   question: string;
-  id: number;
+  questionId: number;
 };
 
 export type Chat = {

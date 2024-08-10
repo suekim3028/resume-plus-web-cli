@@ -26,44 +26,62 @@ type GetCommonQResponse = {
 const genQ = (name: string) =>
   Array.from(
     { length: 2 },
-    (_, i): InterviewTypes.Question => ({ id: i, question: `${name} ${i}번` })
+    (_, i): InterviewTypes.Question => ({
+      questionId: i,
+      question: `${name} ${i}번`,
+    })
   );
 
-export const getCommonQ = async (interviewId: number) =>
-  API.get<GetCommonQResponse>(`/question/common/${interviewId}`, undefined, {
-    dummyData: {
-      tech_questions: genQ("tech"),
-      behav_questions: genQ("behav"),
-    },
-    dummyWaitSecs: 4,
-  });
+export const getTechQ = async (interviewId: number) =>
+  API.get<InterviewTypes.Question[]>(
+    `/question/tech/${interviewId}`,
+    undefined,
+    {
+      dummyData: genQ("tech"),
+      useDummy: false,
+    }
+  );
 
 /**
  * Personal Questions 가져오기
  */
 
-type GetPersonalQResponse = { personal_questions: InterviewTypes.Question[] };
-
 export const getPersonalQ = async (interviewId: number) =>
-  API.get<GetPersonalQResponse>(
-    `/question/personal/${interviewId}`,
+  API.get<InterviewTypes.Question[]>(
+    `/questions/personal/${interviewId}`,
     undefined,
     {
-      dummyData: { personal_questions: genQ("personal") },
-      dummyWaitSecs: 4,
+      dummyData: genQ("personal"),
+      useDummy: false,
     }
   );
 
 /**
  * 자기소개 질문 가져오기
  */
-type GetIntroduceQResponse = { introduce_questions: InterviewTypes.Question[] };
 
 export const getIntroduceQ = async (interviewId: number) =>
-  API.get<GetIntroduceQResponse>(
-    `/question/introduce/${interviewId}`,
+  API.get<InterviewTypes.Question[]>(
+    `/questions/introduce/${interviewId}`,
     undefined,
-    { dummyData: { introduce_questions: genQ("introduce") }, dummyWaitSecs: 4 }
+    {
+      dummyData: genQ("introduce"),
+      useDummy: false,
+    }
+  );
+
+/**
+ * 인성 질문 가져오기
+ */
+
+export const getBehaviorQ = async (interviewId: number) =>
+  API.get<InterviewTypes.Question[]>(
+    `/questions/behavior/${interviewId}`,
+    undefined,
+    {
+      dummyData: genQ("behavior"),
+      useDummy: false,
+    }
   );
 
 /**
@@ -135,15 +153,6 @@ export const getJobs = () =>
     })),
     useDummy: false,
   });
-
-const dummyQuestionGenerator = (
-  length: number,
-  type: string
-): InterviewTypes.Question[] =>
-  Array.from({ length }, (_, idx) => ({
-    id: idx,
-    question: `${type} ${idx} 질문입니다.`,
-  }));
 
 /**
  * 면접 만들기
