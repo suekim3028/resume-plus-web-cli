@@ -127,7 +127,7 @@ const Interview = () => {
         content: await getText(resume),
         isDefault: defaultResume,
         name: resume.name,
-        position: "FRONTEND_DEVELOPER",
+        position: job.job,
       });
     if (resumeError) return;
 
@@ -482,7 +482,7 @@ const Interview = () => {
               stretch
               flexProps={{ mt: 32 }}
               disabled={!submitValue.canSubmit}
-              onClick={() => router.replace(`interview/${1}`)}
+              onClick={submit}
             />
           </GridItem>
         </GridWrapper>

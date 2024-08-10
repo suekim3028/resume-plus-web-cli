@@ -8,7 +8,7 @@ type UploadCvParams = {
   content: string;
   name: string;
   isDefault: boolean;
-  position: "FRONTEND_DEVELOPER";
+  position: string;
 };
 
 export const uploadCV = async (body: UploadCvParams) =>
