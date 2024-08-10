@@ -59,7 +59,11 @@ const TextInputComponent: React.ForwardRefRenderFunction<
       }
 
       if (validate) {
-        setInputState({ ...inputStateRef.current, isValidating: true });
+        setInputState({
+          ...inputStateRef.current,
+          isError: false,
+          isValidating: true,
+        });
         const { isError, errorText } = await validate(value);
         setInputState({ text: value, isError, isValidating: false, errorText });
       } else {

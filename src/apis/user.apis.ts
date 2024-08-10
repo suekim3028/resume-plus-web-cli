@@ -44,7 +44,11 @@ export const refreshToken = (refreshToken: string) =>
  */
 
 export const checkDuplicatedEmail = (email: string) =>
-  API.post<boolean>("/users/duplicate-email", { body: { email } });
+  API.post<boolean>(
+    "/users/duplicate-email",
+    { body: { email } }
+    // { dummyData: false, dummyWaitSecs: 1 }
+  );
 
 /**
  * 토큰 로그인

@@ -173,6 +173,7 @@ const EmailSignIn = () => {
             mt={12}
             hidden
             onChange={handleChangeState("password")}
+            validate={inputUtils.validatePassword}
           />
 
           <TextInput
