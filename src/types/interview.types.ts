@@ -27,21 +27,11 @@ export type InterviewInfo = {
 
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";
 
-// {[criteria]: [score, rationale]}
-export type CriteriaEvaluation = Record<string, [string, string]>;
-
-export type ScoreEvaluation = {
-  score: number;
-  rationale: string;
-};
-
-export type Evaluation = ScoreEvaluation | CriteriaEvaluation;
-
 export type Feedback = {
   question: string;
   questionId: number;
-  user_answer: string;
-  evaluation: Evaluation;
+  userAnswer: string;
+  gptEvaluation: { criteria?: string; score: number; rationale: string }[];
 };
 
 export type Question = {

@@ -8,10 +8,10 @@ export const getScoreStat = (
 ) => {
   const { tech, introduce, personal, behavior } = result;
 
-  const techMean = getFeedbackListMean(tech);
-  const introduceMean = getFeedbackListMean(introduce);
-  const personalMean = getFeedbackListMean(personal);
-  const behaviorMean = getFeedbackListMean(behavior);
+  const techMean = calcPartMean(tech);
+  const introduceMean = calcPartMean(introduce);
+  const personalMean = calcPartMean(personal);
+  const behaviorMean = calcPartMean(behavior);
 
   return {
     techMean,
@@ -22,27 +22,23 @@ export const getScoreStat = (
   };
 };
 
-const getFeedbackListMean = (arr: InterviewTypes.Feedback[]) => {
-  if (!arr.length) return 0;
-  const sum = arr.reduce((prev, f) => {
-    if (!f?.evaluation) return prev;
-    if (isScoreEvaluation(f.evaluation)) {
-      return prev + f.evaluation.score;
-    } else {
-      const feedbackMean = Object.keys(f.evaluation).length
-        ? Object.values(f.evaluation).reduce((prev, curr) => {
-            return prev + Number(curr[0]);
-          }, 0) / Object.keys(f.evaluation).length
-        : 0;
-      return prev + feedbackMean;
-    }
-  }, 0);
+const calcPartMean = (partFeedbacks: InterviewTypes.Feedback[]) => {
+  if (!partFeedbacks.length) return 0;
 
-  return sum / arr.length;
+  const partTotalScore = partFeedbacks.reduce(
+    (prev, f) => prev + calcOneQuestionScoreMean(f),
+    0
+  );
+
+  return partTotalScore / partFeedbacks.length;
 };
 
-export const isScoreEvaluation = (
-  e: InterviewTypes.Evaluation
-): e is InterviewTypes.ScoreEvaluation => {
-  return "score" in e;
+export const calcOneQuestionScoreMean = (f: InterviewTypes.Feedback) => {
+  const questionMeanScore = f.gptEvaluation.length
+    ? f.gptEvaluation.reduce((prev, curr) => {
+        return prev + Number(curr.score);
+      }, 0) / f.gptEvaluation.length
+    : 0;
+
+  return questionMeanScore;
 };

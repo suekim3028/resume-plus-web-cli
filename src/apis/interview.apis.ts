@@ -200,13 +200,24 @@ const genEvaluation1 = () =>
     (_, idx): InterviewTypes.Feedback => ({
       question: `질문 ${idx}`,
       questionId: idx,
-      user_answer: `대답 ${idx}`,
-      evaluation: {
-        criteria1: [`${idx}`, `이유이유이유이유 ${idx}`],
-        criteria2: [`${idx}`, `이유이유이유이유 ${idx}`],
-        criteria3: [`${idx}`, `이유이유이유이유 ${idx}`],
-        criteria4: [`${idx}`, `이유이유이유이유 ${idx}`],
-      },
+      userAnswer: `대답 ${idx}`,
+      gptEvaluation: [
+        {
+          criteria: "절디ㅓㅈㅁ리ㅏㅓㄷㅈㄹㅁ",
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+        {
+          criteria: "절디ㅓㅈㅁ리ㅏㅓㄷㅈㄹㅁ",
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+        {
+          criteria: "절디ㅓㅈㅁ리ㅏㅓㄷㅈㄹㅁ",
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+      ],
     })
   );
 
@@ -216,7 +227,20 @@ const genEvaluation2 = () =>
     (_, idx): InterviewTypes.Feedback => ({
       question: `질문 ${idx}`,
       questionId: idx,
-      user_answer: `대답 ${idx}`,
-      evaluation: { rationale: `이유이유이유 ${idx}`, score: idx },
+      userAnswer: `대답 ${idx}`,
+      gptEvaluation: [
+        {
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+        {
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+        {
+          rationale: `이유이유이ㅠㅇ ${idx}`,
+          score: idx,
+        },
+      ],
     })
   );
