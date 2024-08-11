@@ -4,6 +4,7 @@ import ListSelector, {
   type ListSelectorRef,
 } from "./ListSelector/ListSelector";
 
+import { EventLogger } from "./EventLogger";
 import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
@@ -18,6 +19,7 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 export {
+  EventLogger,
   Icon,
   IconNames,
   Initializer,

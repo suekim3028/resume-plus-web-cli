@@ -11,6 +11,7 @@
     "deploy": "yarn build && eb deploy resume-ai-chat-web2-dev --profile default && echo '🏊🏻 deployment completed!'"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.10.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
