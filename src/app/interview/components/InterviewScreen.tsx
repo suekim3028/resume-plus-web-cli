@@ -217,7 +217,10 @@ type InterviewScreenProps = {
 
 const InterviewScreen = (props: InterviewScreenProps) => {
   return (
-    <InterviewContextProvider questions={props.questions}>
+    <InterviewContextProvider
+      questions={props.questions}
+      interviewId={props.interviewInfo.interviewId}
+    >
       <InterviewScreenComponent {...props} />
     </InterviewContextProvider>
   );

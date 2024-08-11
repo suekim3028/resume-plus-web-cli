@@ -22,6 +22,7 @@ export type InterviewInfo = {
   company: Company;
   department: JobDepartment;
   job: Job;
+  interviewId: number;
 };
 
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";

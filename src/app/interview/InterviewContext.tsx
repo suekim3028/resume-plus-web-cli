@@ -15,9 +15,11 @@ type InterviewContextValue = {
 const InterviewContextProvider = ({
   children,
   questions,
+  interviewId,
 }: {
   children: ReactNode;
   questions: RandomQuestion[];
+  interviewId: number;
 }) => {
   const currentQuestion = useRef<RandomQuestion>();
   const remainQuestions = useRef(questions);
@@ -34,6 +36,7 @@ const InterviewContextProvider = ({
       questionId: currentQuestion.current.questionId,
       answer,
       type: currentQuestion.current.type,
+      interviewId: interviewId,
     });
     getNextQuestion();
   };
@@ -87,6 +90,7 @@ const InterviewContextProvider = ({
         questionId: currentQuestion.current.questionId,
         answer: text,
         type: currentQuestion.current.type,
+        interviewId,
       });
 
       getNextQuestion();

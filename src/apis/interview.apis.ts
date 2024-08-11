@@ -82,26 +82,15 @@ type AnswerQuestionParams = {
   questionId: number;
   answer: string;
   type: InterviewTypes.QuestionType;
+  interviewId: number;
 };
 
 /**
  * tech Q, behav Q, personal Q 답변하기
  */
 
-export const answerQuestion = ({
-  questionId,
-  type,
-  answer,
-}: {
-  questionId: number;
-  type: InterviewTypes.QuestionType;
-  answer: string;
-}) =>
-  API.post<InterviewTypes.Feedback>(`/answer/${type}/${questionId}`, {
-    body: {
-      answer,
-    },
-  });
+export const answerQuestion = ({ type, ...body }: AnswerQuestionParams) =>
+  API.post<InterviewTypes.Feedback>(`/answer/${type}`, { body });
 
 /**
  * 기업 목록 요청

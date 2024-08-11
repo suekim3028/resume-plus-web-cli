@@ -51,6 +51,7 @@ export const userStore = selector<UserTypes.User | null>({
     console.log("?????");
     get(userStoreRefresher);
     const token = TokenStorage.get();
+
     const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
     if (!hasToken) {
       console.log("[USER STORE] no token.");

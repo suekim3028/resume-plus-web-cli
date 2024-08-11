@@ -29,6 +29,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     company: { companyId: 0, companyName: "테스트 회사" },
     job: { companyJobId: 0, companyJob: "테스트 직무" },
     department: { companyDeptId: 0, companyDept: "테스트 직군" },
+    interviewId,
   };
   const router = useRouter();
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
