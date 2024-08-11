@@ -14,15 +14,6 @@ type UploadCvParams = {
 export const uploadCV = async (body: UploadCvParams) =>
   API.post<{ resumeId: number }>("/resume/", { body });
 
-/**
- * Common Questions 가져오기
- */
-
-type GetCommonQResponse = {
-  tech_questions: InterviewTypes.Question[];
-  behav_questions: InterviewTypes.Question[];
-};
-
 const genQ = (name: string) =>
   Array.from(
     { length: 2 },
@@ -48,7 +39,7 @@ export const getTechQ = async (interviewId: number) =>
 
 export const getPersonalQ = async (interviewId: number) =>
   API.get<InterviewTypes.Question[]>(
-    `/questions/personal/${interviewId}`,
+    `/question/personal/${interviewId}`,
     undefined,
     {
       dummyData: genQ("personal"),
@@ -62,7 +53,7 @@ export const getPersonalQ = async (interviewId: number) =>
 
 export const getIntroduceQ = async (interviewId: number) =>
   API.get<InterviewTypes.Question[]>(
-    `/questions/introduce/${interviewId}`,
+    `/question/introduce/${interviewId}`,
     undefined,
     {
       dummyData: genQ("introduce"),
@@ -76,7 +67,7 @@ export const getIntroduceQ = async (interviewId: number) =>
 
 export const getBehaviorQ = async (interviewId: number) =>
   API.get<InterviewTypes.Question[]>(
-    `/questions/behavior/${interviewId}`,
+    `/question/behavior/${interviewId}`,
     undefined,
     {
       dummyData: genQ("behavior"),

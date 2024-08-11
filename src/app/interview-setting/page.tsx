@@ -130,14 +130,14 @@ const Interview = () => {
         name: resume.name,
         position: job.companyJob,
       });
-    // if (resumeError) return;
+    if (resumeError) return;
 
     const { isError, data } = await interviewApis.createInterview({
       companyId: typeof company === "string" ? 0 : company.companyId,
       departmentId: department.companyDeptId,
       interviewRound: "1차 면접",
       jobId: job.companyJobId,
-      resumeId: 1,
+      resumeId: resumeData.resumeId,
     });
 
     if (isError) throw new Error();
@@ -156,6 +156,7 @@ const Interview = () => {
             companyRef.current?.clear();
           }
         }}
+        pb={120}
       >
         <GridWrapper>
           <GridItem colSpan={6} colStart={4} pt={88}>

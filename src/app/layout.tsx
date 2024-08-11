@@ -1,4 +1,4 @@
-import { RecoilRootWrapper } from "@components";
+import { Initializer, RecoilRootWrapper } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { StrictMode } from "react";
 import "./globals.css";
@@ -13,7 +13,9 @@ export default function RootLayout({
       <body>
         <RecoilRootWrapper>
           <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
-            <StrictMode>{children}</StrictMode>
+            <Initializer>
+              <StrictMode>{children}</StrictMode>
+            </Initializer>
           </GoogleOAuthProvider>
         </RecoilRootWrapper>
       </body>

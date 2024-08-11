@@ -4,6 +4,7 @@ import ListSelector, {
   type ListSelectorRef,
 } from "./ListSelector/ListSelector";
 
+import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
 import TextInput, {
@@ -19,6 +20,7 @@ import TypingSelector, {
 export {
   Icon,
   IconNames,
+  Initializer,
   InputState,
   InputValidation,
   ListSelector,
