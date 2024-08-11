@@ -1,5 +1,6 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
+import { EventLogger } from "@components/EventLogger";
 import { useUser } from "@hooks";
 import { userStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
@@ -34,7 +35,12 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             colSpan={2}
             alignItems={"center"}
             display={"flex"}
-            onClick={() => router.push("/")}
+            onClick={() => {
+              router.push("/");
+              EventLogger.log("global_navigation_bar_button")({
+                action: "logo",
+              });
+            }}
             cursor={"pointer"}
           >
             <Logo />
@@ -142,7 +148,7 @@ const Button = ({
   href,
   colStart,
 }: {
-  name: string;
+  name: "서비스 안내" | "면접 연습" | "면접 결과" | "로그인";
   href: string;
   colStart: number;
 }) => {
@@ -155,7 +161,13 @@ const Button = ({
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <Link href={href} style={{ textDecoration: "none", color: "black" }}>
+        <Link
+          href={href}
+          style={{ textDecoration: "none", color: "black" }}
+          onClick={() => {
+            EventLogger.log("global_navigation_bar_button")({ action: name });
+          }}
+        >
           <Text type={"Body2_Normal"}>{name}</Text>
         </Link>
       </GridItem>
