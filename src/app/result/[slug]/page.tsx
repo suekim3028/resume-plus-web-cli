@@ -35,38 +35,40 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
   const { totalMean } = getScoreStat(interview);
 
   return (
-    <TopBarContainer>
-      <GridWrapper>
-        <GridItem colSpan={2}>
-          <Flex gap={4} my={60} onClick={router.back}>
-            <Icon name="normalArrowLeft" size={16} />
-            <Text
-              type={"Label1_Normal"}
-              color={"Label/Alternative"}
-              fontWeight={"600"}
-            >
-              목록으로 돌아가기
-            </Text>
-          </Flex>
-        </GridItem>
-      </GridWrapper>
-      <GridWrapper pb={230}>
-        <GridItem colSpan={2}>
-          <Flex direction={"column"} w="100%" gap={24}>
-            <InterviewInfoCard
-              companyName={company?.companyName || ""}
-              jobName={job?.companyJob || ""}
-              departmentName={department?.companyDept || ""}
-              meanScore={totalMean}
-              createdAt={createdAt}
-            />
-            <ScoreCalcInfo />
-          </Flex>
-        </GridItem>
-        <GridItem colSpan={10} colStart={3}>
-          <FeedbackList {...interview} />
-        </GridItem>
-      </GridWrapper>
+    <TopBarContainer footer>
+      <Flex flexDir={"column"} alignItems={"center"} w="100%">
+        <GridWrapper>
+          <GridItem colSpan={2}>
+            <Flex gap={4} my={60} onClick={router.back}>
+              <Icon name="normalArrowLeft" size={16} />
+              <Text
+                type={"Label1_Normal"}
+                color={"Label/Alternative"}
+                fontWeight={"600"}
+              >
+                목록으로 돌아가기
+              </Text>
+            </Flex>
+          </GridItem>
+        </GridWrapper>
+        <GridWrapper pb={230}>
+          <GridItem colSpan={2}>
+            <Flex direction={"column"} w="100%" gap={24}>
+              <InterviewInfoCard
+                companyName={company?.companyName || ""}
+                jobName={job?.companyJob || ""}
+                departmentName={department?.companyDept || ""}
+                meanScore={totalMean}
+                createdAt={createdAt}
+              />
+              <ScoreCalcInfo />
+            </Flex>
+          </GridItem>
+          <GridItem colSpan={10} colStart={3}>
+            <FeedbackList {...interview} />
+          </GridItem>
+        </GridWrapper>
+      </Flex>
     </TopBarContainer>
   );
 };

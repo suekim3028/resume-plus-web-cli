@@ -1,6 +1,13 @@
 import { interviewApis } from "@apis";
 import { commonHooks } from "@web-core";
-import { createContext, ReactNode, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { speechToText, textToSpeech } from "./actions";
 import { Chat, RandomQuestion } from "./types";
 import { audioBlobToBase64 } from "./utils";
@@ -175,6 +182,15 @@ const InterviewContextProvider = ({
     setTimeout(() => {
       getNextQuestion();
     }, 1500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      mediaRecorder.current?.pause();
+      mediaStream.current?.getTracks().forEach((track) => {
+        track.stop();
+      });
+    };
   }, []);
 
   return (
