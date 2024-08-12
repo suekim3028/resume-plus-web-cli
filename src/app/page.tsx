@@ -37,7 +37,7 @@ export default function Home() {
                     type="Solid_Primary"
                     size="Large"
                     title={"지금 바로 시작하기"}
-                    href={"/sign-in"}
+                    href={"/interview-setting"}
                   />
                 </Flex>
               </Flex>
@@ -78,6 +78,23 @@ export default function Home() {
             width={384}
             height={360}
             style={{ width: 384, height: 360 }}
+          />
+        </Flex>
+        <Flex direction={"column"} alignItems={"center"} pt={80} pb={228}>
+          <Text
+            type={"Display2"}
+            fontWeight={"700"}
+            color={"Static/Black"}
+            textAlign={"center"}
+            mb={48}
+          >
+            {`INTERVIEW+와 함께\n취업 준비의 첫걸음을 시작하세요!`}
+          </Text>
+          <Button
+            type={"Solid_Primary"}
+            size={"Large"}
+            title="지금 면접 시작하기"
+            href={"/interview"}
           />
         </Flex>
       </FooterContainer>
