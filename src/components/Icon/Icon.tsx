@@ -63,6 +63,7 @@ const SVG_ICON_NAMES = [
   "circleQuestionFill",
   "normalArrowLeft",
   "normalCircleQuestion",
+  "normalCheck",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

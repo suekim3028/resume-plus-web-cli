@@ -72,3 +72,14 @@ export const tokenLogin = () =>
     //   },
     // },
   });
+
+export const sendVerificationCode = ({ email }: { email: string }) =>
+  API.post<{ verificationCode: string }>(
+    "",
+    {
+      body: { email },
+    },
+    {
+      dummyData: { verificationCode: "1234" },
+    }
+  );
