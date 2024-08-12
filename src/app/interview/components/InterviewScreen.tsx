@@ -26,6 +26,8 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
   });
 
   const { talkingSide, isEnd } = useInterviewContext();
+
+  const [showExitPopup, setShowExitPopup] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const cameraRef = useRef<FrontCameraRef>(null);
@@ -175,7 +177,7 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
             <CircleButton
               icon="button_exit"
               onClick={() => {
-                //
+                setShowExitPopup(true);
               }}
             />
           </Flex>
@@ -183,6 +185,9 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
         {setting.chat && <ChatSection answerWithInput={() => {}} />}
       </Flex>
       {isEnd && <EndPopup />}
+      {showExitPopup && (
+        <ExitPopup closePopup={() => setShowExitPopup(false)} />
+      )}
     </Flex>
   );
 };
@@ -221,6 +226,55 @@ const EndPopup = () => {
           }}
           size={"Large"}
         />
+      </Flex>
+    </PopUp>
+  );
+};
+
+const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
+  const router = useRouter();
+
+  return (
+    <PopUp visible={true}>
+      <Flex
+        direction={"column"}
+        bgColor={"Static/White"}
+        rounded={24}
+        pt={48}
+        pb={24}
+        px={61}
+        alignItems={"center"}
+      >
+        <Text type={"Title2"} fontWeight={"700"}>
+          {`면접 내용이 모두 사라집니다.\n정말 나가시겠습니까?`}
+        </Text>
+        <Text
+          type={"Body1_Normal"}
+          mt={49}
+          mb={65}
+          textAlign={"center"}
+        >{`연습을 완료하면 면접 연습 결과 페이지에서\n분석 결과를 확인할 수 있어요`}</Text>
+        <Flex gap={16} w="100%">
+          <Button
+            stretch
+            type={"Outlined_Secondary"}
+            title="취소"
+            onClick={closePopup}
+            size={"Large"}
+          />
+          <Button
+            stretch
+            type={"Solid_Primary"}
+            title="면접 나가기"
+            onClick={() => {
+              if (document.fullscreenEnabled) {
+                document.exitFullscreen();
+              }
+              router.replace("/");
+            }}
+            size={"Large"}
+          />
+        </Flex>
       </Flex>
     </PopUp>
   );
