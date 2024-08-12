@@ -55,6 +55,14 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             <Logo size={"SMALL"} />
           </GridItem>
 
+          <Button name={"서비스 안내"} href={"/"} colStart={9} />
+          <Button
+            name={"면접 연습"}
+            href={"/interview-setting"}
+            colStart={10}
+          />
+          <Button name={"면접 결과"} href={"/result"} colStart={11} />
+
           <Suspense fallback={<></>}>
             <UserButtonList />
           </Suspense>
@@ -89,18 +97,6 @@ const UserButtonList = () => {
 
   return (
     <>
-      <Button name={"서비스 안내"} href={"/"} colStart={9} />
-      <Button
-        name={"면접 연습"}
-        href={user ? "/interview-setting" : "/sign-in"}
-        colStart={10}
-      />
-      <Button
-        name={"면접 결과"}
-        href={user ? "/result" : "/sign-in"}
-        colStart={11}
-      />
-
       {user ? (
         <GridItem
           display={"flex"}

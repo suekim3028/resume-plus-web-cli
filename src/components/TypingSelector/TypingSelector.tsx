@@ -83,6 +83,8 @@ const TypingSelectorComponent = <T extends any>(
           left={0}
           right={0}
           zIndex={2}
+          maxHeight={192}
+          overflowY={"scroll"}
           boxShadow={"0px 1px 4px rgba(0, 0, 0, 0.08)"}
           bgColor={"Static/White"}
         >

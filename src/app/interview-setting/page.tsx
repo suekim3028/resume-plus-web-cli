@@ -5,6 +5,7 @@ import {
   Icon,
   ListSelector,
   ListSelectorRef,
+  PopUp,
   TopBarContainer,
   TypingSelector,
   TypingSelectorRef,
@@ -54,6 +55,7 @@ const Interview = () => {
   const [checker, setChecker] = useState(0);
   const [resume, setResume] = useState<File | null>(null);
   const [showPrivacyText, setShowPrivacyText] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -116,6 +118,10 @@ const Interview = () => {
     valueRef.current = { ...valueRef.current, [key]: value };
 
     checkCanSubmit();
+  };
+
+  const onClickSubmit = () => {
+    setShowConfirmPopup(true);
   };
 
   const submit = async () => {
@@ -518,11 +524,18 @@ const Interview = () => {
               stretch
               flexProps={{ mt: 32 }}
               disabled={!submitValue.canSubmit}
-              onClick={submit}
+              onClick={onClickSubmit}
             />
           </GridItem>
         </GridWrapper>
       </Flex>
+      {showConfirmPopup && submitValue.canSubmit && (
+        <ConfirmPopup
+          confirm={submit}
+          value={submitValue.value}
+          close={() => setShowConfirmPopup(false)}
+        />
+      )}
     </TopBarContainer>
   );
 };
@@ -552,6 +565,88 @@ const TemporaryButtons = ({
           </Flex>
         );
       })}
+    </Flex>
+  );
+};
+
+const ConfirmPopup = ({
+  value,
+  confirm,
+  close,
+}: {
+  value: SubmittableValue & {
+    resume: File;
+  };
+  confirm: () => void;
+  close: () => void;
+}) => {
+  const { company, job, department, resume } = value;
+  return (
+    <PopUp visible={true}>
+      <Flex
+        borderRadius={16}
+        bgColor={"Background/Normal/Alternative"}
+        px={40}
+        pt={20}
+        pb={17}
+        flexDir={"column"}
+        alignItems={"center"}
+      >
+        <Text type={"Heading1"} fontWeight={"600"} color={"Label/Neutral"}>
+          입력한 내용을 마지막으로 확인해주세요
+        </Text>
+        <Flex
+          w="100%"
+          py={8}
+          px={12}
+          bgColor={"Static/White"}
+          radioGroup="8"
+          mt={12}
+          gap={16}
+          flexDir={"column"}
+        >
+          <Row
+            title={"지원 직무"}
+            body={`${
+              typeof company === "string" ? company : company.companyName
+            } > ${department.companyDept} > ${job.companyJob}`}
+          />
+          <Row title={"면접 유형"} body={"1차 > 실무진 > 일반 > 1:1 "} />
+          <Row title={"이력서 및 경력기술서"} body={resume.name} />
+        </Flex>
+        <Flex gap={16} mt={12}>
+          <Button
+            size={"Large"}
+            type={"Outlined_Secondary"}
+            title={"다시 입력"}
+            onClick={close}
+          />
+          <Button
+            size={"Large"}
+            type={"Solid_Primary"}
+            title={"면접 시작"}
+            onClick={confirm}
+          />
+        </Flex>
+      </Flex>
+    </PopUp>
+  );
+};
+
+const Row = ({ title, body }: { title: string; body: string }) => {
+  return (
+    <Flex flexDir={"column"} w="100%">
+      <Text type={"Body1_Normal"} color={"Primary/Normal"} fontWeight={"600"}>
+        {title}
+      </Text>
+      <Text
+        type={"Label2"}
+        color={"Label/Alternative"}
+        fontWeight={"500"}
+        mt={8}
+      >
+        {body}
+      </Text>
     </Flex>
   );
 };

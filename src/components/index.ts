@@ -8,6 +8,7 @@ import { EventLogger } from "./EventLogger";
 import Footer from "./Footer";
 import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
+import PopUp from "./Popup";
 import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
 import TextInput, {
   type InputState,
@@ -19,7 +20,6 @@ import TypingSelector, {
   type TypingSelectorItem,
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
-
 export {
   EventLogger,
   Footer,
@@ -32,6 +32,7 @@ export {
   ListSelectorItem,
   ListSelectorRef,
   Logo,
+  PopUp,
   RecoilRootWrapper,
   TextInput,
   TextInputRef,
