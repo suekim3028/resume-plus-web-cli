@@ -625,7 +625,14 @@ const ConfirmPopup = ({
             size={"Large"}
             type={"Solid_Primary"}
             title={"면접 시작"}
-            onClick={confirm}
+            onClick={() => {
+              confirm();
+              const elem = document.getElementById("body");
+
+              if (elem && elem.requestFullscreen) {
+                elem.requestFullscreen();
+              }
+            }}
           />
         </Flex>
       </Flex>

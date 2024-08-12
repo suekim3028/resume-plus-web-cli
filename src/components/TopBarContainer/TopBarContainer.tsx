@@ -34,6 +34,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
       direction={"column"}
       alignItems={"center"}
       ref={ref}
+      bgColor={"Static/White"}
     >
       <Flex
         w="100%"

@@ -59,7 +59,6 @@ const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
         py={16}
         w="100%"
         direction={"column"}
-        border={"1px solid red"}
         justifyContent={"flex-end"}
         overflowY={"scroll"}
       >

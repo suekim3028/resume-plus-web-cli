@@ -10,6 +10,7 @@ const InterviewContext = createContext<InterviewContextValue | null>(null);
 type InterviewContextValue = {
   chats: Chat[];
   talkingSide: "COMPANY" | "ME" | null;
+  isEnd: boolean;
 };
 
 const InterviewContextProvider = ({
@@ -29,6 +30,7 @@ const InterviewContextProvider = ({
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
+  const [isEnd, setIsEnd] = useState(false);
 
   const submitAnswer = async (answer: string) => {
     if (!currentQuestion.current) return;
@@ -44,7 +46,9 @@ const InterviewContextProvider = ({
   const getNextQuestion = async () => {
     console.log({ remainQuestions: remainQuestions.current });
     const nextQuestion = remainQuestions.current.shift();
-    if (!nextQuestion) return;
+    if (!nextQuestion) {
+      return setIsEnd(true);
+    }
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
     setTalkingSide("COMPANY");
@@ -174,7 +178,7 @@ const InterviewContextProvider = ({
   }, []);
 
   return (
-    <InterviewContext.Provider value={{ chats, talkingSide }}>
+    <InterviewContext.Provider value={{ chats, talkingSide, isEnd }}>
       {children}
     </InterviewContext.Provider>
   );

@@ -1,12 +1,13 @@
 "use client";
 /* eslint-disable jsx-a11y/alt-text */
-import { Icon, IconNames } from "@components";
+import { Icon, IconNames, PopUp } from "@components";
 import { InterviewTypes } from "@types";
-import { Flex, Text } from "@uis";
+import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { UI } from "@constants";
+import { useRouter } from "next/navigation";
 import InterviewContextProvider, {
   useInterviewContext,
 } from "../InterviewContext";
@@ -24,7 +25,7 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
     chat: true,
   });
 
-  const { talkingSide } = useInterviewContext();
+  const { talkingSide, isEnd } = useInterviewContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const cameraRef = useRef<FrontCameraRef>(null);
@@ -63,11 +64,16 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
     },
   ];
 
+  useEffect(() => {
+    return () => {
+      cameraRef.current?.stop();
+    };
+  }, []);
+
   const chatRef = useRef<ChatRef>(null);
 
   return (
     <Flex
-      // flex={1}
       position={"fixed"}
       left={0}
       minWidth={1000}
@@ -76,7 +82,6 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
       bottom={0}
       direction="column"
       bgRgbColor={"rgba(131, 131, 132, 1)"}
-      // overflow={"hidden"}
     >
       <Flex
         px={16}
@@ -165,9 +170,9 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
           </Flex>
           <Flex h={BOTTOM_BAR_HEIGHT} pt={43} gap={24}>
             {buttons.map((button) => (
-              <Button {...button} key={button.icon} />
+              <CircleButton {...button} key={button.icon} />
             ))}
-            <Button
+            <CircleButton
               icon="button_exit"
               onClick={() => {
                 //
@@ -177,7 +182,47 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
         </Flex>
         {setting.chat && <ChatSection answerWithInput={() => {}} />}
       </Flex>
+      {isEnd && <EndPopup />}
     </Flex>
+  );
+};
+
+const EndPopup = () => {
+  const router = useRouter();
+  // TODO: 유저 아니면 다르게
+  return (
+    <PopUp visible={true}>
+      <Flex
+        direction={"column"}
+        bgColor={"Static/White"}
+        rounded={24}
+        pt={48}
+        pb={24}
+        px={61}
+        alignItems={"center"}
+      >
+        <Text type={"Title2"} fontWeight={"700"}>
+          수고하셨습니다! 면접이 끝났어요!
+        </Text>
+        <Text
+          type={"Body1_Normal"}
+          mt={49}
+          mb={65}
+          textAlign={"center"}
+        >{`면접 연습 결과 페이지에서 연습 결과를 확인할 수 있어요.\n결과 분석이 끝나면 이메일로 알려드릴게요!`}</Text>
+        <Button
+          type={"Solid_Primary"}
+          title="면접 결과 확인하기"
+          onClick={() => {
+            if (document.fullscreenEnabled) {
+              document.exitFullscreen();
+            }
+            router.replace("/result");
+          }}
+          size={"Large"}
+        />
+      </Flex>
+    </PopUp>
   );
 };
 
@@ -188,7 +233,7 @@ const CAM_GAP = 24;
 const CAM_MX = 20;
 const ChatButton = (chat: { isMine: boolean; text: string }) => {};
 
-const Button = ({ icon, onClick }: ButtonProps) => {
+const CircleButton = ({ icon, onClick }: ButtonProps) => {
   return (
     <Flex
       w={64}
