@@ -55,7 +55,7 @@ const EmailSignInComponent = () => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Logo />
+          <Logo size="LARGE" />
           <TextInput
             title="아이디"
             placeholder="아이디를 입력해주세요"
@@ -85,7 +85,7 @@ const EmailSignInComponent = () => {
             mt={32}
           />
 
-          <Flex w="100%" h={1} bgColor={"Line/Normal/Normal"} my={32} />
+          <Flex w="152px" h={1} bgColor={"Line/Normal/Normal"} my={32} />
           <Flex alignItems={"center"}>
             <Text
               type="Body1_Normal"

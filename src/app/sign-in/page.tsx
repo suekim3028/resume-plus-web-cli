@@ -18,8 +18,8 @@ const SignInComponent = () => {
           flexDir={"column"}
           alignItems={"center"}
         >
-          <Logo />
-          <Text mt={32} type="Heading1" fontWeight={"500"} color="Label/Normal">
+          <Logo size={"LARGE"} />
+          <Text mt={40} type="Heading1" fontWeight={"500"} color="Label/Normal">
             나만의 AI 면접관으로 맞춤형 면접을 받아보세요
           </Text>
         </GridItem>

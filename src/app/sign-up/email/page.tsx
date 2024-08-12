@@ -1,100 +1,74 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon, InputState, Logo, TextInput, TextInputRef } from "@components";
+import { Icon, Logo } from "@components";
 import { UI } from "@constants";
 import { useUser } from "@hooks";
 import { UserTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
-import { inputUtils } from "@utils";
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import EmailInput from "./components/EmailInput";
+import NameInput from "./components/NameInput";
+import PasswordInput from "./components/PasswordInput";
+import { SignUpInputProps, SignUpInputValue } from "./types";
 
-type InputKey =
-  | keyof UserTypes.SignUpUser
-  | "passwordConfirmation"
-  | "authNumber";
+type SignUpValueKey = keyof UserTypes.SignUpUser;
 
-type SignUpValueState = Record<
-  InputKey,
-  Pick<InputState, "isError" | "text" | "isValidating">
->;
+type SignUpValueState = {
+  [k in SignUpValueKey]: SignUpInputValue;
+};
+
+const isSubmittableValue = (
+  value: SignUpValueState
+): value is Record<SignUpValueKey, { isError: false; value: string }> => {
+  return Object.values(value).every((v) => !v.isError && !!v.value);
+};
 
 const EmailSignIn = () => {
-  const [canSubmit, setCanSubmit] = useState({
-    email: false,
-    authNumber: false,
-    all: false,
-  });
   const router = useRouter();
 
   const { signUpWithEmail } = useUser();
-  const [agreedPrivacy, setAgreedPrivacy] = useState(false);
-
-  const [authNumberState, _setAuthNumberState] = useState<
-    "DEFAULT" | "WAITING" | "CONFIRMED"
-  >("DEFAULT");
-  const authNumberStateRef = useRef<"DEFAULT" | "WAITING" | "CONFIRMED">(
-    "DEFAULT"
-  );
-
-  const setAuthNumberState = (state: "DEFAULT" | "WAITING" | "CONFIRMED") => {
-    _setAuthNumberState(state);
-    authNumberStateRef.current = state;
-  };
-
-  const authNumberInputRef = useRef<TextInputRef>(null);
 
   const inputValue = useRef<SignUpValueState>({
-    email: { isError: false, text: "", isValidating: false },
-    password: { isError: false, text: "", isValidating: false },
-    name: { isError: false, text: "", isValidating: false },
-    authNumber: { isError: false, text: "", isValidating: false },
-    passwordConfirmation: { isError: false, text: "", isValidating: false },
+    email: { isError: true, value: null },
+    name: { isError: true, value: null },
+    password: { isError: true, value: null },
   });
 
-  const checkSubmitPossibleByKey = useCallback((key: InputKey) => {
-    return (
-      !inputValue.current[key].isError &&
-      !!inputValue.current[key].text &&
-      !inputValue.current[key].isValidating
-    );
-  }, []);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
+  const [valueChecker, setValueChecker] = useState(true); // error check memoization refresh 위한 state
 
-  const checkSubmitPossible = useCallback(() => {
-    const _canSubmit =
-      (Object.keys(inputValue.current) as InputKey[]).every(
-        checkSubmitPossibleByKey
-      ) && authNumberStateRef.current === "CONFIRMED";
+  const checkerFactory = useCallback(
+    (type: SignUpValueKey): SignUpInputProps["onErrorChange"] => {
+      return (v: SignUpInputValue) => {
+        inputValue.current = { ...inputValue.current, [type]: v };
 
-    const canSubmitEmail = checkSubmitPossibleByKey("email");
-    const canSubmitAuthNumber = checkSubmitPossibleByKey("authNumber");
-
-    setCanSubmit({
-      all: _canSubmit,
-      email: canSubmitEmail && authNumberStateRef.current === "DEFAULT",
-      authNumber:
-        authNumberStateRef.current === "WAITING" && canSubmitAuthNumber,
-    });
-  }, []);
-
-  const sendAuthNumber = () => {
-    setAuthNumberState("WAITING");
-    // send auth number api
-    setCanSubmit((p) => ({ ...p, authNumber: false, email: false }));
-  };
-
-  const checkAuthNumber = () => {
-    const authNumber = inputValue.current.authNumber;
-    setAuthNumberState("CONFIRMED");
-  };
-
-  const handleChangeState = useCallback(
-    (type: keyof typeof inputValue.current) => (state: InputState) => {
-      inputValue.current = { ...inputValue.current, [type]: state };
-      checkSubmitPossible();
+        setValueChecker((p) => !p);
+      };
     },
-    [checkSubmitPossible]
+    []
   );
+
+  const submittableValue = useMemo((): false | UserTypes.SignUpUser => {
+    const value = inputValue.current;
+    if (!privacyAgreed || !isSubmittableValue(value)) return false;
+    const { email, name, password } = value;
+
+    console.log({
+      email: email.value,
+      name: name.value,
+      password: password.value,
+    });
+
+    return { email: email.value, name: name.value, password: password.value };
+  }, [valueChecker, privacyAgreed]);
+
+  const submit = async () => {
+    if (!submittableValue) return;
+    // TODO: loading
+    await signUpWithEmail(submittableValue);
+    router.replace("/");
+  };
 
   return (
     <Flex flex={1} alignItems={"center"} justifyContent={"center"}>
@@ -107,102 +81,24 @@ const EmailSignIn = () => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Logo />
-          <TextInput
-            title="이름"
-            placeholder="이름을 입력해주세요"
-            mt={56}
-            onChange={handleChangeState("name")}
-            validate={inputUtils.validateName}
-          />
-          <Flex flexDir="column" w="100%" mt={12}>
-            <Text
-              type={"Body1_Normal"}
-              fontWeight={"600"}
-              color="Label/Alternative"
-              mb={12}
-            >
-              이메일
-            </Text>
-            <Flex w="100%">
-              <Flex flex={1}>
-                <TextInput
-                  placeholder="이메일을 입력해주세요"
-                  disabled={authNumberState === "CONFIRMED"}
-                  onChange={(state) => {
-                    authNumberInputRef.current?.setValue("");
-                    setAuthNumberState("DEFAULT");
-                    handleChangeState("email")(state);
-                  }}
-                  validate={inputUtils.validateEmail}
-                />
-              </Flex>
-
-              <Button
-                onClick={sendAuthNumber}
-                disabled={!canSubmit.email}
-                title="인증번호 받기"
-                type="Solid_Primary"
-                size="Medium"
-                flexProps={{ px: 11.5, ml: 8 }}
-              />
-            </Flex>
-            <Flex w="100%" mt={8}>
-              <Flex flex={1}>
-                <TextInput
-                  ref={authNumberInputRef}
-                  disabled={authNumberState !== "WAITING"}
-                  placeholder="인증번호를 입력해주세요"
-                  onChange={handleChangeState("authNumber")}
-                />
-              </Flex>
-              <Button
-                title="확인"
-                disabled={
-                  !canSubmit.authNumber || authNumberState !== "WAITING"
-                }
-                onClick={checkAuthNumber}
-                type="Solid_Primary"
-                size="Medium"
-                flexProps={{ ml: 8 }}
-              />
-            </Flex>
+          <Flex alignSelf={"flex-start"}>
+            <Logo size={"MEDIUM"} />
           </Flex>
-
-          <TextInput
-            title="비밀번호"
-            placeholder="비밀번호를 입력해주세요"
-            mt={12}
-            hidden
-            onChange={handleChangeState("password")}
-            validate={inputUtils.validatePassword}
-          />
-
-          <TextInput
-            placeholder="비밀번호를 다시 한번 입력해주세요"
-            mt={8}
-            hidden
-            onChange={handleChangeState("passwordConfirmation")}
-            validate={async (cf) => {
-              const confirmed = !!cf && cf === inputValue.current.password.text;
-              return {
-                isError: !confirmed,
-                errorText: confirmed ? "" : "비밀번호가 일치하지 않습니다",
-              };
-            }}
-          />
+          <NameInput mt={56} onErrorChange={checkerFactory("name")} />
+          <EmailInput mt={12} onErrorChange={checkerFactory("email")} />
+          <PasswordInput mt={12} onErrorChange={checkerFactory("password")} />
 
           <Flex
             w="100%"
             mt={24}
             alignItems={"center"}
             py={4}
-            onClick={() => setAgreedPrivacy((p) => !p)}
+            onClick={() => setPrivacyAgreed((p) => !p)}
             cursor={"pointer"}
           >
             <Icon
               name={
-                agreedPrivacy ? "normalCircleCheckPrimary" : "normalCircleCheck"
+                privacyAgreed ? "normalCircleCheckPrimary" : "normalCircleCheck"
               }
               size={20}
             />
@@ -255,23 +151,8 @@ const EmailSignIn = () => {
             title={"회원가입"}
             stretch
             flexProps={{ mt: 32 }}
-            disabled={!canSubmit.all || !agreedPrivacy}
-            onClick={async () => {
-              const { email, name, password } = inputValue.current;
-
-              console.log({
-                email: email.text,
-                name: name.text,
-                password: password.text,
-              });
-              // TODO: loading
-              await signUpWithEmail({
-                email: email.text,
-                name: name.text,
-                password: password.text,
-              });
-              router.replace("/");
-            }}
+            disabled={!submittableValue}
+            onClick={submit}
           />
         </GridItem>
       </GridWrapper>

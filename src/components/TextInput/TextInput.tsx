@@ -53,6 +53,27 @@ const TextInputComponent: React.ForwardRefRenderFunction<
     [onChange]
   );
 
+  const _validate = async (value: string) => {
+    if (validate) {
+      setInputState({
+        ...inputStateRef.current,
+        isError: false,
+        isValidating: true,
+      });
+      const { isError, errorText } = await validate(value);
+
+      if (value === currentValue.current)
+        setInputState({
+          text: value,
+          isError,
+          isValidating: false,
+          errorText,
+        });
+    } else {
+      setInputState({ ...defaultState, text: value });
+    }
+  };
+
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     async (e) => {
       const value = e.target.value;
@@ -61,24 +82,7 @@ const TextInputComponent: React.ForwardRefRenderFunction<
         setInputState(defaultState);
       }
 
-      if (validate) {
-        setInputState({
-          ...inputStateRef.current,
-          isError: false,
-          isValidating: true,
-        });
-        const { isError, errorText } = await validate(value);
-
-        if (value === currentValue.current)
-          setInputState({
-            text: value,
-            isError,
-            isValidating: false,
-            errorText,
-          });
-      } else {
-        setInputState({ ...defaultState, text: value });
-      }
+      _validate(value);
     },
     [validate, setInputState]
   );
@@ -92,6 +96,8 @@ const TextInputComponent: React.ForwardRefRenderFunction<
             inputComponentRef.current.value = text;
           }
         },
+        getValue: () => inputComponentRef.current?.value || "",
+        validate: () => _validate(inputStateRef.current.text),
       }),
       []
     )
@@ -195,6 +201,8 @@ export type InputState = {
 
 export type TextInputRef = {
   setValue: (value: string) => void;
+  getValue: () => string;
+  validate: () => void;
 };
 
 export default TextInput;

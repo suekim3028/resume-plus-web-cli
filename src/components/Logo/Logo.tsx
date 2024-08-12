@@ -1,11 +1,15 @@
-import { Flex, Text } from "@uis";
+import { Text } from "@uis";
 
-const Logo = () => (
-  <Flex w="186.77px">
-    <Text type="Title2" fontWeight={"700"} userSelect={"none"}>
-      INTERVIEW+
-    </Text>
-  </Flex>
+const Logo = ({ size }: { size: "LARGE" | "MEDIUM" | "SMALL" }) => (
+  <Text
+    type={
+      size === "SMALL" ? "Title2" : size === "MEDIUM" ? "Title1" : "Display1"
+    }
+    fontWeight={"700"}
+    userSelect={"none"}
+  >
+    INTERVIEW+
+  </Text>
 );
 
 export default Logo;
