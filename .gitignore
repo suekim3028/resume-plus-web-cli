@@ -36,9 +36,3 @@ yarn-error.log*
 next-env.d.ts
 
 .env
-public/fonts
-src/apis/API.ts
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml

@@ -3,7 +3,6 @@ import { GridItem } from "@chakra-ui/react";
 import { Logo } from "@components";
 import { useUser } from "@hooks";
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
-import { ErrorBoundary } from "@web-core";
 
 const SignInComponent = () => {
   const { loginWithGoogle } = useUser();
@@ -86,11 +85,7 @@ const SignIn = () => {
     alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
   };
 
-  return (
-    <ErrorBoundary onError={onError}>
-      <SignInComponent />
-    </ErrorBoundary>
-  );
+  return <SignInComponent />;
 };
 
 export default SignIn;

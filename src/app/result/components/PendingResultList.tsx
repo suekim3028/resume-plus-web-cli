@@ -1,7 +1,6 @@
 "use client";
 import { pendingResultStore } from "@store";
 import { Flex } from "@uis";
-import { ErrorBoundary } from "@web-core";
 import { Suspense } from "react";
 import { useRecoilValue } from "recoil";
 import PendingResultCard from "./PendingResultCard";
@@ -20,10 +19,8 @@ const PendingResultListComponent = () => {
 
 export default function PendingResultList() {
   return (
-    <ErrorBoundary fallback={<>에러!</>}>
-      <Suspense fallback={<>로딩중 ..</>}>
-        <PendingResultListComponent />
-      </Suspense>
-    </ErrorBoundary>
+    <Suspense fallback={<>로딩중 ..</>}>
+      <PendingResultListComponent />
+    </Suspense>
   );
 }

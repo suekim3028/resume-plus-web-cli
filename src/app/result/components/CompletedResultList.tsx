@@ -1,7 +1,6 @@
 "use client";
 import { completedResultStore } from "@store";
 import { Flex } from "@uis";
-import { ErrorBoundary } from "@web-core";
 import { Suspense } from "react";
 import { useRecoilValue } from "recoil";
 import CompletedResultCard from "./CompletedResultCard";
@@ -20,10 +19,8 @@ const CompletedResultListComponent = () => {
 
 export default function CompletedResultList() {
   return (
-    <ErrorBoundary fallback={<>에러!</>}>
-      <Suspense fallback={<>로딩중 ..</>}>
-        <CompletedResultListComponent />
-      </Suspense>
-    </ErrorBoundary>
+    <Suspense fallback={<>로딩중 ..</>}>
+      <CompletedResultListComponent />
+    </Suspense>
   );
 }
