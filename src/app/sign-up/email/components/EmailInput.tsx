@@ -23,6 +23,8 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
 
   const [canCheckAuthNumber, setCanCheckAuthNumber] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const setAuthNumberState = (state: AuthNumberState) => {
     _setAuthNumberState(state);
     authNumberStateRef.current = state;
@@ -71,8 +73,13 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
               setAuthNumberState(
                 isEmailValid ? "2_CAN_SEND" : "1_CAN_NOT_SEND"
               );
+              setCanCheckAuthNumber(false);
               emailValue.current = isEmailValid ? state.text : "";
+              setErrorMessage(
+                state.isError && !!state.text ? state.errorText || "" : ""
+              );
             }}
+            hideErrorText
             validate={inputUtils.validateEmail}
           />
         </Flex>
@@ -102,21 +109,35 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
               )
             }
             placeholder="인증번호를 입력해주세요"
+            hideErrorText
             onChange={(v) => {
               authNumber.current = v.text;
               setCanCheckAuthNumber(!!v.text);
+              setErrorMessage(v.isError && v.text ? v.errorText || "" : "");
             }}
           />
         </Flex>
         <Button
           title="확인"
-          disabled={!canCheckAuthNumber}
+          disabled={!canCheckAuthNumber || authNumberState == "5_CONFIRMED"}
           onClick={checkAuthNumber}
           type="Solid_Primary"
           size="Medium"
           flexProps={{ ml: 8 }}
         />
       </Flex>
+      {errorMessage && (
+        <Flex flex={1} flexWrap={"wrap"} mt={4}>
+          <Text
+            type="Caption2"
+            color="Status/Negative"
+            fontWeight={"500"}
+            wordBreak={"break-all"}
+          >
+            {errorMessage}
+          </Text>
+        </Flex>
+      )}
     </Flex>
   );
 };

@@ -52,7 +52,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             }}
             cursor={"pointer"}
           >
-            <Logo />
+            <Logo size={"SMALL"} />
           </GridItem>
 
           <Suspense fallback={<></>}>

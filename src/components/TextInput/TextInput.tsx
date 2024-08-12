@@ -23,7 +23,9 @@ const TextInputComponent: React.ForwardRefRenderFunction<
     defaultValue,
     hidden: hiddenSetting,
     onChange,
+    hideErrorText,
     disabled,
+    helperText,
     ...spaceProps
   },
   ref
@@ -156,10 +158,10 @@ const TextInputComponent: React.ForwardRefRenderFunction<
       </Flex>
       {/* {isValidating && <>validating</>} */}
 
-      {!!text && !isValidating && isError && !!errorText && (
-        <Flex flex={1} flexWrap={"wrap"} mt={12}>
+      {!!text && !isValidating && isError && !!errorText && !hideErrorText ? (
+        <Flex flex={1} flexWrap={"wrap"} mt={4}>
           <Text
-            type="Body1_Normal"
+            type="Caption2"
             color="Status/Negative"
             fontWeight={"500"}
             wordBreak={"break-all"}
@@ -167,6 +169,19 @@ const TextInputComponent: React.ForwardRefRenderFunction<
             {errorText}
           </Text>
         </Flex>
+      ) : (
+        helperText && (
+          <Flex flex={1} flexWrap={"wrap"} mt={4}>
+            <Text
+              type="Caption2"
+              color="Label/Assistive"
+              fontWeight={"400"}
+              wordBreak={"break-all"}
+            >
+              {helperText}
+            </Text>
+          </Flex>
+        )
       )}
     </Flex>
   );
@@ -185,6 +200,8 @@ type TextInputProps = {
   onChange?: (state: InputState) => void;
   onChangeText?: (text: string) => void;
   disabled?: boolean;
+  helperText?: string;
+  hideErrorText?: boolean;
 } & SpaceProps;
 
 export type InputValidation = {

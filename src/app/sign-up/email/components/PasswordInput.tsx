@@ -27,6 +27,7 @@ const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
   return (
     <Flex flexDir={"column"} w="100%">
       <TextInput
+        helperText="8자 이상 16자 이하로 영문,숫자,특수문자를 3가지 이상 조합해주세요"
         title="비밀번호"
         placeholder="비밀번호를 입력해주세요"
         mt={12}
