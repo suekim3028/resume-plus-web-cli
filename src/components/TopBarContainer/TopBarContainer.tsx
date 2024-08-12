@@ -1,6 +1,7 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
+import Footer from "@components/Footer";
 import { useUser } from "@hooks";
 import { userStore } from "@store";
 import { Flex, GridWrapper, Text } from "@uis";
@@ -19,8 +20,8 @@ import Logo from "../Logo/Logo";
 
 const TopBarContainerComponent: ForwardRefRenderFunction<
   HTMLDivElement,
-  { children: ReactNode }
-> = ({ children }, ref) => {
+  { children: ReactNode; footer?: boolean }
+> = ({ children, footer }, ref) => {
   const router = useRouter();
   return (
     <Flex
@@ -59,16 +60,26 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
           </Suspense>
         </GridWrapper>
       </Flex>
-      <Flex flex={1} overflowY={"scroll"} w="100%">
-        {children}
+      <Flex
+        flex={1}
+        overflowY={"scroll"}
+        w="100%"
+        flexDir={"column"}
+        justifyContent={"space-between"}
+      >
+        <Flex w="100%" flexDir={"column"}>
+          {children}
+        </Flex>
+        {footer && <Footer />}
       </Flex>
     </Flex>
   );
 };
 
-const TopBarContainer = forwardRef<HTMLDivElement, { children: ReactNode }>(
-  TopBarContainerComponent
-);
+const TopBarContainer = forwardRef<
+  HTMLDivElement,
+  { children: ReactNode; footer?: boolean }
+>(TopBarContainerComponent);
 
 const UserButtonList = () => {
   const user = useRecoilValue(userStore);

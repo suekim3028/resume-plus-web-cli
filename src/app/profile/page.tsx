@@ -21,7 +21,7 @@ const ProfileComponent = () => {
 
   const { name, email, defaultResume, remainInterview } = user;
   return (
-    <TopBarContainer>
+    <TopBarContainer footer>
       <Flex py={116} w={"100%"} flexDir={"column"}>
         <GridWrapper w="100%" pb={48}>
           <GridItem colStart={5} colSpan={2}>

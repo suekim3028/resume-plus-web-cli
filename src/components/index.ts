@@ -5,7 +5,7 @@ import ListSelector, {
 } from "./ListSelector/ListSelector";
 
 import { EventLogger } from "./EventLogger";
-import FooterContainer from "./FooterContainer";
+import Footer from "./Footer";
 import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
@@ -22,7 +22,7 @@ import TypingSelector, {
 
 export {
   EventLogger,
-  FooterContainer,
+  Footer,
   Icon,
   IconNames,
   Initializer,
