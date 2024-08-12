@@ -23,7 +23,17 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
 > = ({ children }, ref) => {
   const router = useRouter();
   return (
-    <Flex w="100%" direction={"column"} alignItems={"center"} ref={ref}>
+    <Flex
+      w="100%"
+      position={"fixed"}
+      left={0}
+      right={0}
+      top={0}
+      bottom={0}
+      direction={"column"}
+      alignItems={"center"}
+      ref={ref}
+    >
       <Flex
         w="100%"
         alignItems={"center"}
@@ -37,9 +47,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             display={"flex"}
             onClick={() => {
               router.push("/");
-              EventLogger.log("global_navigation_bar_button")({
-                action: "logo",
-              });
+              EventLogger.log("global_navigation_bar_button")("logo");
             }}
             cursor={"pointer"}
           >
@@ -51,7 +59,9 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
           </Suspense>
         </GridWrapper>
       </Flex>
-      {children}
+      <Flex flex={1} overflowY={"scroll"} w="100%">
+        {children}
+      </Flex>
     </Flex>
   );
 };
@@ -110,7 +120,10 @@ const UserButtonList = () => {
                   w="100%"
                   justifyContent={"center"}
                   cursor={"pointer"}
-                  onClick={() => router.push("/profile")}
+                  onClick={() => {
+                    router.push("/profile");
+                    EventLogger.log("global_navigation_bar_profile")("프로필");
+                  }}
                 >
                   <Text type="Label1_Normal" fontWeight={"500"}>
                     프로필
@@ -122,7 +135,12 @@ const UserButtonList = () => {
                   cursor={"pointer"}
                   justifyContent={"center"}
                   w="100%"
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    EventLogger.log("global_navigation_bar_profile")(
+                      "로그아웃"
+                    );
+                  }}
                 >
                   <Text type="Label1_Normal" fontWeight={"500"}>
                     로그아웃
@@ -165,7 +183,7 @@ const Button = ({
           href={href}
           style={{ textDecoration: "none", color: "black" }}
           onClick={() => {
-            EventLogger.log("global_navigation_bar_button")({ action: name });
+            EventLogger.log("global_navigation_bar_button")(name);
           }}
         >
           <Text type={"Body2_Normal"}>{name}</Text>
