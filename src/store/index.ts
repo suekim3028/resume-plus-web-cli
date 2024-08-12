@@ -1,3 +1,4 @@
+"use client";
 import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";

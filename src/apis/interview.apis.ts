@@ -16,7 +16,7 @@ export const uploadCV = async (body: UploadCvParams) =>
 
 const genQ = (name: string) =>
   Array.from(
-    { length: 2 },
+    { length: 1 },
     (_, i): InterviewTypes.Question => ({
       questionId: i,
       question: `${name} ${i}번`,
@@ -29,7 +29,7 @@ export const getTechQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("tech"),
-      useDummy: false,
+      useDummy: true,
     }
   );
 
@@ -43,7 +43,7 @@ export const getPersonalQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("personal"),
-      useDummy: false,
+      useDummy: true,
     }
   );
 
@@ -57,7 +57,7 @@ export const getIntroduceQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("introduce"),
-      useDummy: false,
+      useDummy: true,
     }
   );
 
@@ -71,7 +71,7 @@ export const getBehaviorQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("behavior"),
-      useDummy: false,
+      useDummy: true,
     }
   );
 
@@ -90,7 +90,7 @@ type AnswerQuestionParams = {
  */
 
 export const answerQuestion = ({ type, ...body }: AnswerQuestionParams) =>
-  API.post<InterviewTypes.Feedback>(`/answer/${type}`, { body });
+  API.post(`/answer/${type}`, { body }, { dummyData: undefined });
 
 /**
  * 기업 목록 요청

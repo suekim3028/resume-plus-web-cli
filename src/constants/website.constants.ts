@@ -2,7 +2,7 @@ import { WebsiteTypes } from "@types";
 
 // TODO: 수정 필요
 export const META_DATA: Required<WebsiteTypes.MetaTags> = {
-  ogUrl: process.env.NEXT_PUBLIC_WEB_BASE_URL,
+  ogUrl: "",
   title: "GDSC Yonsei resume ai project",
   description: "This is ML/AI project for chijunsaengs~",
   ogTitle: "GDSC Yonsei resume ai project",

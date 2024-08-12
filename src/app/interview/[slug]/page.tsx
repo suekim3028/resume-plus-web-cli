@@ -52,7 +52,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return router.back();
     }
 
-    console.log(data);
     interviewData.current = data;
     setData(data);
 

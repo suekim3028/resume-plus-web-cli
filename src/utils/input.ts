@@ -1,3 +1,4 @@
+"use client";
 import { userApis } from "@apis";
 import { InputValidation } from "@components";
 import { validateUtils } from "@web-core";

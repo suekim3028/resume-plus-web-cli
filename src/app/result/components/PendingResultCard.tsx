@@ -1,3 +1,4 @@
+"use client";
 import { companyDataStore } from "@store";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";

@@ -1,3 +1,4 @@
+"use client";
 import { interviewApis } from "@apis";
 import { commonHooks } from "@web-core";
 import {

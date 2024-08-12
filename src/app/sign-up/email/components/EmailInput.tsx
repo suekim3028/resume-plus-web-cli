@@ -1,3 +1,4 @@
+"use client";
 import { userApis } from "@apis";
 import { TextInput, TextInputRef } from "@components";
 import { Button, Flex, Text } from "@uis";
