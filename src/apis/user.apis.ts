@@ -73,6 +73,9 @@ export const tokenLogin = () =>
     // },
   });
 
+/** 게스트 로그인 */
+export const guestLogin = () => API.post<UserTypes.User>("/users/guest");
+
 export const sendVerificationCode = ({ email }: { email: string }) =>
   API.post<{ verificationCode: string }>(
     "",

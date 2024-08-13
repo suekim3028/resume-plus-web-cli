@@ -1,23 +1,21 @@
 "use client";
 import { userApis } from "@apis";
+import { userAtom } from "@atoms";
 import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
-import { userStore, userStoreRefresher } from "@store";
-import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
+import { useSetAtom } from "jotai";
 
-export const useUser = () => {
-  const refreshUser = useSetRecoilState(userStoreRefresher);
-
-  const loadableUser = useRecoilValueLoadable(userStore);
+export const useAuth = () => {
+  const refreshUser = useSetAtom(userAtom);
 
   const handleUser = ({ user, token }: userApis.UserResponse) => {
     TokenStorage.set(token);
-    refreshUser((p) => p + 1);
+    refreshUser();
   };
 
   const logout = () => {
     TokenStorage.remove();
-    refreshUser((p) => p + 1);
+    refreshUser();
   };
 
   const loginWithGoogle = useGoogleLogin({
@@ -98,7 +96,6 @@ export const useUser = () => {
   };
 
   return {
-    loadableUser,
     loginWithGoogle,
     loginWithEmail,
     signUpWithEmail,
