@@ -6,7 +6,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
 
 export const useAuth = () => {
-  const { refreshUser } = useUser();
+  const { refreshUser, isGuest } = useUser();
 
   const handleUser = ({ user, token }: userApis.UserResponse) => {
     TokenStorage.set(token);
@@ -38,8 +38,12 @@ export const useAuth = () => {
         const email = user?.email;
         const name = user?.name;
 
+        const method = isGuest
+          ? userApis.guestGoogleSignIn
+          : userApis.googleSignIn;
+
         if (!!email && !!name) {
-          const { data, isError } = await userApis.googleSignIn({
+          const { data, isError } = await method({
             email,
             name,
             id_token: access_token,
@@ -86,7 +90,9 @@ export const useAuth = () => {
     password: string;
     name: string;
   }) => {
-    const { data, isError } = await userApis.signUp(params);
+    const method = isGuest ? userApis.guestSignUp : userApis.signUp;
+
+    const { data, isError } = await method(params);
 
     if (isError) {
       throw new Error();

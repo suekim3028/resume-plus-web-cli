@@ -1,12 +1,12 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon, TopBarContainer } from "@components";
+import { Icon, TopBarContainer, UserOnlyWrapper } from "@components";
 import { Flex, GridWrapper, Text } from "@uis";
 import { useState } from "react";
 import CompletedResultList from "./components/CompletedResultList";
 import PendingResultList from "./components/PendingResultList";
 
-const Result = () => {
+const _Result = () => {
   const [showInfo, setShowInfo] = useState(false);
   return (
     <TopBarContainer footer>
@@ -74,4 +74,10 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default function Result() {
+  return (
+    <UserOnlyWrapper>
+      <_Result />
+    </UserOnlyWrapper>
+  );
+}

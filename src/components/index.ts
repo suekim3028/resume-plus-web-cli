@@ -4,12 +4,12 @@ import ListSelector, {
   type ListSelectorRef,
 } from "./ListSelector/ListSelector";
 
+import { GuestOnlyWrapper, UserOnlyWrapper } from "./AuthWrapper";
 import { EventLogger } from "./EventLogger";
 import Footer from "./Footer";
 import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import PopUp from "./Popup";
-
 import TextInput, {
   type InputState,
   type InputValidation,
@@ -23,6 +23,7 @@ import TypingSelector, {
 export {
   EventLogger,
   Footer,
+  GuestOnlyWrapper,
   Icon,
   IconNames,
   Initializer,
@@ -39,4 +40,5 @@ export {
   TypingSelector,
   TypingSelectorItem,
   TypingSelectorRef,
+  UserOnlyWrapper,
 };

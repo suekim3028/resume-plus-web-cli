@@ -26,7 +26,7 @@ const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
 
 export const useUser = () => {
   const [user, refreshUser] = useAtom(userAtom);
-  return { user, refreshUser };
+  return { user, refreshUser, isGuest: user.loginType === "GUEST" };
 };
 
 const resultAtom = atomWithRefresh<

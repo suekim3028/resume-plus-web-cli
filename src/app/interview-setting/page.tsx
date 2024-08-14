@@ -12,7 +12,6 @@ import {
   TypingSelector,
   TypingSelectorRef,
 } from "@components";
-import AuthWrapper from "@components/AuthWrapper";
 import { UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
@@ -657,10 +656,4 @@ const Row = ({ title, body }: { title: string; body: string }) => {
   );
 };
 
-export default function SuspenseInterview() {
-  return (
-    <AuthWrapper>
-      <Interview />
-    </AuthWrapper>
-  );
-}
+export default Interview;

@@ -1,8 +1,7 @@
 "use client";
 import { useUser } from "@atoms";
 import { GridItem } from "@chakra-ui/react";
-import { TopBarContainer } from "@components";
-import AuthWrapper from "@components/AuthWrapper";
+import { TopBarContainer, UserOnlyWrapper } from "@components";
 
 import { Button, Flex, GridWrapper, Text } from "@uis";
 
@@ -65,9 +64,9 @@ const Row = ({ title, body }: { title: string; body: string }) => {
 
 const Profile = () => {
   return (
-    <AuthWrapper>
+    <UserOnlyWrapper>
       <ProfileComponent />
-    </AuthWrapper>
+    </UserOnlyWrapper>
   );
 };
 

@@ -24,11 +24,25 @@ export const googleSignIn = async (body: GoogleSignInReq) =>
   API.post<UserResponse>(`/users/google-login`, { body });
 
 /**
+ * 게스트 구글 로그인
+ */
+
+export const guestGoogleSignIn = (body: GoogleSignInReq) =>
+  API.post<UserResponse>("/users/guest/google-login", { body });
+
+/**
  * 이메일 회원가입
  */
 
 export const signUp = (body: UserTypes.SignUpUser) =>
   API.post<UserResponse>("/users/", { body });
+
+/**
+ * 게스트 이메일 회원가입
+ */
+
+export const guestSignUp = (body: UserTypes.SignUpUser) =>
+  API.post<UserResponse>("/users/guest/email-login", { body });
 
 /**
  * token refresh
