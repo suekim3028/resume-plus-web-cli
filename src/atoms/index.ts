@@ -12,20 +12,26 @@ const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
   const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
   if (!hasToken) console.log("[USER STORE] no token.");
 
-  const { data, isError } = hasToken
-    ? await userApis.tokenLogin()
-    : await userApis.guestLogin();
+  if (hasToken) {
+    const { data, isError } = await userApis.tokenLogin();
+    if (isError) throw new Error();
+    console.log(`[LOGIN] logged in with user id ${data.userId}`);
+
+    return data;
+  }
+
+  const { data, isError } = await userApis.guestLogin();
 
   if (isError) throw new Error();
-  console.log(
-    `[LOGIN] logged in ${hasToken ? `with user id ${data.userId}` : "as GUEST"}`
-  );
+  console.log(`[LOGIN] logged in as GUEST"}`);
+  TokenStorage.set(data.token);
 
-  return data;
+  return data.user;
 });
 
 export const useUser = () => {
   const [user, refreshUser] = useAtom(userAtom);
+  console.log("user====", user);
   return { user, refreshUser, isGuest: user.loginType === "GUEST" };
 };
 
