@@ -11,9 +11,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import EmailInput from "./components/EmailInput";
 import NameInput from "./components/NameInput";
 import PasswordInput from "./components/PasswordInput";
-import { SignUpInputProps, SignUpInputValue } from "./types";
-
-type SignUpValueKey = keyof UserTypes.SignUpUser;
+import { SignUpInputProps, SignUpInputValue, SignUpValueKey } from "./types";
 
 type SignUpValueState = {
   [k in SignUpValueKey]: SignUpInputValue;
@@ -39,13 +37,10 @@ const EmailSignIn = () => {
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [valueChecker, setValueChecker] = useState(true); // error check memoization refresh 위한 state
 
-  const checkerFactory = useCallback(
-    (type: SignUpValueKey): SignUpInputProps["onErrorChange"] => {
-      return (v: SignUpInputValue) => {
-        inputValue.current = { ...inputValue.current, [type]: v };
-
-        setValueChecker((p) => !p);
-      };
+  const handleErrorChange: SignUpInputProps["onErrorChange"] = useCallback(
+    (type, v) => {
+      inputValue.current = { ...inputValue.current, [type]: v };
+      setValueChecker((p) => !p);
     },
     []
   );
@@ -54,12 +49,6 @@ const EmailSignIn = () => {
     const value = inputValue.current;
     if (!privacyAgreed || !isSubmittableValue(value)) return false;
     const { email, name, password } = value;
-
-    console.log({
-      email: email.value,
-      name: name.value,
-      password: password.value,
-    });
 
     return { email: email.value, name: name.value, password: password.value };
   }, [valueChecker, privacyAgreed]);
@@ -85,9 +74,9 @@ const EmailSignIn = () => {
           <Flex alignSelf={"flex-start"}>
             <Logo size={"MEDIUM"} />
           </Flex>
-          <NameInput mt={56} onErrorChange={checkerFactory("name")} />
-          <EmailInput mt={12} onErrorChange={checkerFactory("email")} />
-          <PasswordInput mt={12} onErrorChange={checkerFactory("password")} />
+          <NameInput mt={56} onErrorChange={handleErrorChange} />
+          <EmailInput mt={12} onErrorChange={handleErrorChange} />
+          <PasswordInput mt={12} onErrorChange={handleErrorChange} />
 
           <Flex
             w="100%"

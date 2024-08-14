@@ -1,7 +1,7 @@
 import { TextInput, TextInputRef } from "@components";
 import { Flex } from "@uis";
 import { inputUtils } from "@utils";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { SignUpInputProps } from "../types";
 
 const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
@@ -12,6 +12,7 @@ const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
 
   const checkIsError = () => {
     onErrorChange(
+      "password",
       password.current && isPasswordConfirmed.current
         ? {
             isError: false,
@@ -61,4 +62,4 @@ const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
   );
 };
 
-export default PasswordInput;
+export default React.memo(PasswordInput);

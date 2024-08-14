@@ -1,13 +1,14 @@
 import { InputState, TextInput } from "@components";
 import { inputUtils } from "@utils";
+import React from "react";
 import { SignUpInputProps } from "../types";
 
 const NameInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
   const handleOnChange = (state: InputState) => {
     if (state.isError) {
-      onErrorChange({ isError: true, value: null });
+      onErrorChange("name", { isError: true, value: null });
     } else {
-      onErrorChange({ isError: false, value: state.text });
+      onErrorChange("name", { isError: false, value: state.text });
     }
   };
 
@@ -22,4 +23,4 @@ const NameInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
   );
 };
 
-export default NameInput;
+export default React.memo(NameInput);

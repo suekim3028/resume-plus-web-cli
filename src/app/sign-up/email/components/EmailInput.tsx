@@ -4,7 +4,7 @@ import { TextInput, TextInputRef } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { inputUtils } from "@utils";
 import { commonHooks } from "@web-core";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SignUpInputProps } from "../types";
 
 type AuthNumberState =
@@ -32,6 +32,7 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
     _setAuthNumberState(state);
     authNumberStateRef.current = state;
     onErrorChange(
+      "email",
       state === "4_CONFIRMED"
         ? { isError: false, value: emailValue.current }
         : { isError: true, value: null }
@@ -213,4 +214,4 @@ const Timer = ({ onEnd, visible }: { onEnd: () => void; visible: boolean }) => {
   );
 };
 
-export default EmailInput;
+export default React.memo(EmailInput);

@@ -1,4 +1,7 @@
 import { SpaceProps } from "@chakra-ui/react";
+import { UserTypes } from "@types";
+
+export type SignUpValueKey = keyof UserTypes.SignUpUser;
 
 export type SignUpInputValue =
   | {
@@ -11,5 +14,5 @@ export type SignUpInputValue =
     };
 
 export type SignUpInputProps = {
-  onErrorChange: (value: SignUpInputValue) => void;
+  onErrorChange: (type: SignUpValueKey, value: SignUpInputValue) => void;
 } & SpaceProps;
