@@ -1,12 +1,12 @@
 "use client";
 import { interviewApis } from "@apis";
 import { InterviewTypes } from "@types";
-import { commonHooks } from "@web-core";
 import {
   createContext,
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -24,6 +24,7 @@ type InterviewContextValue = {
   isEnd: false | EndStatus;
   interviewInfo: InterviewTypes.InterviewInfo;
   submitAnswerWithText: (answer: string) => void;
+  forceEnd: () => void;
 };
 
 const InterviewContextProvider = ({
@@ -93,7 +94,8 @@ const InterviewContextProvider = ({
   }, []);
 
   const effected = useRef(false);
-  commonHooks.useAsyncEffect(async () => {
+
+  useEffect(() => {
     if (effected.current) return;
     effected.current = true;
 
@@ -102,7 +104,17 @@ const InterviewContextProvider = ({
 
   return (
     <InterviewContext.Provider
-      value={{ chats, talkingSide, isEnd, interviewInfo, submitAnswerWithText }}
+      value={{
+        chats,
+        talkingSide,
+        isEnd,
+        interviewInfo,
+        submitAnswerWithText,
+        forceEnd: () => {
+          console.log("forceEnd!");
+          setIsEnd("FORCED");
+        },
+      }}
     >
       {children}
     </InterviewContext.Provider>

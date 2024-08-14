@@ -1,9 +1,10 @@
 import { CompanyThumbnail } from "@components";
 import { Flex, Text } from "@uis";
 import { useInterviewContext } from "../InterviewContext";
+import InterviewTimer from "./InterviewTimer";
 
 const TopBar = () => {
-  const { interviewInfo } = useInterviewContext();
+  const { interviewInfo, forceEnd } = useInterviewContext();
   const { company, department, companyThumbnailUrl } = interviewInfo;
   return (
     <Flex
@@ -35,15 +36,8 @@ const TopBar = () => {
           {department}
         </Text>
       </Flex>
-      <Flex alignItems={"center"} gap={16}>
-        <Text
-          type="Body1_Normal"
-          color={"Label/Alternative"}
-          fontWeight={"600"}
-        >
-          {"00:00"}
-        </Text>
-      </Flex>
+
+      <InterviewTimer onTimeEnd={forceEnd} />
     </Flex>
   );
 };

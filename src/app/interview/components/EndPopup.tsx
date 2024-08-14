@@ -1,22 +1,28 @@
 import { interviewApis } from "@apis";
 import { useUser } from "@atoms";
 import { useRouter } from "next/navigation";
+import { useInterviewContext } from "../InterviewContext";
 import PopupTemplate from "./PoupTemplate";
 
-const EndPopup = ({ interviewId }: { interviewId: number }) => {
+const EndPopup = () => {
   const router = useRouter();
   const { user } = useUser();
 
   const isGuest = user.loginType === "GUEST";
+  const { interviewInfo } = useInterviewContext();
 
   const exitInterview = () => {
-    if (document.fullscreenEnabled) {
-      document.exitFullscreen();
-    }
     router.replace("/");
-    interviewApis.deleteInterview({ id: interviewId });
+    interviewApis.deleteInterview({ id: interviewInfo.interviewId });
   };
 
+  const goToSignUp = () => {
+    router.replace("/sign-in");
+  };
+
+  const goToResult = () => {
+    router.replace("/result");
+  };
   return isGuest ? (
     <PopupTemplate
       title={"수고하셨습니다! 면접이 끝났어요!"}
@@ -28,12 +34,7 @@ const EndPopup = ({ interviewId }: { interviewId: number }) => {
         },
         {
           title: "회원가입",
-          onClick: () => {
-            if (document.fullscreenEnabled) {
-              document.exitFullscreen();
-            }
-            router.replace("/sign-in");
-          },
+          onClick: goToSignUp,
         },
       ]}
     />
@@ -44,12 +45,7 @@ const EndPopup = ({ interviewId }: { interviewId: number }) => {
       buttons={[
         {
           title: "면접 결과 확인하기",
-          onClick: () => {
-            if (document.fullscreenEnabled) {
-              document.exitFullscreen();
-            }
-            router.replace("/result");
-          },
+          onClick: goToResult,
         },
       ]}
     />

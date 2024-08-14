@@ -12,9 +12,6 @@ const ForcedEndPopup = () => {
         {
           title: "메인 화면 돌아가기",
           onClick: () => {
-            if (document.fullscreenEnabled) {
-              document.exitFullscreen();
-            }
             router.replace("/");
           },
         },

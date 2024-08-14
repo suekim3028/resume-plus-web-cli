@@ -59,9 +59,6 @@ const InterviewScreenComponent = () => {
   useEffect(() => {
     return () => {
       cameraRef.current?.stop();
-      if (document.fullscreenEnabled) {
-        document.exitFullscreen();
-      }
     };
   }, []);
 
@@ -104,7 +101,7 @@ const InterviewScreenComponent = () => {
         </Flex>
         {setting.chat && <ChatSection />}
       </Flex>
-      {isEnd === "NORMAL" && <EndPopup interviewId={interviewId} />}
+      {isEnd === "NORMAL" && <EndPopup />}
       {isEnd === "FORCED" && <ForcedEndPopup />}
       {showExitPopup && (
         <ExitPopup closePopup={() => setShowExitPopup(false)} />

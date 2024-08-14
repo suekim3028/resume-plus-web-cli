@@ -15,9 +15,6 @@ const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
         {
           title: "면접 나가기",
           onClick: () => {
-            if (document.fullscreenEnabled) {
-              document.exitFullscreen();
-            }
             interviewApis.deleteInterview({ id: interviewInfo.interviewId });
             router.replace("/");
           },
