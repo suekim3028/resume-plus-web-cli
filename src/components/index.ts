@@ -9,7 +9,7 @@ import Footer from "./Footer";
 import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import PopUp from "./Popup";
-import RecoilRootWrapper from "./RecoilRootWrapper/RecoilRootWrapper";
+
 import TextInput, {
   type InputState,
   type InputValidation,
@@ -33,7 +33,6 @@ export {
   ListSelectorRef,
   Logo,
   PopUp,
-  RecoilRootWrapper,
   TextInput,
   TextInputRef,
   TopBarContainer,

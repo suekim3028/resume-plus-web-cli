@@ -33,7 +33,7 @@ const resultAtom = atomWithRefresh<
   Promise<{
     done: InterviewTypes.CompletedInterviewResult[];
     pending: InterviewTypes.PendingInterviewResult[];
-  } | null>
+  }>
 >(async (get) => {
   get(userAtom);
 
@@ -42,7 +42,11 @@ const resultAtom = atomWithRefresh<
     interviewApis.getPendingResultList(),
   ]);
 
-  if (done.isError || pending.isError) return null;
+  if (done.isError || pending.isError)
+    return {
+      done: [],
+      pending: [],
+    };
   return { done: done.data.resultList, pending: pending.data.resultList };
 });
 

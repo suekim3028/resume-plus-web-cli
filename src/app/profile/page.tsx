@@ -1,23 +1,13 @@
 "use client";
+import { useUser } from "@atoms";
 import { GridItem } from "@chakra-ui/react";
 import { TopBarContainer } from "@components";
-import { userStore } from "@store";
+import AuthWrapper from "@components/AuthWrapper";
+
 import { Button, Flex, GridWrapper, Text } from "@uis";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect } from "react";
-import { useRecoilValue } from "recoil";
 
 const ProfileComponent = () => {
-  const user = useRecoilValue(userStore);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/");
-    }
-  }, [!!user]);
-
-  if (!user) return <></>;
+  const { user } = useUser();
 
   const { name, email, defaultResume, remainInterview } = user;
   return (
@@ -75,9 +65,9 @@ const Row = ({ title, body }: { title: string; body: string }) => {
 
 const Profile = () => {
   return (
-    <Suspense fallback={<>...</>}>
+    <AuthWrapper>
       <ProfileComponent />
-    </Suspense>
+    </AuthWrapper>
   );
 };
 

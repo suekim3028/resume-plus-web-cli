@@ -2,8 +2,9 @@
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
 import Footer from "@components/Footer";
-import { useUser } from "@hooks";
-import { userStore } from "@store";
+
+import { useUser } from "@atoms";
+import { useAuth } from "@hooks";
 import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,6 @@ import {
   forwardRef,
   useState,
 } from "react";
-import { useRecoilValue } from "recoil";
 import Icon from "../Icon/Icon";
 import Logo from "../Logo/Logo";
 
@@ -91,8 +91,8 @@ const TopBarContainer = forwardRef<
 >(TopBarContainerComponent);
 
 const UserButtonList = () => {
-  const user = useRecoilValue(userStore);
-  const { logout } = useUser();
+  const user = useUser();
+  const { logout } = useAuth();
   const router = useRouter();
   const [userMenuVisible, setUserMenuVisible] = useState(false);
 

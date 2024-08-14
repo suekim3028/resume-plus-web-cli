@@ -1,5 +1,7 @@
 "use client";
 import { interviewApis } from "@apis";
+import { useCompanyData } from "@atoms";
+
 import { GridItem } from "@chakra-ui/react";
 import {
   Icon,
@@ -10,14 +12,13 @@ import {
   TypingSelector,
   TypingSelectorRef,
 } from "@components";
+import AuthWrapper from "@components/AuthWrapper";
 import { UI } from "@constants";
-import { companyDataStore } from "@store";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
-import { useRecoilValue } from "recoil";
 
 type SubmittableValue = {
   company: InterviewTypes.Company | string;
@@ -36,7 +37,7 @@ const isInputValueSubmittable = (
 };
 
 const Interview = () => {
-  const companyData = useRecoilValue(companyDataStore);
+  const companyData = useCompanyData();
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const companyRef = useRef<TypingSelectorRef>(null);
@@ -184,38 +185,36 @@ const Interview = () => {
                 *
               </Text>
             </Flex>
-            {!!companyData && (
-              <>
-                <TypingSelector<InterviewTypes.Company>
-                  ref={companyRef}
-                  placeholder="기업명을 입력해주세요"
-                  itemList={companyData.companies.map((value) => ({
-                    label: value.companyName,
-                    value,
-                  }))}
-                  onSelect={(v) => onValueChange("company", v)}
-                  onTypingSelect={(v) => onValueChange("company", v)}
-                />
-                <ListSelector<InterviewTypes.JobDepartment>
-                  ref={departmentRef}
-                  itemList={companyData.departments.map((value) => ({
-                    label: value.companyDept,
-                    value,
-                  }))}
-                  placeholder="직군을 선택해주세요"
-                  onSelect={(v) => onValueChange("department", v)}
-                />
-                <ListSelector<InterviewTypes.Job>
-                  ref={jobRef}
-                  itemList={companyData.jobs.map((value) => ({
-                    label: value.companyJob,
-                    value,
-                  }))}
-                  placeholder="직무를 선택해주세요"
-                  onSelect={(v) => onValueChange("job", v)}
-                />
-              </>
-            )}
+
+            <TypingSelector<InterviewTypes.Company>
+              ref={companyRef}
+              placeholder="기업명을 입력해주세요"
+              itemList={companyData.companies.map((value) => ({
+                label: value.companyName,
+                value,
+              }))}
+              onSelect={(v) => onValueChange("company", v)}
+              onTypingSelect={(v) => onValueChange("company", v)}
+            />
+            <ListSelector<InterviewTypes.JobDepartment>
+              ref={departmentRef}
+              itemList={companyData.departments.map((value) => ({
+                label: value.companyDept,
+                value,
+              }))}
+              placeholder="직군을 선택해주세요"
+              onSelect={(v) => onValueChange("department", v)}
+            />
+            <ListSelector<InterviewTypes.Job>
+              ref={jobRef}
+              itemList={companyData.jobs.map((value) => ({
+                label: value.companyJob,
+                value,
+              }))}
+              placeholder="직무를 선택해주세요"
+              onSelect={(v) => onValueChange("job", v)}
+            />
+
             <Text type="Heading2" fontWeight={"600"} mt={60}>
               면접 상세 설정
             </Text>
@@ -658,4 +657,10 @@ const Row = ({ title, body }: { title: string; body: string }) => {
   );
 };
 
-export default Interview;
+export default function SuspenseInterview() {
+  return (
+    <AuthWrapper>
+      <Interview />
+    </AuthWrapper>
+  );
+}

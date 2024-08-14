@@ -1,17 +1,16 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
 import { Logo, TextInput } from "@components";
-import { useUser } from "@hooks";
-import { authRouteStore } from "@store";
+import { useAuth } from "@hooks";
+
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRef, useState } from "react";
 
 const EmailSignInComponent = () => {
-  const { loginWithEmail } = useUser();
+  const { loginWithEmail } = useAuth();
   const router = useRouter();
-  const [authRouter, setAuthRouter] = useRecoilState(authRouteStore);
+
   const [canSubmit, setCanSubmit] = useState(false);
 
   const inputValue = useRef({
@@ -36,12 +35,8 @@ const EmailSignInComponent = () => {
   const submit = async () => {
     const { email, password } = inputValue.current;
     await loginWithEmail({ email, password });
-    router.replace(authRouter || "/");
+    router.replace("/");
   };
-
-  useEffect(() => {
-    return () => setAuthRouter(null);
-  }, []);
 
   return (
     <Flex flex={1} alignItems={"center"} justifyContent={"center"}>

@@ -1,7 +1,7 @@
-import { Initializer, RecoilRootWrapper } from "@components";
+import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Script from "next/script";
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -12,13 +12,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body id="body">
-        <RecoilRootWrapper>
-          <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
-            <Initializer>
+        <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
+          <Initializer>
+            <Suspense fallback={<>...Loading</>}>
               <StrictMode>{children}</StrictMode>
-            </Initializer>
-          </GoogleOAuthProvider>
-        </RecoilRootWrapper>
+            </Suspense>
+          </Initializer>
+        </GoogleOAuthProvider>
+
         <Script src="https://cdn.amplitude.com/libs/analytics-browser-2.10.0-min.js.gz" />
       </body>
     </html>

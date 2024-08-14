@@ -1,11 +1,11 @@
 "use client";
-import { companyDataStore } from "@store";
+
+import { useCompanyData } from "@atoms";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
-import { useRecoilValue } from "recoil";
 
 const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
-  const companyData = useRecoilValue(companyDataStore);
+  const companyData = useCompanyData();
   const { companyId, jobId, departmentId, createdAt } = result;
   const company = companyData?.companies.find(
     ({ companyId: id }) => id === companyId

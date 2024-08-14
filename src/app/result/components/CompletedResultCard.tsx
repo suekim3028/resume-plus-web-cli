@@ -1,9 +1,10 @@
 "use client";
-import { companyDataStore } from "@store";
+
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
-import { useRecoilValue } from "recoil";
+
+import { useCompanyData } from "@atoms";
 import { getScoreStat } from "../utils";
 import ScoreBadge from "./ScoreBadge";
 
@@ -11,7 +12,7 @@ const CompletedResultCard = (
   result: InterviewTypes.CompletedInterviewResult
 ) => {
   const router = useRouter();
-  const companyData = useRecoilValue(companyDataStore);
+  const companyData = useCompanyData();
   const { companyId, jobId, departmentId, createdAt, interviewId } = result;
 
   const company = companyData?.companies.find(

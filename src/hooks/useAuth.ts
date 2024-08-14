@@ -1,12 +1,12 @@
 "use client";
 import { userApis } from "@apis";
-import { userAtom } from "@atoms";
+import { useUser } from "@atoms";
+
 import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
-import { useSetAtom } from "jotai";
 
 export const useAuth = () => {
-  const refreshUser = useSetAtom(userAtom);
+  const { refreshUser } = useUser();
 
   const handleUser = ({ user, token }: userApis.UserResponse) => {
     TokenStorage.set(token);

@@ -1,11 +1,12 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
 import { Icon, TopBarContainer } from "@components";
-import { companyDataStore, completedResultStore } from "@store";
+
 import { Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { useRecoilValue } from "recoil";
+
+import { useCompanyData, useResult } from "@atoms";
 import { getScoreStat } from "../utils";
 import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
@@ -14,10 +15,10 @@ import ScoreCalcInfo from "./components/ScoreCalcInfo";
 const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
 
-  const resultInterviews = useRecoilValue(completedResultStore);
-  const companyData = useRecoilValue(companyDataStore);
+  const resultInterviews = useResult();
+  const companyData = useCompanyData();
   const router = useRouter();
-  const interview = resultInterviews.find((i) => {
+  const interview = resultInterviews?.done.find((i) => {
     return i.interviewId === Number(interviewId);
   });
 
