@@ -1,7 +1,7 @@
 import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Script from "next/script";
-import { StrictMode, Suspense } from "react";
+import { StrictMode } from "react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -14,9 +14,7 @@ export default function RootLayout({
       <body id="body">
         <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
           <Initializer>
-            <Suspense fallback={<>...Loading</>}>
-              <StrictMode>{children}</StrictMode>
-            </Suspense>
+            <StrictMode>{children}</StrictMode>
           </Initializer>
         </GoogleOAuthProvider>
 

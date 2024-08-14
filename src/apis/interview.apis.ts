@@ -29,7 +29,7 @@ export const getTechQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("tech"),
-      useDummy: true,
+      useDummy: false,
     }
   );
 
@@ -43,7 +43,7 @@ export const getPersonalQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("personal"),
-      useDummy: true,
+      useDummy: false,
     }
   );
 
@@ -57,7 +57,7 @@ export const getIntroduceQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("introduce"),
-      useDummy: true,
+      useDummy: false,
     }
   );
 
@@ -71,7 +71,7 @@ export const getBehaviorQ = async (interviewId: number) =>
     undefined,
     {
       dummyData: genQ("behavior"),
-      useDummy: true,
+      useDummy: false,
     }
   );
 
@@ -90,7 +90,7 @@ type AnswerQuestionParams = {
  */
 
 export const answerQuestion = ({ type, ...body }: AnswerQuestionParams) =>
-  API.post(`/answer/${type}`, { body }, { dummyData: undefined });
+  API.post(`/answer/${type}`, { body });
 
 /**
  * 기업 목록 요청

@@ -2,7 +2,7 @@
 
 import { useUser } from "@atoms";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { memo, ReactNode, useEffect } from "react";
 
 const AuthWrapper = ({
   children,
@@ -12,24 +12,26 @@ const AuthWrapper = ({
   guestOnly: boolean;
 }) => {
   const router = useRouter();
-  const { user } = useUser();
+  const { isGuest } = useUser();
 
   useEffect(() => {
-    if (user.loginType === "GUEST" && !guestOnly) {
+    if (isGuest && !guestOnly) {
       router.replace("/sign-in");
     }
-    if (user.loginType !== "GUEST" && guestOnly) {
+    if (!isGuest && guestOnly) {
       router.replace("/");
     }
-  }, [user.loginType, guestOnly]);
+  }, [isGuest, guestOnly]);
 
   return children;
 };
 
-export const UserOnlyWrapper = ({ children }: { children: ReactNode }) => (
+export const UserOnlyWrapper = memo(({ children }: { children: ReactNode }) => (
   <AuthWrapper guestOnly={false}>{children}</AuthWrapper>
-);
+));
 
-export const GuestOnlyWrapper = ({ children }: { children: ReactNode }) => (
-  <AuthWrapper guestOnly={true}>{children}</AuthWrapper>
+export const GuestOnlyWrapper = memo(
+  ({ children }: { children: ReactNode }) => (
+    <AuthWrapper guestOnly={true}>{children}</AuthWrapper>
+  )
 );

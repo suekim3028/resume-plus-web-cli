@@ -93,7 +93,7 @@ export default function Home() {
           type={"Solid_Primary"}
           size={"Large"}
           title="지금 면접 시작하기"
-          href={"/interview"}
+          href={"/interview-setting"}
         />
       </Flex>
     </TopBarContainer>

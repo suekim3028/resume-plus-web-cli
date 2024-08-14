@@ -4,8 +4,12 @@ import { useInterviewContext } from "../InterviewContext";
 import InterviewTimer from "./InterviewTimer";
 
 const TopBar = () => {
-  const { interviewInfo, forceEnd } = useInterviewContext();
+  const { interviewInfo, setStatus } = useInterviewContext();
   const { company, department, companyThumbnailUrl } = interviewInfo;
+
+  const handleOnTimeEnd = () => {
+    setStatus("FORCE_END");
+  };
   return (
     <Flex
       px={16}
@@ -37,7 +41,7 @@ const TopBar = () => {
         </Text>
       </Flex>
 
-      <InterviewTimer onTimeEnd={forceEnd} />
+      <InterviewTimer onTimeEnd={handleOnTimeEnd} />
     </Flex>
   );
 };
