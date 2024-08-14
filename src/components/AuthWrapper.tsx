@@ -2,7 +2,7 @@
 
 import { useUser } from "@atoms";
 import { useRouter } from "next/navigation";
-import { memo, ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 
 const AuthWrapper = ({
   children,
@@ -25,13 +25,4 @@ const AuthWrapper = ({
 
   return children;
 };
-
-export const UserOnlyWrapper = memo(({ children }: { children: ReactNode }) => (
-  <AuthWrapper guestOnly={false}>{children}</AuthWrapper>
-));
-
-export const GuestOnlyWrapper = memo(
-  ({ children }: { children: ReactNode }) => (
-    <AuthWrapper guestOnly={true}>{children}</AuthWrapper>
-  )
-);
+export default React.memo(AuthWrapper);

@@ -1,4 +1,4 @@
-import { GuestOnlyWrapper, UserOnlyWrapper } from "./AuthWrapper";
+import AuthWrapper from "./AuthWrapper";
 import CompanyThumbnail from "./CompanyThumbnail";
 import { EventLogger } from "./EventLogger";
 import Footer from "./Footer";
@@ -21,10 +21,10 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 export {
+  AuthWrapper,
   CompanyThumbnail,
   EventLogger,
   Footer,
-  GuestOnlyWrapper,
   Icon,
   IconNames,
   Initializer,
@@ -41,5 +41,4 @@ export {
   TypingSelector,
   TypingSelectorItem,
   TypingSelectorRef,
-  UserOnlyWrapper,
 };

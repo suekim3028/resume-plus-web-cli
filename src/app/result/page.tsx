@@ -1,6 +1,6 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon, TopBarContainer, UserOnlyWrapper } from "@components";
+import { AuthWrapper, Icon, TopBarContainer } from "@components";
 import { Flex, GridWrapper, Text } from "@uis";
 import { useState } from "react";
 import CompletedResultList from "./components/CompletedResultList";
@@ -76,8 +76,8 @@ const _Result = () => {
 
 export default function Result() {
   return (
-    <UserOnlyWrapper>
+    <AuthWrapper guestOnly={false}>
       <_Result />
-    </UserOnlyWrapper>
+    </AuthWrapper>
   );
 }
