@@ -14,9 +14,13 @@ const CompanyThumbnail = ({
       h={size}
       flexShrink={0}
       rounded={10}
-      bgRgbColor="rgba(217, 217, 217, 1)"
+      alignItems={"center"}
+      justifyContent={"center"}
+      bgRgbColor="black"
     >
-      <Text type={"Label1_Normal"}>{companyName}</Text>
+      <Text type={"Label1_Normal"} color={"Static/White"}>
+        {companyName}
+      </Text>
     </Flex>
   );
 };

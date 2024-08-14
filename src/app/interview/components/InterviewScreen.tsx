@@ -16,6 +16,7 @@ import EndPopup from "./EndPopup";
 import ExitPopup from "./ExitPopup";
 import ForcedEndPopup from "./ForcedEndPopup";
 import { FrontCameraRef } from "./FrontCamera";
+import HurryUpSnackBar from "./HurryUpSnackBar";
 import TopBar from "./TopBar";
 
 const InterviewScreenComponent = () => {
@@ -25,7 +26,7 @@ const InterviewScreenComponent = () => {
     chat: true,
   });
 
-  const { talkingSide, isEnd, interviewInfo } = useInterviewContext();
+  const { talkingSide, status, interviewInfo } = useInterviewContext();
   const { interviewId } = interviewInfo;
 
   const [showExitPopup, setShowExitPopup] = useState(false);
@@ -81,6 +82,7 @@ const InterviewScreenComponent = () => {
           flexDirection={"column"}
           alignItems={"center"}
           justifyContent={"center"}
+          position={"relative"}
         >
           <CamSection
             cameraRef={cameraRef}
@@ -98,11 +100,13 @@ const InterviewScreenComponent = () => {
               }}
             />
           </Flex>
+
+          {status === "5_MINUTES_LEFT" && <HurryUpSnackBar />}
         </Flex>
         {setting.chat && <ChatSection />}
       </Flex>
-      {isEnd === "NORMAL" && <EndPopup />}
-      {isEnd === "FORCED" && <ForcedEndPopup />}
+      {status === "END" && <EndPopup />}
+      {status === "FORCE_END" && <ForcedEndPopup />}
       {showExitPopup && (
         <ExitPopup closePopup={() => setShowExitPopup(false)} />
       )}

@@ -16,15 +16,15 @@ import { Chat, RandomQuestion } from "./types";
 
 const InterviewContext = createContext<InterviewContextValue | null>(null);
 
-type EndStatus = "FORCED" | "NORMAL";
+type InterviewStatus = "DEFAULT" | "FORCE_END" | "END" | "5_MINUTES_LEFT";
 
 type InterviewContextValue = {
   chats: Chat[];
   talkingSide: "COMPANY" | "ME" | null;
-  isEnd: false | EndStatus;
+  status: InterviewStatus;
   interviewInfo: InterviewTypes.InterviewInfo;
   submitAnswerWithText: (answer: string) => void;
-  forceEnd: () => void;
+  setStatus: (status: InterviewStatus) => void;
 };
 
 const InterviewContextProvider = ({
@@ -41,7 +41,7 @@ const InterviewContextProvider = ({
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
-  const [isEnd, setIsEnd] = useState<false | EndStatus>(false);
+  const [status, setStatus] = useState<InterviewStatus>("DEFAULT");
 
   /**
    * 대답 제출, 채팅 추가, 다음 질문 가져오기
@@ -79,7 +79,7 @@ const InterviewContextProvider = ({
    */
   const getNextQuestion = useCallback(async () => {
     const nextQuestion = remainQuestions.current.shift();
-    if (!nextQuestion) return setIsEnd("NORMAL");
+    if (!nextQuestion) return setStatus("END");
 
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
@@ -107,13 +107,10 @@ const InterviewContextProvider = ({
       value={{
         chats,
         talkingSide,
-        isEnd,
+        status,
         interviewInfo,
         submitAnswerWithText,
-        forceEnd: () => {
-          console.log("forceEnd!");
-          setIsEnd("FORCED");
-        },
+        setStatus,
       }}
     >
       {children}
