@@ -1,11 +1,12 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
 import { Logo } from "@components";
-import { useUser } from "@hooks";
+import { useAuth } from "@hooks";
+
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
 
 const SignInComponent = () => {
-  const { loginWithGoogle } = useUser();
+  const { loginWithGoogle } = useAuth();
 
   return (
     <Flex flex={1} alignItems={"center"}>

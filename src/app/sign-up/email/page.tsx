@@ -2,7 +2,8 @@
 import { GridItem } from "@chakra-ui/react";
 import { Icon, Logo } from "@components";
 import { UI } from "@constants";
-import { useUser } from "@hooks";
+
+import { useAuth } from "@hooks";
 import { UserTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,7 @@ const isSubmittableValue = (
 const EmailSignIn = () => {
   const router = useRouter();
 
-  const { signUpWithEmail } = useUser();
+  const { signUpWithEmail } = useAuth();
 
   const inputValue = useRef<SignUpValueState>({
     email: { isError: true, value: null },
