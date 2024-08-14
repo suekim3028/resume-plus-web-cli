@@ -25,26 +25,34 @@ type Step = (typeof STEPS)[number];
 
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
-  const interview: InterviewTypes.InterviewInfo = {
-    company: { companyId: 0, companyName: "테스트 회사" },
-    job: { companyJobId: 0, companyJob: "테스트 직무" },
-    department: { companyDeptId: 0, companyDept: "테스트 직군" },
-    interviewId,
-  };
   const router = useRouter();
+
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
+  const interview = useRef<InterviewTypes.InterviewInfo>();
+
   const interviewData = useRef<{
     questions: RandomQuestion[];
     questionParts: QuestionPart[];
   }>();
 
-  const [data, setData] = useState<{
-    questions: RandomQuestion[];
-    questionParts: QuestionPart[];
-  }>();
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
   commonHooks.useAsyncEffect(async () => {
+    // TODO: interview 정보 가져와서 넣기
+    // const {isError, data} = await interviewApis.interview
+    interview.current = {
+      company: "삼송",
+      department: {
+        companyDept: "테스트 직군",
+        companyDeptId: 0,
+      },
+      job: {
+        companyJob: "테스트 직무",
+        companyJobId: 0,
+      },
+      interviewId: 0,
+    };
+
     const { isError, data } = await getQuestions(interviewId);
 
     if (isError) {
@@ -53,24 +61,26 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     }
 
     interviewData.current = data;
-    setData(data);
 
     questionWaitingRef.current &&
       (await questionWaitingRef.current.animStart());
     setStep("2_STEP_CHECK");
   }, []);
 
-  if (data)
+  if (step === "1_QUESTION_WAITING")
+    return <QuestionWaiting ref={questionWaitingRef} />;
+
+  if (!interview.current || !interviewData.current) return <></>;
+
+  if (1 == 1)
     return (
       <InterviewScreen
-        interviewInfo={interview}
-        questions={data?.questions || []}
+        interviewInfo={interview.current}
+        questions={interviewData.current.questions || []}
       />
     );
 
   switch (step) {
-    case "1_QUESTION_WAITING":
-      return <QuestionWaiting ref={questionWaitingRef} />;
     case "2_STEP_CHECK":
       return (
         <StepCheck
@@ -83,12 +93,15 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
     case "4_ENTER_WAITING":
       return (
-        <EnterWaiting {...interview} goNext={() => setStep("5_INTERVIEW")} />
+        <EnterWaiting
+          {...interview.current}
+          goNext={() => setStep("5_INTERVIEW")}
+        />
       );
     case "5_INTERVIEW":
       return (
         <InterviewScreen
-          interviewInfo={interview}
+          interviewInfo={interview.current}
           questions={interviewData.current?.questions || []}
         />
       );

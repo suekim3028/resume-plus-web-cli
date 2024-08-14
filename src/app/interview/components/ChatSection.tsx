@@ -1,49 +1,20 @@
 import { Icon } from "@components";
 import { Flex, Text } from "@uis";
-import {
-  forwardRef,
-  ForwardRefRenderFunction,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { useRef } from "react";
 import { useInterviewContext } from "../InterviewContext";
 import { Chat } from "../types";
 import S from "./styles.module.css";
 
-const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
-  { answerWithInput },
-  ref
-) => {
-  const { chats } = useInterviewContext();
-  const [inputDisabled, setInputDisabled] = useState(false);
-
-  const appendAnswer = (answer: string) => {
-    if (!inputRef.current) return;
-    inputRef.current.value = [inputRef.current.value, answer].join("");
-  };
+const ChatComponent = () => {
+  const { chats, submitAnswerWithText } = useInterviewContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClickSend = () => {
     if (!inputRef.current) return;
-    answerWithInput(inputRef.current.value);
+    submitAnswerWithText(inputRef.current.value);
+    inputRef.current.value = "";
   };
-
-  const disable = () => {
-    if (inputRef.current) inputRef.current.value = "";
-    setInputDisabled(true);
-  };
-
-  const enable = () => {
-    setInputDisabled(false);
-  };
-
-  useImperativeHandle(ref, () => ({
-    disable,
-    enable,
-    appendAnswer,
-  }));
 
   return (
     <Flex
@@ -77,7 +48,6 @@ const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
         >
           <input
             ref={inputRef}
-            disabled={inputDisabled}
             placeholder="답변을 입력하세요"
             color="white"
             style={{
@@ -101,16 +71,7 @@ const ChatComponent: ForwardRefRenderFunction<ChatRef, ChatProps> = (
   );
 };
 
-export type ChatRef = {
-  appendAnswer: (answer: string) => void;
-  disable: () => void;
-  enable: () => void;
-};
-type ChatProps = {
-  answerWithInput: (answer: string) => void;
-};
-
-export default forwardRef(ChatComponent);
+export default ChatComponent;
 
 const ChatBubble = ({ isMine, text }: Chat) => {
   return (

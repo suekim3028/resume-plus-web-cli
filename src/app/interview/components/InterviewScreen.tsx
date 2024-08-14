@@ -14,7 +14,7 @@ import InterviewContextProvider, {
   useInterviewContext,
 } from "../InterviewContext";
 import { RandomQuestion } from "../types";
-import ChatSection, { ChatRef } from "./ChatSection";
+import ChatSection from "./ChatSection";
 import FrontCamera, { FrontCameraRef } from "./FrontCamera";
 
 const InterviewScreenComponent = () => {
@@ -71,10 +71,11 @@ const InterviewScreenComponent = () => {
   useEffect(() => {
     return () => {
       cameraRef.current?.stop();
+      if (document.fullscreenEnabled) {
+        document.exitFullscreen();
+      }
     };
   }, []);
-
-  const chatRef = useRef<ChatRef>(null);
 
   return (
     <Flex
@@ -109,7 +110,7 @@ const InterviewScreenComponent = () => {
             color={"Label/Alternative"}
             fontWeight={"600"}
           >
-            {company.companyName}
+            {typeof company === "string" ? company : company.companyName}
           </Text>
           <Text
             type="Body1_Normal"
@@ -184,7 +185,7 @@ const InterviewScreenComponent = () => {
             />
           </Flex>
         </Flex>
-        {setting.chat && <ChatSection answerWithInput={() => {}} />}
+        {setting.chat && <ChatSection />}
       </Flex>
       {isEnd && <EndPopup interviewId={interviewId} />}
       {showExitPopup && (
@@ -269,7 +270,7 @@ const EndPopup = ({ interviewId }: { interviewId: number }) => {
 
 const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
   const router = useRouter();
-
+  const { interviewInfo } = useInterviewContext();
   return (
     <PopUp visible={true}>
       <Flex
@@ -306,6 +307,7 @@ const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
               if (document.fullscreenEnabled) {
                 document.exitFullscreen();
               }
+              interviewApis.deleteInterview({ id: interviewInfo.interviewId });
               router.replace("/");
             }}
             size={"Large"}

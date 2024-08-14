@@ -5,14 +5,14 @@ import { commonHooks } from "@web-core";
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from "react";
-import { speechToText, textToSpeech } from "./actions";
+import { textToSpeech } from "./actions";
+import { useRecorder } from "./hooks";
 import { Chat, RandomQuestion } from "./types";
-import { audioBlobToBase64 } from "./utils";
 
 const InterviewContext = createContext<InterviewContextValue | null>(null);
 
@@ -21,6 +21,7 @@ type InterviewContextValue = {
   talkingSide: "COMPANY" | "ME" | null;
   isEnd: boolean;
   interviewInfo: InterviewTypes.InterviewInfo;
+  submitAnswerWithText: (answer: string) => void;
 };
 
 const InterviewContextProvider = ({
@@ -35,14 +36,16 @@ const InterviewContextProvider = ({
   const currentQuestion = useRef<RandomQuestion>();
   const remainQuestions = useRef(questions);
 
-  const mediaStream = useRef<MediaStream>();
-  const mediaRecorder = useRef<MediaRecorder>();
-
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
   const [isEnd, setIsEnd] = useState(false);
 
-  const submitAnswer = async (answer: string) => {
+  /**
+   * 대답 제출, 채팅 추가, 다음 질문 가져오기
+   */
+  const submitAnswer = useCallback(async (answer: string) => {
+    setChats((c) => [...c, { isMine: true, text: answer }]);
+
     if (!currentQuestion.current) return;
     interviewApis.answerQuestion({
       questionId: currentQuestion.current.questionId,
@@ -51,154 +54,53 @@ const InterviewContextProvider = ({
       interviewId: interviewInfo.interviewId,
     });
     getNextQuestion();
+  }, []);
+
+  const { startRecorder, resetRecorder } = useRecorder(submitAnswer);
+
+  const submitAnswerWithText = useCallback(
+    (text: string) => {
+      submitAnswer(text);
+      resetRecorder();
+    },
+    [resetRecorder, submitAnswer]
+  );
+
+  const startAnswer = () => {
+    setTalkingSide("ME");
+    startRecorder();
   };
 
-  const getNextQuestion = async () => {
-    console.log({ remainQuestions: remainQuestions.current });
+  /**
+   * 다음 질문 가져오기
+   */
+  const getNextQuestion = useCallback(async () => {
     const nextQuestion = remainQuestions.current.shift();
-    if (!nextQuestion) {
-      return setIsEnd(true);
-    }
+    if (!nextQuestion) return setIsEnd(true);
+
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
     setTalkingSide("COMPANY");
     const data = await textToSpeech(nextQuestion.question);
-    if (!data) {
-      // startRecord();
-      return;
-    }
+    // const data = "";
+    if (!data) return startAnswer();
+
     const audio = new Audio(data);
-    audio.onended = () => {
-      startRecord();
-    };
+    audio.onended = startAnswer;
     audio.play();
-  };
-
-  const resetMediaRecorder = () => {
-    if (!mediaStream.current) return;
-    const _mediaRecorder = new MediaRecorder(mediaStream.current);
-    stackedData.current = [];
-    _mediaRecorder.ondataavailable = (ev) => {
-      if (ev.data.size <= 0) return;
-      stackedData.current.push(ev.data);
-    };
-
-    _mediaRecorder.onstop = async () => {
-      console.log("녹음 ~ ~ ~ ~ 끝!");
-      if (!stackedData.current.length) return;
-
-      const blob = new Blob(stackedData.current);
-      const base64Audio = await audioBlobToBase64(blob);
-
-      const text = await speechToText(base64Audio);
-
-      if (!text) {
-        startRecord();
-        return;
-      }
-      setChats((c) => [...c, { isMine: true, text }]);
-
-      if (!currentQuestion.current) return;
-
-      interviewApis.answerQuestion({
-        questionId: currentQuestion.current.questionId,
-        answer: text,
-        type: currentQuestion.current.type,
-        interviewId: interviewInfo.interviewId,
-      });
-
-      getNextQuestion();
-      console.log({ text });
-    };
-
-    mediaRecorder.current = _mediaRecorder;
-  };
-
-  const resetMediaStream = async () => {
-    mediaStream.current = await navigator.mediaDevices?.getUserMedia({
-      video: false,
-      audio: true,
-    });
-
-    const audioContext = new AudioContext();
-    const source = audioContext.createMediaStreamSource(mediaStream.current);
-    console.log(source);
-
-    analyzer.current = audioContext.createAnalyser();
-    source.connect(analyzer.current);
-  };
+  }, []);
 
   const effected = useRef(false);
-
-  const stackedData = useRef<Blob[]>([]);
-  const analyzer = useRef<AnalyserNode>();
-
-  const fiveSeconds = useRef<NodeJS.Timeout | null>(null);
-  const interval = useRef<NodeJS.Timeout | null>(null);
-
-  function getPeakLevel() {
-    if (!analyzer.current) return 0;
-    const array = new Uint8Array(analyzer.current.fftSize);
-
-    analyzer.current.getByteTimeDomainData(array);
-    return (
-      array.reduce(
-        (max, current) => Math.max(max, Math.abs(current - 127)),
-        0
-      ) / 128
-    );
-  }
-
-  const startRecord = async () => {
-    if (!mediaRecorder.current) return;
-    setTalkingSide("ME");
-
-    resetMediaRecorder();
-    interval.current = setInterval(() => {
-      const level = getPeakLevel();
-
-      if (level > 0.05) {
-        console.log("----- timeout 리셋");
-        // 5% 이상이면 계속 들음
-        fiveSeconds.current && clearTimeout(fiveSeconds.current);
-        fiveSeconds.current = setTimeout(() => {
-          console.log("----timout 끝!!!");
-          interval.current && clearInterval(interval.current);
-          mediaRecorder.current?.stop();
-          fiveSeconds.current && clearTimeout(fiveSeconds.current);
-        }, 3000);
-      }
-    }, 200);
-
-    // 음성 녹음
-    mediaRecorder.current.start();
-    console.log("녹음 ~ ~ ~ ~ 시작!");
-  };
-
   commonHooks.useAsyncEffect(async () => {
     if (effected.current) return;
     effected.current = true;
 
-    await resetMediaStream();
-    resetMediaRecorder();
-
-    setTimeout(() => {
-      getNextQuestion();
-    }, 1500);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      mediaRecorder.current?.pause();
-      mediaStream.current?.getTracks().forEach((track) => {
-        track.stop();
-      });
-    };
+    setTimeout(getNextQuestion, 1500);
   }, []);
 
   return (
     <InterviewContext.Provider
-      value={{ chats, talkingSide, isEnd, interviewInfo }}
+      value={{ chats, talkingSide, isEnd, interviewInfo, submitAnswerWithText }}
     >
       {children}
     </InterviewContext.Provider>
