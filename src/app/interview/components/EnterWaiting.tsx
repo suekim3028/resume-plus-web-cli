@@ -38,11 +38,9 @@ const EnterWaiting = ({
       <Text type="Display2" fontWeight={"700"} textAlign={"center"}>
         {`${RANDOM_FAMILY_NAME}PM 님(호스트)이 곧 귀하를 들어오게 할 것 입니다.\n잠시만 기다려주세요, 면접이 시작됩니다.`}
       </Text>
-      <Text
-        mt={32}
-        type="Title2"
-        fontWeight={"500"}
-      >{`${company.companyName} ${department.companyDept} 직군 ${job.companyJob} 인터뷰`}</Text>
+      <Text mt={32} type="Title2" fontWeight={"500"}>{`${
+        typeof company === "string" ? company : company.companyName
+      } ${department.companyDept} 직군 ${job.companyJob} 인터뷰`}</Text>
       {leftSeconds ? (
         <Flex>
           <Text

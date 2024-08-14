@@ -63,7 +63,7 @@ const ChatComponent = () => {
             className={S["chat-input"]}
           />
           <Flex p={3} onClick={handleClickSend}>
-            <Icon name="button_chat_off" size={16} />
+            <Icon name="normalSendSharp" size={16} />
           </Flex>
         </Flex>
       </Flex>

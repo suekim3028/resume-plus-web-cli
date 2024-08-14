@@ -42,15 +42,10 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     // const {isError, data} = await interviewApis.interview
     interview.current = {
       company: "삼송",
-      department: {
-        companyDept: "테스트 직군",
-        companyDeptId: 0,
-      },
-      job: {
-        companyJob: "테스트 직무",
-        companyJobId: 0,
-      },
+      department: "테스트 직군",
+      job: "테스트 직무",
       interviewId: 0,
+      companyThumbnailUrl: null,
     };
 
     const { isError, data } = await getQuestions(interviewId);

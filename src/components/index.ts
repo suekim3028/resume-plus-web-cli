@@ -1,13 +1,13 @@
+import { GuestOnlyWrapper, UserOnlyWrapper } from "./AuthWrapper";
+import CompanyThumbnail from "./CompanyThumbnail";
+import { EventLogger } from "./EventLogger";
+import Footer from "./Footer";
 import Icon, { type IconNames } from "./Icon/Icon";
+import Initializer from "./Initializer";
 import ListSelector, {
   type ListSelectorItem,
   type ListSelectorRef,
 } from "./ListSelector/ListSelector";
-
-import { GuestOnlyWrapper, UserOnlyWrapper } from "./AuthWrapper";
-import { EventLogger } from "./EventLogger";
-import Footer from "./Footer";
-import Initializer from "./Initializer";
 import Logo from "./Logo/Logo";
 import PopUp from "./Popup";
 import TextInput, {
@@ -21,6 +21,7 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 export {
+  CompanyThumbnail,
   EventLogger,
   Footer,
   GuestOnlyWrapper,

@@ -11,7 +11,7 @@ import {
 const FrontCameraComponent: ForwardRefRenderFunction<
   FrontCameraRef,
   FrontCameraProps
-> = ({ borderRadius, muted }, ref) => {
+> = ({ borderRadius }, ref) => {
   const [cameraReady, setCameraReady] = useState(false);
   const mediaStream = useRef<MediaStream>();
 
@@ -101,7 +101,6 @@ export type FrontCameraRef = {
 };
 type FrontCameraProps = {
   borderRadius?: number;
-  muted?: boolean;
 };
 const FrontCamera = forwardRef(FrontCameraComponent);
 

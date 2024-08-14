@@ -5,7 +5,7 @@ export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 export type Company = {
   companyId: number;
   companyName: string;
-  // thumbnailUrl: string;
+  thumbnailUrl?: string;
 };
 
 export type JobDepartment = {
@@ -19,10 +19,11 @@ export type Job = {
 };
 
 export type InterviewInfo = {
-  company: Company | string;
-  department: JobDepartment;
-  job: Job;
+  company: string;
+  department: string;
+  job: string;
   interviewId: number;
+  companyThumbnailUrl: string | null;
 };
 
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";
