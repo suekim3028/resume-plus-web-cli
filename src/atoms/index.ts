@@ -2,9 +2,10 @@ import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
 import { jsUtils } from "@web-core";
+import { useAtom, useAtomValue } from "jotai";
 import { atomWithRefresh } from "jotai/utils";
 
-export const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
+const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
   await jsUtils.wait(3);
   // if (1 == 1) return null;
   const token = TokenStorage.get();
@@ -23,7 +24,12 @@ export const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
   return data;
 });
 
-export const resultAtom = atomWithRefresh<
+export const useUser = () => {
+  const [user, refreshUser] = useAtom(userAtom);
+  return { user, refreshUser };
+};
+
+const resultAtom = atomWithRefresh<
   Promise<{
     done: InterviewTypes.CompletedInterviewResult[];
     pending: InterviewTypes.PendingInterviewResult[];
@@ -40,7 +46,12 @@ export const resultAtom = atomWithRefresh<
   return { done: done.data.resultList, pending: pending.data.resultList };
 });
 
-export const companyAtom = atomWithRefresh<
+export const useResult = () => {
+  const result = useAtomValue(resultAtom);
+  return result;
+};
+
+const companyAtom = atomWithRefresh<
   Promise<{
     companies: InterviewTypes.Company[];
     departments: InterviewTypes.JobDepartment[];
@@ -61,3 +72,8 @@ export const companyAtom = atomWithRefresh<
     jobs: jobs.data,
   };
 });
+
+export const useCompanyData = () => {
+  const companyData = useAtomValue(companyAtom);
+  return companyData;
+};

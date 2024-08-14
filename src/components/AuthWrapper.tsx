@@ -1,31 +1,22 @@
 "use client";
-import { userAtom } from "@atoms";
-import { UserContextProvider } from "@contexts";
-import { useAtomValue } from "jotai";
-import { useRouter } from "next/navigation";
-import { ReactNode, Suspense, useEffect } from "react";
 
-const _AuthWrapper = ({ children }: { children: ReactNode }) => {
+import { useUser } from "@atoms";
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+
+const AuthWrapper = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const user = useAtomValue(userAtom);
+  const { user } = useUser();
 
   useEffect(() => {
-    if (!user) {
+    if (user.loginType === "GUEST") {
       router.replace("/sign-in");
     }
-  }, [!!user]);
+  }, [user.loginType]);
 
   if (!user) return <></>;
 
-  return <UserContextProvider>{children}</UserContextProvider>;
-};
-
-const AuthWrapper = ({ children }: { children: ReactNode }) => {
-  return (
-    <Suspense fallback={<>유저 가져오는중</>}>
-      <_AuthWrapper>{children}</_AuthWrapper>
-    </Suspense>
-  );
+  return children;
 };
 
 export default AuthWrapper;
