@@ -244,3 +244,6 @@ const genEvaluation2 = () =>
       ],
     })
   );
+
+export const deleteInterview = ({ id }: { id: number }) =>
+  API.delete(`interview/${id}`);

@@ -6,6 +6,8 @@ import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { interviewApis } from "@apis";
+import { useUser } from "@atoms";
 import { UI } from "@constants";
 import { useRouter } from "next/navigation";
 import InterviewContextProvider, {
@@ -15,8 +17,7 @@ import { RandomQuestion } from "../types";
 import ChatSection, { ChatRef } from "./ChatSection";
 import FrontCamera, { FrontCameraRef } from "./FrontCamera";
 
-const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
-  const { company, job, department } = interviewInfo;
+const InterviewScreenComponent = () => {
   const window = commonHooks.useWindowSize({});
 
   const [setting, setSetting] = useState({
@@ -25,7 +26,8 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
     chat: true,
   });
 
-  const { talkingSide, isEnd } = useInterviewContext();
+  const { talkingSide, isEnd, interviewInfo } = useInterviewContext();
+  const { company, job, department, interviewId } = interviewInfo;
 
   const [showExitPopup, setShowExitPopup] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -184,7 +186,7 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
         </Flex>
         {setting.chat && <ChatSection answerWithInput={() => {}} />}
       </Flex>
-      {isEnd && <EndPopup />}
+      {isEnd && <EndPopup interviewId={interviewId} />}
       {showExitPopup && (
         <ExitPopup closePopup={() => setShowExitPopup(false)} />
       )}
@@ -192,9 +194,20 @@ const InterviewScreenComponent = ({ interviewInfo }: InterviewScreenProps) => {
   );
 };
 
-const EndPopup = () => {
+const EndPopup = ({ interviewId }: { interviewId: number }) => {
   const router = useRouter();
-  // TODO: 유저 아니면 다르게
+  const { user } = useUser();
+
+  const isGuest = user.loginType === "GUEST";
+
+  const exitInterview = () => {
+    if (document.fullscreenEnabled) {
+      document.exitFullscreen();
+    }
+    router.replace("/");
+    interviewApis.deleteInterview({ id: interviewId });
+  };
+
   return (
     <PopUp visible={true}>
       <Flex
@@ -209,23 +222,46 @@ const EndPopup = () => {
         <Text type={"Title2"} fontWeight={"700"}>
           수고하셨습니다! 면접이 끝났어요!
         </Text>
-        <Text
-          type={"Body1_Normal"}
-          mt={49}
-          mb={65}
-          textAlign={"center"}
-        >{`면접 연습 결과 페이지에서 연습 결과를 확인할 수 있어요.\n결과 분석이 끝나면 이메일로 알려드릴게요!`}</Text>
-        <Button
-          type={"Solid_Primary"}
-          title="면접 결과 확인하기"
-          onClick={() => {
-            if (document.fullscreenEnabled) {
-              document.exitFullscreen();
-            }
-            router.replace("/result");
-          }}
-          size={"Large"}
-        />
+        <Text type={"Body1_Normal"} mt={49} mb={65} textAlign={"center"}>
+          {isGuest
+            ? `아쉽게도 비회원은 면접 연습 결과를 확인할 수 없어요.\n회원가입 후 맞춤형 면접 분석을 받아보세요!`
+            : `면접 연습 결과 페이지에서 연습 결과를 확인할 수 있어요.\n결과 분석이 끝나면 이메일로 알려드릴게요!`}
+        </Text>
+        {user.loginType === "GUEST" ? (
+          <Flex gap={16} w="100%">
+            <Button
+              stretch
+              type={"Outlined_Secondary"}
+              title="면접장 나가기"
+              onClick={exitInterview}
+              size={"Large"}
+            />
+            <Button
+              stretch
+              type={"Solid_Primary"}
+              title="회원가입"
+              onClick={() => {
+                if (document.fullscreenEnabled) {
+                  document.exitFullscreen();
+                }
+                router.replace("/sign-in");
+              }}
+              size={"Large"}
+            />
+          </Flex>
+        ) : (
+          <Button
+            type={"Solid_Primary"}
+            title="면접 결과 확인하기"
+            onClick={() => {
+              if (document.fullscreenEnabled) {
+                document.exitFullscreen();
+              }
+              router.replace("/result");
+            }}
+            size={"Large"}
+          />
+        )}
       </Flex>
     </PopUp>
   );
@@ -318,9 +354,9 @@ const InterviewScreen = (props: InterviewScreenProps) => {
   return (
     <InterviewContextProvider
       questions={props.questions}
-      interviewId={props.interviewInfo.interviewId}
+      interviewInfo={props.interviewInfo}
     >
-      <InterviewScreenComponent {...props} />
+      <InterviewScreenComponent />
     </InterviewContextProvider>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 import { interviewApis } from "@apis";
+import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import {
   createContext,
@@ -19,16 +20,17 @@ type InterviewContextValue = {
   chats: Chat[];
   talkingSide: "COMPANY" | "ME" | null;
   isEnd: boolean;
+  interviewInfo: InterviewTypes.InterviewInfo;
 };
 
 const InterviewContextProvider = ({
   children,
   questions,
-  interviewId,
+  interviewInfo,
 }: {
   children: ReactNode;
   questions: RandomQuestion[];
-  interviewId: number;
+  interviewInfo: InterviewTypes.InterviewInfo;
 }) => {
   const currentQuestion = useRef<RandomQuestion>();
   const remainQuestions = useRef(questions);
@@ -46,7 +48,7 @@ const InterviewContextProvider = ({
       questionId: currentQuestion.current.questionId,
       answer,
       type: currentQuestion.current.type,
-      interviewId: interviewId,
+      interviewId: interviewInfo.interviewId,
     });
     getNextQuestion();
   };
@@ -102,7 +104,7 @@ const InterviewContextProvider = ({
         questionId: currentQuestion.current.questionId,
         answer: text,
         type: currentQuestion.current.type,
-        interviewId,
+        interviewId: interviewInfo.interviewId,
       });
 
       getNextQuestion();
@@ -195,7 +197,9 @@ const InterviewContextProvider = ({
   }, []);
 
   return (
-    <InterviewContext.Provider value={{ chats, talkingSide, isEnd }}>
+    <InterviewContext.Provider
+      value={{ chats, talkingSide, isEnd, interviewInfo }}
+    >
       {children}
     </InterviewContext.Provider>
   );
