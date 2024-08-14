@@ -1,6 +1,20 @@
+import { Spinner } from "@chakra-ui/react";
 import { TopBarContainer } from "@components";
-import { ReactNode } from "react";
+import { Flex } from "@uis";
+import { ReactNode, Suspense } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return <TopBarContainer>{children}</TopBarContainer>;
+  return (
+    <TopBarContainer>
+      <Suspense
+        fallback={
+          <Flex w="100%">
+            <Spinner />
+          </Flex>
+        }
+      >
+        {children}
+      </Suspense>
+    </TopBarContainer>
+  );
 }

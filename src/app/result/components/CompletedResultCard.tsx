@@ -4,24 +4,18 @@ import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
-import { useCompanyData } from "@atoms";
 import { getScoreStat } from "../utils";
 import ScoreBadge from "./ScoreBadge";
 
-const CompletedResultCard = (
-  result: InterviewTypes.CompletedInterviewResult
-) => {
+const CompletedResultCard = ({
+  result,
+  interviewInfo,
+}: {
+  result: InterviewTypes.CompletedInterviewResult;
+  interviewInfo: InterviewTypes.InterviewInfo;
+}) => {
   const router = useRouter();
-  const companyData = useCompanyData();
-  const { companyId, jobId, departmentId, createdAt, interviewId } = result;
 
-  const company = companyData?.companies.find(
-    ({ companyId: id }) => id === companyId
-  );
-  const department = companyData?.departments.find(
-    ({ companyDeptId: id }) => id === departmentId
-  );
-  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
   const { totalMean } = getScoreStat(result);
 
   return (
@@ -35,7 +29,7 @@ const CompletedResultCard = (
       borderRadius={12}
       border={`2px solid rgba(112, 115, 124, 0.52)`}
       onClick={() => {
-        router.push(`/result/${interviewId}`);
+        router.push(`/result/${interviewInfo.interviewId}`);
       }}
     >
       <Flex w="100%" flex={0} h={128} mb={14}>
@@ -64,7 +58,7 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             width={"100%"}
           >
-            {company?.companyName || ""}
+            {interviewInfo.company}
           </Text>
 
           <Text
@@ -75,7 +69,7 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             mb={4}
           >
-            {department?.companyDept || ""}
+            {interviewInfo.department}
           </Text>
 
           <Text
@@ -85,13 +79,13 @@ const CompletedResultCard = (
             wordBreak={"break-all"}
             fontWeight={"400"}
           >
-            {job?.companyJob || ""}
+            {interviewInfo.job}
           </Text>
         </Flex>
       </Flex>
       <Flex w="100%" justifyContent={"space-between"}>
         <Text type="Label2" fontWeight={"400"}>
-          {createdAt}
+          {result.createdAt}
         </Text>
         <ScoreBadge score={totalMean} size={"medium"} />
       </Flex>

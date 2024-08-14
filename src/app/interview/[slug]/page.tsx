@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@atoms";
 import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
@@ -29,6 +30,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
+  const { refreshUser } = useUser();
 
   const interviewData = useRef<{
     questions: RandomQuestion[];
@@ -40,6 +42,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
   commonHooks.useAsyncEffect(async () => {
     // TODO: interview 정보 가져와서 넣기
     // const {isError, data} = await interviewApis.interview
+    refreshUser();
     interview.current = {
       company: "삼송",
       department: "테스트 직군",
@@ -67,14 +70,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   if (!interview.current || !interviewData.current) return <></>;
 
-  if (1 == 1)
-    return (
-      <InterviewScreen
-        interviewInfo={interview.current}
-        questions={interviewData.current.questions || []}
-      />
-    );
-
   switch (step) {
     case "2_STEP_CHECK":
       return (
@@ -100,8 +95,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
           questions={interviewData.current?.questions || []}
         />
       );
-    default:
-      break;
   }
 };
 export default Interview;

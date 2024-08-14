@@ -1,10 +1,14 @@
 import { interviewApis } from "@apis";
 import { useUser } from "@atoms";
+import { Spinner } from "@chakra-ui/react";
+import { PopUp } from "@components";
+import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import { useInterviewContext } from "../InterviewContext";
 import PopupTemplate from "./PoupTemplate";
 
-const EndPopup = () => {
+const EndPopupComponent = () => {
   const router = useRouter();
   const { user } = useUser();
 
@@ -52,4 +56,25 @@ const EndPopup = () => {
   );
 };
 
-export default EndPopup;
+export default function EndPopup() {
+  return (
+    <Suspense
+      fallback={
+        <PopUp visible={true}>
+          <Flex
+            bgColor={"Static/White"}
+            rounded={24}
+            pt={48}
+            pb={24}
+            px={61}
+            alignItems={"center"}
+          >
+            <Spinner color="gray" />
+          </Flex>
+        </PopUp>
+      }
+    >
+      <EndPopupComponent />
+    </Suspense>
+  );
+}

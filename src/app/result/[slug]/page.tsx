@@ -1,10 +1,9 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon, TopBarContainer } from "@components";
+import { Icon } from "@components";
 
 import { Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 import { useCompanyData, useResult } from "@atoms";
 import { getScoreStat } from "../utils";
@@ -12,7 +11,7 @@ import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
 import ScoreCalcInfo from "./components/ScoreCalcInfo";
 
-const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
+const ResultDetail = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
 
   const resultInterviews = useResult();
@@ -36,48 +35,40 @@ const ResultDetailComponent = ({ params }: { params: { slug: number } }) => {
   const { totalMean } = getScoreStat(interview);
 
   return (
-    <TopBarContainer footer>
-      <Flex flexDir={"column"} alignItems={"center"} w="100%">
-        <GridWrapper>
-          <GridItem colSpan={2}>
-            <Flex gap={4} my={60} onClick={router.back}>
-              <Icon name="normalArrowLeft" size={16} />
-              <Text
-                type={"Label1_Normal"}
-                color={"Label/Alternative"}
-                fontWeight={"600"}
-              >
-                목록으로 돌아가기
-              </Text>
-            </Flex>
-          </GridItem>
-        </GridWrapper>
-        <GridWrapper pb={230}>
-          <GridItem colSpan={2}>
-            <Flex direction={"column"} w="100%" gap={24}>
-              <InterviewInfoCard
-                companyName={company?.companyName || ""}
-                jobName={job?.companyJob || ""}
-                departmentName={department?.companyDept || ""}
-                meanScore={totalMean}
-                createdAt={createdAt}
-              />
-              <ScoreCalcInfo />
-            </Flex>
-          </GridItem>
-          <GridItem colSpan={10} colStart={3}>
-            <FeedbackList {...interview} />
-          </GridItem>
-        </GridWrapper>
-      </Flex>
-    </TopBarContainer>
+    <Flex flexDir={"column"} alignItems={"center"} w="100%">
+      <GridWrapper>
+        <GridItem colSpan={2}>
+          <Flex gap={4} my={60} onClick={router.back}>
+            <Icon name="normalArrowLeft" size={16} />
+            <Text
+              type={"Label1_Normal"}
+              color={"Label/Alternative"}
+              fontWeight={"600"}
+            >
+              목록으로 돌아가기
+            </Text>
+          </Flex>
+        </GridItem>
+      </GridWrapper>
+      <GridWrapper pb={230}>
+        <GridItem colSpan={2}>
+          <Flex direction={"column"} w="100%" gap={24}>
+            <InterviewInfoCard
+              companyName={company?.companyName || ""}
+              jobName={job?.companyJob || ""}
+              departmentName={department?.companyDept || ""}
+              meanScore={totalMean}
+              createdAt={createdAt}
+            />
+            <ScoreCalcInfo />
+          </Flex>
+        </GridItem>
+        <GridItem colSpan={10} colStart={3}>
+          <FeedbackList {...interview} />
+        </GridItem>
+      </GridWrapper>
+    </Flex>
   );
 };
 
-export default function ResultDetail({ params }: { params: { slug: number } }) {
-  return (
-    <Suspense>
-      <ResultDetailComponent {...{ params }} />
-    </Suspense>
-  );
-}
+export default ResultDetail;

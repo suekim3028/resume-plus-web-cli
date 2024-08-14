@@ -65,7 +65,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
           <Button name={"면접 결과"} href={"/result"} colStart={11} />
 
           <Suspense fallback={<></>}>
-            <UserButtonList />
+            <UserButton />
           </Suspense>
         </GridWrapper>
       </Flex>
@@ -90,7 +90,7 @@ const TopBarContainer = forwardRef<
   { children: ReactNode; footer?: boolean }
 >(TopBarContainerComponent);
 
-const UserButtonList = () => {
+const UserButton = () => {
   const { isGuest } = useUser();
   const { logout } = useAuth();
   const router = useRouter();

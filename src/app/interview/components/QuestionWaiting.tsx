@@ -22,7 +22,6 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   const { user, isGuest } = useUser();
 
   const divRef = useRef<HTMLDivElement>(null);
-  console.log(animState);
 
   const animStart = () =>
     new Promise((resolve: (val: undefined) => void) => {

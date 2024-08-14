@@ -1,20 +1,15 @@
 "use client";
 
-import { useCompanyData } from "@atoms";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 
-const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
-  const companyData = useCompanyData();
-  const { companyId, jobId, departmentId, createdAt } = result;
-  const company = companyData?.companies.find(
-    ({ companyId: id }) => id === companyId
-  );
-  const department = companyData?.departments.find(
-    ({ companyDeptId: id }) => id === departmentId
-  );
-  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
-
+const PendingResultCard = ({
+  result,
+  interviewInfo,
+}: {
+  result: InterviewTypes.PendingInterviewResult;
+  interviewInfo: InterviewTypes.InterviewInfo;
+}) => {
   return (
     <Flex
       pt={32}
@@ -54,7 +49,7 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             width={"100%"}
             color={"Label/Assistive"}
           >
-            {company?.companyName || ""}
+            {interviewInfo.company}
           </Text>
 
           <Text
@@ -66,7 +61,7 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             color={"Label/Assistive"}
             mb={4}
           >
-            {department?.companyDept || ""}
+            {interviewInfo.department}
           </Text>
 
           <Text
@@ -77,13 +72,13 @@ const PendingResultCard = (result: InterviewTypes.PendingInterviewResult) => {
             wordBreak={"break-all"}
             fontWeight={"400"}
           >
-            {job?.companyJob || ""}
+            {interviewInfo.job}
           </Text>
         </Flex>
       </Flex>
       <Flex w="100%" justifyContent={"space-between"}>
         <Text type="Label2" fontWeight={"400"} color={"Label/Assistive"}>
-          {createdAt}
+          {result.createdAt}
         </Text>
       </Flex>
     </Flex>

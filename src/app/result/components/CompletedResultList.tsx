@@ -1,17 +1,24 @@
 "use client";
 
-import { useResult } from "@atoms";
+import { useCompanyData, useResult } from "@atoms";
+import { Spinner } from "@chakra-ui/react";
 import { Flex } from "@uis";
 import { Suspense } from "react";
+import { findCompanyInfo } from "../utils";
 import CompletedResultCard from "./CompletedResultCard";
 
 const CompletedResultListComponent = () => {
   const { done } = useResult();
+  const companyData = useCompanyData();
 
   return (
     <Flex w="100%" overflowX={"scroll"} gap={24} pb={24}>
       {done.map((result) => (
-        <CompletedResultCard {...result} key={result.interviewId} />
+        <CompletedResultCard
+          result={result}
+          interviewInfo={findCompanyInfo(result, companyData)}
+          key={result.interviewId}
+        />
       ))}
     </Flex>
   );
@@ -19,7 +26,13 @@ const CompletedResultListComponent = () => {
 
 export default function CompletedResultList() {
   return (
-    <Suspense fallback={<>로딩중 ..</>}>
+    <Suspense
+      fallback={
+        <Flex w="100%" p={24}>
+          <Spinner />
+        </Flex>
+      }
+    >
       <CompletedResultListComponent />
     </Suspense>
   );

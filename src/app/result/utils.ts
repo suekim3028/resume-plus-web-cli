@@ -42,3 +42,29 @@ export const calcOneQuestionScoreMean = (f: InterviewTypes.Feedback) => {
 
   return questionMeanScore;
 };
+
+export const findCompanyInfo = (
+  interview: InterviewTypes.PendingInterviewResult,
+  companyData: {
+    companies: InterviewTypes.Company[];
+    departments: InterviewTypes.JobDepartment[];
+    jobs: InterviewTypes.Job[];
+  }
+): InterviewTypes.InterviewInfo => {
+  const { companyId, departmentId, jobId } = interview;
+  const company = companyData.companies.find(
+    ({ companyId: id }) => id === companyId
+  );
+  const department = companyData?.departments.find(
+    ({ companyDeptId: id }) => id === departmentId
+  );
+  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
+
+  return {
+    company: company ? company.companyName : "",
+    job: job?.companyJob || "",
+    department: department?.companyDept || "",
+    companyThumbnailUrl: company?.thumbnailUrl || null,
+    interviewId: interview.interviewId,
+  };
+};
