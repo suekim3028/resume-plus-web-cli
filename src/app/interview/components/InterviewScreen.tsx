@@ -1,20 +1,20 @@
 "use client";
 /* eslint-disable jsx-a11y/alt-text */
-import { Icon, IconNames, PopUp } from "@components";
+import { Icon, IconNames } from "@components";
 import { InterviewTypes } from "@types";
-import { Button, Flex, Text } from "@uis";
+import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { interviewApis } from "@apis";
-import { useUser } from "@atoms";
 import { UI } from "@constants";
-import { useRouter } from "next/navigation";
 import InterviewContextProvider, {
   useInterviewContext,
 } from "../InterviewContext";
 import { RandomQuestion } from "../types";
 import ChatSection from "./ChatSection";
+import EndPopup from "./EndPopup";
+import ExitPopup from "./ExitPopup";
+import ForcedEndPopup from "./ForcedEndPopup";
 import FrontCamera, { FrontCameraRef } from "./FrontCamera";
 
 const InterviewScreenComponent = () => {
@@ -187,134 +187,12 @@ const InterviewScreenComponent = () => {
         </Flex>
         {setting.chat && <ChatSection />}
       </Flex>
-      {isEnd && <EndPopup interviewId={interviewId} />}
+      {isEnd === "NORMAL" && <EndPopup interviewId={interviewId} />}
+      {isEnd === "FORCED" && <ForcedEndPopup />}
       {showExitPopup && (
         <ExitPopup closePopup={() => setShowExitPopup(false)} />
       )}
     </Flex>
-  );
-};
-
-const EndPopup = ({ interviewId }: { interviewId: number }) => {
-  const router = useRouter();
-  const { user } = useUser();
-
-  const isGuest = user.loginType === "GUEST";
-
-  const exitInterview = () => {
-    if (document.fullscreenEnabled) {
-      document.exitFullscreen();
-    }
-    router.replace("/");
-    interviewApis.deleteInterview({ id: interviewId });
-  };
-
-  return (
-    <PopUp visible={true}>
-      <Flex
-        direction={"column"}
-        bgColor={"Static/White"}
-        rounded={24}
-        pt={48}
-        pb={24}
-        px={61}
-        alignItems={"center"}
-      >
-        <Text type={"Title2"} fontWeight={"700"}>
-          수고하셨습니다! 면접이 끝났어요!
-        </Text>
-        <Text type={"Body1_Normal"} mt={49} mb={65} textAlign={"center"}>
-          {isGuest
-            ? `아쉽게도 비회원은 면접 연습 결과를 확인할 수 없어요.\n회원가입 후 맞춤형 면접 분석을 받아보세요!`
-            : `면접 연습 결과 페이지에서 연습 결과를 확인할 수 있어요.\n결과 분석이 끝나면 이메일로 알려드릴게요!`}
-        </Text>
-        {user.loginType === "GUEST" ? (
-          <Flex gap={16} w="100%">
-            <Button
-              stretch
-              type={"Outlined_Secondary"}
-              title="면접장 나가기"
-              onClick={exitInterview}
-              size={"Large"}
-            />
-            <Button
-              stretch
-              type={"Solid_Primary"}
-              title="회원가입"
-              onClick={() => {
-                if (document.fullscreenEnabled) {
-                  document.exitFullscreen();
-                }
-                router.replace("/sign-in");
-              }}
-              size={"Large"}
-            />
-          </Flex>
-        ) : (
-          <Button
-            type={"Solid_Primary"}
-            title="면접 결과 확인하기"
-            onClick={() => {
-              if (document.fullscreenEnabled) {
-                document.exitFullscreen();
-              }
-              router.replace("/result");
-            }}
-            size={"Large"}
-          />
-        )}
-      </Flex>
-    </PopUp>
-  );
-};
-
-const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
-  const router = useRouter();
-  const { interviewInfo } = useInterviewContext();
-  return (
-    <PopUp visible={true}>
-      <Flex
-        direction={"column"}
-        bgColor={"Static/White"}
-        rounded={24}
-        pt={48}
-        pb={24}
-        px={61}
-        alignItems={"center"}
-      >
-        <Text type={"Title2"} fontWeight={"700"}>
-          {`면접 내용이 모두 사라집니다.\n정말 나가시겠습니까?`}
-        </Text>
-        <Text
-          type={"Body1_Normal"}
-          mt={49}
-          mb={65}
-          textAlign={"center"}
-        >{`연습을 완료하면 면접 연습 결과 페이지에서\n분석 결과를 확인할 수 있어요`}</Text>
-        <Flex gap={16} w="100%">
-          <Button
-            stretch
-            type={"Outlined_Secondary"}
-            title="취소"
-            onClick={closePopup}
-            size={"Large"}
-          />
-          <Button
-            stretch
-            type={"Solid_Primary"}
-            title="면접 나가기"
-            onClick={() => {
-              if (document.fullscreenEnabled) {
-                document.exitFullscreen();
-              }
-              interviewApis.deleteInterview({ id: interviewInfo.interviewId });
-              router.replace("/");
-            }}
-            size={"Large"}
-          />
-        </Flex>
-      </Flex>
-    </PopUp>
   );
 };
 

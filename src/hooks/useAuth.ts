@@ -4,19 +4,20 @@ import { useUser } from "@atoms";
 
 import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
+import { useCallback } from "react";
 
 export const useAuth = () => {
   const { refreshUser, isGuest } = useUser();
 
-  const handleUser = ({ user, token }: userApis.UserResponse) => {
+  const handleUser = useCallback(({ token }: userApis.UserResponse) => {
     TokenStorage.set(token);
     refreshUser();
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     TokenStorage.remove();
     refreshUser();
-  };
+  }, []);
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -66,40 +67,36 @@ export const useAuth = () => {
     },
   });
 
-  const loginWithEmail = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    const { data, isError } = await userApis.emailSignIn({
-      email,
-      password,
-    });
+  const loginWithEmail = useCallback(
+    async ({ email, password }: { email: string; password: string }) => {
+      const { data, isError } = await userApis.emailSignIn({
+        email,
+        password,
+      });
 
-    if (isError) {
-      throw new Error();
-    }
+      if (isError) {
+        throw new Error();
+      }
 
-    handleUser(data);
-  };
+      handleUser(data);
+    },
+    [handleUser]
+  );
 
-  const signUpWithEmail = async (params: {
-    email: string;
-    password: string;
-    name: string;
-  }) => {
-    const method = isGuest ? userApis.guestSignUp : userApis.signUp;
+  const signUpWithEmail = useCallback(
+    async (params: { email: string; password: string; name: string }) => {
+      const method = isGuest ? userApis.guestSignUp : userApis.signUp;
 
-    const { data, isError } = await method(params);
+      const { data, isError } = await method(params);
 
-    if (isError) {
-      throw new Error();
-    }
+      if (isError) {
+        throw new Error();
+      }
 
-    handleUser(data);
-  };
+      handleUser(data);
+    },
+    [handleUser]
+  );
 
   return {
     loginWithGoogle,

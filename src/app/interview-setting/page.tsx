@@ -138,13 +138,24 @@ const Interview = () => {
       });
     if (resumeError) return;
 
-    const { isError, data } = await interviewApis.createInterview({
-      companyId: typeof company === "string" ? 0 : company.companyId,
-      departmentId: department.companyDeptId,
-      interviewRound: "1차 면접",
-      jobId: job.companyJobId,
-      resumeId: resumeData.resumeId,
-    });
+    const { isError, data } = await interviewApis.createInterview(
+      typeof company === "string"
+        ? {
+            companyName: company,
+            departmentId: department.companyDeptId,
+            interviewRound: "1차 면접",
+            jobId: job.companyJobId,
+            resumeId: resumeData.resumeId,
+          }
+        : {
+            companyId: company.companyId,
+
+            departmentId: department.companyDeptId,
+            interviewRound: "1차 면접",
+            jobId: job.companyJobId,
+            resumeId: resumeData.resumeId,
+          }
+    );
 
     if (isError) throw new Error();
     router.replace(`interview/${data.interviewId}`);

@@ -138,12 +138,20 @@ export const getJobs = () =>
  * 면접 만들기
  */
 export type CreateInterviewReq = {
-  companyId: number;
   departmentId: number;
   jobId: number;
   interviewRound: "1차 면접";
   resumeId: number;
-};
+} & (
+  | {
+      companyId: number;
+      companyName?: undefined;
+    }
+  | {
+      companyName: string;
+      companyId?: undefined;
+    }
+);
 
 type CreateInterviewRes = {
   interviewId: number;
@@ -161,28 +169,33 @@ type GetCompletedInterviewResultListResponse = {
 };
 
 export const getCompletedInterviewResultList = () =>
-  API.get<GetCompletedInterviewResultListResponse>("", undefined, {
-    dummyData: {
-      resultList: Array.from({ length: 10 }, (_, idx) => ({
-        companyId: idx,
-        jobId: idx,
-        departmentId: idx,
-        createdAt: "2024. 3. 25 (토) 23:31",
-        behavior: genEvaluation1(),
-        introduce: genEvaluation1(),
-        personal: genEvaluation2(),
-        tech: genEvaluation2(),
-        interviewId: idx,
-      })),
-    },
-  });
+  API.get<GetCompletedInterviewResultListResponse>(
+    "interview?status=done",
+    undefined,
+    {
+      dummyData: {
+        resultList: Array.from({ length: 10 }, (_, idx) => ({
+          companyId: idx,
+          jobId: idx,
+          departmentId: idx,
+          createdAt: "2024. 3. 25 (토) 23:31",
+          behavior: genEvaluation1(),
+          introduce: genEvaluation1(),
+          personal: genEvaluation2(),
+          tech: genEvaluation2(),
+          interviewId: idx,
+        })),
+      },
+      useDummy: false,
+    }
+  );
 
 type GetPendingREsultListResponse = {
   resultList: InterviewTypes.PendingInterviewResult[];
 };
 
 export const getPendingResultList = () =>
-  API.get<GetPendingREsultListResponse>("", undefined, {
+  API.get<GetPendingREsultListResponse>("interview?status=pending", undefined, {
     dummyData: {
       resultList: Array.from({ length: 10 }, (_, idx) => ({
         companyId: idx,
@@ -192,6 +205,7 @@ export const getPendingResultList = () =>
         createdAt: "2024. 3. 25 (토) 23:31",
       })),
     },
+    useDummy: false,
   });
 
 const genEvaluation1 = () =>

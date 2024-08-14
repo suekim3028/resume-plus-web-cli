@@ -92,11 +92,12 @@ export const guestLogin = () => API.post<UserResponse>("/users/guest");
 
 export const sendVerificationCode = ({ email }: { email: string }) =>
   API.post<{ verificationCode: string }>(
-    "",
+    "users/verify-email",
     {
       body: { email },
     },
     {
       dummyData: { verificationCode: "1234" },
+      useDummy: false,
     }
   );

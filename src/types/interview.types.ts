@@ -19,7 +19,7 @@ export type Job = {
 };
 
 export type InterviewInfo = {
-  company: Company;
+  company: Company | string;
   department: JobDepartment;
   job: Job;
   interviewId: number;

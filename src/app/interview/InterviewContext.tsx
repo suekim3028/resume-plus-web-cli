@@ -16,10 +16,12 @@ import { Chat, RandomQuestion } from "./types";
 
 const InterviewContext = createContext<InterviewContextValue | null>(null);
 
+type EndStatus = "FORCED" | "NORMAL";
+
 type InterviewContextValue = {
   chats: Chat[];
   talkingSide: "COMPANY" | "ME" | null;
-  isEnd: boolean;
+  isEnd: false | EndStatus;
   interviewInfo: InterviewTypes.InterviewInfo;
   submitAnswerWithText: (answer: string) => void;
 };
@@ -38,7 +40,7 @@ const InterviewContextProvider = ({
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
-  const [isEnd, setIsEnd] = useState(false);
+  const [isEnd, setIsEnd] = useState<false | EndStatus>(false);
 
   /**
    * 대답 제출, 채팅 추가, 다음 질문 가져오기
@@ -76,7 +78,7 @@ const InterviewContextProvider = ({
    */
   const getNextQuestion = useCallback(async () => {
     const nextQuestion = remainQuestions.current.shift();
-    if (!nextQuestion) return setIsEnd(true);
+    if (!nextQuestion) return setIsEnd("NORMAL");
 
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
