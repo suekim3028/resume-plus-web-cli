@@ -8,7 +8,6 @@ import {
   ListSelector,
   ListSelectorRef,
   PopUp,
-  TopBarContainer,
   TypingSelector,
   TypingSelectorRef,
 } from "@components";
@@ -38,7 +37,6 @@ const isInputValueSubmittable = (
 const Interview = () => {
   const companyData = useCompanyData();
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const companyRef = useRef<TypingSelectorRef>(null);
   const departmentRef = useRef<ListSelectorRef>(null);
   const jobRef = useRef<ListSelectorRef>(null);
@@ -162,7 +160,7 @@ const Interview = () => {
   };
 
   return (
-    <TopBarContainer ref={wrapperRef}>
+    <>
       <Flex
         flex={1}
         alignItems={"center"}
@@ -545,7 +543,7 @@ const Interview = () => {
           close={() => setShowConfirmPopup(false)}
         />
       )}
-    </TopBarContainer>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
-const EmailSignInComponent = () => {
+const EmailSignIn = () => {
   const { loginWithEmail } = useAuth();
   const router = useRouter();
 
@@ -100,13 +100,6 @@ const EmailSignInComponent = () => {
       </GridWrapper>
     </Flex>
   );
-};
-
-const EmailSignIn = () => {
-  const onError = () => {
-    alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
-  };
-  return <EmailSignInComponent />;
 };
 
 export default EmailSignIn;

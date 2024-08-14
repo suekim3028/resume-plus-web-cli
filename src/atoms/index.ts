@@ -1,23 +1,20 @@
 import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
-import { jsUtils } from "@web-core";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithRefresh } from "jotai/utils";
 
 const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
-  await jsUtils.wait(3);
-  // if (1 == 1) return null;
   const token = TokenStorage.get();
   const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
   if (!hasToken) console.log("[USER STORE] no token.");
 
   if (hasToken) {
     const { data, isError } = await userApis.tokenLogin();
-    if (isError) throw new Error();
-    console.log(`[LOGIN] logged in with user id ${data.userId}`);
-
-    return data;
+    if (!isError) {
+      console.log(`[LOGIN] logged in with user id ${data.userId}`);
+      return data;
+    }
   }
 
   const { data, isError } = await userApis.guestLogin();
@@ -28,12 +25,6 @@ const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
 
   return data.user;
 });
-
-export const useUser = () => {
-  const [user, refreshUser] = useAtom(userAtom);
-  console.log("user====", user);
-  return { user, refreshUser, isGuest: user.loginType === "GUEST" };
-};
 
 const resultAtom = atomWithRefresh<
   Promise<{
@@ -56,11 +47,6 @@ const resultAtom = atomWithRefresh<
   return { done: done.data.resultList, pending: pending.data.resultList };
 });
 
-export const useResult = () => {
-  const result = useAtomValue(resultAtom);
-  return result;
-};
-
 const companyAtom = atomWithRefresh<
   Promise<{
     companies: InterviewTypes.Company[];
@@ -82,6 +68,17 @@ const companyAtom = atomWithRefresh<
     jobs: jobs.data,
   };
 });
+
+export const useUser = () => {
+  const [user, refreshUser] = useAtom(userAtom);
+  console.log("user====", user);
+  return { user, refreshUser, isGuest: user.loginType === "GUEST" };
+};
+
+export const useResult = () => {
+  const result = useAtomValue(resultAtom);
+  return result;
+};
 
 export const useCompanyData = () => {
   const companyData = useAtomValue(companyAtom);
