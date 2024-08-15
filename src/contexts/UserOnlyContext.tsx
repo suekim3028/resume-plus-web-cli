@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "@atoms";
 import { AuthLoadingComponent } from "@components";
 
@@ -21,7 +22,7 @@ const _UserOnlyContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!isUser) {
-      router.replace("/");
+      router.replace("/sign-in");
     }
   }, [isUser]);
 

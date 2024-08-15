@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "@atoms";
 import { AuthLoadingComponent } from "@components";
 
