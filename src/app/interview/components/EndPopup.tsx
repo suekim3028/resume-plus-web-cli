@@ -10,9 +10,8 @@ import PopupTemplate from "./PoupTemplate";
 
 const EndPopupComponent = () => {
   const router = useRouter();
-  const { user } = useUser();
 
-  const isGuest = user.loginType === "GUEST";
+  const { isGuest } = useUser();
   const { interviewInfo } = useInterviewContext();
 
   const exitInterview = () => {

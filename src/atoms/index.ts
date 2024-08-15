@@ -4,7 +4,7 @@ import { InterviewTypes, UserTypes } from "@types";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithRefresh } from "jotai/utils";
 
-const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
+const userAtom = atomWithRefresh<Promise<UserTypes.User | null>>(async () => {
   const token = TokenStorage.get();
   const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
   if (!hasToken) console.log("[USER STORE] no token.");
@@ -19,7 +19,9 @@ const userAtom = atomWithRefresh<Promise<UserTypes.User>>(async () => {
 
   const { data, isError } = await userApis.guestLogin();
 
-  if (isError) throw new Error();
+  if (isError) {
+    return null;
+  }
   console.log(`[LOGIN] logged in as GUEST"}`);
   TokenStorage.set(data.token);
 
@@ -72,7 +74,7 @@ const companyAtom = atomWithRefresh<
 export const useUser = () => {
   const [user, refreshUser] = useAtom(userAtom);
   console.log("user====", user);
-  return { user, refreshUser, isGuest: user.loginType === "GUEST" };
+  return { user, refreshUser, isGuest: !user || user.loginType === "GUEST" };
 };
 
 export const useResult = () => {

@@ -7,6 +7,7 @@ import Row from "./components/Row";
 
 const Profile = () => {
   const { user } = useUser();
+  if (!user) return <></>;
 
   const { name, email, defaultResume, remainInterview } = user;
   return (
