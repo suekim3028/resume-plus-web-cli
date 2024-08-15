@@ -1,13 +1,12 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
 
-import { usePopulatedUser } from "@components";
+import { useUserOnlyContext } from "@contexts";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import Row from "./components/Row";
 
 const Profile = () => {
-  const { user } = usePopulatedUser();
-
+  const { user } = useUserOnlyContext();
   const { name, email, defaultResume, remainInterview } = user;
   return (
     <Flex py={116} w={"100%"} flexDir={"column"}>
