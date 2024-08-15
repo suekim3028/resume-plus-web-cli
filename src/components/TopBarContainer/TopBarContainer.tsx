@@ -3,20 +3,12 @@ import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
 import Footer from "@components/Footer";
 
-import { useUser } from "@atoms";
-import { useAuth } from "@hooks";
-import { Flex, GridWrapper, Text } from "@uis";
-import Link from "next/link";
+import { Flex, GridWrapper } from "@uis";
 import { useRouter } from "next/navigation";
-import {
-  ForwardRefRenderFunction,
-  ReactNode,
-  Suspense,
-  forwardRef,
-  useState,
-} from "react";
-import Icon from "../Icon/Icon";
+import { ForwardRefRenderFunction, ReactNode, forwardRef } from "react";
 import Logo from "../Logo/Logo";
+import TopBarButton from "./components/TopBarButton";
+import UserButton from "./components/UserButton";
 
 const TopBarContainerComponent: ForwardRefRenderFunction<
   HTMLDivElement,
@@ -56,17 +48,14 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             <Logo size={"SMALL"} />
           </GridItem>
 
-          <Button name={"서비스 안내"} href={"/"} colStart={9} />
-          <Button
+          <TopBarButton name={"서비스 안내"} href={"/"} colStart={9} />
+          <TopBarButton
             name={"면접 연습"}
             href={"/interview-setting"}
             colStart={10}
           />
-          <Button name={"면접 결과"} href={"/result"} colStart={11} />
-
-          <Suspense fallback={<></>}>
-            <UserButton />
-          </Suspense>
+          <TopBarButton name={"면접 결과"} href={"/result"} colStart={11} />
+          <UserButton />
         </GridWrapper>
       </Flex>
       <Flex
@@ -89,107 +78,5 @@ const TopBarContainer = forwardRef<
   HTMLDivElement,
   { children: ReactNode; footer?: boolean }
 >(TopBarContainerComponent);
-
-const UserButton = () => {
-  const { isGuest } = useUser();
-  const { logout } = useAuth();
-  const router = useRouter();
-  const [userMenuVisible, setUserMenuVisible] = useState(false);
-
-  if (isGuest)
-    return <Button name={"로그인"} href={"/sign-in"} colStart={12} />;
-
-  return (
-    <GridItem
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"flex-end"}
-      colStart={12}
-    >
-      <Flex position={"relative"}>
-        <Icon
-          name={"navigationMypage_LabelStrong"}
-          size={24}
-          onClick={() => setUserMenuVisible((p) => !p)}
-        />
-        {userMenuVisible && (
-          <Flex
-            flexDirection={"column"}
-            borderRadius={8}
-            border={"1px solid black"}
-            position={"absolute"}
-            top={"100%"}
-            right={0}
-            bgColor={"Static/White"}
-            whiteSpace={"nowrap"}
-            width={78}
-          >
-            <Flex
-              py={10}
-              w="100%"
-              justifyContent={"center"}
-              cursor={"pointer"}
-              onClick={() => {
-                router.push("/profile");
-                EventLogger.log("global_navigation_bar_profile")("프로필");
-              }}
-            >
-              <Text type="Label1_Normal" fontWeight={"500"}>
-                프로필
-              </Text>
-            </Flex>
-            <Flex h={1} w={"100%"} bgColor={"Line/Normal/Strong"} />
-            <Flex
-              py={10}
-              cursor={"pointer"}
-              justifyContent={"center"}
-              w="100%"
-              onClick={() => {
-                logout();
-                EventLogger.log("global_navigation_bar_profile")("로그아웃");
-              }}
-            >
-              <Text type="Label1_Normal" fontWeight={"500"}>
-                로그아웃
-              </Text>
-            </Flex>
-          </Flex>
-        )}
-      </Flex>
-    </GridItem>
-  );
-};
-
-const Button = ({
-  name,
-  href,
-  colStart,
-}: {
-  name: "서비스 안내" | "면접 연습" | "면접 결과" | "로그인";
-  href: string;
-  colStart: number;
-}) => {
-  return (
-    <>
-      <GridItem
-        key={name}
-        colStart={colStart}
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
-        <Link
-          href={href}
-          style={{ textDecoration: "none", color: "black" }}
-          onClick={() => {
-            EventLogger.log("global_navigation_bar_button")(name);
-          }}
-        >
-          <Text type={"Body2_Normal"}>{name}</Text>
-        </Link>
-      </GridItem>
-    </>
-  );
-};
 
 export default TopBarContainer;
