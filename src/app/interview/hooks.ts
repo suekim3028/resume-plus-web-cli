@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef } from "react";
+import { speechToText } from "./actions";
 import { audioBlobToBase64 } from "./utils";
 
 export const useRecorder = (onRecordEnd: (text: string) => void) => {
@@ -37,9 +38,8 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
     const blob = new Blob(recorded);
     const base64Audio = await audioBlobToBase64(blob);
 
-    // const text = await speechToText(base64Audio);
-    const text = "ㅎㅎㅎㅎㅎㅎ";
-    onRecordEnd(text);
+    const text = await speechToText(base64Audio);
+    onRecordEnd(text || "");
   };
 
   /**

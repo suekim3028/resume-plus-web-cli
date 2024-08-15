@@ -19,6 +19,12 @@ export default function RootLayout({
         </GoogleOAuthProvider>
 
         <Script src="https://cdn.amplitude.com/libs/analytics-browser-2.10.0-min.js.gz" />
+         <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp-dynamic-subset.min.css"
+        /> 
       </body>
     </html>
   );
