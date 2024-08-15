@@ -14,7 +14,7 @@ import {
 const UserOnlyContext = createContext<UserOnlyContextValue | null>(null);
 
 const _UserOnlyContextProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useUser();
+  const { user, ...useUserValue } = useUser();
   const router = useRouter();
 
   const isUser = !!user && user.loginType !== "GUEST";
@@ -26,7 +26,11 @@ const _UserOnlyContextProvider = ({ children }: { children: ReactNode }) => {
   }, [isUser]);
 
   if (!isUser) return <AuthLoadingComponent />;
-  return children;
+  return (
+    <UserOnlyContext.Provider value={{ user, ...useUserValue }}>
+      {children}
+    </UserOnlyContext.Provider>
+  );
 };
 
 const UserOnlyContextProvider = ({ children }: { children: ReactNode }) => {
@@ -38,7 +42,7 @@ const UserOnlyContextProvider = ({ children }: { children: ReactNode }) => {
 };
 
 type UserOnlyContextValue = Omit<ReturnType<typeof useUser>, "user"> & {
-  user: UserTypes.User;
+  user: Exclude<UserTypes.User, { loginType: "GUEST" }>;
 };
 
 export const useUserOnlyContext = () => {

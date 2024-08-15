@@ -7,7 +7,7 @@ import { TokenStorage } from "@storage";
 import { useCallback } from "react";
 
 export const useAuth = () => {
-  const { refreshUser, isGuest } = useUser();
+  const { refreshUser, user: currentUser, isGuestUser } = useUser();
 
   const handleUser = useCallback(({ token }: userApis.UserResponse) => {
     TokenStorage.set(token);
@@ -39,9 +39,10 @@ export const useAuth = () => {
         const email = user?.email;
         const name = user?.name;
 
-        const method = isGuest
-          ? userApis.guestGoogleSignIn
-          : userApis.googleSignIn;
+        const method =
+          !!currentUser && currentUser.loginType === "GUEST"
+            ? userApis.guestGoogleSignIn
+            : userApis.googleSignIn;
 
         if (!!email && !!name) {
           const { data, isError } = await method({
@@ -73,6 +74,7 @@ export const useAuth = () => {
         email,
         password,
       });
+      // todo: guest
 
       if (isError) {
         throw new Error();
@@ -80,12 +82,12 @@ export const useAuth = () => {
 
       handleUser(data);
     },
-    [handleUser]
+    [handleUser, isGuestUser]
   );
 
   const signUpWithEmail = useCallback(
     async (params: { email: string; password: string; name: string }) => {
-      const method = isGuest ? userApis.guestSignUp : userApis.signUp;
+      const method = isGuestUser ? userApis.guestSignUp : userApis.signUp;
 
       const { data, isError } = await method(params);
 
@@ -95,13 +97,26 @@ export const useAuth = () => {
 
       handleUser(data);
     },
-    [handleUser]
+    [handleUser, isGuestUser]
   );
+
+  const guestSignIn = useCallback(async () => {
+    // const { setUser } = useUser();
+    const { data, isError } = await userApis.guestLogin();
+
+    if (isError) {
+      return { isError: true };
+    }
+    console.log(`[LOGIN] logged in as GUEST"}`);
+    handleUser(data);
+    return { isError: false };
+  }, [handleUser]);
 
   return {
     loginWithGoogle,
     loginWithEmail,
     signUpWithEmail,
     logout,
+    guestSignIn,
   };
 };

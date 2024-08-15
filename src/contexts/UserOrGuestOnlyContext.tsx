@@ -20,7 +20,7 @@ const _UserOrGuestOnlyContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const { user } = useUser();
+  const { user, ...useUserValue } = useUser();
   const { guestSignIn } = useAuth();
   const router = useRouter();
 
@@ -40,7 +40,11 @@ const _UserOrGuestOnlyContextProvider = ({
   }, [!!user]);
 
   if (!user) return <AuthLoadingComponent />;
-  return children;
+  return (
+    <UserOrGuestOnlyContext.Provider value={{ user, ...useUserValue }}>
+      {children}
+    </UserOrGuestOnlyContext.Provider>
+  );
 };
 
 const UserOrGuestOnlyContextProvider = ({

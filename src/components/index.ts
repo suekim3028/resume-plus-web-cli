@@ -1,4 +1,5 @@
-import AuthWrapper from "./AuthWrapper";
+import AuthLoadingComponent from "./AuthLoadingComponent";
+
 import CompanyThumbnail from "./CompanyThumbnail";
 import { EventLogger } from "./EventLogger";
 import Footer from "./Footer";
@@ -21,7 +22,7 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 export {
-  AuthWrapper,
+  AuthLoadingComponent,
   CompanyThumbnail,
   EventLogger,
   Footer,

@@ -16,16 +16,7 @@ const userAtom = atomWithRefresh<Promise<UserTypes.User | null>>(async () => {
       return data;
     }
   }
-
-  const { data, isError } = await userApis.guestLogin();
-
-  if (isError) {
-    return null;
-  }
-  console.log(`[LOGIN] logged in as GUEST"}`);
-  TokenStorage.set(data.token);
-
-  return data.user;
+  return null;
 });
 
 const resultAtom = atomWithRefresh<
@@ -73,8 +64,14 @@ const companyAtom = atomWithRefresh<
 
 export const useUser = () => {
   const [user, refreshUser] = useAtom(userAtom);
+  const isGuestUser = !!user && user.loginType === "GUEST";
   console.log("user====", user);
-  return { user, refreshUser, isGuest: !user || user.loginType === "GUEST" };
+  return {
+    user,
+    refreshUser,
+    isGuestUser,
+    // setUser,
+  };
 };
 
 export const useResult = () => {
