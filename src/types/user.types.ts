@@ -9,6 +9,8 @@ export type User = {
   remainInterview: number;
 };
 
+export type GuestUser = Omit<User, "loginType"> & { loginType: "GUEST" };
+
 export type Token = {
   grantType: string;
   accessToken: string;

@@ -1,6 +1,6 @@
-import { AuthWrapper } from "@components";
+import { GuestOrNonUserOnlyProvider } from "@contexts";
 import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return <AuthWrapper guestOnly>{children}</AuthWrapper>;
+  return <GuestOrNonUserOnlyProvider>{children}</GuestOrNonUserOnlyProvider>;
 }
