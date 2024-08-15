@@ -1,13 +1,12 @@
 "use client";
-import { useUser } from "@atoms";
 import { GridItem } from "@chakra-ui/react";
 
+import { usePopulatedUser } from "@components";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import Row from "./components/Row";
 
 const Profile = () => {
-  const { user } = useUser();
-  if (!user) return <></>;
+  const { user } = usePopulatedUser();
 
   const { name, email, defaultResume, remainInterview } = user;
   return (

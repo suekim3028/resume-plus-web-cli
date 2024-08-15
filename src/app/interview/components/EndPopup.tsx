@@ -1,7 +1,7 @@
 import { interviewApis } from "@apis";
-import { useUser } from "@atoms";
 import { Spinner } from "@chakra-ui/react";
 import { PopUp } from "@components";
+import { useUserOrGuestOnlyContext } from "@contexts";
 import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
@@ -11,7 +11,7 @@ import PopupTemplate from "./PoupTemplate";
 const EndPopupComponent = () => {
   const router = useRouter();
 
-  const { isGuest } = useUser();
+  const { isGuestUser } = useUserOrGuestOnlyContext();
   const { interviewInfo } = useInterviewContext();
 
   const exitInterview = () => {
@@ -26,7 +26,7 @@ const EndPopupComponent = () => {
   const goToResult = () => {
     router.replace("/result");
   };
-  return isGuest ? (
+  return isGuestUser ? (
     <PopupTemplate
       title={"수고하셨습니다! 면접이 끝났어요!"}
       body={`아쉽게도 비회원은 면접 연습 결과를 확인할 수 없어요.\n회원가입 후 맞춤형 면접 분석을 받아보세요!`}

@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@atoms";
+import { useUserOrGuestOnlyContext } from "@contexts";
 import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
-  const { refreshUser } = useUser();
+  const { refreshUser } = useUserOrGuestOnlyContext();
 
   const interviewData = useRef<{
     questions: RandomQuestion[];
