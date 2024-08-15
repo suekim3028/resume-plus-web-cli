@@ -1,12 +1,13 @@
 import { Spinner } from "@chakra-ui/react";
-import { AuthWrapper, TopBarContainer } from "@components";
+import { TopBarContainer } from "@components";
+import { UserOnlyContextProvider } from "@contexts";
 import { Flex } from "@uis";
 import { ReactNode, Suspense } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <AuthWrapper guestOnly={false}>
-      <TopBarContainer footer>
+    <TopBarContainer footer>
+      <UserOnlyContextProvider>
         <Suspense
           fallback={
             <Flex w="100%" flex={1}>
@@ -16,7 +17,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         >
           {children}
         </Suspense>
-      </TopBarContainer>
-    </AuthWrapper>
+      </UserOnlyContextProvider>
+    </TopBarContainer>
   );
 }
