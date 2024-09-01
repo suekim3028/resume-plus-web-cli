@@ -20,6 +20,8 @@ const FeedbackItem = ({
       borderRadius={16}
       border={`1px solid ${UI.COLORS["Line/Normal/Strong"]}`}
       flexDirection={"column"}
+      overflow={"hidden"}
+      cursor={"pointer"}
     >
       <Flex
         bgColor={isOpen ? "Fill/Normal" : "Static/White"}

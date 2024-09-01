@@ -31,6 +31,7 @@ const CompletedResultCard = ({
       onClick={() => {
         router.push(`/result/${interviewInfo.interviewId}`);
       }}
+      cursor={"pointer"}
     >
       <Flex w="100%" flex={0} h={128} mb={14}>
         <Flex

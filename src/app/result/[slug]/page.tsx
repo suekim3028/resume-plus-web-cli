@@ -38,7 +38,7 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
     <Flex flexDir={"column"} alignItems={"center"} w="100%">
       <GridWrapper>
         <GridItem colSpan={2}>
-          <Flex gap={4} my={60} onClick={router.back}>
+          <Flex gap={4} my={60} onClick={router.back} cursor={"pointer"}>
             <Icon name="normalArrowLeft" size={16} />
             <Text
               type={"Label1_Normal"}

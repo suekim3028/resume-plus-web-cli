@@ -9,7 +9,10 @@ import FeedbackItem from "./FeedbackItem";
 const FeedbackList = (
   interview: Pick<
     InterviewTypes.CompletedInterviewResult,
-    "behavior" | "introduce" | "personal" | "tech"
+    | "behaviorFeedback"
+    | "introduceFeedback"
+    | "personalFeedback"
+    | "techFeedback"
   >
 ) => {
   const [selected, setSelected] =
@@ -22,7 +25,12 @@ const FeedbackList = (
     "behavior",
   ];
 
-  const { behavior, introduce, personal, tech } = interview;
+  const {
+    behaviorFeedback,
+    introduceFeedback,
+    personalFeedback,
+    techFeedback,
+  } = interview;
   const { behaviorMean, introduceMean, personalMean, techMean } =
     getScoreStat(interview);
 
@@ -37,10 +45,10 @@ const FeedbackList = (
     InterviewTypes.QuestionType,
     InterviewTypes.Feedback[]
   > = {
-    behavior: behavior,
-    introduce: introduce,
-    personal: personal,
-    tech: tech,
+    behavior: behaviorFeedback,
+    introduce: introduceFeedback,
+    personal: personalFeedback,
+    tech: techFeedback,
   };
 
   return (
@@ -48,6 +56,7 @@ const FeedbackList = (
       <Flex gap={40} w="100%">
         {sectionList.map((section) => (
           <Flex
+            cursor={"pointer"}
             gap={25}
             borderRadius={12}
             border={`2px solid ${
