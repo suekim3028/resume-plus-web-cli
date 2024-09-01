@@ -170,7 +170,7 @@ type GetCompletedInterviewResultListResponse = {
 
 export const getCompletedInterviewResultList = () =>
   API.get<GetCompletedInterviewResultListResponse>(
-    "interview?status=done",
+    "interview/?status=done",
     undefined,
     {
       dummyData: {
@@ -195,18 +195,22 @@ type GetPendingREsultListResponse = {
 };
 
 export const getPendingResultList = () =>
-  API.get<GetPendingREsultListResponse>("interview?status=pending", undefined, {
-    dummyData: {
-      resultList: Array.from({ length: 10 }, (_, idx) => ({
-        companyId: idx,
-        jobId: idx,
-        departmentId: idx,
-        interviewId: idx,
-        createdAt: "2024. 3. 25 (토) 23:31",
-      })),
-    },
-    useDummy: false,
-  });
+  API.get<GetPendingREsultListResponse>(
+    "interview/?status=pending",
+    undefined,
+    {
+      dummyData: {
+        resultList: Array.from({ length: 10 }, (_, idx) => ({
+          companyId: idx,
+          jobId: idx,
+          departmentId: idx,
+          interviewId: idx,
+          createdAt: "2024. 3. 25 (토) 23:31",
+        })),
+      },
+      useDummy: false,
+    }
+  );
 
 const genEvaluation1 = () =>
   Array.from(
