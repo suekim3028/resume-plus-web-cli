@@ -1,4 +1,7 @@
 "use client";
+import { interviewApis } from "@apis";
+import { findCompanyInfo } from "@app/result/utils";
+import { useCompanyData } from "@atoms";
 import { useUserOrGuestOnlyContext } from "@contexts";
 import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
@@ -31,6 +34,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
   const { refreshUser } = useUserOrGuestOnlyContext();
+  const companyData = useCompanyData();
 
   const interviewData = useRef<{
     questions: RandomQuestion[];
@@ -39,17 +43,20 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
+  const effected = useRef(false);
   commonHooks.useAsyncEffect(async () => {
-    // TODO: interview 정보 가져와서 넣기
-    // const {isError, data} = await interviewApis.interview
+    if (effected.current) return;
+    effected.current = true;
+
+    const { isError: interviewInfoError, data: interviewInfoData } =
+      await interviewApis.getInterviewInfo({ id: interviewId });
+    if (interviewInfoError) {
+      alert("질문 생성에서 에러가 발생했습니다. 다시 시도해주세요.");
+      return router.back();
+    }
+
     refreshUser();
-    interview.current = {
-      company: "삼송",
-      department: "테스트 직군",
-      job: "테스트 직무",
-      interviewId: 0,
-      companyThumbnailUrl: null,
-    };
+    interview.current = findCompanyInfo(interviewInfoData, companyData);
 
     const { isError, data } = await getQuestions(interviewId);
 

@@ -265,3 +265,19 @@ const genEvaluation2 = () =>
 
 export const deleteInterview = ({ id }: { id: number }) =>
   API.delete(`interview/${id}`);
+
+/**
+ * 인터뷰 정보 가져오기
+ */
+
+type GetInterviewInfoResponse = {
+  interviewId: number;
+  companyId?: number;
+  companyName?: string;
+  jobId: number;
+  departmentId: number;
+  createdAt: string;
+};
+
+export const getInterviewInfo = ({ id }: { id: number }) =>
+  API.get<GetInterviewInfoResponse>(`interview/${id}`);

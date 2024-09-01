@@ -46,7 +46,8 @@ export type Chat = {
 };
 
 export type CompletedInterviewResult = {
-  companyId: number;
+  companyId?: number;
+  companyName?: string;
   jobId: number;
   departmentId: number;
   createdAt: string;
@@ -58,7 +59,8 @@ export type CompletedInterviewResult = {
 };
 
 export type PendingInterviewResult = {
-  companyId: number;
+  companyId?: number;
+  companyName?: string;
   jobId: number;
   departmentId: number;
   interviewId: number;

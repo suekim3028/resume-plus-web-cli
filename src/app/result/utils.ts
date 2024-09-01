@@ -51,17 +51,25 @@ export const findCompanyInfo = (
     jobs: InterviewTypes.Job[];
   }
 ): InterviewTypes.InterviewInfo => {
-  const { companyId, departmentId, jobId } = interview;
-  const company = companyData.companies.find(
-    ({ companyId: id }) => id === companyId
-  );
+  const {
+    companyId,
+    departmentId,
+    jobId,
+    companyName: _companyName,
+  } = interview;
+
+  const company = companyId
+    ? companyData.companies.find(({ companyId: id }) => id === companyId)
+    : null;
+  const companyName = _companyName || company?.companyName || "";
+
   const department = companyData?.departments.find(
     ({ companyDeptId: id }) => id === departmentId
   );
   const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
 
   return {
-    company: company ? company.companyName : "",
+    company: companyName,
     job: job?.companyJob || "",
     department: department?.companyDept || "",
     companyThumbnailUrl: company?.thumbnailUrl || null,
