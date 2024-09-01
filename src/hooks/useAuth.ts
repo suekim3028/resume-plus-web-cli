@@ -48,7 +48,7 @@ export const useAuth = () => {
           const { data, isError } = await method({
             email,
             name,
-            id_token: access_token,
+            idToken: access_token,
           });
 
           if (isError) {
