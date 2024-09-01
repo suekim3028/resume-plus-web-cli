@@ -52,10 +52,10 @@ export type CompletedInterviewResult = {
   departmentId: number;
   createdAt: string;
   interviewId: number;
-  introduce: Feedback[];
-  personal: Feedback[];
-  tech: Feedback[];
-  behavior: Feedback[];
+  introduceFeedback: Feedback[];
+  personalFeedback: Feedback[];
+  techFeedback: Feedback[];
+  behaviorFeedback: Feedback[];
 };
 
 export type PendingInterviewResult = {

@@ -38,7 +38,7 @@ const resultAtom = atomWithRefresh<
       done: [],
       pending: [],
     };
-  return { done: done.data.resultList, pending: pending.data.resultList };
+  return { done: done.data, pending: pending.data };
 });
 
 const companyAtom = atomWithRefresh<

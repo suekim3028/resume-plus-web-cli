@@ -3,15 +3,23 @@ import { InterviewTypes } from "@types";
 export const getScoreStat = (
   result: Pick<
     InterviewTypes.CompletedInterviewResult,
-    "behavior" | "introduce" | "personal" | "tech"
+    | "behaviorFeedback"
+    | "introduceFeedback"
+    | "personalFeedback"
+    | "techFeedback"
   >
 ) => {
-  const { tech, introduce, personal, behavior } = result;
+  const {
+    techFeedback,
+    introduceFeedback,
+    personalFeedback,
+    behaviorFeedback,
+  } = result;
 
-  const techMean = calcPartMean(tech);
-  const introduceMean = calcPartMean(introduce);
-  const personalMean = calcPartMean(personal);
-  const behaviorMean = calcPartMean(behavior);
+  const techMean = calcPartMean(techFeedback);
+  const introduceMean = calcPartMean(introduceFeedback);
+  const personalMean = calcPartMean(personalFeedback);
+  const behaviorMean = calcPartMean(behaviorFeedback);
 
   return {
     techMean,

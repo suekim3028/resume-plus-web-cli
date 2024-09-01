@@ -169,23 +169,24 @@ type GetCompletedInterviewResultListResponse = {
 };
 
 export const getCompletedInterviewResultList = () =>
-  API.get<GetCompletedInterviewResultListResponse>(
+  API.get<InterviewTypes.CompletedInterviewResult[]>(
     "interview/?status=done",
     undefined,
     {
-      dummyData: {
-        resultList: Array.from({ length: 10 }, (_, idx) => ({
+      dummyData: Array.from(
+        { length: 10 },
+        (_, idx): InterviewTypes.CompletedInterviewResult => ({
           companyId: idx,
           jobId: idx,
           departmentId: idx,
           createdAt: "2024. 3. 25 (토) 23:31",
-          behavior: genEvaluation1(),
-          introduce: genEvaluation1(),
-          personal: genEvaluation2(),
-          tech: genEvaluation2(),
+          behaviorFeedback: genEvaluation1(),
+          introduceFeedback: genEvaluation1(),
+          personalFeedback: genEvaluation2(),
+          techFeedback: genEvaluation2(),
           interviewId: idx,
-        })),
-      },
+        })
+      ),
       useDummy: false,
     }
   );
@@ -195,19 +196,18 @@ type GetPendingREsultListResponse = {
 };
 
 export const getPendingResultList = () =>
-  API.get<GetPendingREsultListResponse>(
+  API.get<InterviewTypes.PendingInterviewResult[]>(
     "interview/?status=pending",
     undefined,
     {
-      dummyData: {
-        resultList: Array.from({ length: 10 }, (_, idx) => ({
-          companyId: idx,
-          jobId: idx,
-          departmentId: idx,
-          interviewId: idx,
-          createdAt: "2024. 3. 25 (토) 23:31",
-        })),
-      },
+      dummyData: Array.from({ length: 10 }, (_, idx) => ({
+        companyId: idx,
+        jobId: idx,
+        departmentId: idx,
+        interviewId: idx,
+        createdAt: "2024. 3. 25 (토) 23:31",
+      })),
+
       useDummy: false,
     }
   );
