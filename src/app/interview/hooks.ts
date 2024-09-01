@@ -30,7 +30,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
   /**
    * 녹음기 데이터 가져오기 (onstop 에서 호출됨)
    */
-  const processRecordedData = async () => {
+  const processRecordedData = useCallback(async () => {
     const recorded = recordData.current;
     console.log(recorded.length);
     if (!recorded.length) return;
@@ -40,7 +40,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
 
     const text = await speechToText(base64Audio);
     onRecordEnd(text || "");
-  };
+  }, [onRecordEnd]);
 
   /**
    * 녹음 시작
@@ -71,6 +71,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
         console.log("----- timeout 리셋");
         // 5% 이상이면 계속 들음
         clearTimeout(silenceTimeout.current);
+
         silenceTimeout.current = setTimeout(() => {
           console.log("----timout 끝!!!");
           mediaRecorder.current?.stop();

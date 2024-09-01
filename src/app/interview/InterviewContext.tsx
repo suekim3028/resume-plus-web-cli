@@ -4,6 +4,7 @@ import { InterviewTypes } from "@types";
 import {
   createContext,
   ReactNode,
+  RefObject,
   useCallback,
   useContext,
   useEffect,
@@ -25,6 +26,7 @@ type InterviewContextValue = {
   interviewInfo: InterviewTypes.InterviewInfo;
   submitAnswerWithText: (answer: string) => void;
   setStatus: (status: InterviewStatus) => void;
+  chatScrollRef: RefObject<HTMLDivElement>;
 };
 
 const InterviewContextProvider = ({
@@ -38,6 +40,8 @@ const InterviewContextProvider = ({
 }) => {
   const currentQuestion = useRef<RandomQuestion>();
   const remainQuestions = useRef(questions);
+  const currentAudio = useRef<HTMLAudioElement>();
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
@@ -48,6 +52,14 @@ const InterviewContextProvider = ({
    */
   const submitAnswer = useCallback(async (answer: string) => {
     setChats((c) => [...c, { isMine: true, text: answer }]);
+    setTimeout(
+      () =>
+        chatScrollRef.current?.scrollTo({
+          top: chatScrollRef.current.clientHeight,
+          behavior: "smooth",
+        }),
+      200
+    );
 
     if (!currentQuestion.current) return;
     interviewApis.answerQuestion({
@@ -63,8 +75,8 @@ const InterviewContextProvider = ({
 
   const submitAnswerWithText = useCallback(
     (text: string) => {
-      submitAnswer(text);
       resetRecorder();
+      submitAnswer(text);
     },
     [resetRecorder, submitAnswer]
   );
@@ -79,19 +91,32 @@ const InterviewContextProvider = ({
    */
   const getNextQuestion = useCallback(async () => {
     const nextQuestion = remainQuestions.current.shift();
+    if (currentAudio.current) {
+      currentAudio.current.removeEventListener("ended", startAnswer);
+      currentAudio.current.pause();
+    }
     if (!nextQuestion) return setStatus("END");
 
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
+    setTimeout(
+      () =>
+        chatScrollRef.current?.scrollTo({
+          top: chatScrollRef.current.clientHeight,
+          behavior: "smooth",
+        }),
+      200
+    );
     setTalkingSide("COMPANY");
     const data = await textToSpeech(nextQuestion.question);
-    // const data = "";
+
     if (!data) return startAnswer();
 
     const audio = new Audio(data);
+    currentAudio.current = audio;
     audio.onended = startAnswer;
     audio.play();
-  }, []);
+  }, [startAnswer]);
 
   const effected = useRef(false);
 
@@ -99,7 +124,7 @@ const InterviewContextProvider = ({
     if (effected.current) return;
     effected.current = true;
 
-    // setTimeout(getNextQuestion, 1500);
+    setTimeout(getNextQuestion, 1500);
   }, []);
 
   return (
@@ -111,6 +136,7 @@ const InterviewContextProvider = ({
         interviewInfo,
         submitAnswerWithText,
         setStatus,
+        chatScrollRef,
       }}
     >
       {children}

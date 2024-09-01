@@ -6,7 +6,7 @@ import { Chat } from "../types";
 import S from "./styles.module.css";
 
 const ChatComponent = () => {
-  const { chats, submitAnswerWithText } = useInterviewContext();
+  const { chats, submitAnswerWithText, chatScrollRef } = useInterviewContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,21 +23,29 @@ const ChatComponent = () => {
       bgColor={"Background/Elevated/Alternative"}
       direction={"column"}
       pb={24}
+      justifyContent={"flex-end"}
     >
       <Flex
-        flex={1}
-        gap={16}
-        py={16}
+        flexGrow={0}
+        flexShrink={1}
         w="100%"
-        direction={"column"}
-        justifyContent={"flex-end"}
         overflowY={"scroll"}
+        direction={"column"}
+        ref={chatScrollRef}
       >
-        {chats.map((chat) => (
-          <ChatBubble {...chat} key={chat.text.slice(0, 20)} />
-        ))}
+        <Flex
+          gap={16}
+          py={16}
+          w="100%"
+          direction={"column"}
+          justifyContent={"flex-end"}
+        >
+          {chats.map((chat) => (
+            <ChatBubble {...chat} key={chat.text.slice(0, 20)} />
+          ))}
+        </Flex>
       </Flex>
-      <Flex width="100%" px={16}>
+      <Flex width="100%" px={16} justifySelf={"flex-end"} flex={0}>
         <Flex
           bgColor={"Primary/Normal"}
           w="100%"

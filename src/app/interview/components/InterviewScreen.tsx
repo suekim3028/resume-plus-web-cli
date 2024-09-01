@@ -75,7 +75,7 @@ const InterviewScreenComponent = () => {
       bgRgbColor={"rgba(131, 131, 132, 1)"}
     >
       <TopBar />
-      <Flex flex={1}>
+      <Flex flex={1} overflowY={"hidden"}>
         <Flex
           flex={1}
           px={8}
