@@ -17,7 +17,7 @@ export const emailSignIn = async (body: UserTypes.EmailSignInUser) =>
  */
 
 type GoogleSignInReq = {
-  id_token: string;
+  idToken: string;
 } & Pick<UserTypes.User, "email" | "name">;
 
 export const googleSignIn = async (body: GoogleSignInReq) =>

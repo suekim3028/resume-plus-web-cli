@@ -21,7 +21,7 @@ const FeedbackItem = ({
       border={`1px solid ${UI.COLORS["Line/Normal/Strong"]}`}
       flexDirection={"column"}
       overflow={"hidden"}
-      cursor={"pointer"}
+      cursor={gptEvaluation.length ? "pointer" : undefined}
     >
       <Flex
         bgColor={isOpen ? "Fill/Normal" : "Static/White"}
@@ -30,7 +30,9 @@ const FeedbackItem = ({
         justifyContent={"space-between"}
         alignItems={"flex-start"}
         w="100%"
-        onClick={() => setIsOpen((p) => !p)}
+        onClick={() => {
+          !!gptEvaluation.length && setIsOpen((p) => !p);
+        }}
         borderBottom={
           isOpen ? `1px solid ${UI.COLORS["Line/Normal/Strong"]}` : undefined
         }
@@ -45,6 +47,7 @@ const FeedbackItem = ({
             </Text>
           </Flex>
         </Flex>
+
         <Flex
           alignItems={"center"}
           gap={24}
@@ -53,10 +56,12 @@ const FeedbackItem = ({
           justifyContent={"center"}
         >
           <ScoreBadge score={score} size={"medium"} />
-          <Icon
-            name={isOpen ? "chevronUpNormal" : "chevronDownNormal"}
-            size={24}
-          />
+          {!!gptEvaluation.length && (
+            <Icon
+              name={isOpen ? "chevronUpNormal" : "chevronDownNormal"}
+              size={24}
+            />
+          )}
         </Flex>
       </Flex>
       {isOpen && (
