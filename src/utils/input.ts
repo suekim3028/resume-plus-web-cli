@@ -40,7 +40,7 @@ export const validatePassword = async (
   password: string
 ): Promise<InputValidation> => {
   const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*?()\-_={}[\]~₩<>,.])[a-zA-Z\d!@#$%^&*?()\-_={}[\]~₩<>,.]{8,16}$/;
 
   if (!passwordRegex.test(password)) {
     return {
