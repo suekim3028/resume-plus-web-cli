@@ -48,7 +48,13 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             <Logo size={"SMALL"} />
           </GridItem>
 
-          <TopBarButton name={"서비스 안내"} href={"/"} colStart={9} />
+          <TopBarButton
+            name={"서비스 안내"}
+            href={
+              "https://alive-capacity-239.notion.site/cc48f3bb32d74e24b7f7c17df2230813?pvs=4"
+            }
+            colStart={9}
+          />
           <TopBarButton
             name={"면접 연습"}
             href={"/interview-setting"}

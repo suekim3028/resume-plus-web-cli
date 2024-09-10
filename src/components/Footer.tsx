@@ -24,9 +24,24 @@ const Footer = () => {
               </Text>
             </Flex>
             <Flex gap={40} ml={94} mr={17}>
-              <Button title={"Service Guide"} url={""} />
-              <Button title={"Private Policy"} url={""} />
-              <Button title={"Survey"} url={""} />
+              <Button
+                title={"Service Guide"}
+                url={
+                  "https://alive-capacity-239.notion.site/cc48f3bb32d74e24b7f7c17df2230813?pvs=4"
+                }
+              />
+              <Button
+                title={"Private Policy"}
+                url={
+                  "https://alive-capacity-239.notion.site/04d05207f7174be182ed176039544fde?pvs=4"
+                }
+              />
+              <Button
+                title={"Survey"}
+                url={
+                  "https://docs.google.com/forms/d/e/1FAIpQLSfun86YZZUuyOjeQYUyrXO-yS1kNBPL2DXTKxyThzwQXXxgRg/viewform"
+                }
+              />
               <Flex flexDir={"column"}>
                 <Text
                   type={"Heading2"}
@@ -61,13 +76,7 @@ const Footer = () => {
 const Button = ({ url, title }: { url: string; title: string }) => {
   return (
     <Link href={url} target={"_blank"}>
-      <Text
-        type={"Heading2"}
-        fontWeight={"600"}
-        color={"Static/White"}
-        cursor={"pointer"}
-        onClick={() => {}} // TODO: 링크 연결
-      >
+      <Text type={"Heading2"} fontWeight={"600"} color={"Static/White"}>
         {title}
       </Text>
     </Link>
