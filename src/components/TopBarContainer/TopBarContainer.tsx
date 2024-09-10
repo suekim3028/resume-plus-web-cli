@@ -18,7 +18,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
   return (
     <Flex
       w="100%"
-      position={"fixed"}
+      position={"absolute"}
       left={0}
       right={0}
       top={0}
@@ -55,6 +55,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             colStart={10}
           />
           <TopBarButton name={"면접 결과"} href={"/result"} colStart={11} />
+
           <UserButton />
         </GridWrapper>
       </Flex>

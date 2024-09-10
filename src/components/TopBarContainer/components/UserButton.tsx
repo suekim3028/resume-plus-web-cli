@@ -81,12 +81,14 @@ const _UserButton = () => {
 
 export default function UserButton() {
   return (
-    <Suspense
-      fallback={
-        <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />
-      }
-    >
-      <_UserButton />
-    </Suspense>
+    <Flex alignItems={"center"} justifyContent={"center"} flex={1}>
+      <Suspense
+        fallback={
+          <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />
+        }
+      >
+        <_UserButton />
+      </Suspense>
+    </Flex>
   );
 }

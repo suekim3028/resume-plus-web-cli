@@ -35,6 +35,7 @@ export const useAuth = () => {
             redirect: "follow",
           }
         );
+
         const user = await data.json();
         const email = user?.email;
         const name = user?.name;
