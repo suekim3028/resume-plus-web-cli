@@ -5,7 +5,8 @@ import React, { useRef } from "react";
 import { SignUpInputProps } from "../types";
 
 const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
-  const password = useRef(""); // valid password만 유지
+  const password = useRef("");
+  const isPasswordValid = useRef(false);
   const isPasswordConfirmed = useRef(false);
 
   const confirmPasswordInputRef = useRef<TextInputRef>(null);
@@ -13,7 +14,7 @@ const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
   const checkIsError = () => {
     onErrorChange(
       "password",
-      password.current && isPasswordConfirmed.current
+      isPasswordValid.current && isPasswordConfirmed.current
         ? {
             isError: false,
             value: password.current,
@@ -34,7 +35,8 @@ const PasswordInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
         mt={12}
         hidden
         onChange={(s) => {
-          password.current = s.isError || s.isValidating ? "" : s.text;
+          password.current = s.text;
+          isPasswordValid.current = !s.isValidating && !s.isError;
           confirmPasswordInputRef.current?.validate();
           checkIsError();
         }}
