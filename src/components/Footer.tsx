@@ -31,7 +31,7 @@ const Footer = () => {
                 }
               />
               <Button
-                title={"Private Policy"}
+                title={"Privacy Policy"}
                 url={
                   "https://alive-capacity-239.notion.site/04d05207f7174be182ed176039544fde?pvs=4"
                 }

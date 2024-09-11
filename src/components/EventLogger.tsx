@@ -25,7 +25,7 @@ type EventParams = {
     | "면접 결과"
     | "로그인";
   global_navigation_bar_profile: "프로필" | "로그아웃";
-  footer_button: "Service Guide" | "Private Policy" | "Survey";
+  footer_button: "Service Guide" | "Privacy Policy" | "Survey";
   Home: undefined;
   home_main_banner_card: "면접 연습하러 가기";
   home_banner_card: "지금 면접 시작하기";
