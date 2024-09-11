@@ -35,7 +35,9 @@ const Profile = () => {
           type={"Outlined_Primary"}
           size="Large"
           title={"설문조사 하기"}
-          href={""} // TODO: 링크 연결
+          href={
+            "https://docs.google.com/forms/d/e/1FAIpQLSfun86YZZUuyOjeQYUyrXO-yS1kNBPL2DXTKxyThzwQXXxgRg/viewform"
+          }
         />
       </Flex>
     </Flex>
