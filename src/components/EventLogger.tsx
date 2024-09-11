@@ -32,7 +32,7 @@ type EventParams = {
   LogIn: undefined;
   login_button: undefined;
   IdLogIn: undefined;
-  id_login_button: "로그인" | "아이디/비밀번호 찾기" | "회원가입";
+  id_login_button: "로그인" | "이메일/비밀번호 찾기" | "회원가입";
   SignUp: undefined;
   signup_button: "인증번호 받기" | "확인" | "중복확인" | "회원가입";
   InterviewSetting: undefined;

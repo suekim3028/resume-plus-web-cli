@@ -49,7 +49,7 @@ const SignInComponent = () => {
             flexProps={{ mt: 40 }}
             type="Outlined_Primary"
             size="Large"
-            title="아이디로 로그인"
+            title="이메일로 로그인"
             stretch
             href="/sign-in/email"
             textProps={{

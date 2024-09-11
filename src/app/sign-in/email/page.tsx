@@ -51,8 +51,8 @@ const EmailSignIn = () => {
         >
           <Logo size="LARGE" />
           <TextInput
-            title="아이디"
-            placeholder="아이디를 입력해주세요"
+            title="이메일"
+            placeholder="이메일를 입력해주세요"
             mt={56}
             onChange={handleChangeEmail}
           />
@@ -74,7 +74,7 @@ const EmailSignIn = () => {
           />
           <TextButton
             type={"Assistive"}
-            title="아이디/비밀번호 찾기"
+            title="이메일/비밀번호 찾기"
             size={"Medium"}
             mt={32}
           />
