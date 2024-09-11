@@ -30,7 +30,9 @@ const TopBarButton = ({
             EventLogger.log("global_navigation_bar_button")(name);
           }}
         >
-          <Text type={"Body2_Normal"}>{name}</Text>
+          <Text type={"Body2_Normal"} fontWeight={"600"}>
+            {name}
+          </Text>
         </Link>
       </GridItem>
     </>
