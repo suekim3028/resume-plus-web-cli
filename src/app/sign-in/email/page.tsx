@@ -4,6 +4,7 @@ import { Logo, TextInput } from "@components";
 import { useAuth } from "@hooks";
 
 import { Button, Flex, GridWrapper, Text, TextButton } from "@uis";
+import { getRsaKeys } from "@utils";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
@@ -33,9 +34,31 @@ const EmailSignIn = () => {
   };
 
   const submit = async () => {
-    const { email, password } = inputValue.current;
-    await loginWithEmail({ email, password });
-    router.replace("/");
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const { publicKey, privateKey } = await getRsaKeys();
+
+    console.log({ publicKey, privateKey });
+
+    const encrypted = await window.crypto.subtle.encrypt(
+      {
+        name: "RSA-OAEP",
+      },
+      publicKey,
+      encoder.encode("안녕하세요")
+    );
+
+    const decrypted = await window.crypto.subtle.decrypt(
+      {
+        name: "RSA-OAEP",
+      },
+      privateKey,
+      encrypted
+    );
+    console.log(decoder.decode(decrypted));
+    // const { email, password } = inputValue.current;
+    // await loginWithEmail({ email, password });
+    // router.replace("/");
   };
 
   return (

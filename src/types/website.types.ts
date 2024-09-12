@@ -14,4 +14,6 @@ export type Env = {
   NEXT_PUBLIC_API_SERVER: string;
   GOOGLE_OAUTH_CLIENT_KEY: string;
   GOOGLE_SPEECH_API_KEY: string;
+  RSA_PUBLIC_KEY: string;
+  RSA_PRIVATE_KEY: string;
 };
