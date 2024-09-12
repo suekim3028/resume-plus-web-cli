@@ -11,7 +11,6 @@ const API = returnFetch({
     return { Authorization: `Bearer ${token.accessToken}` };
   },
   onError: () => {
-    console.log("!!!!");
     ModalManager.show({
       Component: (
         <Flex
