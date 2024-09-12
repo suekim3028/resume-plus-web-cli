@@ -46,9 +46,7 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
       email: emailValue.current,
     });
     if (isError) {
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
-      setAuthNumberState("2_CAN_SEND");
-      return;
+      return setAuthNumberState("2_CAN_SEND");
     }
 
     authNumber.current = data.verificationCode;

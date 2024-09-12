@@ -155,8 +155,7 @@ const Interview = () => {
           }
     );
 
-    if (isError) throw new Error();
-    router.replace(`interview/${data.interviewId}`);
+    if (!isError) router.replace(`interview/${data.interviewId}`);
   };
 
   return (

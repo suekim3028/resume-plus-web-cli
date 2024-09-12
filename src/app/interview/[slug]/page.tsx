@@ -51,7 +51,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     const { isError: interviewInfoError, data: interviewInfoData } =
       await interviewApis.getInterviewInfo({ id: interviewId });
     if (interviewInfoError) {
-      alert("질문 생성에서 에러가 발생했습니다. 다시 시도해주세요.");
       return router.back();
     }
 
@@ -61,7 +60,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     const { isError, data } = await getQuestions(interviewId);
 
     if (isError) {
-      alert("질문 생성에서 에러가 발생했습니다. 다시 시도해주세요.");
       return router.back();
     }
 

@@ -54,8 +54,14 @@ const companyAtom = atomWithRefresh<
     interviewApis.getJobs(),
   ]);
 
-  if (companies.isError || departments.isError || jobs.isError)
-    throw new Error();
+  if (companies.isError || departments.isError || jobs.isError) {
+    return {
+      companies: [],
+      departments: [],
+      jobs: [],
+    };
+  }
+
   return {
     companies: companies.data,
     departments: departments.data,

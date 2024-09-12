@@ -52,11 +52,7 @@ export const useAuth = () => {
             idToken: access_token,
           });
 
-          if (isError) {
-            throw new Error();
-          }
-
-          handleUser(data);
+          if (!isError) handleUser(data);
         } else {
           throw new Error();
         }
@@ -77,11 +73,7 @@ export const useAuth = () => {
       });
       // todo: guest
 
-      if (isError) {
-        throw new Error();
-      }
-
-      handleUser(data);
+      if (!isError) handleUser(data);
     },
     [handleUser, isGuestUser]
   );
@@ -92,11 +84,7 @@ export const useAuth = () => {
 
       const { data, isError } = await method(params);
 
-      if (isError) {
-        throw new Error();
-      }
-
-      handleUser(data);
+      if (!isError) handleUser(data);
     },
     [handleUser, isGuestUser]
   );
@@ -105,9 +93,8 @@ export const useAuth = () => {
     // const { setUser } = useUser();
     const { data, isError } = await userApis.guestLogin();
 
-    if (isError) {
-      return { isError: true };
-    }
+    if (isError) return;
+
     console.log(`[LOGIN] logged in as GUEST"}`);
     handleUser(data);
     return { isError: false };
