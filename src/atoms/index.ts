@@ -2,7 +2,7 @@ import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
 import { useAtom, useAtomValue } from "jotai";
-import { atomWithRefresh } from "jotai/utils";
+import { atomWithRefresh, loadable } from "jotai/utils";
 import { useMemo } from "react";
 
 const userAtom = atomWithRefresh<Promise<UserTypes.User | null>>(async () => {
@@ -82,6 +82,12 @@ export const useUser = () => {
     isGuestUser,
     // setUser,
   };
+};
+
+export const useLoadableUser = () => {
+  const [value] = useAtom(loadable(userAtom));
+
+  return value;
 };
 
 export const useResult = () => {

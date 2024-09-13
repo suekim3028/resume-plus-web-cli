@@ -10,3 +10,21 @@
 //   // 5. Redirect user
 //   redirect("/profile");
 // }
+
+// export const createSession = async  ()=>{
+//     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+//     const session = await publicEncrypt({ userId, expiresAt })
+
+//     cookies().set('session', session, {
+//       httpOnly: true,
+//       secure: true,
+//       expires: expiresAt,
+//       sameSite: 'lax',
+//       path: '/',
+//     })
+// }
+// export const checkUser = async ()=>{
+//     const session = cookies().get('session')?.value;
+//     const payload = await decrypt(session)
+
+// }

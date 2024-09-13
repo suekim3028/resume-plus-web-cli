@@ -33,9 +33,9 @@ const EmailSignIn = () => {
   };
 
   const submit = async () => {
-    // const { email, password } = inputValue.current;
-    // await loginWithEmail({ email, password });
-    // router.replace("/");
+    const { email, password } = inputValue.current;
+    await loginWithEmail({ email, password });
+    router.replace("/");
   };
 
   return (

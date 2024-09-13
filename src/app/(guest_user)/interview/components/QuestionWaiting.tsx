@@ -1,5 +1,6 @@
 "use client";
-import { useUserOrGuestOnlyContext } from "@contexts";
+
+import { useUser } from "@atoms";
 import { Flex, Text } from "@uis";
 import {
   forwardRef,
@@ -19,7 +20,7 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   const [animState, setAnimState] = useState<"DEFAULT" | "WAITING" | "END">(
     "DEFAULT"
   );
-  const { user, isGuestUser } = useUserOrGuestOnlyContext();
+  const { user, isGuestUser } = useUser();
 
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +39,8 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   useEffect(() => {
     setAnimState("WAITING");
   }, []);
+
+  if (!user) return <></>;
 
   return (
     <Container colSpan={6} colStart={4}>
