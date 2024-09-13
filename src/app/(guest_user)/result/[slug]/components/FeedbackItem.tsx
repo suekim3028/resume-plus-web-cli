@@ -1,10 +1,10 @@
-import ScoreBadge from "@app/result/components/ScoreBadge";
-import { calcOneQuestionScoreMean } from "@app/result/utils";
 import { Icon } from "@components";
 import { UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useState } from "react";
+import ScoreBadge from "../../components/ScoreBadge";
+import { calcOneQuestionScoreMean } from "../../utils";
 
 const FeedbackItem = ({
   index,

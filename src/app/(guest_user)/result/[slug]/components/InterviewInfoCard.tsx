@@ -1,6 +1,6 @@
-import ScoreBadge from "@app/result/components/ScoreBadge";
 import { UI } from "@constants";
 import { Flex, Text } from "@uis";
+import ScoreBadge from "../../components/ScoreBadge";
 
 const InterviewInfoCard = ({
   createdAt,

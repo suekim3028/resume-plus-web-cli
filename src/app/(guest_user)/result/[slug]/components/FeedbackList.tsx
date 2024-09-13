@@ -1,9 +1,10 @@
-import ScoreBadge from "@app/result/components/ScoreBadge";
-import { getScoreStat } from "@app/result/utils";
+//
 import { INTERVIEW_CONSTS, UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useState } from "react";
+import ScoreBadge from "../../components/ScoreBadge";
+import { getScoreStat } from "../../utils";
 import FeedbackItem from "./FeedbackItem";
 
 const FeedbackList = (

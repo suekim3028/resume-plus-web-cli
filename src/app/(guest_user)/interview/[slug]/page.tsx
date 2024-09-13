@@ -1,8 +1,9 @@
 "use client";
 import { interviewApis } from "@apis";
-import { findCompanyInfo } from "@app/result/utils";
-import { useCompanyData } from "@atoms";
-import { useUserOrGuestOnlyContext } from "@contexts";
+
+import { useCompanyData, useUser } from "@atoms";
+
+import { findCompanyInfo } from "@app/(guest_user)/result/utils";
 import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
-  const { refreshUser } = useUserOrGuestOnlyContext();
+  const { refreshUser } = useUser();
   const companyData = useCompanyData();
 
   const interviewData = useRef<{
@@ -55,6 +56,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     }
 
     refreshUser();
+
     interview.current = findCompanyInfo(interviewInfoData, companyData);
 
     const { isError, data } = await getQuestions(interviewId);
