@@ -2,9 +2,8 @@
 import { useLoadableUser } from "@atoms";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
-import { useRouter } from "next/navigation";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 const AuthLayout = ({
   children,
@@ -16,12 +15,14 @@ const AuthLayout = ({
   validate: (user: UserTypes.User | null) => boolean;
 }) => {
   const value = useLoadableUser();
-  const router = useRouter();
 
   const isValid = value.state === "hasData" && validate(value.data);
 
+  const effected = useRef(false);
   useEffect(() => {
-    if (value.state === "hasData" && !isValid) {
+    if (value.state !== "hasData" || effected.current) return;
+    effected.current = true;
+    if (!isValid) {
       onInvalidState();
     }
   }, [value.state === "hasData", isValid]);
