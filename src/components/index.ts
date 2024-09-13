@@ -1,4 +1,4 @@
-import AuthLoadingComponent from "./AuthLoadingComponent";
+import AuthLayout from "./AuthLayout";
 
 import CompanyThumbnail from "./CompanyThumbnail";
 import { EventLogger } from "./EventLogger";
@@ -22,7 +22,7 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 export {
-  AuthLoadingComponent,
+  AuthLayout,
   CompanyThumbnail,
   EventLogger,
   Footer,
