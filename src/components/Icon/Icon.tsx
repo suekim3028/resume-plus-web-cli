@@ -26,6 +26,7 @@ const Icon = ({ name, size, href, ...flexProps }: IconsProps) => {
   return href ? (
     <Link
       href={href}
+
       //   target={openInNewTab ? "_blank" : undefined}
     >
       {Component}

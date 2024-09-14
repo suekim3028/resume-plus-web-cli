@@ -75,7 +75,7 @@ const Footer = () => {
 
 const Button = ({ url, title }: { url: string; title: string }) => {
   return (
-    <Link href={url} target={"_blank"}>
+    <Link href={url} target={"_blank"} style={{ textDecoration: "none" }}>
       <Text type={"Heading2"} fontWeight={"600"} color={"Static/White"}>
         {title}
       </Text>
