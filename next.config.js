@@ -4,6 +4,7 @@ const nextConfig = {
   include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", "env.d.ts"],
   compiler: {
     styledComponents: true,
+    emotion: true,
   },
 };
 
