@@ -6,6 +6,7 @@ import { Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
 import { useCompanyData, useResult } from "@atoms";
+import { useMemo } from "react";
 import { getScoreStat } from "../utils";
 import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
@@ -15,7 +16,7 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
 
   const resultInterviews = useResult();
-  const companyData = useCompanyData();
+  const { getJobsByDepartmentId, ...companyData } = useCompanyData();
   const router = useRouter();
   const interview = resultInterviews?.done.find((i) => {
     return i.interviewId === Number(interviewId);
@@ -28,10 +29,18 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
   const company = companyData?.companies.find(
     ({ companyId: id }) => id === companyId
   );
-  const department = companyData?.departments.find(
-    ({ companyDeptId: id }) => id === departmentId
+  const department = companyData?.departmentGroups.find(
+    ({ departmentId: id }) => id === departmentId
   );
-  const job = companyData?.jobs.find(({ companyJobId: id }) => id === jobId);
+
+  const job = useMemo(() => {
+    return department
+      ? getJobsByDepartmentId(department?.departmentId).find(
+          ({ companyJobId }) => companyJobId === jobId
+        ) || null
+      : null;
+  }, [department?.departmentId]);
+
   const { totalMean } = getScoreStat(interview);
 
   return (
@@ -56,7 +65,7 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
             <InterviewInfoCard
               companyName={company?.companyName || ""}
               jobName={job?.companyJob || ""}
-              departmentName={department?.companyDept || ""}
+              departmentName={department?.department || ""}
               meanScore={totalMean}
               createdAt={createdAt}
             />
