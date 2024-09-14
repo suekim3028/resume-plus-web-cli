@@ -9,6 +9,13 @@ const StepCheck = ({
   questionParts: QuestionPart[];
   goNext: () => void;
 }) => {
+  const totalQuestionCount = questionParts.reduce((prev, current) => {
+    return prev + current.questionCount;
+  }, 0);
+
+  const totalDuration = questionParts.reduce((prev, current) => {
+    return prev + current.duration;
+  }, 0);
   return (
     <Container colSpan={8} colStart={3}>
       <Flex>
@@ -21,7 +28,7 @@ const StepCheck = ({
           color={"Primary/Normal"}
           ml={8}
         >
-          {`${9}개`}
+          {`${totalQuestionCount}개`}
         </Text>
         <Text type={"Title2"} fontWeight={"500"} ml={8}>
           질문으로
@@ -32,7 +39,7 @@ const StepCheck = ({
           ml={8}
           color={"Primary/Normal"}
         >
-          {`${25}분`}
+          {`${totalDuration}분`}
         </Text>
         <Text type={"Title2"} fontWeight={"500"}>
           간 면접이 진행될 예정이에요
@@ -66,7 +73,7 @@ const PartRow = (props: QuestionPart) => {
       alignItems={"center"}
       px={8}
       borderRadius={8}
-      py={6.5}
+      h={45}
     >
       <Flex alignItems={"center"}>
         <Text
