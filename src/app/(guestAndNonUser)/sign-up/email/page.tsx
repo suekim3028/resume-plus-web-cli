@@ -74,7 +74,7 @@ const EmailSignIn = () => {
           <Flex alignSelf={"flex-start"}>
             <Logo size={"MEDIUM"} />
           </Flex>
-          <NameInput mt={56} onErrorChange={handleErrorChange} />
+          <NameInput mt={32} onErrorChange={handleErrorChange} />
           <EmailInput mt={12} onErrorChange={handleErrorChange} />
           <PasswordInput mt={12} onErrorChange={handleErrorChange} />
 

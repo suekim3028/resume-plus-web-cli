@@ -141,7 +141,7 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
         </Flex>
         <Button
           title={authNumberState === "4_CONFIRMED" ? "" : "확인"}
-          leftIcon={
+          rightIcon={
             authNumberState === "4_CONFIRMED" ? "normalCheck" : undefined
           }
           disabled={!canCheckAuthNumber || authNumberState == "4_CONFIRMED"}

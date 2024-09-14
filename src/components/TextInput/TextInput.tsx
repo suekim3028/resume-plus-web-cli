@@ -118,7 +118,7 @@ const TextInputComponent: React.ForwardRefRenderFunction<
         </Text>
       )}
       <Flex
-        py={9}
+        height={40}
         borderWidth={1}
         borderStyle={"solid"}
         borderColor={
@@ -140,7 +140,7 @@ const TextInputComponent: React.ForwardRefRenderFunction<
             fontWeight: "400",
             fontSize: 15,
             lineHeight: "22.01px",
-            color: "rgba(55, 56, 60, 0.61)",
+            color: UI.COLORS["Label/Normal"],
             borderStyle: "none",
             display: "flex",
             flex: 1,

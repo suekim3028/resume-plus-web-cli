@@ -117,6 +117,7 @@ const Button = ({
   title,
   onClick,
   href,
+  iconSize: _iconSize,
   flexProps: _flexProps,
   textProps: _textProps,
 }: ButtonProps) => {
@@ -165,18 +166,18 @@ const Button = ({
       onClick={disabled ? undefined : onClick}
       {...flexProps}
     >
-      {leftIcon && <Icon name={leftIcon} size={iconSize} />}
+      {leftIcon && <Icon name={leftIcon} size={_iconSize ?? iconSize} />}
 
       <Text
-        {...textProps}
         type={fontType}
         fontWeight={fontWeight}
         color={currentColor}
+        {...textProps}
       >
         {title}
       </Text>
 
-      {rightIcon && <Icon name={rightIcon} size={iconSize} />}
+      {rightIcon && <Icon name={rightIcon} size={_iconSize ?? iconSize} />}
     </Flex>
   );
 
@@ -203,7 +204,7 @@ type ButtonProps = {
   disabled?: boolean;
   leftIcon?: IconNames;
   rightIcon?: IconNames;
-
+  iconSize?: number;
   size: Sizes;
   onClick?: () => void;
   href?: string;
