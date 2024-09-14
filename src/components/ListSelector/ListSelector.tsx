@@ -1,16 +1,23 @@
 "use client";
 import { UI } from "@constants";
 import { Flex, Text } from "@uis";
-import React, { ReactElement, Ref, useImperativeHandle, useState } from "react";
+import React, {
+  ReactElement,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import Icon from "../Icon/Icon";
 
 const ListSelectorComponent = <T extends any>(
   props: ListSelectorItemProps<T>,
-  ref: Ref<ListSelectorRef>
+  ref: Ref<ListSelectorRef<T>>
 ) => {
-  const { itemList, placeholder, onSelect } = props;
+  const { itemList, placeholder, onSelect, disabled, disabledMsg } = props;
   const [showList, setShowList] = useState(false);
   const [selected, _setSelected] = useState<ListSelectorItem<T> | null>(null);
+
   const [isError, setIsError] = useState(false);
 
   const setSelected = (value: ListSelectorItem<T> | null) => {
@@ -22,15 +29,33 @@ const ListSelectorComponent = <T extends any>(
     setShowList(false);
   };
 
-  useImperativeHandle(ref, () => ({ close }));
+  useEffect(() => {
+    setIsError(false);
+    if (disabled) {
+      setSelected(null);
+      setShowList(false);
+    }
+  }, [disabled]);
+
+  const select = (item: ListSelectorItem<T> | null) => {
+    setSelected(item);
+    close();
+  };
+
+  useImperativeHandle(ref, () => ({ close, select }));
 
   return (
     <Flex w="100%" position={"relative"} py={20}>
       <Flex
         cursor={"pointer"}
         onClick={(e) => {
-          setShowList((p) => !p);
           e.stopPropagation();
+          e.preventDefault();
+          if (disabled) {
+            setIsError(true);
+            return;
+          }
+          setShowList((p) => !p);
         }}
         px={8}
         py={10}
@@ -38,7 +63,13 @@ const ListSelectorComponent = <T extends any>(
         overflow={"hidden"}
         bgColor={"Background/Normal/Normal"}
         borderColor={
-          UI.COLORS[showList ? "Label/Normal" : "Line/Normal/Normal"]
+          UI.COLORS[
+            isError
+              ? "Status/Negative"
+              : showList
+              ? "Label/Normal"
+              : "Line/Normal/Normal"
+          ]
         }
         // borderBottomWidth={1}
         borderWidth={"0px 0px 1px 0px"}
@@ -48,16 +79,29 @@ const ListSelectorComponent = <T extends any>(
         <Text
           type="Body1_Normal"
           fontWeight={"400"}
-          color={selected ? "Label/Normal" : "Label/Assistive"}
+          color={
+            isError
+              ? "Status/Negative"
+              : selected
+              ? "Label/Normal"
+              : "Label/Assistive"
+          }
         >
           {selected ? selected.label : placeholder}
         </Text>
-        <Icon
-          name={`chevron${showList ? "Up" : "Down"}${
-            isError ? "Negative" : selected ? "Normal" : "Assistive"
-          }`}
-          size={24}
-        />
+        {isError ? (
+          <Icon name={"chevronDownNegative"} size={24} />
+        ) : selected ? (
+          <Icon
+            name={showList ? "chevronUpNormal" : "chevronDownNormal"}
+            size={24}
+          />
+        ) : (
+          <Icon
+            name={showList ? "chevronUpAssistive" : "chevronDownAssistive"}
+            size={24}
+          />
+        )}
       </Flex>
       {showList && (
         <Flex
@@ -101,7 +145,7 @@ const ListSelectorComponent = <T extends any>(
 // Cast the output
 const ListSelector = React.forwardRef(ListSelectorComponent) as <T extends any>(
   p: ListSelectorItemProps<T> & {
-    ref?: Ref<ListSelectorRef>;
+    ref?: Ref<ListSelectorRef<T>>;
   }
 ) => ReactElement;
 
@@ -110,10 +154,13 @@ type ListSelectorItemProps<T> = {
   itemList: ListSelectorItem<T>[];
   placeholder: string;
   onSelect: (value: T | null) => void;
+  disabled?: boolean;
+  disabledMsg?: string;
 };
 
-export type ListSelectorRef = {
+export type ListSelectorRef<T> = {
   close: () => void;
+  select: (item: ListSelectorItem<T> | null) => void;
 };
 
 export default ListSelector;

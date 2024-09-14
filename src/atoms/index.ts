@@ -3,7 +3,7 @@ import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithRefresh, loadable } from "jotai/utils";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 const userAtom = atomWithRefresh<Promise<UserTypes.User | null>>(async () => {
   const token = TokenStorage.get();
@@ -44,28 +44,24 @@ const resultAtom = atomWithRefresh<
 const companyAtom = atomWithRefresh<
   Promise<{
     companies: InterviewTypes.Company[];
-    departments: InterviewTypes.JobDepartment[];
-    jobs: InterviewTypes.Job[];
+    departmentGroups: InterviewTypes.DepartmentGroup[];
   }>
 >(async () => {
-  const [companies, departments, jobs] = await Promise.all([
+  const [companies, departmentGroups] = await Promise.all([
     interviewApis.getCompanies(),
-    interviewApis.getDepartments(),
-    interviewApis.getJobs(),
+    interviewApis.getDepartmentGroups(),
   ]);
 
-  if (companies.isError || departments.isError || jobs.isError) {
+  if (companies.isError || departmentGroups.isError) {
     return {
       companies: [],
-      departments: [],
-      jobs: [],
+      departmentGroups: [],
     };
   }
 
   return {
     companies: companies.data,
-    departments: departments.data,
-    jobs: jobs.data,
+    departmentGroups: departmentGroups.data,
   };
 });
 
@@ -97,5 +93,17 @@ export const useResult = () => {
 
 export const useCompanyData = () => {
   const companyData = useAtomValue(companyAtom);
-  return companyData;
+
+  const getJobsByDepartmentId = useCallback(
+    (id: number) =>
+      companyData.departmentGroups.find(
+        ({ departmentId }) => departmentId === id
+      )?.job || [],
+    [!!companyData]
+  );
+
+  return {
+    ...companyData,
+    getJobsByDepartmentId,
+  };
 };

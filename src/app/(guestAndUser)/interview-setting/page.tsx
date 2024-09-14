@@ -39,8 +39,9 @@ const Interview = () => {
     useCompanyData();
 
   const companyRef = useRef<TypingSelectorRef>(null);
-  const departmentRef = useRef<ListSelectorRef>(null);
-  const jobRef = useRef<ListSelectorRef>(null);
+  const departmentRef =
+    useRef<ListSelectorRef<InterviewTypes.Department>>(null);
+  const jobRef = useRef<ListSelectorRef<InterviewTypes.Job>>(null);
 
   const refs = [companyRef.current, departmentRef.current, jobRef.current];
 
@@ -216,7 +217,10 @@ const Interview = () => {
                 value,
               }))}
               placeholder="직군을 선택해주세요"
-              onSelect={(v) => onValueChange("department", v)}
+              onSelect={(v) => {
+                onValueChange("department", v);
+                jobRef.current?.select(null);
+              }}
             />
             <ListSelector<InterviewTypes.Job>
               ref={jobRef}

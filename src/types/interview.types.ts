@@ -7,15 +7,17 @@ export type Company = {
   companyName: string;
   thumbnailUrl?: string;
 };
-
-export type JobDepartment = {
-  companyDeptId: number;
-  companyDept: string;
+export type Department = {
+  departmentId: number;
+  department: string;
 };
 
 export type Job = {
   companyJobId: number;
   companyJob: string;
+};
+export type DepartmentGroup = Department & {
+  job: Job[];
 };
 
 export type InterviewInfo = {

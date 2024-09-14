@@ -121,7 +121,7 @@ export const getDepartmentGroups = () =>
         companyJob: `직군 ${idx}`,
       })),
     })),
-    useDummy: true,
+    useDummy: false,
   });
 
 /**
