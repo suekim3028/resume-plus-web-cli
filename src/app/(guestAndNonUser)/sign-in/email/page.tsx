@@ -34,8 +34,8 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     const { email, password } = inputValue.current;
-    await loginWithEmail({ email, password });
-    router.replace("/");
+    const { success } = await loginWithEmail({ email, password });
+    if (success) router.replace("/");
   };
 
   return (
@@ -69,7 +69,7 @@ const EmailSignIn = () => {
             title={"로그인"}
             stretch
             flexProps={{ mt: 32 }}
-            // disabled={!canSubmit}
+            disabled={!canSubmit}
             onClick={submit}
           />
           <TextButton

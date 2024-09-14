@@ -71,9 +71,12 @@ export const useAuth = () => {
         email,
         password,
       });
-      // todo: guest
 
-      if (!isError) handleUser(data);
+      if (isError) {
+        return { success: false };
+      }
+      handleUser(data);
+      return { success: true };
     },
     [handleUser, isGuestUser]
   );
@@ -84,7 +87,11 @@ export const useAuth = () => {
 
       const { data, isError } = await method(params);
 
-      if (!isError) handleUser(data);
+      if (isError) {
+        return { success: false };
+      }
+      handleUser(data);
+      return { success: true };
     },
     [handleUser, isGuestUser]
   );
@@ -93,11 +100,12 @@ export const useAuth = () => {
     // const { setUser } = useUser();
     const { data, isError } = await userApis.guestLogin();
 
-    if (isError) return;
-
-    console.log(`[LOGIN] logged in as GUEST"}`);
+    if (isError) {
+      return { success: false };
+    }
     handleUser(data);
-    return { isError: false };
+    console.log(`[LOGIN] logged in as GUEST"}`);
+    return { success: true };
   }, [handleUser]);
 
   return {

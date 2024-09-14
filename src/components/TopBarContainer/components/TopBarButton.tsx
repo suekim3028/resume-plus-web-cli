@@ -15,27 +15,35 @@ const TopBarButton = ({
   colStart: number;
 }) => {
   return (
-    <>
-      <GridItem
-        key={name}
-        colStart={colStart}
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
+    <GridItem
+      overflow={"visible"}
+      key={name}
+      colStart={colStart}
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      whiteSpace={"nowrap"}
+    >
+      <Link
+        href={href}
+        style={{
+          textDecoration: "none",
+          color: "black",
+        }}
+        onClick={() => {
+          EventLogger.log("global_navigation_bar_button")(name);
+        }}
       >
-        <Link
-          href={href}
-          style={{ textDecoration: "none", color: "black" }}
-          onClick={() => {
-            EventLogger.log("global_navigation_bar_button")(name);
-          }}
+        <Text
+          type={"Body2_Normal"}
+          fontWeight={"600"}
+          style={{ whiteSpace: "nowrap" }}
+          overflow={"visible"}
         >
-          <Text type={"Body2_Normal"} fontWeight={"600"}>
-            {name}
-          </Text>
-        </Link>
-      </GridItem>
-    </>
+          {name}
+        </Text>
+      </Link>
+    </GridItem>
   );
 };
 
