@@ -38,7 +38,7 @@ const FeedbackItem = ({
         }
       >
         <Flex flex={1}>
-          <Text type={"Heading1"} fontWeight={"500"} w={55}>
+          <Text type={"Heading1"} fontWeight={"500"} mr={24}>
             {`Q${index}.`}
           </Text>
           <Flex>

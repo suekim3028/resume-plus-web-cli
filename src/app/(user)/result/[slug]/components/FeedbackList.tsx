@@ -68,6 +68,7 @@ const FeedbackList = (
             key={section}
             py={16}
             px={8}
+            minWidth={197}
             alignItems={"center"}
             justifyContent={"center"}
             onClick={() => setSelected(section)}
@@ -78,6 +79,7 @@ const FeedbackList = (
             >
               {INTERVIEW_CONSTS.PART_LABEL[section]}
             </Text>
+
             <ScoreBadge score={means[section]} size={"medium"} />
           </Flex>
         ))}
