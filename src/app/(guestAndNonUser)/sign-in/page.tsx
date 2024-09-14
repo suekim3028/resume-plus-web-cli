@@ -71,7 +71,7 @@ const SignInComponent = () => {
             mt={8}
             type="Assistive"
             title="고객센터 문의하기"
-            href=""
+            href="https://pf.kakao.com/_neapG/chat"
             size="Medium"
           />
         </GridItem>
