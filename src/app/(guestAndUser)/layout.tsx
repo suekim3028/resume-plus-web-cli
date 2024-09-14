@@ -7,7 +7,10 @@ import { ReactNode, useCallback } from "react";
 export default function Layout({ children }: { children: ReactNode }) {
   const { guestSignIn } = useAuth();
 
-  const validate = useCallback((user: UserTypes.User | null) => !!user, []);
+  const validate = useCallback(
+    (loginType: UserTypes.LoginType | null) => !!loginType,
+    []
+  );
 
   return (
     <AuthLayout validate={validate} onInvalidState={guestSignIn}>

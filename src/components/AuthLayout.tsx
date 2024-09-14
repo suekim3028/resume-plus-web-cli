@@ -3,7 +3,7 @@ import { useLoadableUser } from "@atoms";
 import * as animationData from "@public/lotties/loading.json";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
-import React, { ReactNode, useMemo, useRef } from "react";
+import React, { ReactNode, useEffect } from "react";
 import Lottie from "react-lottie";
 
 const AuthLayout = ({
@@ -13,34 +13,33 @@ const AuthLayout = ({
 }: {
   children: ReactNode;
   onInvalidState: () => void;
-  validate: (user: UserTypes.User | null) => boolean;
+  validate: (loginType: UserTypes.LoginType | null) => boolean;
 }) => {
   const value = useLoadableUser();
 
-  const currentLoginType = useRef(
+  const isValid = validate(
     value.state === "hasData" ? value.data?.loginType || null : null
   );
 
-  const isValid = useMemo(() => {
-    if (typeof window === "undefined") return true; // static page generation issue. 서버 컴포넌트 생성 시 overlay가 있는 상태에서 생성되면, 클라이언트에서 isValid값이 true가 초기값인 경우 서버 생성 그대로 보여주기 때문에 오버레이 안없어짐
-    if (value.state !== "hasData") return false;
-    const _isValid = validate(value.data);
-
-    if (
-      (currentLoginType.current !== value.data?.loginType || null) &&
-      !_isValid
-    ) {
-      currentLoginType.current = value.data?.loginType || null;
+  useEffect(() => {
+    if (!isValid) {
       onInvalidState();
     }
+  }, [isValid]);
 
-    return _isValid;
-  }, [value.state === "hasData" ? value.data?.loginType : undefined]);
+  useEffect(() => {
+    if (typeof window !== "undefined" && isValid) {
+      // 이미 isValid인 상태일 때, 서버에서 온 html을 업데이트 하지 않아서 오버레이가 사라지지 않는 문제
+      const overlay = document.getElementById("auth_layout_overlay");
+      if (overlay) overlay.style["display"] = "none";
+    }
+  }, []);
 
   return (
     <>
       {children}
       <Flex
+        id="auth_layout_overlay"
         position={"fixed"}
         left={0}
         display={isValid ? "none" : "flex"}

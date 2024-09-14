@@ -26,7 +26,13 @@ const resultAtom = atomWithRefresh<
     pending: InterviewTypes.PendingInterviewResult[];
   }>
 >(async (get) => {
-  get(userAtom);
+  const user = await get(userAtom);
+  if (!user || user.loginType === "GUEST") {
+    return {
+      done: [],
+      pending: [],
+    };
+  }
 
   const [done, pending] = await Promise.all([
     interviewApis.getCompletedInterviewResultList(),

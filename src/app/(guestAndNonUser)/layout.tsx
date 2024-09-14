@@ -8,7 +8,8 @@ import { ReactNode, useCallback } from "react";
 const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const validate = useCallback(
-    (user: UserTypes.User | null) => !user || user.loginType === "GUEST",
+    (loginType: UserTypes.LoginType | null) =>
+      loginType === null || loginType === "GUEST",
     []
   );
   const handleInvalidState = useCallback(() => router.replace("/"), []);
