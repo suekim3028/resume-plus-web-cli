@@ -631,6 +631,7 @@ const ConfirmPopup = ({
               width: 116,
               height: 48,
               padding: 0,
+              bgColor: "Transparent",
             }}
           />
           <Button
