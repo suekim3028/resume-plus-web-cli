@@ -4,6 +4,9 @@ import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
+import { CompanyThumbnail } from "@components";
+
+import { interviewUtils } from "@utils";
 import { getScoreStat } from "../utils";
 import ScoreBadge from "./ScoreBadge";
 
@@ -16,6 +19,7 @@ const CompletedResultCard = ({
 }) => {
   const router = useRouter();
 
+  console.log(interviewInfo);
   const { totalMean } = getScoreStat(result);
 
   return (
@@ -33,14 +37,12 @@ const CompletedResultCard = ({
       }}
       cursor={"pointer"}
     >
-      <Flex w="100%" flex={0} h={128} mb={14}>
-        <Flex
-          w={128}
-          h={128}
-          flexShrink={0}
-          rounded={10}
-          bgRgbColor="rgba(217, 217, 217, 1)"
-        ></Flex>
+      <Flex w="100%" flex={0} h={128} mb={16}>
+        <CompanyThumbnail
+          companyName={interviewInfo.company}
+          size={"large"}
+          thumbnailUrl={interviewInfo.companyThumbnailUrl ?? undefined}
+        />
         <Flex
           direction={"column"}
           h={128}
@@ -84,9 +86,9 @@ const CompletedResultCard = ({
           </Text>
         </Flex>
       </Flex>
-      <Flex w="100%" justifyContent={"space-between"}>
+      <Flex w="100%" justifyContent={"space-between"} alignItems={"center"}>
         <Text type="Label2" fontWeight={"400"}>
-          {result.createdAt}
+          {interviewUtils.formatData(result.createdAt)}
         </Text>
         <ScoreBadge score={totalMean} size={"medium"} />
       </Flex>
