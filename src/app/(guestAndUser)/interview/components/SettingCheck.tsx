@@ -1,9 +1,12 @@
+import { Icon } from "@components";
+import * as animationData from "@public/lotties/loading.json";
 import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useEffect, useRef, useState } from "react";
+import Lottie from "react-lottie";
 import Container from "./Container";
-type Status = "IDLE" | "RECORDING" | "RECORDED";
 
+type Status = "IDLE" | "RECORDING" | "RECORDED";
 const SettingCheck = ({ goNext }: { goNext: () => void }) => {
   const [settingStatus, setSettingStatus] = useState<Status>("IDLE");
   const videoUrl = useRef<string | null>(null);
@@ -46,7 +49,6 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
         direction={"column"}
         alignItems={"center"}
         justifyContent={"center"}
-        flex={1}
       >
         {render()}
       </Flex>
@@ -56,7 +58,12 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
 
 const Idle = ({ goNext }: { goNext: () => void }) => {
   return (
-    <Flex direction={"column"} alignItems={"center"}>
+    <Flex
+      direction={"column"}
+      alignItems={"center"}
+      h={580}
+      justifyContent={"center"}
+    >
       <Text type="Title3" color="Static/Black" fontWeight={"500"} mb={64}>
         원활한 면접을 위해 웹캠과 마이크 환경을 점검할게요
       </Text>
@@ -80,6 +87,11 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
   const recorder = useRef<MediaRecorder>();
   const videoElement = useRef<HTMLVideoElement>(null);
 
+  const [showRecorder, setShowRecorder] = useState({
+    video: false,
+    mic: false,
+  });
+
   const record = () => {
     if (!mediaStream.current || !recorder.current) return;
     setRecordingStatus("RECORDING");
@@ -97,8 +109,13 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
       },
       audio: true,
     });
+
     if (videoElement.current)
       videoElement.current.srcObject = mediaStream.current;
+    setShowRecorder({
+      video: mediaStream.current.getVideoTracks().length > 0,
+      mic: mediaStream.current.getAudioTracks().length > 0,
+    });
 
     recorder.current = new MediaRecorder(mediaStream.current);
     recorder.current.ondataavailable = (ev) => {
@@ -114,40 +131,70 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
 
   return (
     <Flex
-      flex={1}
       direction={"row"}
-      p={102}
+      h={580}
       alignItems={"center"}
       justifyContent={"center"}
-      gap={90}
+      gap={72}
     >
       <Flex
-        flexGrow={0}
         alignSelf={"center"}
         width={384}
         height={384}
         borderRadius={28}
         overflow={"hidden"}
+        bgColor={"Static/Black"}
+        position={"relative"}
       >
-        <video
-          autoPlay
-          disableRemotePlayback
-          disablePictureInPicture
-          width={"100%"}
-          height={"100%"}
-          ref={videoElement}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            transform: "rotateY(180deg)",
-            borderRadius: 28,
-            overflow: "hidden",
-          }}
-          muted
-          controls={false}
-          playsInline
-        />
+        {showRecorder.video ? (
+          <>
+            <video
+              autoPlay
+              disableRemotePlayback
+              disablePictureInPicture
+              width={"100%"}
+              height={"100%"}
+              ref={videoElement}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                transform: "rotateY(180deg)",
+                borderRadius: 28,
+                overflow: "hidden",
+              }}
+              muted
+              controls={false}
+              playsInline
+            />
+            <Flex position={"absolute"} right={16} bottom={16}>
+              <Icon
+                name={showRecorder.mic ? "iconMicGreen" : "iconMicGreenOff"}
+                size={24}
+              />
+            </Flex>
+          </>
+        ) : (
+          <Flex
+            flex={1}
+            alignItems={"center"}
+            justifyContent={"center"}
+            bgColor={"Line/Solid/Alternative"}
+          >
+            <Lottie
+              options={{
+                loop: true,
+                autoplay: true,
+                animationData: animationData,
+                rendererSettings: {
+                  preserveAspectRatio: "xMidYMid slice",
+                },
+              }}
+              height={30}
+              width={30}
+            />
+          </Flex>
+        )}
       </Flex>
       {recordingStatus === "READY" ? (
         <Flex direction={"column"} alignItems={"center"}>
@@ -164,6 +211,7 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
           </Text>
           <Button
             size={"Large"}
+            disabled={!showRecorder.mic || !showRecorder.video}
             title="환경체크 시작"
             type="Solid_Primary"
             onClick={record}
@@ -204,7 +252,7 @@ const Recorded = ({
     if (!url) goBack();
   }, [!!url]);
   return (
-    <Flex alignItems={"center"} p={102} flex={1} w="100%">
+    <Flex alignItems={"center"} h={580} w="100%" justifyContent={"center"}>
       <Flex
         flexGrow={0}
         alignSelf={"center"}
@@ -212,6 +260,7 @@ const Recorded = ({
         width={384}
         height={384}
         borderRadius={28}
+        bgColor={"Static/Black"}
       >
         <video
           src={url}

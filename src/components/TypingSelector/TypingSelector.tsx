@@ -40,7 +40,7 @@ const TypingSelectorComponent = <T extends any>(
   useImperativeHandle(ref, () => ({ close, clear }));
 
   return (
-    <Flex w="100%" position={"relative"} my={20}>
+    <Flex w="100%" position={"relative"}>
       <Flex
         cursor={"pointer"}
         px={8}

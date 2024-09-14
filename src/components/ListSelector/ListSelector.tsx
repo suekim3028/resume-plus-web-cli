@@ -45,7 +45,7 @@ const ListSelectorComponent = <T extends any>(
   useImperativeHandle(ref, () => ({ close, select }));
 
   return (
-    <Flex w="100%" position={"relative"} py={20} direction={"column"}>
+    <Flex w="100%" position={"relative"} direction={"column"}>
       {isError && disabledMsg && (
         <Text type={"Caption1"} fontWeight={"400"} color={"Status/Negative"}>
           * {disabledMsg}

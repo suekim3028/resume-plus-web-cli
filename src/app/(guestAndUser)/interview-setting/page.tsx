@@ -200,40 +200,41 @@ const Interview = () => {
               </Text>
             </Flex>
 
-            <TypingSelector<InterviewTypes.Company>
-              ref={companyRef}
-              placeholder="기업명을 입력해주세요"
-              itemList={companies.map((value) => ({
-                label: value.companyName,
-                value,
-              }))}
-              onSelect={(v) => onValueChange("company", v)}
-              onTypingSelect={(v) => onValueChange("company", v)}
-            />
-            <ListSelector<InterviewTypes.Department>
-              ref={departmentRef}
-              itemList={departmentGroups.map((value) => ({
-                label: value.department,
-                value,
-              }))}
-              placeholder="직군을 선택해주세요"
-              onSelect={(v) => {
-                onValueChange("department", v);
-                jobRef.current?.select(null);
-              }}
-            />
-            <ListSelector<InterviewTypes.Job>
-              ref={jobRef}
-              itemList={jobs.map((value) => ({
-                label: value.companyJob,
-                value,
-              }))}
-              placeholder="직무를 선택해주세요"
-              onSelect={(v) => onValueChange("job", v)}
-              disabled={!jobs.length}
-              disabledMsg="직군을 먼저 선택해주세요"
-            />
-
+            <Flex flexDir={"column"} gap={40} mt={24}>
+              <TypingSelector<InterviewTypes.Company>
+                ref={companyRef}
+                placeholder="기업명을 입력해주세요"
+                itemList={companies.map((value) => ({
+                  label: value.companyName,
+                  value,
+                }))}
+                onSelect={(v) => onValueChange("company", v)}
+                onTypingSelect={(v) => onValueChange("company", v)}
+              />
+              <ListSelector<InterviewTypes.Department>
+                ref={departmentRef}
+                itemList={departmentGroups.map((value) => ({
+                  label: value.department,
+                  value,
+                }))}
+                placeholder="직군을 선택해주세요"
+                onSelect={(v) => {
+                  onValueChange("department", v);
+                  jobRef.current?.select(null);
+                }}
+              />
+              <ListSelector<InterviewTypes.Job>
+                ref={jobRef}
+                itemList={jobs.map((value) => ({
+                  label: value.companyJob,
+                  value,
+                }))}
+                placeholder="직무를 선택해주세요"
+                onSelect={(v) => onValueChange("job", v)}
+                disabled={!jobs.length}
+                disabledMsg="직군을 먼저 선택해주세요"
+              />
+            </Flex>
             <Text type="Heading2" fontWeight={"600"} mt={60}>
               면접 상세 설정
             </Text>
