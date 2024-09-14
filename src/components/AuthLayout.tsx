@@ -3,7 +3,7 @@ import { useLoadableUser } from "@atoms";
 import * as animationData from "@public/lotties/loading.json";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import Lottie from "react-lottie";
 
 const AuthLayout = ({
@@ -17,14 +17,20 @@ const AuthLayout = ({
 }) => {
   const value = useLoadableUser();
 
-  const isValid = validate(
-    value.state === "hasData" ? value.data?.loginType || null : null
-  );
+  const currentLoginType =
+    value.state === "hasData" ? value.data?.loginType || null : null;
+  const prevLoginType = useRef(currentLoginType);
+  const isValid = validate(currentLoginType);
 
   useEffect(() => {
-    if (!isValid) {
+    if (
+      value.state === "hasData" &&
+      !isValid &&
+      prevLoginType.current !== currentLoginType
+    ) {
       onInvalidState();
     }
+    prevLoginType.current = currentLoginType;
   }, [isValid]);
 
   useEffect(() => {
