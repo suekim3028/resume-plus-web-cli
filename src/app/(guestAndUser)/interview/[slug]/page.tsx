@@ -3,7 +3,7 @@ import { interviewApis } from "@apis";
 
 import { useCompanyData, useUser } from "@atoms";
 
-import { findCompanyInfo } from "@app/(guest_user)/result/utils";
+import { findCompanyInfo } from "@app/(guestAndUser)/result/utils";
 import { InterviewTypes } from "@types";
 import { commonHooks } from "@web-core";
 import { useRouter } from "next/navigation";

@@ -3,7 +3,7 @@ import { useLoadableUser } from "@atoms";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
 
-import { ReactNode, useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 
 const AuthLayout = ({
   children,
@@ -16,36 +16,59 @@ const AuthLayout = ({
 }) => {
   const value = useLoadableUser();
 
-  const isValid = value.state === "hasData" && validate(value.data);
+  const currentLoginType = useRef(
+    value.state === "hasData" ? value.data?.loginType || null : null
+  );
 
-  const effected = useRef(false);
-  useEffect(() => {
-    if (value.state !== "hasData" || effected.current) return;
-    effected.current = true;
-    if (!isValid) {
+  const isValid = useMemo(() => {
+    if (typeof window === "undefined") return false; // static page generation issue
+    if (value.state !== "hasData") return false;
+    console.log(value.data?.loginType);
+    const _isValid = validate(value.data);
+
+    if (
+      (currentLoginType.current !== value.data?.loginType || null) &&
+      !_isValid
+    ) {
+      currentLoginType.current = value.data?.loginType || null;
       onInvalidState();
     }
-  }, [value.state === "hasData", isValid]);
 
-  if (isValid) {
-    return children;
-  }
+    return _isValid;
+  }, [value.state === "hasData" ? value.data?.loginType : undefined]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || isValid) {
+      document.getElementsByClassName("noe").item(0)?.remove(); //reload 시 제대로 동작안하고 계속 overlay 남아 있는 문제. 직접 지워주는 거로 해결
+    }
+  }, []);
 
   return (
-    <Flex
-      position={"fixed"}
-      left={0}
-      right={0}
-      top={0}
-      bottom={0}
-      bgRgbColor={"rgba(0,0,0,0.5)"}
-      zIndex={10}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
+    <>
       {children}
-    </Flex>
+      {!isValid && (
+        <Flex
+          className="noe"
+          position={"fixed"}
+          left={0}
+          right={0}
+          top={0}
+          bottom={0}
+          bgRgbColor={"rgba(0,0,0,0.2)"}
+        >
+          hi
+        </Flex>
+      )}
+    </>
   );
 };
 
-export default AuthLayout;
+const Test = () => {
+  console.log("!!");
+  return <></>;
+};
+
+export default React.memo(AuthLayout);
+// export default function Auth({ children }: { children: ReactNode }) {
+//   return children;
+// }

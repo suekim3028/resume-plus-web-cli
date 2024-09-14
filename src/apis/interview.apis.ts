@@ -107,31 +107,21 @@ export const getCompanies = () =>
   });
 
 /**
- * 직군 목록 요청
+ * 직군직무 목록 요청
  */
 
-type GetDepartmentsResponse = InterviewTypes.JobDepartment[];
-export const getDepartments = () =>
-  API.get<GetDepartmentsResponse>("/company/department", undefined, {
+type GetDepartmentsResponse = InterviewTypes.DepartmentGroup[];
+export const getDepartmentGroups = () =>
+  API.get<GetDepartmentsResponse>("/company/dept-job", undefined, {
     dummyData: Array.from({ length: 20 }, (_, idx) => ({
-      companyDeptId: idx,
-      companyDept: `직군awefawefawef ${idx}번`,
+      departmentId: idx,
+      department: `직군 ${idx}`,
+      job: Array.from({ length: 20 }, (_, idx) => ({
+        companyJobId: idx,
+        companyJob: `직군 ${idx}`,
+      })),
     })),
-    useDummy: false,
-  });
-
-/**
- * 직무 목록 요청
- */
-
-type GetJobsResponse = InterviewTypes.Job[];
-export const getJobs = () =>
-  API.get<GetJobsResponse>("/company/job", undefined, {
-    dummyData: Array.from({ length: 20 }, (_, idx) => ({
-      companyJobId: idx,
-      companyJob: `직무aefwawefawfewafewafewfa ${idx}번`,
-    })),
-    useDummy: false,
+    useDummy: true,
   });
 
 /**
