@@ -11,7 +11,7 @@ import {
   TypingSelector,
   TypingSelectorRef,
 } from "@components";
-import { UI } from "@constants";
+import { UI, WEBSITE_CONSTS } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
@@ -517,19 +517,7 @@ const Interview = () => {
                     color="Label/Neutral"
                     fontWeight={"400"}
                   >
-                    쏘카 (이하 “회사”라 함)은(는) “Greeting” 을 통한 채용 절차
-                    진행을 위하여 귀하의 정보를 수집합니다. 1. 수집하는
-                    개인정보의 필수항목 •성명, 전화번호, 이메일 2.
-                    개인정보처리의 목적 •채용 관련 안내, 공지사항 전달, 채용 및
-                    웹사이트 이용 관련 연락, 채용 적합성 판단 및 서류심사/면접
-                    등의 근거 자료, 인재 DB 활용 등 3. 보유기간 •접수 지원 후
-                    3년간, 단 정보주체의 삭제 요청이 있는 경우 지체없이 파기 ※
-                    회사는 본인이 작성/제출한 정보에 한하여 정보를 수집합니다.
-                    채용서비스의 특성상 민감한 정보 등이 수집될 수 있으니
-                    작성/제출에 유의하여 주시기 바랍니다. ※ 귀하는 개인 정보
-                    수집ㆍ이용에 대한 동의를 거부할 권리가 있습니다. 그러나
-                    동의를 거부할 경우 원활한 기업 측으로의 지원자 정보 전달을
-                    진행할 수 없어 본건 서비스에 제한을 받을 수 있습니다
+                    {WEBSITE_CONSTS.PRIVACY_DATA_TEXT}
                   </Text>
                 </Flex>
               )}
