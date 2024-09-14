@@ -6,6 +6,7 @@ import { useState } from "react";
 import CompletedResultList from "./components/CompletedResultList";
 import PendingResultList from "./components/PendingResultList";
 
+import S from "./styles.module.css";
 const Result = () => {
   const [showInfo, setShowInfo] = useState(false);
   return (
@@ -25,30 +26,29 @@ const Result = () => {
                   width: 300,
                 }}
               >
-                <Icon
-                  name="circleQuestionFill"
-                  size={24}
-                  onClick={() => {
-                    setShowInfo((p) => !p);
-                  }}
-                />
-                {showInfo && (
-                  <Flex
-                    top={16}
-                    alignItems={"flex-start"}
-                    position={"absolute"}
-                    left={12}
-                    borderRadius={8}
-                    bgColor={"Primary/Normal"}
-                    p={4}
-                  >
-                    <Text
-                      type="Caption2"
-                      fontWeight={"500"}
-                      color={"Static/White"}
-                    >{`오른쪽 아래의 숫자는\n면접 종합 점수입니다`}</Text>
-                  </Flex>
-                )}
+                <div
+                  style={{ width: "fit-content" }}
+                  className={S["result_question_icon"]}
+                >
+                  <Icon name="normalCircleExclamation" size={24} />
+                </div>
+                <Flex
+                  visibility={"hidden"}
+                  top={16}
+                  alignItems={"flex-start"}
+                  position={"absolute"}
+                  left={12}
+                  borderRadius={8}
+                  bgColor={"Primary/Normal"}
+                  p={4}
+                  className={S["result_question_box"]}
+                >
+                  <Text
+                    type="Caption2"
+                    fontWeight={"500"}
+                    color={"Static/White"}
+                  >{`오른쪽 아래의 숫자는\n면접 종합 점수입니다`}</Text>
+                </Flex>
               </div>
             </Flex>
             <Text type="Title3" fontWeight={"500"} mb={40}>

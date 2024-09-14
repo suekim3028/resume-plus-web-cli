@@ -1,0 +1,3 @@
+.result_question_icon:hover + .result_question_box {
+  visibility: visible;
+}
