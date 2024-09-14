@@ -591,6 +591,7 @@ const ConfirmPopup = ({
     <PopUp visible={true}>
       <Flex
         borderRadius={16}
+        w={480}
         bgColor={"Background/Normal/Alternative"}
         px={40}
         pt={20}
@@ -603,10 +604,10 @@ const ConfirmPopup = ({
         </Text>
         <Flex
           w="100%"
-          py={8}
-          px={12}
+          py={4}
+          px={14}
           bgColor={"Static/White"}
-          radioGroup="8"
+          borderRadius={8}
           mt={12}
           gap={16}
           flexDir={"column"}
@@ -626,11 +627,17 @@ const ConfirmPopup = ({
             type={"Outlined_Secondary"}
             title={"다시 입력"}
             onClick={close}
+            flexProps={{
+              width: 116,
+              height: 48,
+              padding: 0,
+            }}
           />
           <Button
             size={"Large"}
             type={"Solid_Primary"}
             title={"면접 시작"}
+            flexProps={{ width: 116, height: 48, padding: 0 }}
             onClick={() => {
               confirm();
               const elem = document.getElementById("body");
@@ -649,14 +656,19 @@ const ConfirmPopup = ({
 const Row = ({ title, body }: { title: string; body: string }) => {
   return (
     <Flex flexDir={"column"} w="100%">
-      <Text type={"Body1_Normal"} color={"Primary/Normal"} fontWeight={"600"}>
+      <Text
+        type={"Body1_Normal"}
+        color={"Primary/Normal"}
+        fontWeight={"600"}
+        my={4}
+      >
         {title}
       </Text>
       <Text
         type={"Label2"}
         color={"Label/Alternative"}
         fontWeight={"500"}
-        mt={8}
+        my={4}
       >
         {body}
       </Text>
