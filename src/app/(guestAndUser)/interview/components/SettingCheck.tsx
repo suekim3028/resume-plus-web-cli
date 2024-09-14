@@ -1,9 +1,7 @@
-import { Icon } from "@components";
-import * as animationData from "@public/lotties/loading.json";
+import { Icon, Spinner } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useEffect, useRef, useState } from "react";
-import Lottie from "react-lottie";
 import Container from "./Container";
 
 type Status = "IDLE" | "RECORDING" | "RECORDED";
@@ -181,18 +179,7 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
             justifyContent={"center"}
             bgColor={"Line/Solid/Alternative"}
           >
-            <Lottie
-              options={{
-                loop: true,
-                autoplay: true,
-                animationData: animationData,
-                rendererSettings: {
-                  preserveAspectRatio: "xMidYMid slice",
-                },
-              }}
-              height={30}
-              width={30}
-            />
+            <Spinner size={30} />
           </Flex>
         )}
       </Flex>

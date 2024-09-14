@@ -21,6 +21,8 @@ import TypingSelector, {
   type TypingSelectorItem,
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
+
+import Spinner from "./Spinner";
 export {
   AuthLayout,
   CompanyThumbnail,
@@ -36,6 +38,7 @@ export {
   ListSelectorRef,
   Logo,
   PopUp,
+  Spinner,
   TextInput,
   TextInputRef,
   TopBarContainer,

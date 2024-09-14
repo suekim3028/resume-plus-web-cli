@@ -1,10 +1,9 @@
 "use client";
 import { useLoadableUser } from "@atoms";
-import * as animationData from "@public/lotties/loading.json";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
 import React, { ReactNode, useEffect, useRef } from "react";
-import Lottie from "react-lottie";
+import Spinner from "./Spinner";
 
 const AuthLayout = ({
   children,
@@ -56,18 +55,7 @@ const AuthLayout = ({
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <Lottie
-          options={{
-            loop: true,
-            autoplay: true,
-            animationData: animationData,
-            rendererSettings: {
-              preserveAspectRatio: "xMidYMid slice",
-            },
-          }}
-          height={30}
-          width={30}
-        />
+        <Spinner size={30} />
       </Flex>
     </>
   );
