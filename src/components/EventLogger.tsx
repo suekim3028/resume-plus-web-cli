@@ -1,5 +1,3 @@
-import * as amplitude from "@amplitude/analytics-browser";
-
 type EventProp = {
   action?: string;
   label?: string;
@@ -11,7 +9,7 @@ class _EventLogger {
   public log<T extends EventKey>(event: T): (params: EventParams[T]) => void {
     return (params) => {
       const _props = factory[event](params);
-      amplitude.track(event, _props);
+      // amplitude.track(event, _props);
       console.log(`[LogEvent] ${event} : ${JSON.stringify(_props)}`);
     };
   }

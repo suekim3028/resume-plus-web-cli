@@ -1,7 +1,6 @@
 import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
-import Script from "next/script";
 import { StrictMode } from "react";
 import "./globals.css";
 
@@ -21,7 +20,6 @@ export default function RootLayout({
           </Initializer>
         </GoogleOAuthProvider>
 
-        <Script src="https://cdn.amplitude.com/libs/analytics-browser-2.10.0-min.js.gz" />
         <link
           rel="stylesheet"
           as="style"
