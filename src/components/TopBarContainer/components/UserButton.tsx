@@ -40,8 +40,10 @@ const _UserButton = () => {
             top={"100%"}
             right={0}
             bgColor={"Static/White"}
+            overflow={"visible"}
             whiteSpace={"nowrap"}
             width={78}
+            boxShadow={"0px 2px 8px rgba(0, 0, 0, 0.16)"}
           >
             <Flex
               py={10}
