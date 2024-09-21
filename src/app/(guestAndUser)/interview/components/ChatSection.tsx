@@ -59,7 +59,7 @@ const ChatComponent = () => {
             placeholder="답변을 입력하세요"
             color="white"
             style={{
-              fontFamily: "Pretendard JP",
+              fontFamily: "Pretendard JP Variable",
               fontSize: 15,
               lineHeight: "22.01px",
 

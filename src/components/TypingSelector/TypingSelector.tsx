@@ -59,7 +59,7 @@ const TypingSelectorComponent = <T extends any>(
         <input
           ref={inputRef}
           style={{
-            fontFamily: "Pretendard JP",
+            fontFamily: "Pretendard JP Variable",
             fontSize: 16,
             lineHeight: "150%",
             borderStyle: "none",

@@ -19,12 +19,11 @@ export default function RootLayout({
             </StrictMode>
           </Initializer>
         </GoogleOAuthProvider>
-
         <link
           rel="stylesheet"
           as="style"
           crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp-dynamic-subset.min.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp.min.css"
         />
       </body>
     </html>
