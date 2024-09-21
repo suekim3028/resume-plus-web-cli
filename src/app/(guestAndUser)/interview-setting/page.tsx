@@ -645,7 +645,10 @@ const ConfirmPopup = ({
             size={"Large"}
             type={"Outlined_Secondary"}
             title={"다시 입력"}
-            onClick={close}
+            onClick={() => {
+              close();
+              EventLogger.log("interview_setting_popup_button", "다시 입력");
+            }}
             flexProps={{
               width: 116,
               height: 48,
@@ -660,6 +663,8 @@ const ConfirmPopup = ({
             flexProps={{ width: 116, height: 48, padding: 0 }}
             onClick={() => {
               confirm();
+              EventLogger.log("interview_setting_popup_button", "면접 시작");
+
               const elem = document.getElementById("body");
 
               if (elem && elem.requestFullscreen) {
