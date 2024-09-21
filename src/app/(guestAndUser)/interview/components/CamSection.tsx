@@ -1,5 +1,6 @@
+import { useUserValue } from "@atoms";
 import { UI } from "@constants";
-import { Flex } from "@uis";
+import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import React, { RefObject, useMemo } from "react";
 import { BOTTOM_BAR_HEIGHT, TOP_BAR_HEIGHT } from "../constants";
@@ -17,6 +18,7 @@ const CamSection = ({
   interviewerName: string;
 }) => {
   const window = commonHooks.useWindowSize({});
+  const { user } = useUserValue();
 
   const CAM_SIZE = useMemo(() => {
     if (!window) return 0;
@@ -47,7 +49,19 @@ const CamSection = ({
             ? `3px solid ${UI.COLORS["Primary/Normal"]}`
             : undefined
         }
-      ></Flex>
+        position={"relative"}
+      >
+        <Text
+          type={"Label1_Normal"}
+          fontWeight={"600"}
+          bottom={12}
+          right={8}
+          position={"absolute"}
+          color={"Primary/Normal"}
+        >
+          {`면접관_${interviewerName}PM`}
+        </Text>
+      </Flex>
       <Flex
         overflow={"hidden"}
         // flex={0}
@@ -60,8 +74,19 @@ const CamSection = ({
         }
         bgRgbColor={"rgba(217, 217, 217, 1)"}
         borderRadius={12}
+        position={"relative"}
       >
         <FrontCamera ref={cameraRef} />
+        <Text
+          type={"Label1_Normal"}
+          fontWeight={"600"}
+          bottom={12}
+          right={8}
+          position={"absolute"}
+          color={"Primary/Normal"}
+        >
+          {`지원자_${user && user.loginType !== "GUEST" ? user.name : "OO"}님`}
+        </Text>
       </Flex>
     </Flex>
   );

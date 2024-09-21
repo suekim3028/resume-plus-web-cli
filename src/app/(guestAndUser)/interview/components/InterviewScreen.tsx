@@ -1,6 +1,5 @@
 "use client";
 
-import { InterviewTypes } from "@types";
 import { Flex } from "@uis";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,7 +8,6 @@ import InterviewContextProvider, {
   useInterviewContext,
 } from "../InterviewContext";
 import { useInterviewInfoContext } from "../InterviewInfoContext";
-import { RandomQuestion } from "../types";
 import CamSection from "./CamSection";
 import ChatSection from "./ChatSection";
 import CircleButton, { CircleButtonProps } from "./CircleButton";
@@ -115,12 +113,6 @@ const InterviewScreenComponent = () => {
       )}
     </Flex>
   );
-};
-
-type InterviewScreenProps = {
-  interviewInfo: InterviewTypes.InterviewInfo;
-  questions: RandomQuestion[];
-  interviewerName: string;
 };
 
 const InterviewScreen = () => {
