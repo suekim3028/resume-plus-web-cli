@@ -86,7 +86,7 @@ const Button = ({
       href={url}
       target={"_blank"}
       style={{ textDecoration: "none" }}
-      onClick={() => EventLogger.log("footer_button")(title)}
+      onClick={() => EventLogger.log("footer_button", title)}
     >
       <Text type={"Heading2"} fontWeight={"600"} color={"Static/White"}>
         {title}

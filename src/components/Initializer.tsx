@@ -1,6 +1,7 @@
 "use client";
 import * as amplitude from "@amplitude/analytics-browser";
 import { useRefreshUser } from "@atoms";
+import { useRouteChangeEvent } from "@hooks";
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 export default function Initializer({ children }: { children: ReactNode }) {
@@ -8,6 +9,8 @@ export default function Initializer({ children }: { children: ReactNode }) {
   const refreshUser = useRefreshUser();
 
   const effected = useRef(false);
+
+  useRouteChangeEvent();
   useEffect(() => {
     if (effected.current) return;
 

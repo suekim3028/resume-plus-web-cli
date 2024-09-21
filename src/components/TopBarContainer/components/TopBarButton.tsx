@@ -31,7 +31,7 @@ const TopBarButton = ({
           color: "black",
         }}
         onClick={() => {
-          EventLogger.log("global_navigation_bar_button")(name);
+          EventLogger.log("global_navigation_bar_button", name);
         }}
       >
         <Text

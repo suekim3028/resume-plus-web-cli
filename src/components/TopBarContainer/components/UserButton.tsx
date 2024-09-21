@@ -52,7 +52,7 @@ const _UserButton = () => {
               cursor={"pointer"}
               onClick={() => {
                 router.push("/profile");
-                EventLogger.log("global_navigation_bar_profile")("프로필");
+                EventLogger.log("global_navigation_bar_profile", "프로필");
               }}
             >
               <Text type="Label1_Normal" fontWeight={"500"}>
@@ -67,7 +67,7 @@ const _UserButton = () => {
               w="100%"
               onClick={() => {
                 logout();
-                EventLogger.log("global_navigation_bar_profile")("로그아웃");
+                EventLogger.log("global_navigation_bar_profile", "로그아웃");
               }}
             >
               <Text type="Label1_Normal" fontWeight={"500"}>

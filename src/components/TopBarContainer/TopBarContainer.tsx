@@ -41,7 +41,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             display={"flex"}
             onClick={() => {
               router.push("/");
-              EventLogger.log("global_navigation_bar_button")("logo");
+              EventLogger.log("global_navigation_bar_button", "logo");
             }}
             cursor={"pointer"}
           >

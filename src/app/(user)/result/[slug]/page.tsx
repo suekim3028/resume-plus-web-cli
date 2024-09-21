@@ -1,11 +1,12 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon } from "@components";
+import { EventLogger, Icon } from "@components";
 
+import { useCompanyData, useResult } from "@atoms";
 import { Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
-import { useCompanyData, useResult } from "@atoms";
+import { useEffect, useMemo } from "react";
 import { getScoreStat } from "../utils";
 import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
@@ -21,24 +22,43 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
     return i.interviewId === Number(interviewId);
   });
 
-  if (!interview) return <></>;
+  const interviewInfo = useMemo(() => {
+    if (!interview) return null;
+    const { companyId, jobId, departmentId, createdAt } = interview;
 
-  const { companyId, jobId, departmentId, createdAt } = interview;
+    const company = companyData?.companies.find(
+      ({ companyId: id }) => id === companyId
+    );
+    const department = companyData?.departmentGroups.find(
+      ({ departmentId: id }) => id === departmentId
+    );
 
-  const company = companyData?.companies.find(
-    ({ companyId: id }) => id === companyId
-  );
-  const department = companyData?.departmentGroups.find(
-    ({ departmentId: id }) => id === departmentId
-  );
+    const job = department
+      ? getJobsByDepartmentId(department?.departmentId).find(
+          ({ companyJobId }) => companyJobId === jobId
+        ) || null
+      : null;
+    const { totalMean } = getScoreStat(interview);
 
-  const job = department
-    ? getJobsByDepartmentId(department?.departmentId).find(
-        ({ companyJobId }) => companyJobId === jobId
-      ) || null
-    : null;
+    return { ...interview, company, department, job, createdAt, totalMean };
+  }, [!!interview]);
 
-  const { totalMean } = getScoreStat(interview);
+  useEffect(() => {
+    if (!interviewInfo) return;
+    const { company, department, job, createdAt, totalMean } = interviewInfo;
+
+    EventLogger.log("InterviewResultDetail", {
+      corp_name: company?.companyName || "",
+
+      interview_datetime: createdAt,
+      job_name: job?.companyJob || "",
+      occupation_name: department?.department || "",
+      score: totalMean,
+    });
+  }, [!!interviewInfo]);
+
+  if (!interviewInfo || !interview) return <></>;
+  const { company, department, job, createdAt, totalMean } = interviewInfo;
 
   return (
     <Flex flexDir={"column"} alignItems={"center"} w="100%">
