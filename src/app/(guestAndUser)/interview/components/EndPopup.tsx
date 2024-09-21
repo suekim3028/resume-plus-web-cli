@@ -1,11 +1,11 @@
 import { interviewApis } from "@apis";
 import { Spinner } from "@chakra-ui/react";
-import { PopUp } from "@components";
+import { EventLogger, PopUp } from "@components";
 
 import { useUserValue } from "@atoms";
 import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { useInterviewInfoContext } from "../InterviewInfoContext";
 import PopupTemplate from "./PoupTemplate";
 
@@ -16,17 +16,31 @@ const EndPopupComponent = () => {
   const { interviewInfo } = useInterviewInfoContext();
 
   const exitInterview = () => {
+    EventLogger.log("interview_finish_popup_button", {
+      popup_title: "면접장 나가기",
+    });
     router.replace("/");
+
     interviewApis.deleteInterview({ id: interviewInfo.interviewId });
   };
 
   const goToSignUp = () => {
+    EventLogger.log("interview_finish_popup_button", {
+      popup_title: "회원가입",
+    });
+
     router.replace("/sign-in");
   };
 
   const goToResult = () => {
     router.replace("/result");
   };
+
+  useEffect(() => {
+    EventLogger.log("InterviewFinishPopUp", {
+      popup_title: "수고하셨습니다! 면접이 끝났어요!",
+    });
+  }, []);
   return isGuestUser ? (
     <PopupTemplate
       title={"수고하셨습니다! 면접이 끝났어요!"}
