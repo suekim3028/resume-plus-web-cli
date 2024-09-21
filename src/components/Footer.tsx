@@ -2,6 +2,7 @@
 import { GridItem } from "@chakra-ui/react";
 import { Flex, GridWrapper, Text } from "@uis";
 import Link from "next/link";
+import { EventLogger } from "./EventLogger";
 
 const Footer = () => {
   return (
@@ -73,9 +74,20 @@ const Footer = () => {
   );
 };
 
-const Button = ({ url, title }: { url: string; title: string }) => {
+const Button = ({
+  url,
+  title,
+}: {
+  url: string;
+  title: "Service Guide" | "Privacy Policy" | "Survey";
+}) => {
   return (
-    <Link href={url} target={"_blank"} style={{ textDecoration: "none" }}>
+    <Link
+      href={url}
+      target={"_blank"}
+      style={{ textDecoration: "none" }}
+      onClick={() => EventLogger.log("footer_button")(title)}
+    >
       <Text type={"Heading2"} fontWeight={"600"} color={"Static/White"}>
         {title}
       </Text>
