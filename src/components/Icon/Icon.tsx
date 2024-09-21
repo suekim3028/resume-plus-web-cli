@@ -69,6 +69,7 @@ const SVG_ICON_NAMES = [
   "normalCircleExclamation",
   "iconMicGreen",
   "iconMicGreenOff",
+  "iconMicRedOff",
 ] as const;
 
 const PNG_ICON_NAMES = [""] as const;

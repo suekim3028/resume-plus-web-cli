@@ -14,15 +14,16 @@ const TopBar = () => {
   };
   return (
     <Flex
-      px={16}
+      px={15}
+      py={8}
       justifyContent={"space-between"}
       bgColor={"Line/Solid/Normal"}
       zIndex={2}
       alignItems={"center"}
     >
-      <Flex alignItems={"center"} gap={12}>
+      <Flex alignItems={"center"} gap={48}>
         <CompanyThumbnail
-          size={"large"}
+          size={"small"}
           companyName={company}
           thumbnailUrl={companyThumbnailUrl || undefined}
         />

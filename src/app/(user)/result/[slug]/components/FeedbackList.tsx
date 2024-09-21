@@ -70,7 +70,7 @@ const FeedbackList = (
             px={8}
             minWidth={197}
             alignItems={"center"}
-            justifyContent={"center"}
+            justifyContent={"space-between"}
             onClick={() => setSelected(section)}
           >
             <Text

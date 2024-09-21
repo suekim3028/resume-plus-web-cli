@@ -1,6 +1,13 @@
 import { Icon } from "@components";
 import { Flex, Text } from "@uis";
-import { KeyboardEventHandler, useCallback, useRef } from "react";
+import {
+  forwardRef,
+  KeyboardEventHandler,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useInterviewContext } from "../InterviewContext";
 import { Chat } from "../types";
 import S from "./styles.module.css";
@@ -8,9 +15,12 @@ import S from "./styles.module.css";
 const ChatComponent = () => {
   const { chats, submitAnswerWithText, chatScrollRef } = useInterviewContext();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const isSubmitting = useRef(false);
+  const heightCalculatorRef = useRef<{
+    setText: (text: string) => void;
+  }>(null);
 
   const handleClickSend = useCallback(async () => {
     if (!inputRef.current || isSubmitting.current) return;
@@ -27,6 +37,11 @@ const ChatComponent = () => {
     isSubmitting.current = false;
   }, []);
 
+  const [scrollHeight, setScrollHeight] = useState(
+    inputRef.current?.scrollHeight || 0
+  );
+
+  console.log({ scrollHeight });
   const handleKeyDownEventListener: KeyboardEventHandler<HTMLInputElement> =
     useCallback((e) => {
       if (e.key === "Enter") handleClickSend();
@@ -61,8 +76,9 @@ const ChatComponent = () => {
           ))}
         </Flex>
       </Flex>
-      <Flex width="100%" px={16} justifySelf={"flex-end"} flex={0}>
+      <Flex width="100%" px={16} justifySelf={"flex-end"}>
         <Flex
+          height={"fit-content"}
           bgColor={"Primary/Normal"}
           w="100%"
           justifyContent={"space-between"}
@@ -70,24 +86,37 @@ const ChatComponent = () => {
           py={13}
           borderRadius={12}
         >
-          <input
-            ref={inputRef}
-            placeholder="답변을 입력하세요"
-            color="white"
-            style={{
-              fontFamily: "Pretendard JP Variable",
-              fontSize: 15,
-              lineHeight: "22.01px",
+          <Flex w="100%" position={"relative"}>
+            <HeightCalculator
+              ref={heightCalculatorRef}
+              onChangeHeight={setScrollHeight}
+            />
+            <textarea
+              ref={inputRef}
+              // wrap="soft"
+              placeholder="답변을 입력하세요"
+              color="white"
+              onChange={(e) => {
+                console.log("CHANGE DETECTED ! ! ");
 
-              border: "none",
-              backgroundColor: "transparent",
-
-              color: "white",
-            }}
-            onKeyUp={handleKeyDownEventListener}
-            className={S["chat-input"]}
-          />
-          <Flex p={3} onClick={handleClickSend}>
+                heightCalculatorRef.current?.setText(e.target.value);
+              }}
+              style={{
+                height: scrollHeight || undefined,
+                zIndex: 3,
+                overflowY: "hidden",
+                width: "100%",
+                fontFamily: "Pretendard JP Variable",
+                fontSize: 15,
+                lineHeight: "24px",
+                border: "none",
+                backgroundColor: "transparent",
+                color: "white",
+              }}
+              className={S["chat-input"]}
+            />
+          </Flex>
+          <Flex p={3} onClick={handleClickSend} ml={16}>
             <Icon name="normalSendSharp" size={16} />
           </Flex>
         </Flex>
@@ -97,6 +126,46 @@ const ChatComponent = () => {
 };
 
 export default ChatComponent;
+
+const HeightCalculator = forwardRef<
+  { setText: (text: string) => void },
+  { onChangeHeight: (height: number) => void }
+>(({ onChangeHeight }, ref) => {
+  const [text, setText] = useState("");
+  const handleResize = useCallback((entries: ResizeObserverEntry[]) => {
+    const height = entries[0].contentRect.height;
+    onChangeHeight(height);
+  }, []);
+  const resizeObserver = new ResizeObserver(handleResize);
+
+  useImperativeHandle(ref, () => ({ setText }));
+
+  return (
+    <Flex
+      position={"absolute"}
+      border={"1px solid white"}
+      left={0}
+      right={0}
+      opacity={0}
+      minHeight={22}
+      ref={(ref) => {
+        if (ref) resizeObserver.observe(ref);
+      }}
+    >
+      <Text
+        onResize={(e) => console.log(e)}
+        type={"Body2_Reading"}
+        fontWeight={"400"}
+        w="100%"
+        // opacity={0}
+        color={"Accent/Red Orange"}
+        border="1px solid orange"
+      >
+        {text}
+      </Text>
+    </Flex>
+  );
+});
 
 const ChatBubble = ({ isMine, text }: Chat) => {
   return (

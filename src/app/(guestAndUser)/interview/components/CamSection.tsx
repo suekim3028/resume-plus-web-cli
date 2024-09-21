@@ -1,4 +1,5 @@
 import { useUserValue } from "@atoms";
+import { Icon } from "@components";
 import { UI } from "@constants";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
@@ -8,11 +9,13 @@ import FrontCamera, { FrontCameraRef } from "./FrontCamera";
 
 const CamSection = ({
   chatOn,
+  micOn,
   cameraRef,
   talkingSide,
   interviewerName,
 }: {
   chatOn: boolean;
+  micOn: boolean;
   cameraRef: RefObject<FrontCameraRef>;
   talkingSide: "COMPANY" | "ME" | null;
   interviewerName: string;
@@ -50,7 +53,13 @@ const CamSection = ({
             : undefined
         }
         position={"relative"}
+        alignItems={"center"}
+        justifyContent={"center"}
       >
+        <Text type={"Display1"} fontWeight={"700"} color={"Static/Black"}>
+          {`${interviewerName}PM`}
+        </Text>
+
         <Text
           type={"Label1_Normal"}
           fontWeight={"600"}
@@ -77,6 +86,11 @@ const CamSection = ({
         position={"relative"}
       >
         <FrontCamera ref={cameraRef} />
+        {!micOn && (
+          <Flex position={"absolute"} left={8} bottom={8}>
+            <Icon name="iconMicRedOff" size={24} />
+          </Flex>
+        )}
         <Text
           type={"Label1_Normal"}
           fontWeight={"600"}

@@ -10,25 +10,39 @@ const PopupTemplate = ({
   body: string;
   buttons: { title: string; onClick: () => void }[];
 }) => {
+  const size = buttons.length === 2 ? "small" : "large";
   return (
     <PopUp visible={true}>
       <Flex
         direction={"column"}
         bgColor={"Static/White"}
         rounded={24}
-        pt={48}
-        pb={24}
-        px={61}
+        w={size === "small" ? 400 : 480}
         alignItems={"center"}
+        justifyContent={"space-between"}
+        h={size === "small" ? 280 : 320}
+        px={size === "small" ? 32 : 0}
+        pt={size === "small" ? 40 : 56}
+        pb={size === "small" ? 16 : 24}
       >
-        <Text type={"Title2"} fontWeight={"700"}>
-          {title}
-        </Text>
-        <Text type={"Body1_Normal"} mt={49} mb={65} textAlign={"center"}>
-          {body}
-        </Text>
+        <Flex flexDirection={"column"}>
+          <Text
+            type={size === "small" ? "Heading2" : "Title2"}
+            textAlign={"center"}
+            fontWeight={size === "small" ? "600" : "700"}
+          >
+            {title}
+          </Text>
+          <Text
+            pt={size === "small" ? 32 : 42}
+            type={size === "small" ? "Label1_Normal" : "Body1_Normal"}
+            textAlign={"center"}
+          >
+            {body}
+          </Text>
+        </Flex>
         {buttons.length === 2 ? (
-          <Flex gap={16} w="100%">
+          <Flex gap={16} w="100%" pt={size === "small" ? 48 : 0}>
             <Button
               stretch
               type={"Outlined_Secondary"}

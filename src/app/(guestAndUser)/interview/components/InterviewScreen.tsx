@@ -85,6 +85,7 @@ const InterviewScreenComponent = () => {
           position={"relative"}
         >
           <CamSection
+            micOn={setting.mic}
             interviewerName={interviewerName}
             cameraRef={cameraRef}
             chatOn={setting.chat}
