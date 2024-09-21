@@ -1,4 +1,4 @@
-import { TopBarContainer } from "@components";
+import { EventLogger, TopBarContainer } from "@components";
 import { Button, Flex, Text } from "@uis";
 import Image from "next/image";
 
@@ -31,6 +31,9 @@ export default function Home() {
               size="Large"
               title={"지금 바로 시작하기"}
               href={"/interview-setting"}
+              onClick={() =>
+                EventLogger.log("home_main_banner_card", "지금 바로 시작하기")
+              }
               flexProps={{ width: 282, height: 80, padding: 0 }}
               textProps={{ fontSize: 25.72, fontWeight: "600" }}
             />

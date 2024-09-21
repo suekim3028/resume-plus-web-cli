@@ -1,5 +1,5 @@
 "use client";
-import { Logo } from "@components";
+import { EventLogger, Logo } from "@components";
 import { UI } from "@constants";
 import { useAuth } from "@hooks";
 
@@ -31,7 +31,10 @@ const SignInComponent = () => {
             title="구글 계정으로 로그인"
             leftIcon="logoGoogle"
             stretch
-            onClick={loginWithGoogle}
+            onClick={() => {
+              loginWithGoogle();
+              EventLogger.log("login_button", "구글 계정으로 로그인");
+            }}
             textProps={{
               color: "Static/Black",
               fontSize: 22,
@@ -52,6 +55,9 @@ const SignInComponent = () => {
             title="이메일로 로그인"
             stretch
             href="/sign-in/email"
+            onClick={() => {
+              EventLogger.log("login_button", "이메일로 로그인");
+            }}
             textProps={{
               color: "Static/Black",
               fontSize: 22,
@@ -72,6 +78,9 @@ const SignInComponent = () => {
           mt={8}
           type="Assistive"
           title="고객센터 문의하기"
+          onClick={() => {
+            EventLogger.log("login_button", "고객센터 문의하기");
+          }}
           href="https://pf.kakao.com/_neapG/chat"
           size="Medium"
         />

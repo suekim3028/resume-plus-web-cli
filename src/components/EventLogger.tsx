@@ -13,8 +13,10 @@ class _EventLogger {
   ) {
     {
       const [event, params] = _value;
+
+      const defaultProps = {};
       const _props = params ? factory[event](params) : undefined;
-      amplitude.track(event, _props);
+      amplitude.track(event, { ...defaultProps, ..._props });
       console.log(`[LogEvent] ${event} : ${JSON.stringify(_props)}`);
     }
   }
@@ -30,10 +32,10 @@ type EventParams = {
   global_navigation_bar_profile: "프로필" | "로그아웃";
   footer_button: "Service Guide" | "Privacy Policy" | "Survey";
   Home: undefined;
-  home_main_banner_card: "면접 연습하러 가기";
+  home_main_banner_card: string;
   home_banner_card: "지금 면접 시작하기";
   LogIn: undefined;
-  login_button: undefined;
+  login_button: string;
   IdLogIn: undefined;
   id_login_button: "로그인" | "이메일/비밀번호 찾기" | "회원가입";
   SignUp: undefined;
