@@ -2,6 +2,7 @@
 import { GridItem } from "@chakra-ui/react";
 
 import { useUserValue } from "@atoms";
+import { EventLogger } from "@components";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import Row from "./components/Row";
 
@@ -42,6 +43,7 @@ const Profile = () => {
           href={
             "https://docs.google.com/forms/d/e/1FAIpQLSfun86YZZUuyOjeQYUyrXO-yS1kNBPL2DXTKxyThzwQXXxgRg/viewform"
           }
+          onClick={() => EventLogger.log("profile_button", "설문조사 하기")}
         />
       </Flex>
     </Flex>
