@@ -37,46 +37,76 @@ const InterviewContextProvider = ({ children }: { children: ReactNode }) => {
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [talkingSide, setTalkingSide] = useState<"COMPANY" | "ME" | null>(null);
-  const [status, setStatus] = useState<InterviewStatus>("DEFAULT");
+  const [status, _setStatus] = useState<InterviewStatus>("DEFAULT");
+
+  const canSubmit = useRef(false);
 
   /**
    * 대답 제출, 채팅 추가, 다음 질문 가져오기
    */
-  const submitAnswer = useCallback(async (answer: string) => {
-    setChats((c) => [...c, { isMine: true, text: answer }]);
-    setTimeout(
-      () =>
-        chatScrollRef.current?.scrollTo({
-          top: chatScrollRef.current.clientHeight,
-          behavior: "smooth",
-        }),
-      200
-    );
 
-    if (!currentQuestion.current) return;
-    interviewApis.answerQuestion({
-      questionId: currentQuestion.current.questionId,
-      answer,
-      type: currentQuestion.current.type,
-      interviewId: interviewInfo.interviewId,
-    });
-    getNextQuestion();
-  }, []);
+  const submitAnswer = useCallback(
+    async (answer: string) => {
+      if (!canSubmit.current || status === "END" || status === "FORCE_END")
+        return;
+
+      if (!answer) {
+        startAnswer();
+        return;
+      }
+
+      canSubmit.current = false;
+      setChats((c) => [...c, { isMine: true, text: answer }]);
+      setTimeout(
+        () =>
+          chatScrollRef.current?.scrollTo({
+            top: chatScrollRef.current.clientHeight,
+            behavior: "smooth",
+          }),
+        200
+      );
+
+      if (!currentQuestion.current) return;
+      interviewApis.answerQuestion({
+        questionId: currentQuestion.current.questionId,
+        answer,
+        type: currentQuestion.current.type,
+        interviewId: interviewInfo.interviewId,
+      });
+      getNextQuestion();
+    },
+    [status]
+  );
 
   const { startRecorder, resetRecorder } = useRecorder(submitAnswer);
 
+  const setStatus = useCallback(
+    (status: InterviewStatus) => {
+      if (status === "END" || status === "FORCE_END") {
+        resetRecorder();
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+      }
+      _setStatus(status);
+    },
+    [resetRecorder]
+  );
+
   const submitAnswerWithText = useCallback(
-    (text: string) => {
+    async (text: string) => {
+      if (!canSubmit.current) return;
+
       resetRecorder();
-      submitAnswer(text);
+      await submitAnswer(text);
     },
     [resetRecorder, submitAnswer]
   );
 
-  const startAnswer = () => {
+  const startAnswer = useCallback(() => {
     setTalkingSide("ME");
     startRecorder();
-  };
+  }, [startRecorder]);
 
   /**
    * 다음 질문 가져오기
@@ -91,6 +121,8 @@ const InterviewContextProvider = ({ children }: { children: ReactNode }) => {
 
     currentQuestion.current = nextQuestion;
     setChats((c) => [...c, { isMine: false, text: nextQuestion.question }]);
+    canSubmit.current = true;
+
     setTimeout(
       () =>
         chatScrollRef.current?.scrollTo({
@@ -108,7 +140,7 @@ const InterviewContextProvider = ({ children }: { children: ReactNode }) => {
     currentAudio.current = audio;
     audio.onended = startAnswer;
     audio.play();
-  }, [startAnswer]);
+  }, [startAnswer, setStatus]);
 
   const effected = useRef(false);
 

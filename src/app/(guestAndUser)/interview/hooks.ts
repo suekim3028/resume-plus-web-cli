@@ -39,6 +39,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
     const base64Audio = await audioBlobToBase64(blob);
 
     const text = await speechToText(base64Audio);
+
     onRecordEnd(text || "");
   }, [onRecordEnd]);
 
@@ -59,7 +60,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
 
     _mediaRecorder.onstop = processRecordedData;
     _mediaRecorder.ondataavailable = (ev) => {
-      console.log("--data");
+      console.log("--데이터 들어옴");
       if (ev.data.size <= 0) return;
       recordData.current.push(ev.data);
     };
@@ -67,13 +68,13 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
 
     soundCheckInterval.current = setInterval(() => {
       const level = analyzer.current ? getSoundLevel(analyzer.current) : 0;
-      if (level > 0.05) {
-        console.log("----- timeout 리셋");
+      if (level > 0.2) {
+        console.log("----- 듣는중");
         // 5% 이상이면 계속 들음
         clearTimeout(silenceTimeout.current);
 
         silenceTimeout.current = setTimeout(() => {
-          console.log("----timout 끝!!!");
+          console.log("---- 말 다한듯!");
           mediaRecorder.current?.stop();
           clearInterval(soundCheckInterval.current);
           clearTimeout(silenceTimeout.current);

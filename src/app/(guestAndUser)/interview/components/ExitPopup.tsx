@@ -1,4 +1,3 @@
-import { interviewApis } from "@apis";
 import { useRouter } from "next/navigation";
 import { useInterviewInfoContext } from "../InterviewInfoContext";
 import PopupTemplate from "./PoupTemplate";
@@ -15,8 +14,12 @@ const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
         {
           title: "면접 나가기",
           onClick: () => {
-            interviewApis.deleteInterview({ id: interviewInfo.interviewId });
-            router.replace("/");
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            }
+
+            // interviewApis.deleteInterview({ id: interviewInfo.interviewId });
+            // router.replace("/");
           },
         },
       ]}

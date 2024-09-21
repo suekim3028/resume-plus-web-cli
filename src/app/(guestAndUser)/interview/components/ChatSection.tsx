@@ -1,6 +1,6 @@
 import { Icon } from "@components";
 import { Flex, Text } from "@uis";
-import { useRef } from "react";
+import { KeyboardEventHandler, useCallback, useRef } from "react";
 import { useInterviewContext } from "../InterviewContext";
 import { Chat } from "../types";
 import S from "./styles.module.css";
@@ -10,11 +10,27 @@ const ChatComponent = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClickSend = () => {
-    if (!inputRef.current) return;
-    submitAnswerWithText(inputRef.current.value);
+  const isSubmitting = useRef(false);
+
+  const handleClickSend = useCallback(async () => {
+    if (!inputRef.current || isSubmitting.current) return;
+    isSubmitting.current = true;
+
+    const value = inputRef.current.value;
+    if (!value) {
+      isSubmitting.current = false;
+      return;
+    }
     inputRef.current.value = "";
-  };
+
+    submitAnswerWithText(value);
+    isSubmitting.current = false;
+  }, []);
+
+  const handleKeyDownEventListener: KeyboardEventHandler<HTMLInputElement> =
+    useCallback((e) => {
+      if (e.key === "Enter") handleClickSend();
+    }, []);
 
   return (
     <Flex
@@ -40,8 +56,8 @@ const ChatComponent = () => {
           direction={"column"}
           justifyContent={"flex-end"}
         >
-          {chats.map((chat) => (
-            <ChatBubble {...chat} key={chat.text.slice(0, 20)} />
+          {chats.map((chat, idx) => (
+            <ChatBubble {...chat} key={idx} />
           ))}
         </Flex>
       </Flex>
@@ -68,6 +84,7 @@ const ChatComponent = () => {
 
               color: "white",
             }}
+            onKeyUp={handleKeyDownEventListener}
             className={S["chat-input"]}
           />
           <Flex p={3} onClick={handleClickSend}>

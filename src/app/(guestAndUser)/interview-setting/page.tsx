@@ -8,12 +8,14 @@ import {
   ListSelector,
   ListSelectorRef,
   PopUp,
+  Spinner,
   TypingSelector,
   TypingSelectorRef,
 } from "@components";
 import { UI, WEBSITE_CONSTS } from "@constants";
 import { InterviewTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
+import { ModalManager } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
@@ -134,6 +136,7 @@ const Interview = () => {
 
     const { company, job, department, resume } = submitValue.value;
 
+    ModalManager.show({ closeOnDim: false, Component: <Spinner size={30} /> });
     const { isError: resumeError, data: resumeData } =
       await interviewApis.uploadCV({
         content: await getText(resume),
@@ -141,7 +144,7 @@ const Interview = () => {
         name: resume.name,
         position: job.companyJob,
       });
-    if (resumeError) return;
+    if (resumeError) return ModalManager.close();
 
     const { isError, data } = await interviewApis.createInterview(
       typeof company === "string"
@@ -162,6 +165,7 @@ const Interview = () => {
           }
     );
 
+    ModalManager.close();
     if (!isError) router.replace(`interview/${data.interviewId}`);
   };
 
