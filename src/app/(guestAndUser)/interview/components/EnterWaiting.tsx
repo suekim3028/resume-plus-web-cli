@@ -1,7 +1,7 @@
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
-import { commonHooks, jsUtils } from "@web-core";
-import { useRef, useState } from "react";
+import { commonHooks } from "@web-core";
+import { useState } from "react";
 import Container from "./Container";
 
 const EnterWaiting = ({
@@ -9,14 +9,12 @@ const EnterWaiting = ({
   job,
   department,
   goNext,
+  interviewerName,
 }: InterviewTypes.InterviewInfo & {
   goNext: () => void;
+  interviewerName: string;
 }) => {
   const [leftSeconds, setLeftSeconds] = useState(10);
-
-  const RANDOM_FAMILY_NAME = useRef(
-    jsUtils.getRandomArrItem(["김", "이", "박", "정"])
-  ).current;
 
   commonHooks.useSecondEffect(10, (second) => {
     const _leftSeconds = 10 - second - 1;
@@ -36,7 +34,7 @@ const EnterWaiting = ({
       bgColor="Background/Normal/Alternative"
     >
       <Text type="Display2" fontWeight={"700"} textAlign={"center"}>
-        {`${RANDOM_FAMILY_NAME}PM 님(호스트)이 곧 귀하를 들어오게 할 것 입니다.\n잠시만 기다려주세요, 면접이 시작됩니다.`}
+        {`${interviewerName}PM 님(호스트)이 곧 귀하를 들어오게 할 것 입니다.\n잠시만 기다려주세요, 면접이 시작됩니다.`}
       </Text>
       <Text
         mt={32}

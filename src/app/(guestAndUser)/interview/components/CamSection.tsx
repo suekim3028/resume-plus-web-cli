@@ -9,10 +9,12 @@ const CamSection = ({
   chatOn,
   cameraRef,
   talkingSide,
+  interviewerName,
 }: {
   chatOn: boolean;
   cameraRef: RefObject<FrontCameraRef>;
   talkingSide: "COMPANY" | "ME" | null;
+  interviewerName: string;
 }) => {
   const window = commonHooks.useWindowSize({});
 

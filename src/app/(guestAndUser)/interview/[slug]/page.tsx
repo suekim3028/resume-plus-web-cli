@@ -5,7 +5,7 @@ import { useCompanyData, useUser } from "@atoms";
 
 import { findCompanyInfo } from "@app/(user)/result/utils";
 import { InterviewTypes } from "@types";
-import { commonHooks } from "@web-core";
+import { commonHooks, jsUtils } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import EnterWaiting from "../components/EnterWaiting";
@@ -42,6 +42,10 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     questionParts: QuestionPart[];
   }>();
 
+  const randomFamilyName = useRef(
+    jsUtils.getRandomArrItem(["김", "이", "박", "정"])
+  ).current;
+
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
   const effected = useRef(false);
@@ -77,6 +81,15 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   if (!interview.current || !interviewData.current) return <></>;
 
+  if (1 == 1)
+    return (
+      <InterviewScreen
+        interviewerName={randomFamilyName}
+        interviewInfo={interview.current}
+        questions={interviewData.current?.questions || []}
+      />
+    );
+
   switch (step) {
     case "2_STEP_CHECK":
       return (
@@ -92,12 +105,14 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return (
         <EnterWaiting
           {...interview.current}
+          interviewerName={randomFamilyName}
           goNext={() => setStep("5_INTERVIEW")}
         />
       );
     case "5_INTERVIEW":
       return (
         <InterviewScreen
+          interviewerName={randomFamilyName}
           interviewInfo={interview.current}
           questions={interviewData.current?.questions || []}
         />

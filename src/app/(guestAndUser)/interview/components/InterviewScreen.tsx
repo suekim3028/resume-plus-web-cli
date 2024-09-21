@@ -19,7 +19,11 @@ import { FrontCameraRef } from "./FrontCamera";
 import HurryUpSnackBar from "./HurryUpSnackBar";
 import TopBar from "./TopBar";
 
-const InterviewScreenComponent = () => {
+const InterviewScreenComponent = ({
+  interviewerName,
+}: {
+  interviewerName: string;
+}) => {
   const [setting, setSetting] = useState({
     mic: true,
     video: true,
@@ -85,6 +89,7 @@ const InterviewScreenComponent = () => {
           position={"relative"}
         >
           <CamSection
+            interviewerName={interviewerName}
             cameraRef={cameraRef}
             chatOn={setting.chat}
             talkingSide={talkingSide}
@@ -117,6 +122,7 @@ const InterviewScreenComponent = () => {
 type InterviewScreenProps = {
   interviewInfo: InterviewTypes.InterviewInfo;
   questions: RandomQuestion[];
+  interviewerName: string;
 };
 
 const InterviewScreen = (props: InterviewScreenProps) => {
@@ -125,7 +131,7 @@ const InterviewScreen = (props: InterviewScreenProps) => {
       questions={props.questions}
       interviewInfo={props.interviewInfo}
     >
-      <InterviewScreenComponent />
+      <InterviewScreenComponent interviewerName={props.interviewerName} />
     </InterviewContextProvider>
   );
 };
