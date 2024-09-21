@@ -1,4 +1,4 @@
-import { Icon } from "@components";
+import { EventLogger, Icon } from "@components";
 import { Flex, Text } from "@uis";
 import {
   forwardRef,
@@ -34,6 +34,7 @@ const ChatComponent = () => {
     inputRef.current.value = "";
 
     submitAnswerWithText(value);
+
     isSubmitting.current = false;
   }, []);
 
@@ -116,7 +117,17 @@ const ChatComponent = () => {
               className={S["chat-input"]}
             />
           </Flex>
-          <Flex p={3} onClick={handleClickSend} ml={16}>
+          <Flex
+            p={3}
+            onClick={() => {
+              EventLogger.log(
+                "interview_chat_send_button",
+                inputRef.current?.value || ""
+              );
+              handleClickSend();
+            }}
+            ml={16}
+          >
             <Icon name="normalSendSharp" size={16} />
           </Flex>
         </Flex>
