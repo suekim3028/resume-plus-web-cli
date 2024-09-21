@@ -90,7 +90,14 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
           </Flex>
         </GridItem>
         <GridItem colSpan={10} colStart={3}>
-          <FeedbackList {...interview} />
+          <FeedbackList
+            {...interview}
+            companyName={company?.companyName || ""}
+            jobName={job?.companyJob || ""}
+            departmentName={department?.department || ""}
+            meanScore={totalMean}
+            createdAt={createdAt}
+          />
         </GridItem>
       </GridWrapper>
     </Flex>

@@ -1,4 +1,5 @@
 //
+import { EventLogger } from "@components";
 import { INTERVIEW_CONSTS, UI } from "@constants";
 import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
@@ -14,7 +15,13 @@ const FeedbackList = (
     | "introduceFeedback"
     | "personalFeedback"
     | "techFeedback"
-  >
+  > & {
+    createdAt: string;
+    companyName: string;
+    jobName: string;
+    departmentName: string;
+    meanScore: number;
+  }
 ) => {
   const [selected, setSelected] =
     useState<InterviewTypes.QuestionType>("introduce");
@@ -31,6 +38,11 @@ const FeedbackList = (
     introduceFeedback,
     personalFeedback,
     techFeedback,
+    createdAt,
+    companyName,
+    jobName,
+    departmentName,
+    meanScore,
   } = interview;
   const { behaviorMean, introduceMean, personalMean, techMean } =
     getScoreStat(interview);
@@ -71,7 +83,17 @@ const FeedbackList = (
             minWidth={197}
             alignItems={"center"}
             justifyContent={"space-between"}
-            onClick={() => setSelected(section)}
+            onClick={() => {
+              setSelected(section);
+              EventLogger.log("interview_result_detail_card", {
+                corp_name: companyName,
+                interview_datetime: createdAt,
+                job_name: jobName,
+                occupation_name: departmentName,
+                score: meanScore,
+                label: section,
+              });
+            }}
           >
             <Text
               type={"Body1_Normal"}

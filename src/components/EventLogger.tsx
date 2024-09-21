@@ -89,6 +89,7 @@ type EventParams = {
     job_name: string;
     score: number;
     interview_datetime: string;
+    label: string;
   };
   Profile: undefined;
   profile_button: string;
