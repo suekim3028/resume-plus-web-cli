@@ -1,8 +1,8 @@
 "use client";
 
 import { useCompanyData, useResult } from "@atoms";
-import { Spinner } from "@chakra-ui/react";
-import { Flex } from "@uis";
+import { Spinner } from "@components";
+import { Flex, Text } from "@uis";
 import { Suspense } from "react";
 import { findCompanyInfo } from "../utils";
 import PendingResultCard from "./PendingResultCard";
@@ -10,6 +10,20 @@ import PendingResultCard from "./PendingResultCard";
 const PendingResultListComponent = () => {
   const { pending } = useResult();
   const companyData = useCompanyData();
+
+  if (!pending.length)
+    return (
+      <Flex pt={48} w={"100%"} flexDir={"column"} alignItems={"center"}>
+        <Text
+          textAlign={"center"}
+          color={"Label/Alternative"}
+          type={"Heading1"}
+          fontWeight={"500"}
+        >
+          {"분석중인 면접이 없습니다"}
+        </Text>
+      </Flex>
+    );
 
   return (
     <Flex w="100%" overflowX={"scroll"} gap={24} pb={24}>
@@ -29,7 +43,7 @@ export default function PendingResultList() {
     <Suspense
       fallback={
         <Flex w="100%" p={24}>
-          <Spinner />
+          <Spinner size={40} />
         </Flex>
       }
     >
