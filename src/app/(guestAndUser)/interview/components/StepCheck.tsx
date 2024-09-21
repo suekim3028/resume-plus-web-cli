@@ -1,3 +1,4 @@
+import { EventLogger } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { QuestionPart } from "../types";
 import Container from "./Container";
@@ -54,7 +55,14 @@ const StepCheck = ({
         ))}
       </Flex>
       <Button
-        onClick={goNext}
+        onClick={() => {
+          goNext();
+
+          EventLogger.log(
+            "interview_setting_confirm_button",
+            `총 ${totalQuestionCount}개 질문으로 ${totalDuration}분간 면접이 진행될 예정이에요`
+          );
+        }}
         type="Solid_Primary"
         size="Large"
         title="면접 환경 확인하기"

@@ -40,9 +40,6 @@ export const useRouteChangeEvent = () => {
         break;
 
       default:
-        if (pathname.startsWith("/interview/")) {
-          EventLogger.log("Interview");
-        }
         break;
     }
     if (pathname === "/") {

@@ -4,10 +4,11 @@ import { interviewApis } from "@apis";
 import { useCompanyData } from "@atoms";
 
 import { findCompanyInfo } from "@app/(user)/result/utils";
+import { EventLogger } from "@components";
 import { InterviewTypes } from "@types";
 import { commonHooks, jsUtils } from "@web-core";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EnterWaiting from "../components/EnterWaiting";
 import InterviewScreen from "../components/InterviewScreen";
 import QuestionWaiting, {
@@ -76,6 +77,25 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     setStep("2_STEP_CHECK");
   }, []);
 
+  useEffect(() => {
+    switch (step) {
+      case "1_QUESTION_WAITING":
+        EventLogger.log("InterviewSettingLoading");
+        break;
+      case "2_STEP_CHECK":
+        EventLogger.log("InterviewSettingConfirm");
+        break;
+      case "4_ENTER_WAITING":
+        EventLogger.log("WaitingRoom");
+        break;
+      case "5_INTERVIEW":
+        EventLogger.log("Interview");
+        break;
+      default:
+        break;
+    }
+  }, [step]);
+
   if (step === "1_QUESTION_WAITING")
     return <QuestionWaiting ref={questionWaitingRef} />;
 
@@ -89,8 +109,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       questionParts={interviewData.current.questionParts}
     >
       {(() => {
-        if (2 == 2) return <InterviewScreen />;
-
         switch (step) {
           case "2_STEP_CHECK":
             return (

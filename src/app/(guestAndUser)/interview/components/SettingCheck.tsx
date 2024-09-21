@@ -1,7 +1,7 @@
-import { Icon, Spinner } from "@components";
+import { EventLogger, Icon, Spinner } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Container from "./Container";
 
 type Status = "IDLE" | "RECORDING" | "RECORDED";
@@ -9,9 +9,10 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
   const [settingStatus, setSettingStatus] = useState<Status>("IDLE");
   const videoUrl = useRef<string | null>(null);
 
-  const render = (): JSX.Element => {
+  const render = useCallback((): JSX.Element => {
     switch (settingStatus) {
       case "IDLE":
+        EventLogger.log("EnvironmentCheck01");
         return <Idle goNext={() => setSettingStatus("RECORDING")} />;
       case "RECORDING":
         return (
@@ -23,6 +24,7 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
           />
         );
       case "RECORDED":
+        EventLogger.log("EnvironmentCheck04");
         return (
           <Recorded
             url={videoUrl.current || ""}
@@ -31,7 +33,7 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
           />
         );
     }
-  };
+  }, [settingStatus]);
 
   return (
     <Container
@@ -126,6 +128,12 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
       onRecord(url);
     };
   }, []);
+
+  useEffect(() => {
+    EventLogger.log(
+      recordingStatus === "READY" ? "EnvironmentCheck02" : "EnvironmentCheck03"
+    );
+  }, [recordingStatus]);
 
   return (
     <Flex
@@ -278,13 +286,19 @@ const Recorded = ({
             size={"Large"}
             title="다시하기"
             type="Outlined_Primary"
-            onClick={goBack}
+            onClick={() => {
+              goBack();
+              EventLogger.log("environment_check_button", "다시하기");
+            }}
           />
           <Button
             size={"Large"}
             title="입장하기"
             type="Solid_Primary"
-            onClick={goNext}
+            onClick={() => {
+              goNext();
+              EventLogger.log("environment_check_button", "입장하기");
+            }}
           />
         </Flex>
       </Flex>
