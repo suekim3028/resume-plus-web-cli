@@ -1,10 +1,12 @@
 import { CompanyThumbnail } from "@components";
 import { Flex, Text } from "@uis";
 import { useInterviewContext } from "../InterviewContext";
+import { useInterviewInfoContext } from "../InterviewInfoContext";
 import InterviewTimer from "./InterviewTimer";
 
 const TopBar = () => {
-  const { interviewInfo, setStatus } = useInterviewContext();
+  const { interviewInfo } = useInterviewInfoContext();
+  const { setStatus } = useInterviewContext();
   const { company, department, companyThumbnailUrl } = interviewInfo;
 
   const handleOnTimeEnd = () => {

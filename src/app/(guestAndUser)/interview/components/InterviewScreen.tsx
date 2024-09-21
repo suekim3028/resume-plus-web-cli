@@ -8,6 +8,7 @@ import { BOTTOM_BAR_HEIGHT } from "../constants";
 import InterviewContextProvider, {
   useInterviewContext,
 } from "../InterviewContext";
+import { useInterviewInfoContext } from "../InterviewInfoContext";
 import { RandomQuestion } from "../types";
 import CamSection from "./CamSection";
 import ChatSection from "./ChatSection";
@@ -19,18 +20,15 @@ import { FrontCameraRef } from "./FrontCamera";
 import HurryUpSnackBar from "./HurryUpSnackBar";
 import TopBar from "./TopBar";
 
-const InterviewScreenComponent = ({
-  interviewerName,
-}: {
-  interviewerName: string;
-}) => {
+const InterviewScreenComponent = () => {
   const [setting, setSetting] = useState({
     mic: true,
     video: true,
     chat: true,
   });
 
-  const { talkingSide, status, interviewInfo } = useInterviewContext();
+  const { talkingSide, status } = useInterviewContext();
+  const { interviewInfo, interviewerName } = useInterviewInfoContext();
   const { interviewId } = interviewInfo;
 
   const [showExitPopup, setShowExitPopup] = useState(false);
@@ -125,13 +123,10 @@ type InterviewScreenProps = {
   interviewerName: string;
 };
 
-const InterviewScreen = (props: InterviewScreenProps) => {
+const InterviewScreen = () => {
   return (
-    <InterviewContextProvider
-      questions={props.questions}
-      interviewInfo={props.interviewInfo}
-    >
-      <InterviewScreenComponent interviewerName={props.interviewerName} />
+    <InterviewContextProvider>
+      <InterviewScreenComponent />
     </InterviewContextProvider>
   );
 };

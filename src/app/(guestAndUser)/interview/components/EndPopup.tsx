@@ -6,14 +6,14 @@ import { useUserValue } from "@atoms";
 import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { useInterviewContext } from "../InterviewContext";
+import { useInterviewInfoContext } from "../InterviewInfoContext";
 import PopupTemplate from "./PoupTemplate";
 
 const EndPopupComponent = () => {
   const router = useRouter();
 
   const { isGuestUser } = useUserValue();
-  const { interviewInfo } = useInterviewContext();
+  const { interviewInfo } = useInterviewInfoContext();
 
   const exitInterview = () => {
     router.replace("/");

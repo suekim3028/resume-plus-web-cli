@@ -1,11 +1,11 @@
 import { interviewApis } from "@apis";
 import { useRouter } from "next/navigation";
-import { useInterviewContext } from "../InterviewContext";
+import { useInterviewInfoContext } from "../InterviewInfoContext";
 import PopupTemplate from "./PoupTemplate";
 
 const ExitPopup = ({ closePopup }: { closePopup: () => void }) => {
   const router = useRouter();
-  const { interviewInfo } = useInterviewContext();
+  const { interviewInfo } = useInterviewInfoContext();
   return (
     <PopupTemplate
       title={`면접 내용이 모두 사라집니다.\n정말 나가시겠습니까?`}

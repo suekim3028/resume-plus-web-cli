@@ -1,6 +1,5 @@
 "use client";
 import { interviewApis } from "@apis";
-import { InterviewTypes } from "@types";
 import {
   createContext,
   ReactNode,
@@ -13,6 +12,7 @@ import {
 } from "react";
 import { textToSpeech } from "./actions";
 import { useRecorder } from "./hooks";
+import { useInterviewInfoContext } from "./InterviewInfoContext";
 import { Chat, RandomQuestion } from "./types";
 
 const InterviewContext = createContext<InterviewContextValue | null>(null);
@@ -23,21 +23,13 @@ type InterviewContextValue = {
   chats: Chat[];
   talkingSide: "COMPANY" | "ME" | null;
   status: InterviewStatus;
-  interviewInfo: InterviewTypes.InterviewInfo;
   submitAnswerWithText: (answer: string) => void;
   setStatus: (status: InterviewStatus) => void;
   chatScrollRef: RefObject<HTMLDivElement>;
 };
 
-const InterviewContextProvider = ({
-  children,
-  questions,
-  interviewInfo,
-}: {
-  children: ReactNode;
-  questions: RandomQuestion[];
-  interviewInfo: InterviewTypes.InterviewInfo;
-}) => {
+const InterviewContextProvider = ({ children }: { children: ReactNode }) => {
+  const { questions, interviewInfo } = useInterviewInfoContext();
   const currentQuestion = useRef<RandomQuestion>();
   const remainQuestions = useRef(questions);
   const currentAudio = useRef<HTMLAudioElement>();
@@ -124,7 +116,7 @@ const InterviewContextProvider = ({
     if (effected.current) return;
     effected.current = true;
 
-    setTimeout(getNextQuestion, 1500);
+    // setTimeout(getNextQuestion, 1500);
   }, []);
 
   return (
@@ -133,7 +125,7 @@ const InterviewContextProvider = ({
         chats,
         talkingSide,
         status,
-        interviewInfo,
+
         submitAnswerWithText,
         setStatus,
         chatScrollRef,

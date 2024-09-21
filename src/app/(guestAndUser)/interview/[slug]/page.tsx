@@ -15,6 +15,7 @@ import QuestionWaiting, {
 } from "../components/QuestionWaiting";
 import SettingCheck from "../components/SettingCheck";
 import StepCheck from "../components/StepCheck";
+import InterviewInfoContextProvider from "../InterviewInfoContext";
 import { QuestionPart, RandomQuestion } from "../types";
 import { getQuestions } from "../utils";
 
@@ -49,6 +50,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
   const effected = useRef(false);
+
   commonHooks.useAsyncEffect(async () => {
     if (effected.current) return;
     effected.current = true;
@@ -79,42 +81,40 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   if (!interview.current || !interviewData.current) return <></>;
 
-  if (1 == 1)
-    return (
-      <InterviewScreen
-        interviewerName={randomFamilyName}
-        interviewInfo={interview.current}
-        questions={interviewData.current?.questions || []}
-      />
-    );
+  return (
+    <InterviewInfoContextProvider
+      interviewInfo={interview.current}
+      interviewerName={randomFamilyName}
+      questions={interviewData.current.questions}
+      questionParts={interviewData.current.questionParts}
+    >
+      {(() => {
+        if (2 == 2) return <InterviewScreen />;
 
-  switch (step) {
-    case "2_STEP_CHECK":
-      return (
-        <StepCheck
-          goNext={() => setStep("3_SETTING_CHECK")}
-          questionParts={interviewData.current?.questionParts || []}
-        />
-      );
+        switch (step) {
+          case "2_STEP_CHECK":
+            return (
+              <StepCheck
+                goNext={() => setStep("3_SETTING_CHECK")}
+                questionParts={interviewData.current?.questionParts || []}
+              />
+            );
 
-    case "3_SETTING_CHECK":
-      return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
-    case "4_ENTER_WAITING":
-      return (
-        <EnterWaiting
-          {...interview.current}
-          interviewerName={randomFamilyName}
-          goNext={() => setStep("5_INTERVIEW")}
-        />
-      );
-    case "5_INTERVIEW":
-      return (
-        <InterviewScreen
-          interviewerName={randomFamilyName}
-          interviewInfo={interview.current}
-          questions={interviewData.current?.questions || []}
-        />
-      );
-  }
+          case "3_SETTING_CHECK":
+            return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
+          case "4_ENTER_WAITING":
+            return (
+              <EnterWaiting
+                {...interview.current}
+                interviewerName={randomFamilyName}
+                goNext={() => setStep("5_INTERVIEW")}
+              />
+            );
+          case "5_INTERVIEW":
+            return <InterviewScreen />;
+        }
+      })()}
+    </InterviewInfoContextProvider>
+  );
 };
 export default Interview;
