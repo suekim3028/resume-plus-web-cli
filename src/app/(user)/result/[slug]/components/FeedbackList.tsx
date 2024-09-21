@@ -92,6 +92,7 @@ const FeedbackList = (
                 occupation_name: departmentName,
                 score: meanScore,
                 label: section,
+                value: means[section],
               });
             }}
           >
