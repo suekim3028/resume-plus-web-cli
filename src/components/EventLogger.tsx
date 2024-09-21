@@ -90,6 +90,7 @@ type EventParams = {
     score: number;
     interview_datetime: string;
     label: string;
+    value: number;
   };
   Profile: undefined;
   profile_button: string;
