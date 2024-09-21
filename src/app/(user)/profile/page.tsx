@@ -31,7 +31,7 @@ const Profile = () => {
           pb={16}
           pt={40}
         >
-          간단한 설문조사 후에 면접 연습 30회권을 받아가세요!
+          간단한 설문조사 후에 면접 연습 5회권을 받아가세요!
         </Text>
         <Button
           type={"Outlined_Primary"}
