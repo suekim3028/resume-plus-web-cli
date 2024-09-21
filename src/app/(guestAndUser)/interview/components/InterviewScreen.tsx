@@ -3,6 +3,7 @@
 import { Flex } from "@uis";
 import { useEffect, useRef, useState } from "react";
 
+import { EventLogger } from "@components";
 import { BOTTOM_BAR_HEIGHT } from "../constants";
 import InterviewContextProvider, {
   useInterviewContext,
@@ -53,7 +54,10 @@ const InterviewScreenComponent = () => {
     },
     {
       icon: `button_chat_${setting.chat ? "on" : "off"}`,
-      onClick: () => setSetting((p) => ({ ...p, chat: !p.chat })),
+      onClick: () => {
+        setSetting((p) => ({ ...p, chat: !p.chat }));
+        EventLogger.log("interview_chat_button");
+      },
     },
   ];
 
@@ -99,6 +103,7 @@ const InterviewScreenComponent = () => {
               icon="button_exit"
               onClick={() => {
                 setShowExitPopup(true);
+                EventLogger.log("interview_exit_button");
               }}
             />
           </Flex>
