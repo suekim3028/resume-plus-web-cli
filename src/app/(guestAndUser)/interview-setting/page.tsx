@@ -4,6 +4,7 @@ import { useCompanyData } from "@atoms";
 
 import { GridItem } from "@chakra-ui/react";
 import {
+  EventLogger,
   Icon,
   ListSelector,
   ListSelectorRef,
@@ -135,6 +136,12 @@ const Interview = () => {
     if (!submitValue.canSubmit) return;
 
     const { company, job, department, resume } = submitValue.value;
+
+    EventLogger.log("interview_setting_button", {
+      corp_name: typeof company === "string" ? company : company.companyName,
+      job_name: job.companyJob,
+      occupation_name: department.department,
+    });
 
     ModalManager.show({ closeOnDim: false, Component: <Spinner size={30} /> });
     const { isError: resumeError, data: resumeData } =
