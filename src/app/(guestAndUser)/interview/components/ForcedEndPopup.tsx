@@ -1,3 +1,4 @@
+import { EventLogger } from "@components";
 import { useRouter } from "next/navigation";
 import PopupTemplate from "./PoupTemplate";
 
@@ -12,6 +13,7 @@ const ForcedEndPopup = () => {
         {
           title: "메인 화면 돌아가기",
           onClick: () => {
+            EventLogger.log("interview_stop_popup_button");
             router.replace("/");
           },
         },
