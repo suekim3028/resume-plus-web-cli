@@ -24,7 +24,7 @@ const CompanyThumbnail = ({
   }
 
   const companyName =
-    _companyName.length > 8 ? `${_companyName.slice(0,7)}...` : _companyName;
+    _companyName.length > 8 ? `${_companyName.slice(0, 7)}...` : _companyName;
 
   return (
     <Flex
@@ -33,6 +33,7 @@ const CompanyThumbnail = ({
       py={size === "small" ? 8 : 16}
       px={size === "small" ? 2 : 0}
       rounded={rounded}
+      alignItems={"center"}
       justifyContent={"center"}
       bgColor={"Fill/Strong"}
     >
