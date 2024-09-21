@@ -1,5 +1,5 @@
 "use client";
-import { Logo, TextInput } from "@components";
+import { EventLogger, Logo, TextInput } from "@components";
 import { useAuth } from "@hooks";
 
 import { Button, Flex, Text, TextButton } from "@uis";
@@ -63,13 +63,20 @@ const EmailSignIn = () => {
           stretch
           flexProps={{ mt: 32, height: 48 }}
           disabled={!canSubmit}
-          onClick={submit}
+          onClick={() => {
+            submit();
+            EventLogger.log("id_login_button", "로그인");
+          }}
         />
         <TextButton
           type={"Assistive"}
           title="이메일/비밀번호 찾기"
           size={"Medium"}
           mt={32}
+          href="https://pf.kakao.com/_neapG/chat"
+          onClick={() =>
+            EventLogger.log("id_login_button", "이메일/비밀번호 찾기")
+          }
         />
 
         <Flex w="152px" h={1} bgColor={"Line/Normal/Normal"} my={32} />
@@ -87,6 +94,7 @@ const EmailSignIn = () => {
             title="회원가입"
             size={"Medium"}
             href="/sign-up/email"
+            onClick={() => EventLogger.log("id_login_button", "회원가입")}
           />
         </Flex>
       </Flex>
