@@ -1,7 +1,7 @@
 "use client";
 import { interviewApis } from "@apis";
 
-import { useCompanyData, useUser } from "@atoms";
+import { useCompanyData } from "@atoms";
 
 import { findCompanyInfo } from "@app/(user)/result/utils";
 import { InterviewTypes } from "@types";
@@ -34,7 +34,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
 
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
-  const { refreshUser } = useUser();
+
   const companyData = useCompanyData();
 
   const interviewData = useRef<{
@@ -58,8 +58,6 @@ const Interview = ({ params }: { params: { slug: number } }) => {
     if (interviewInfoError) {
       return router.back();
     }
-
-    refreshUser();
 
     interview.current = findCompanyInfo(interviewInfoData, companyData);
 

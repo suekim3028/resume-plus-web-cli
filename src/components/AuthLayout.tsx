@@ -1,8 +1,8 @@
 "use client";
-import { useLoadableUser } from "@atoms";
+import { useUserValue } from "@atoms";
 import { UserTypes } from "@types";
 import { Flex } from "@uis";
-import React, { ReactNode, useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import Spinner from "./Spinner";
 
 const AuthLayout = ({
@@ -14,31 +14,19 @@ const AuthLayout = ({
   onInvalidState: () => void;
   validate: (loginType: UserTypes.LoginType | null) => boolean;
 }) => {
-  const value = useLoadableUser();
+  const { user } = useUserValue();
 
-  const currentLoginType =
-    value.state === "hasData" ? value.data?.loginType || null : null;
-  const prevLoginType = useRef(currentLoginType);
-  const isValid = validate(currentLoginType);
+  console.log("!!!!!", user);
+
+  const isValid = useMemo(() => {
+    return validate(user?.loginType || null);
+  }, [user?.loginType]);
 
   useEffect(() => {
-    if (
-      value.state === "hasData" &&
-      !isValid &&
-      prevLoginType.current !== currentLoginType
-    ) {
+    if (!isValid) {
       onInvalidState();
     }
-    prevLoginType.current = currentLoginType;
   }, [isValid]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && isValid) {
-      // 이미 isValid인 상태일 때, 서버에서 온 html을 업데이트 하지 않아서 오버레이가 사라지지 않는 문제
-      const overlay = document.getElementById("auth_layout_overlay");
-      if (overlay) overlay.style["display"] = "none";
-    }
-  }, []);
 
   return (
     <>

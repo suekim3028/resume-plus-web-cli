@@ -2,7 +2,7 @@ import { interviewApis } from "@apis";
 import { Spinner } from "@chakra-ui/react";
 import { PopUp } from "@components";
 
-import { useUser } from "@atoms";
+import { useUserValue } from "@atoms";
 import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
@@ -12,7 +12,7 @@ import PopupTemplate from "./PoupTemplate";
 const EndPopupComponent = () => {
   const router = useRouter();
 
-  const { isGuestUser } = useUser();
+  const { isGuestUser } = useUserValue();
   const { interviewInfo } = useInterviewContext();
 
   const exitInterview = () => {

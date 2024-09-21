@@ -1,22 +1,27 @@
 "use client";
 import { userApis } from "@apis";
-import { useUser } from "@atoms";
+import { useSetUser, useUserValue } from "@atoms";
 
 import { useGoogleLogin } from "@react-oauth/google";
 import { TokenStorage } from "@storage";
+import { useRouter } from "next/navigation";
+
 import { useCallback } from "react";
 
 export const useAuth = () => {
-  const { refreshUser, user: currentUser, isGuestUser } = useUser();
+  const { user: currentUser, isGuestUser } = useUserValue();
+  const setUser = useSetUser();
+  const router = useRouter();
 
-  const handleUser = useCallback(({ token }: userApis.UserResponse) => {
-    TokenStorage.set(token);
-    refreshUser();
+  const handleUser = useCallback((value: userApis.UserResponse) => {
+    TokenStorage.set(value.token);
+    setUser(value.user);
   }, []);
 
   const logout = useCallback(() => {
+    router.replace("/");
     TokenStorage.remove();
-    refreshUser();
+    setUser(null);
   }, []);
 
   const loginWithGoogle = useGoogleLogin({

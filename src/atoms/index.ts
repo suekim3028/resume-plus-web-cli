@@ -1,24 +1,11 @@
 import { interviewApis, userApis } from "@apis";
 import { TokenStorage } from "@storage";
 import { InterviewTypes, UserTypes } from "@types";
-import { useAtom, useAtomValue } from "jotai";
-import { atomWithRefresh, loadable } from "jotai/utils";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atomWithRefresh } from "jotai/utils";
 import { useCallback, useMemo } from "react";
 
-const userAtom = atomWithRefresh<Promise<UserTypes.User | null>>(async () => {
-  const token = TokenStorage.get();
-  const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
-  if (!hasToken) console.log("[USER STORE] no token.");
-
-  if (hasToken) {
-    const { data, isError } = await userApis.tokenLogin();
-    if (!isError) {
-      console.log(`[LOGIN] logged in with user id ${data.userId}`);
-      return data;
-    }
-  }
-  return null;
-});
+const userAtom = atom<UserTypes.User | null>(null);
 
 const resultAtom = atomWithRefresh<
   Promise<{
@@ -26,7 +13,7 @@ const resultAtom = atomWithRefresh<
     pending: InterviewTypes.PendingInterviewResult[];
   }>
 >(async (get) => {
-  const user = await get(userAtom);
+  const user = get(userAtom);
   if (!user || user.loginType === "GUEST") {
     return {
       done: [],
@@ -71,8 +58,8 @@ const companyAtom = atomWithRefresh<
   };
 });
 
-export const useUser = () => {
-  const [user, refreshUser] = useAtom(userAtom);
+export const useUserValue = () => {
+  const user = useAtomValue(userAtom);
   const isGuestUser = useMemo(
     () => !!user && user.loginType === "GUEST",
     [user?.loginType]
@@ -80,16 +67,35 @@ export const useUser = () => {
 
   return {
     user,
-    refreshUser,
     isGuestUser,
     // setUser,
   };
 };
 
-export const useLoadableUser = () => {
-  const [value] = useAtom(loadable(userAtom));
+export const useRefreshUser = () => {
+  const setUser = useSetUser();
 
-  return value;
+  const refresh = async () => {
+    const token = TokenStorage.get();
+    const hasToken = !!token && !!token.accessToken && !!token.refreshToken;
+    if (!hasToken) console.log("[USER STORE] no token.");
+
+    if (hasToken) {
+      const { data, isError } = await userApis.tokenLogin();
+      if (!isError) {
+        console.log(`[LOGIN] logged in with user id ${data.userId}`);
+        setUser(data);
+      }
+    }
+  };
+
+  return refresh;
+};
+
+export const useSetUser = () => {
+  const setAtomUser = useSetAtom(userAtom);
+
+  return setAtomUser;
 };
 
 export const useResult = () => {

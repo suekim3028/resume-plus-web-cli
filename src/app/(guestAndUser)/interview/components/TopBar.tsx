@@ -20,7 +20,7 @@ const TopBar = () => {
     >
       <Flex alignItems={"center"} gap={12}>
         <CompanyThumbnail
-          size={64}
+          size={"large"}
           companyName={company}
           thumbnailUrl={companyThumbnailUrl || undefined}
         />

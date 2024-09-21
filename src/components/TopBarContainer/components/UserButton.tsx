@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@atoms";
+import { useUserValue } from "@atoms";
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
 import Icon from "@components/Icon/Icon";
@@ -10,7 +10,7 @@ import { Suspense, useState } from "react";
 import TopBarButton from "./TopBarButton";
 
 const _UserButton = () => {
-  const { user, isGuestUser } = useUser();
+  const { user, isGuestUser } = useUserValue();
   const { logout } = useAuth();
   const router = useRouter();
   const [userMenuVisible, setUserMenuVisible] = useState(false);

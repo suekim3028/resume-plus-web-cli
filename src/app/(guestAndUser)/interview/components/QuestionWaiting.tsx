@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@atoms";
+import { useUserValue } from "@atoms";
 import { Flex, Text } from "@uis";
 import {
   forwardRef,
@@ -20,7 +20,7 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   const [animState, setAnimState] = useState<"DEFAULT" | "WAITING" | "END">(
     "DEFAULT"
   );
-  const { user, isGuestUser } = useUser();
+  const { user, isGuestUser } = useUserValue();
 
   const divRef = useRef<HTMLDivElement>(null);
 
