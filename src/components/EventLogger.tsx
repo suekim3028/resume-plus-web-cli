@@ -62,7 +62,7 @@ type EventParams = {
   interview_chat_send_button: string;
   interview_exit_popup_button: {
     action: "취소" | "면접 나가기";
-    popup_title: string;
+    label: string;
   };
   interview_stop_popup_button: undefined;
   InterviewFinishPopUp: { popup_title: string };
@@ -130,9 +130,9 @@ const factory: { [k in EventKey]: (params: EventParams[k]) => EventProp } = {
   interview_chat_button: noParam,
   interview_exit_button: noParam,
   interview_chat_send_button: labelOnly,
-  interview_exit_popup_button: ({ action, popup_title }) => ({
+  interview_exit_popup_button: ({ action, label }) => ({
     action,
-    label: popup_title,
+    label,
   }),
   interview_stop_popup_button: noParam,
   InterviewFinishPopUp: ({ popup_title }) => ({ label: popup_title }),
