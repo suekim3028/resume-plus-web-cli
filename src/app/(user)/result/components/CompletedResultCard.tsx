@@ -4,7 +4,7 @@ import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
-import { CompanyThumbnail } from "@components";
+import { CompanyThumbnail, EventLogger } from "@components";
 
 import { interviewUtils } from "@utils";
 import { getScoreStat } from "../utils";
@@ -13,9 +13,11 @@ import ScoreBadge from "./ScoreBadge";
 const CompletedResultCard = ({
   result,
   interviewInfo,
+  createdAt,
 }: {
   result: InterviewTypes.CompletedInterviewResult;
   interviewInfo: InterviewTypes.InterviewInfo;
+  createdAt: string;
 }) => {
   const router = useRouter();
 
@@ -34,6 +36,13 @@ const CompletedResultCard = ({
       border={`2px solid rgba(112, 115, 124, 0.52)`}
       onClick={() => {
         router.push(`/result/${interviewInfo.interviewId}`);
+        EventLogger.log("interview_result_card", {
+          corp_name: interviewInfo.company,
+          interview_datetime: createdAt,
+          job_name: interviewInfo.job,
+          occupation_name: interviewInfo.department,
+          score: totalMean,
+        });
       }}
       cursor={"pointer"}
     >

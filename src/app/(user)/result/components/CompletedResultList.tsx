@@ -36,6 +36,7 @@ const CompletedResultListComponent = () => {
       {done.map((result) => (
         <CompletedResultCard
           result={result}
+          createdAt={result.createdAt}
           interviewInfo={findCompanyInfo(result, companyData)}
           key={result.interviewId}
         />
