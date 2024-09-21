@@ -1,6 +1,6 @@
 "use client";
 import { userApis } from "@apis";
-import { TextInput, TextInputRef } from "@components";
+import { EventLogger, TextInput, TextInputRef } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { inputUtils } from "@utils";
 import { commonHooks } from "@web-core";
@@ -92,7 +92,10 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
         </Flex>
 
         <Button
-          onClick={sendAuthNumber}
+          onClick={() => {
+            sendAuthNumber();
+            EventLogger.log("signup_button", "인증번호 받기");
+          }}
           disabled={
             !(
               authNumberState === "2_CAN_SEND" ||
@@ -145,7 +148,10 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
             authNumberState === "4_CONFIRMED" ? "normalCheck" : undefined
           }
           disabled={!canCheckAuthNumber || authNumberState == "4_CONFIRMED"}
-          onClick={checkAuthNumber}
+          onClick={() => {
+            checkAuthNumber();
+            EventLogger.log("signup_button", "확인");
+          }}
           type="Solid_Primary"
           size="Medium"
           flexProps={{

@@ -1,6 +1,6 @@
 "use client";
 import { GridItem } from "@chakra-ui/react";
-import { Icon, Logo } from "@components";
+import { EventLogger, Icon, Logo } from "@components";
 import { UI, WEBSITE_CONSTS } from "@constants";
 
 import { useAuth } from "@hooks";
@@ -131,7 +131,10 @@ const EmailSignIn = () => {
             stretch
             flexProps={{ mt: 32 }}
             disabled={!submittableValue}
-            onClick={submit}
+            onClick={() => {
+              submit();
+              EventLogger.log("signup_button", "회원가입");
+            }}
           />
         </GridItem>
       </GridWrapper>
