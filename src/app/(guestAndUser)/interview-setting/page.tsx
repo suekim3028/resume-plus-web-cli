@@ -455,14 +455,10 @@ const Interview = () => {
               />
             </Flex>
 
-            <Flex
-              w={"100%"}
-              flexDir={"column"}
-              borderRadius={8}
-              border={"1px solid rgba(112, 115, 124, 0.22)"}
-              mt={24}
-            >
+            <Flex w={"100%"} flexDir={"column"} mt={24}>
               <Flex
+                border={"1px solid rgba(112, 115, 124, 0.22)"}
+                borderRadius={showPrivacyText ? "8px 8px 0px 0px" : 8}
                 w="100%"
                 alignItems={"center"}
                 py={10.5}
@@ -509,23 +505,30 @@ const Interview = () => {
                   size={24}
                 />
               </Flex>
-              {showPrivacyText && (
-                <Flex
-                  h={240}
-                  p={16}
-                  overflowY={"scroll"}
-                  bgColor={"Background/Elevated/Alternative"}
-                  borderTop={`1px solid ${UI.COLORS["Line/Normal/Normal"]}`}
+
+              <Flex
+                h={272}
+                borderRadius={"0px 0px 8px 8px"}
+                opacity={showPrivacyText ? 1 : 0}
+                // scaleY={showPrivacyText ? 1 : 0}
+                // scaleY={}
+                // transform={`scaleY(${showPrivacyText ? 1 : 0.6})`}
+                transformOrigin={"top"}
+                transition={"opacity 0.3s ease-out, transform 0.3s ease-out"}
+                overflowY={"scroll"}
+                bgColor={"Background/Elevated/Alternative"}
+                border={`1px solid ${UI.COLORS["Line/Normal/Normal"]}`}
+                p={16}
+                borderTop={"0px"}
+              >
+                <Text
+                  type="Body1_Normal"
+                  color="Label/Neutral"
+                  fontWeight={"400"}
                 >
-                  <Text
-                    type="Body1_Normal"
-                    color="Label/Neutral"
-                    fontWeight={"400"}
-                  >
-                    {WEBSITE_CONSTS.PRIVACY_DATA_TEXT}
-                  </Text>
-                </Flex>
-              )}
+                  {WEBSITE_CONSTS.PRIVACY_DATA_TEXT}
+                </Text>
+              </Flex>
             </Flex>
 
             <Button
@@ -533,7 +536,11 @@ const Interview = () => {
               size={"Large"}
               title={"면접 시작하기"}
               stretch
-              flexProps={{ mt: 32 }}
+              flexProps={{
+                mt: 96,
+                transition: "all 0.3s ease-out",
+                transform: `translateY(${showPrivacyText ? "0px" : "-272px"})`,
+              }}
               disabled={!submitValue.canSubmit}
               onClick={onClickSubmit}
             />
