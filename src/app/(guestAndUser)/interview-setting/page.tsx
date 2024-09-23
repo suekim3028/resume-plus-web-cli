@@ -1,6 +1,6 @@
 "use client";
 import { interviewApis } from "@apis";
-import { useCompanyData } from "@atoms";
+import { useCompanyData, useRefreshUser } from "@atoms";
 
 import { GridItem } from "@chakra-ui/react";
 import {
@@ -40,6 +40,7 @@ const isInputValueSubmittable = (
 const Interview = () => {
   const { companies, departmentGroups, getJobsByDepartmentId } =
     useCompanyData();
+  const refreshUser = useRefreshUser();
 
   const companyRef = useRef<TypingSelectorRef>(null);
   const departmentRef =
@@ -152,7 +153,9 @@ const Interview = () => {
         position: job.companyJob,
       });
     if (resumeError) return ModalManager.close();
-
+    if (defaultResume) {
+      refreshUser();
+    }
     const { isError, data } = await interviewApis.createInterview(
       typeof company === "string"
         ? {

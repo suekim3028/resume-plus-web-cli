@@ -148,7 +148,7 @@ const InterviewContextProvider = ({ children }: { children: ReactNode }) => {
     if (effected.current) return;
     effected.current = true;
 
-    // setTimeout(getNextQuestion, 1500);
+    setTimeout(getNextQuestion, 1500);
   }, []);
 
   return (

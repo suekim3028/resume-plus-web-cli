@@ -16,8 +16,6 @@ const AuthLayout = ({
 }) => {
   const { user } = useUserValue();
 
-  console.log("!!!!!", user);
-
   const isValid = useMemo(() => {
     return validate(user?.loginType || null);
   }, [user?.loginType]);
