@@ -3,6 +3,7 @@ import { Flex, Text } from "@uis";
 import {
   forwardRef,
   ForwardRefRenderFunction,
+  KeyboardEventHandler,
   useCallback,
   useImperativeHandle,
   useRef,
@@ -37,6 +38,18 @@ const ChatComponent = () => {
 
     isSubmitting.current = false;
   }, []);
+
+  const handlePressEnter: KeyboardEventHandler<HTMLTextAreaElement> =
+    useCallback((e) => {
+      if (e.key === "Enter") {
+        console.log("!");
+        handleClickSend();
+
+        heightCalculatorRef.current?.setText("");
+
+        e.preventDefault();
+      }
+    }, []);
 
   const [scrollHeight, setScrollHeight] = useState(
     inputRef.current?.scrollHeight || 0
@@ -94,15 +107,7 @@ const ChatComponent = () => {
               onChange={(e) => {
                 heightCalculatorRef.current?.setText(e.target.value);
               }}
-              onKeyUp={(e) => {
-                if (e.key === "Enter") {
-                  handleClickSend();
-
-                  heightCalculatorRef.current?.setText("");
-
-                  e.preventDefault();
-                }
-              }}
+              onKeyUp={handlePressEnter}
               style={{
                 height: scrollHeight || undefined,
                 zIndex: 3,
