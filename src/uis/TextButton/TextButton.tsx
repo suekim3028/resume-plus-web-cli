@@ -99,7 +99,11 @@ const TextButton = ({
   return href ? (
     <Link
       href={href}
-      style={{ width: stretch ? "100%" : "fit-content" }}
+      style={{
+        width: stretch ? "100%" : "fit-content",
+        textDecoration: "none",
+      }}
+
       //   target={openInNewTab ? "_blank" : undefined}
     >
       {Component}
