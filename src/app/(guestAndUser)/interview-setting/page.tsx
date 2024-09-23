@@ -152,9 +152,7 @@ const Interview = () => {
         position: job.companyJob,
       });
     if (resumeError) return ModalManager.close();
-    if (defaultResume) {
-      refreshUser();
-    }
+
     const { isError, data } = await interviewApis.createInterview(
       typeof company === "string"
         ? {
@@ -174,6 +172,7 @@ const Interview = () => {
           }
     );
 
+    refreshUser();
     ModalManager.close();
     if (!isError) router.replace(`interview/${data.interviewId}`);
   };
