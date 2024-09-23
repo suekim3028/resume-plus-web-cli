@@ -17,8 +17,9 @@ export const emailSignIn = async (body: UserTypes.EmailSignInUser) =>
  */
 
 type GoogleSignInReq = {
-  idToken: string;
-} & Pick<UserTypes.User, "email" | "name">;
+  tokenType: string;
+  accessToken: string;
+};
 
 export const googleSignIn = async (body: GoogleSignInReq) =>
   API.post<UserResponse>(`/users/google-login`, { body });
