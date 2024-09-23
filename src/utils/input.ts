@@ -54,3 +54,19 @@ export const validatePassword = async (
     isError: false,
   };
 };
+
+export const validateVerificationCode = async (
+  email: string,
+  verificationCode: string
+): Promise<InputValidation> => {
+  const { isError, data: verified } = await userApis.checkVerificationCode({
+    email,
+    verificationCode,
+  });
+
+  if (!verified) {
+    return { isError: true, errorText: "올바르지 않은 인증번호입니다" };
+  }
+
+  return { isError: false };
+};

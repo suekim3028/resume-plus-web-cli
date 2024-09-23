@@ -1,3 +1,4 @@
+"use client";
 import { Icon, IconNames } from "@components";
 import { Flex } from "@uis";
 

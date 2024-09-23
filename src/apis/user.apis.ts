@@ -90,9 +90,12 @@ export const tokenLogin = () =>
 /** 게스트 로그인 */
 export const guestLogin = () => API.post<UserResponse>("/users/guest");
 
+/**
+ * 인증번호 보내기
+ */
 export const sendVerificationCode = ({ email }: { email: string }) =>
-  API.post<{ verificationCode: string }>(
-    "users/verify-email",
+  API.post(
+    "users/send-verification-code",
     {
       body: { email },
     },
@@ -101,3 +104,11 @@ export const sendVerificationCode = ({ email }: { email: string }) =>
       useDummy: false,
     }
   );
+
+/**
+ * 인증번호 확인
+ */
+export const checkVerificationCode = (data: {
+  email: string;
+  verificationCode: string;
+}) => API.post<boolean>("/users/verify-code", { body: data });

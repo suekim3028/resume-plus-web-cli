@@ -1,3 +1,4 @@
+"use client";
 //
 import { EventLogger } from "@components";
 import { INTERVIEW_CONSTS, UI } from "@constants";

@@ -1,9 +1,9 @@
 "use client";
 import { userApis } from "@apis";
-import { EventLogger, TextInput, TextInputRef } from "@components";
+import { EventLogger, Spinner, TextInput, TextInputRef } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { inputUtils } from "@utils";
-import { commonHooks } from "@web-core";
+import { commonHooks, ModalManager } from "@web-core";
 import React, { useEffect, useRef, useState } from "react";
 import { SignUpInputProps } from "../types";
 
@@ -18,7 +18,6 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
 
   const emailValue = useRef(""); // valid 한 이메일만 유지
   const typedAuthNumber = useRef(""); // valid한 이메일만 유지
-  const authNumber = useRef(""); // 인증번호 답
 
   const [authNumberState, _setAuthNumberState] =
     useState<AuthNumberState>("1_CAN_NOT_SEND");
@@ -41,15 +40,15 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
 
   const sendAuthNumber = async () => {
     setAuthNumberState("3_WAITING");
+    ModalManager.show({ Component: <Spinner size={30} />, closeOnDim: false });
 
-    const { isError, data } = await userApis.sendVerificationCode({
+    const { isError } = await userApis.sendVerificationCode({
       email: emailValue.current,
     });
+    ModalManager.close();
     if (isError) {
       return setAuthNumberState("2_CAN_SEND");
     }
-
-    authNumber.current = data.verificationCode;
   };
 
   const checkAuthNumber = () => {
@@ -135,10 +134,8 @@ const EmailInput = ({ onErrorChange, ...spaceProps }: SignUpInputProps) => {
               setCanCheckAuthNumber(!!v.text && !v.isError);
               setErrorMessage(v.isError && v.text ? v.errorText || "" : "");
             }}
-            validate={async (text) =>
-              text === authNumber.current
-                ? { isError: false }
-                : { isError: true, errorText: "올바르지 않은 인증번호입니다" }
+            validate={(v) =>
+              inputUtils.validateVerificationCode(emailValue.current, v)
             }
           />
         </Flex>
