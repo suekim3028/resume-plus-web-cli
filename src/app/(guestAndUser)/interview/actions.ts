@@ -29,9 +29,8 @@ export const speechToText = async (base64Audio: string) => {
 };
 
 export const textToSpeech = async (text: string) => {
-  // if (1 == 1) return "";
   const apiKey = process.env.GOOGLE_SPEECH_API_KEY;
-  console.log({ text, apiKey });
+
   const response = await fetch(
     `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
     {
@@ -47,8 +46,6 @@ export const textToSpeech = async (text: string) => {
       }),
     }
   );
-
-  console.log(response);
 
   const res = await response.json();
 

@@ -21,7 +21,6 @@ const CompletedResultCard = ({
 }) => {
   const router = useRouter();
 
-  console.log(interviewInfo);
   const { totalMean } = getScoreStat(result);
 
   return (

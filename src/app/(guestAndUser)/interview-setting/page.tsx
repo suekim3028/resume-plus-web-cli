@@ -123,7 +123,6 @@ const Interview = () => {
     key: T,
     value: InputValue[T]
   ) => {
-    console.log(value);
     valueRef.current = { ...valueRef.current, [key]: value };
 
     checkCanSubmit();

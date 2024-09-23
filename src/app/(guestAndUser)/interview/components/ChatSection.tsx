@@ -2,6 +2,7 @@ import { EventLogger, Icon } from "@components";
 import { Flex, Text } from "@uis";
 import {
   forwardRef,
+  ForwardRefRenderFunction,
   KeyboardEventHandler,
   useCallback,
   useImperativeHandle,
@@ -42,7 +43,6 @@ const ChatComponent = () => {
     inputRef.current?.scrollHeight || 0
   );
 
-  console.log({ scrollHeight });
   const handleKeyDownEventListener: KeyboardEventHandler<HTMLInputElement> =
     useCallback((e) => {
       if (e.key === "Enter") handleClickSend();
@@ -98,8 +98,6 @@ const ChatComponent = () => {
               placeholder="답변을 입력하세요"
               color="white"
               onChange={(e) => {
-                console.log("CHANGE DETECTED ! ! ");
-
                 heightCalculatorRef.current?.setText(e.target.value);
               }}
               style={{
@@ -138,10 +136,10 @@ const ChatComponent = () => {
 
 export default ChatComponent;
 
-const HeightCalculator = forwardRef<
+const HeightCalculatorComponent: ForwardRefRenderFunction<
   { setText: (text: string) => void },
   { onChangeHeight: (height: number) => void }
->(({ onChangeHeight }, ref) => {
+> = ({ onChangeHeight }, ref) => {
   const [text, setText] = useState("");
   const handleResize = useCallback((entries: ResizeObserverEntry[]) => {
     const height = entries[0].contentRect.height;
@@ -176,7 +174,12 @@ const HeightCalculator = forwardRef<
       </Text>
     </Flex>
   );
-});
+};
+
+const HeightCalculator = forwardRef<
+  { setText: (text: string) => void },
+  { onChangeHeight: (height: number) => void }
+>(HeightCalculatorComponent);
 
 const ChatBubble = ({ isMine, text }: Chat) => {
   return (

@@ -32,7 +32,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
    */
   const processRecordedData = useCallback(async () => {
     const recorded = recordData.current;
-    console.log(recorded.length);
+
     if (!recorded.length) return;
 
     const blob = new Blob(recorded);
@@ -60,7 +60,6 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
 
     _mediaRecorder.onstop = processRecordedData;
     _mediaRecorder.ondataavailable = (ev) => {
-      console.log("--데이터 들어옴");
       if (ev.data.size <= 0) return;
       recordData.current.push(ev.data);
     };
