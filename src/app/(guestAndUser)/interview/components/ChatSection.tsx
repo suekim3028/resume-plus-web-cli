@@ -27,7 +27,7 @@ const ChatComponent = () => {
     if (!inputRef.current || isSubmitting.current) return;
     isSubmitting.current = true;
 
-    const value = inputRef.current.value;
+    const value = inputRef.current.value.trim();
     if (!value) {
       isSubmitting.current = false;
       return;
@@ -44,9 +44,7 @@ const ChatComponent = () => {
       if (e.key === "Enter") {
         console.log("!");
         handleClickSend();
-
         heightCalculatorRef.current?.setText("");
-
         e.preventDefault();
       }
     }, []);
