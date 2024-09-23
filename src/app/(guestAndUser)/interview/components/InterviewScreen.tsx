@@ -27,8 +27,7 @@ const InterviewScreenComponent = () => {
   });
 
   const { talkingSide, status } = useInterviewContext();
-  const { interviewInfo, interviewerName } = useInterviewInfoContext();
-  const { interviewId } = interviewInfo;
+  const { interviewerName } = useInterviewInfoContext();
 
   const [showExitPopup, setShowExitPopup] = useState(false);
 

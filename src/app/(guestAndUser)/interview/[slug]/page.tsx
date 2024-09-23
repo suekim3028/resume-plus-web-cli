@@ -111,12 +111,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       {(() => {
         switch (step) {
           case "2_STEP_CHECK":
-            return (
-              <StepCheck
-                goNext={() => setStep("3_SETTING_CHECK")}
-                questionParts={interviewData.current?.questionParts || []}
-              />
-            );
+            return <StepCheck goNext={() => setStep("3_SETTING_CHECK")} />;
 
           case "3_SETTING_CHECK":
             return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;

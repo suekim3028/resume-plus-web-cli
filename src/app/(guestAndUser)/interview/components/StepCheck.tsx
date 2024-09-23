@@ -1,15 +1,11 @@
 import { EventLogger } from "@components";
 import { Button, Flex, Text } from "@uis";
+import { useInterviewInfoContext } from "../InterviewInfoContext";
 import { QuestionPart } from "../types";
 import Container from "./Container";
 
-const StepCheck = ({
-  questionParts,
-  goNext,
-}: {
-  questionParts: QuestionPart[];
-  goNext: () => void;
-}) => {
+const StepCheck = ({ goNext }: { goNext: () => void }) => {
+  const { questionParts } = useInterviewInfoContext();
   const totalQuestionCount = questionParts.reduce((prev, current) => {
     return prev + current.questionCount;
   }, 0);
