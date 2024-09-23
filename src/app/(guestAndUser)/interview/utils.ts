@@ -51,9 +51,9 @@ export const getQuestions = async (
       questions,
       questionParts: [
         genQuestionPart(1, "introduce", introduceQs),
-        genQuestionPart(2, "personal", introduceQs),
-        genQuestionPart(3, "tech", introduceQs),
-        genQuestionPart(4, "behavior", introduceQs),
+        genQuestionPart(2, "personal", personalQs),
+        genQuestionPart(3, "tech", techQs),
+        genQuestionPart(4, "behavior", behavQs),
       ],
     },
   };
