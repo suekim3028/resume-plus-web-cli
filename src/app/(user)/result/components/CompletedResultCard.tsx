@@ -49,7 +49,7 @@ const CompletedResultCard = ({
         <CompanyThumbnail
           companyName={interviewInfo.company}
           size={"large"}
-          thumbnailUrl={interviewInfo.companyThumbnailUrl ?? undefined}
+          imageUrl={interviewInfo.companyThumbnailUrl ?? undefined}
         />
         <Flex
           direction={"column"}

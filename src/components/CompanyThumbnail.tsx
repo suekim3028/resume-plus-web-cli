@@ -2,20 +2,20 @@ import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 
 const CompanyThumbnail = ({
-  thumbnailUrl,
+  imageUrl,
   companyName: _companyName,
   size,
-}: Pick<InterviewTypes.Company, "thumbnailUrl" | "companyName"> & {
+}: Pick<InterviewTypes.Company, "imageUrl" | "companyName"> & {
   size: "small" | "large";
 }) => {
   const sizeN = size === "small" ? 48 : 128;
   const rounded = size === "small" ? 12 : 10;
 
-  if (thumbnailUrl) {
+  if (imageUrl) {
     return (
       // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
       <img
-        src={thumbnailUrl}
+        src={imageUrl}
         width={sizeN}
         height={sizeN}
         style={{ width: sizeN, height: sizeN, borderRadius: rounded }}

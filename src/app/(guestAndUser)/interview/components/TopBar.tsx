@@ -25,7 +25,7 @@ const TopBar = () => {
         <CompanyThumbnail
           size={"small"}
           companyName={company}
-          thumbnailUrl={companyThumbnailUrl || undefined}
+          imageUrl={companyThumbnailUrl || undefined}
         />
 
         <Text

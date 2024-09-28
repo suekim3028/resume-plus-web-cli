@@ -83,7 +83,7 @@ export const findCompanyInfo = (
     company: companyName,
     job: job?.companyJob || "",
     department: department?.department || "",
-    companyThumbnailUrl: company?.thumbnailUrl || null,
+    companyThumbnailUrl: company?.imageUrl || null,
     interviewId: interview.interviewId,
   };
 };

@@ -5,7 +5,7 @@ export type Step = (typeof INTERVIEW_CONSTS.STEPS)[number];
 export type Company = {
   companyId: number;
   companyName: string;
-  thumbnailUrl?: string;
+  imageUrl?: string;
 };
 export type Department = {
   departmentId: number;
