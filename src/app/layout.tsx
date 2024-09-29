@@ -19,12 +19,6 @@ export default function RootLayout({
             </StrictMode>
           </Initializer>
         </GoogleOAuthProvider>
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp-dynamic-subset.min.css"
-        />
       </body>
     </html>
   );
