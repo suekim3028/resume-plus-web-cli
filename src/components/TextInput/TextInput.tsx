@@ -136,7 +136,7 @@ const TextInputComponent: React.ForwardRefRenderFunction<
           type={hidden ? "password" : "text"}
           placeholder={placeholder}
           style={{
-            fontFamily: "Pretendard JP Variable",
+            fontFamily: "Pretendard",
             fontWeight: "400",
             fontSize: 15,
             lineHeight: "22.01px",

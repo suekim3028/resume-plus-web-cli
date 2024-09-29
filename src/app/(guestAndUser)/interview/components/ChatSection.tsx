@@ -111,7 +111,7 @@ const ChatComponent = () => {
                 zIndex: 3,
                 overflowY: "hidden",
                 width: "100%",
-                fontFamily: "Pretendard JP Variable",
+                fontFamily: "Pretendard",
                 fontSize: 15,
                 lineHeight: "24px",
                 border: "none",
