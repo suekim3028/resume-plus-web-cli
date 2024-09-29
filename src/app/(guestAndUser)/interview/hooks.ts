@@ -77,7 +77,7 @@ export const useRecorder = (onRecordEnd: (text: string) => void) => {
           mediaRecorder.current?.stop();
           clearInterval(soundCheckInterval.current);
           clearTimeout(silenceTimeout.current);
-        }, 3000);
+        }, 1500);
       }
     }, 200);
 
