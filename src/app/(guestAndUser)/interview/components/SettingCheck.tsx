@@ -110,12 +110,13 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
       audio: true,
     });
 
-    if (videoElement.current)
-      videoElement.current.srcObject = mediaStream.current;
     setShowRecorder({
       video: mediaStream.current.getVideoTracks().length > 0,
       mic: mediaStream.current.getAudioTracks().length > 0,
     });
+
+    if (videoElement.current)
+      videoElement.current.srcObject = mediaStream.current;
 
     recorder.current = new MediaRecorder(mediaStream.current);
     recorder.current.ondataavailable = (ev) => {
@@ -149,40 +150,42 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
         height={384}
         borderRadius={28}
         overflow={"hidden"}
-        bgColor={"Static/Black"}
+        bgColor={showRecorder.video ? "Static/Black" : "Line/Solid/Alternative"}
         position={"relative"}
       >
-        {showRecorder.video ? (
-          <>
-            <video
-              autoPlay
-              disableRemotePlayback
-              disablePictureInPicture
-              width={"100%"}
-              height={"100%"}
-              ref={videoElement}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                transform: "rotateY(180deg)",
-                borderRadius: 28,
-                overflow: "hidden",
-              }}
-              muted
-              controls={false}
-              playsInline
-            />
-            <Flex position={"absolute"} right={16} bottom={16}>
-              <Icon
-                name={showRecorder.mic ? "iconMicGreen" : "iconMicGreenOff"}
-                size={24}
-              />
-            </Flex>
-          </>
-        ) : (
+        <video
+          autoPlay
+          disableRemotePlayback
+          disablePictureInPicture
+          width={"100%"}
+          height={"100%"}
+          ref={videoElement}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            transform: "rotateY(180deg)",
+
+            overflow: "hidden",
+          }}
+          muted
+          controls={false}
+          playsInline
+        />
+        <Flex position={"absolute"} right={16} bottom={16}>
+          <Icon
+            name={showRecorder.mic ? "iconMicGreen" : "iconMicGreenOff"}
+            size={24}
+          />
+        </Flex>
+
+        {!showRecorder.video && (
           <Flex
-            flex={1}
+            position={"absolute"}
+            left={0}
+            right={0}
+            top={0}
+            bottom={0}
             alignItems={"center"}
             justifyContent={"center"}
             bgColor={"Line/Solid/Alternative"}
