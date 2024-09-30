@@ -54,13 +54,10 @@ const API = returnFetch({
       if (!refreshToken) return;
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_SERVER}/user/login`,
+        `${process.env.NEXT_PUBLIC_API_SERVER}/users/refresh-token`,
         {
           body: JSON.stringify({
-            loginType: "REFRESH",
-            payload: {
-              refreshToken,
-            },
+            token: refreshToken,
           }),
           method: "POST",
         }
