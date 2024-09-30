@@ -96,7 +96,7 @@ const CompletedResultCard = ({
       </Flex>
       <Flex w="100%" justifyContent={"space-between"} alignItems={"center"}>
         <Text type="Label2" fontWeight={"400"}>
-          {interviewUtils.formatData(result.createdAt)}
+          {interviewUtils.formatDate(result.createdAt)}
         </Text>
         <ScoreBadge score={totalMean} size={"medium"} />
       </Flex>
