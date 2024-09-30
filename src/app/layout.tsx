@@ -1,6 +1,7 @@
 import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
+import type { Metadata } from "next";
 import { StrictMode } from "react";
 import "./globals.css";
 
@@ -38,3 +39,8 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const metadata: Metadata = {
+  title: "인터뷰플러스",
+  description: "혼자서도 자신 있는 면접 연습",
+};
