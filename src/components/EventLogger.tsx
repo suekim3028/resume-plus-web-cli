@@ -14,7 +14,10 @@ class _EventLogger {
     {
       const [event, params] = _value;
 
-      const defaultProps = {};
+      const defaultProps = {
+        login: "Y", // TODO
+        version: "1.0.0",
+      };
       const _props = params ? factory[event](params) : undefined;
       amplitude.track(event, { ...defaultProps, ..._props });
       console.log(`[LogEvent] ${event} : ${JSON.stringify(_props)}`);
@@ -31,7 +34,11 @@ type EventParams = {
     | "로그인";
   global_navigation_bar_profile: "프로필" | "로그아웃";
   footer_button: "Service Guide" | "Privacy Policy" | "Survey";
-  Home: undefined;
+  Home: {
+    utm_source: string | null;
+    utm_medium: string | null;
+    utm_campaign: string | null;
+  };
   home_main_banner_card: string;
   home_banner_card: "지금 면접 시작하기";
   LogIn: undefined;
@@ -107,7 +114,7 @@ const factory: { [k in EventKey]: (params: EventParams[k]) => EventProp } = {
   global_navigation_bar_button: actionOnly,
   global_navigation_bar_profile: actionOnly,
   footer_button: actionOnly,
-  Home: noParam,
+  Home: attributesOnly,
   home_main_banner_card: labelOnly,
   home_banner_card: labelOnly,
   LogIn: noParam,
