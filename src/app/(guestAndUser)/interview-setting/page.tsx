@@ -133,6 +133,7 @@ const Interview = () => {
   };
 
   const submit = async () => {
+    setShowConfirmPopup(false);
     if (!submitValue.canSubmit) return;
 
     const { company, job, department, resume } = submitValue.value;
@@ -142,8 +143,10 @@ const Interview = () => {
       job_name: job.companyJob,
       occupation_name: department.department,
     });
+    console.log("2222");
 
     ModalManager.show({ closeOnDim: false, Component: <Spinner size={30} /> });
+
     const { isError: resumeError, data: resumeData } =
       await interviewApis.uploadCV({
         content: await getText(resume),
@@ -151,7 +154,9 @@ const Interview = () => {
         name: resume.name,
         position: job.companyJob,
       });
-    if (resumeError) return ModalManager.close();
+    if (resumeError) {
+      return ModalManager.close();
+    }
 
     const { isError, data } = await interviewApis.createInterview(
       typeof company === "string"
@@ -172,7 +177,7 @@ const Interview = () => {
           }
     );
 
-    refreshUser();
+    await refreshUser();
     ModalManager.close();
     if (!isError) router.replace(`interview/${data.interviewId}`);
   };

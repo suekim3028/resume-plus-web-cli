@@ -11,6 +11,7 @@ const Profile = () => {
 
   if (!user) return <></>;
   const { name, email, defaultResume, remainInterview } = user;
+
   return (
     <Flex pt={116} pb={304} w={"100%"} flexDir={"column"}>
       <GridWrapper w="100%" pb={48}>
