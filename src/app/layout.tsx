@@ -2,7 +2,7 @@ import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
 import type { Metadata } from "next";
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -29,11 +29,13 @@ export default function RootLayout({
       </head>
       <body id="body">
         <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
-          <Initializer>
-            <StrictMode>
-              <ModalWrapper>{children}</ModalWrapper>
-            </StrictMode>
-          </Initializer>
+          <Suspense>
+            <Initializer>
+              <StrictMode>
+                <ModalWrapper>{children}</ModalWrapper>
+              </StrictMode>
+            </Initializer>
+          </Suspense>
         </GoogleOAuthProvider>
       </body>
     </html>
