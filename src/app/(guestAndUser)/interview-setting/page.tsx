@@ -1,7 +1,6 @@
 "use client";
 
 import { GridItem } from "@chakra-ui/react";
-import { InterviewTypes } from "@types";
 import { Flex, GridWrapper } from "@uis";
 import { Form } from "@web-core";
 import InterviewDefaultSetting from "./components/InterviewDefaultSetting";
@@ -11,21 +10,6 @@ import ResumeUploadGroup from "./components/ResumeUploadGroup";
 import SubmitButton from "./components/SubmitButton";
 import TitleSection from "./components/TitleSection";
 import { InterviewSettingValue } from "./types";
-type SubmittableValue = {
-  company: InterviewTypes.Company | string;
-  department: InterviewTypes.Department;
-  job: InterviewTypes.Job;
-};
-
-type InputValue = {
-  [key in keyof SubmittableValue]: SubmittableValue[key] | null;
-};
-
-const isInputValueSubmittable = (
-  value: InputValue
-): value is SubmittableValue => {
-  return Object.keys(value).every((v) => !!value[v as keyof InputValue]);
-};
 
 const Interview = () => {
   const form = new Form.FormFactory<InterviewSettingValue>();
