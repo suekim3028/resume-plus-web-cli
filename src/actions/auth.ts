@@ -1,30 +1,44 @@
-// export async function signup(state: FormState, formData: FormData) {
-//   // Previous steps:
-//   // 1. Validate form fields
-//   // 2. Prepare data for insertion into database
-//   // 3. Insert the user into the database or call an Library API
+"use server";
 
-//   // Current steps:
-//   // 4. Create user session
-//   await createSession(user.id);
-//   // 5. Redirect user
-//   redirect("/profile");
-// }
+import { cookies } from "next/headers";
 
-// export const createSession = async  ()=>{
-//     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-//     const session = await publicEncrypt({ userId, expiresAt })
+import { userApis } from "@apis";
 
-//     cookies().set('session', session, {
-//       httpOnly: true,
-//       secure: true,
-//       expires: expiresAt,
-//       sameSite: 'lax',
-//       path: '/',
-//     })
-// }
-// export const checkUser = async ()=>{
-//     const session = cookies().get('session')?.value;
-//     const payload = await decrypt(session)
+export const handleLogin = async (
+  value: Pick<userApis.UserResponse, "token">
+) => {
+  console.log("===HANDLE LOGIN");
+  const { token } = value;
 
-// }
+  const encrypted = JSON.stringify(token); // TODO: Encrypt
+  cookies().set("token", encrypted, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 7, // One week
+    path: "/",
+  });
+  // Redirect or handle the response after setting the cookie
+};
+
+const getToken = () => {
+  const token = cookies().get("token")?.value;
+
+  console.log({ token });
+  return token ? JSON.parse(token) : null;
+};
+
+export const tokenLogin = async (): Promise<userApis.UserResponse | null> => {
+  const token = getToken();
+  if (!token) return null;
+
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER}/users/current-user`,
+    { headers: { Authorization: `Bearer ${token.accessToken}` } }
+  );
+
+  if (data.ok) {
+    return await data.json();
+  }
+
+  return null;
+};
