@@ -3,11 +3,14 @@ import { interviewApis } from "@apis";
 import { QueryOptions } from "@tanstack/react-query";
 import { MyQueryData, MyQueryKey } from "./queries.types";
 
-export const queryOptions: {
-  [key in MyQueryKey]: (
-    params: MyQueryData[key]["deps"]
-  ) => Omit<QueryOptions<MyQueryData[key]["data"]>, "queryKey"> &
-    Required<Pick<QueryOptions<MyQueryData[key]["data"]>, "queryKey">>;
+export const queryOptionGenerator: {
+  [key in MyQueryKey]: MyQueryData[key]["deps"] extends undefined
+    ? () => Omit<QueryOptions<MyQueryData[key]["data"]>, "queryKey"> &
+        Required<Pick<QueryOptions<MyQueryData[key]["data"]>, "queryKey">>
+    : (
+        params: MyQueryData[key]["deps"]
+      ) => Omit<QueryOptions<MyQueryData[key]["data"]>, "queryKey"> &
+        Required<Pick<QueryOptions<MyQueryData[key]["data"]>, "queryKey">>;
 } = {
   USER: () => ({
     queryKey: ["user"],

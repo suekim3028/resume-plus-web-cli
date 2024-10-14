@@ -2,7 +2,8 @@
 import { useUserValue } from "@atoms";
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
-import { useAuth } from "@hooks";
+
+import { UserSession } from "@libs";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
@@ -10,7 +11,6 @@ import TopBarButton from "../TopBarButton";
 
 const UserHoverMenuWrapper = ({ children }: { children: ReactNode }) => {
   const { user, isGuestUser } = useUserValue();
-  const { logout } = useAuth();
   const router = useRouter();
   const [userMenuVisible, setUserMenuVisible] = useState(false);
 
@@ -67,7 +67,7 @@ const UserHoverMenuWrapper = ({ children }: { children: ReactNode }) => {
               justifyContent={"center"}
               w="100%"
               onClick={() => {
-                logout();
+                UserSession.signOut();
                 EventLogger.log("global_navigation_bar_profile", "로그아웃");
               }}
             >

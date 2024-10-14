@@ -18,13 +18,13 @@ export const useAuth = () => {
     setUser(value.user);
   }, []);
 
-  const logout = useCallback(() => {
+  const signOut = useCallback(() => {
     router.replace("/");
     TokenStorage.remove();
     setUser(null);
   }, []);
 
-  const loginWithGoogle = useGoogleLogin({
+  const signInWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         const { token_type, access_token } = tokenResponse;
@@ -49,7 +49,7 @@ export const useAuth = () => {
     },
   });
 
-  const loginWithEmail = useCallback(
+  const signInWithEmail = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
       const { data, isError } = await userApis.emailSignIn({
         email,
@@ -93,10 +93,10 @@ export const useAuth = () => {
   }, [handleUser]);
 
   return {
-    loginWithGoogle,
-    loginWithEmail,
+    signInWithGoogle,
+    signInWithEmail,
     signUpWithEmail,
-    logout,
+    signOut,
     guestSignIn,
   };
 };

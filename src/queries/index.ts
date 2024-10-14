@@ -1,3 +1,3 @@
-import { queryOptions } from "./queries.consts";
+import { queryOptionGenerator } from "./queries.consts";
 export { default as MyHydrationBoundary } from "./MyHydrationBoundary";
-export { queryOptions };
+export { queryOptionGenerator };

@@ -26,7 +26,7 @@ const getToken = () => {
 };
 
 export const tokenLogin = async (): Promise<
-  (userApis.UserResponse & { isGuestUser: boolean }) | null
+  (userApis.UserResponse & { isGuest: boolean }) | null
 > => {
   const token = getToken();
   if (!token) return null;
@@ -39,7 +39,7 @@ export const tokenLogin = async (): Promise<
   if (data.ok) {
     const user = (await data.json()) as UserTypes.User;
 
-    return { user, token, isGuestUser: user?.loginType === "GUEST" };
+    return { user, token, isGuest: user?.loginType === "GUEST" };
   }
 
   return null;

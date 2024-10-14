@@ -1,15 +1,18 @@
-import { tokenLogin } from "@actions/auth";
+"use client";
+
 import { GridItem } from "@chakra-ui/react";
 import Icon from "@components/Icon/Icon";
+
+import { queryOptionGenerator } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex } from "@uis";
-import { Suspense } from "react";
 import TopBarButton from "./TopBarButton";
 import UserHoverMenuWrapper from "./UserHoverMenuWrapper/UserHoverMenuWrapper";
 
-const _UserButton = async () => {
-  const user = await tokenLogin();
+const UserButton = () => {
+  const { data: user } = useQuery(queryOptionGenerator["USER"]());
 
-  if (!user || user.isGuestUser)
+  if (!user || user.isGuest)
     return <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />;
 
   return (
@@ -28,16 +31,4 @@ const _UserButton = async () => {
   );
 };
 
-export default function UserButton() {
-  return (
-    <Flex alignItems={"center"} justifyContent={"center"} flex={1}>
-      <Suspense
-        fallback={
-          <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />
-        }
-      >
-        <_UserButton />
-      </Suspense>
-    </Flex>
-  );
-}
+export default UserButton;

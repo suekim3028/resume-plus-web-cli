@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { ReactNode } from "react";
-import { queryOptions } from "./queries.consts";
+import { queryOptionGenerator } from "./queries.consts";
 import { MyQueryData, MyQueryKey } from "./queries.types";
 import { getQueryClient } from "./queries.utils";
 
@@ -21,7 +21,7 @@ const MyHydrationBoundary = async <T extends MyQueryKey>({
       deps: MyQueryData[T]["deps"];
     }) => {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(queryOptions[queryKey](deps));
+  await queryClient.prefetchQuery(queryOptionGenerator[queryKey](deps));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
