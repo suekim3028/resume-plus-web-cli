@@ -3,11 +3,11 @@
 import { cookies } from "next/headers";
 
 import { userApis } from "@apis";
+import { UserTypes } from "@types";
 
-export const handleLogin = async (
+export const handleSignIn = async (
   value: Pick<userApis.UserResponse, "token">
 ) => {
-  console.log("===HANDLE LOGIN");
   const { token } = value;
 
   const encrypted = JSON.stringify(token); // TODO: Encrypt
@@ -17,14 +17,12 @@ export const handleLogin = async (
     maxAge: 60 * 60 * 24 * 7, // One week
     path: "/",
   });
-  // Redirect or handle the response after setting the cookie
 };
 
 const getToken = () => {
   const token = cookies().get("token")?.value;
 
-  console.log({ token });
-  return token ? JSON.parse(token) : null;
+  return token ? JSON.parse(token) : null; // TODO: decrypt
 };
 
 export const tokenLogin = async (): Promise<
@@ -39,9 +37,14 @@ export const tokenLogin = async (): Promise<
   );
 
   if (data.ok) {
-    const res = await data.json();
-    return { ...res, isGuestUser: res?.type === "GUEST" };
+    const user = (await data.json()) as UserTypes.User;
+
+    return { user, token, isGuestUser: user?.loginType === "GUEST" };
   }
 
   return null;
+};
+
+export const handleSignOut = async () => {
+  cookies().delete("token");
 };

@@ -22,7 +22,7 @@ class UserSession {
     this._user = null;
   }
 
-  public isGuestUser() {
+  public get isGuestUser() {
     return this.user?.loginType === "GUEST";
   }
 
@@ -38,7 +38,7 @@ class UserSession {
   public async signInWithGoogle(googleTokenResponse: TokenResponse) {
     const { token_type, access_token } = googleTokenResponse;
 
-    const method = this.isGuestUser()
+    const method = this.isGuestUser
       ? userApis.guestGoogleSignIn
       : userApis.googleSignIn;
 
@@ -50,14 +50,14 @@ class UserSession {
     if (!isError) this.handleUserResponse(data);
   }
 
-  public async loginWithEmail({
+  public async signInWithEmail({
     email,
     password,
   }: {
     email: string;
     password: string;
   }) {
-    const method = this.isGuestUser()
+    const method = this.isGuestUser
       ? userApis.guestEmailSignIn
       : userApis.emailSignIn;
 
@@ -78,7 +78,7 @@ class UserSession {
     password: string;
     name: string;
   }) {
-    const method = this.isGuestUser() ? userApis.guestSignUp : userApis.signUp;
+    const method = this.isGuestUser ? userApis.guestSignUp : userApis.signUp;
 
     const { data, isError } = await method(params);
 
