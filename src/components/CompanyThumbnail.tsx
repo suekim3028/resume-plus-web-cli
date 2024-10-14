@@ -18,7 +18,13 @@ const CompanyThumbnail = ({
         src={imageUrl}
         width={sizeN}
         height={sizeN}
-        style={{ width: sizeN, height: sizeN, borderRadius: rounded }}
+        style={{
+          width: sizeN,
+          height: sizeN,
+          borderRadius: rounded,
+          objectFit: "contain",
+          backgroundColor: "rgba(0,0,0,0.05)",
+        }}
       />
     );
   }
