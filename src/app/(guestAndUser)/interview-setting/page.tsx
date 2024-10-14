@@ -3,6 +3,7 @@
 import { GridItem } from "@chakra-ui/react";
 import { Flex, GridWrapper } from "@uis";
 import { Form } from "@web-core";
+import { useMemo } from "react";
 import InterviewDefaultSetting from "./components/InterviewDefaultSetting";
 import InterviewDetailSetting from "./components/InterviewDetailSetting";
 import PrivacyAgreementCheckbox from "./components/PrivacyAgreementCheckbox";
@@ -12,7 +13,7 @@ import TitleSection from "./components/TitleSection";
 import { InterviewSettingValue } from "./types";
 
 const Interview = () => {
-  const form = new Form.FormFactory<InterviewSettingValue>();
+  const form = useMemo(() => new Form.FormFactory<InterviewSettingValue>(), []);
 
   return (
     <form.FormProvider
