@@ -3,7 +3,7 @@ import { GridItem } from "@chakra-ui/react";
 import { EventLogger, Icon, Logo } from "@components";
 import { UI, WEBSITE_CONSTS } from "@constants";
 
-import { UserSession } from "@libs";
+import { useAuth } from "@hooks";
 import { UserTypes } from "@types";
 import { Button, Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
@@ -25,6 +25,7 @@ const isSubmittableValue = (
 
 const EmailSignIn = () => {
   const router = useRouter();
+  const { signUpWithEmail } = useAuth();
 
   const inputValue = useRef<SignUpValueState>({
     email: { isError: true, value: null },
@@ -53,7 +54,7 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     if (!submittableValue) return;
-    await UserSession.signUpWithEmail(submittableValue);
+    await signUpWithEmail(submittableValue);
     router.replace("/");
   };
 

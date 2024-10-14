@@ -1,24 +1,29 @@
 import { InterviewTypes, UserTypes } from "@types";
 
-export type QueryDataFactory<Data, Dependency = undefined> = {
+type QueryInfoFactory<Data, Dependency = undefined> = {
   data: Data;
   deps: Dependency;
 };
 
-export type MyQueryData = {
-  USER: QueryDataFactory<{ user: UserTypes.User; isGuest: boolean } | null>;
-  RESULT: QueryDataFactory<
+export type MyQueryInfo = {
+  USER: QueryInfoFactory<{ user: UserTypes.User; isGuest: boolean } | null>;
+  RESULT: QueryInfoFactory<
     {
       done: InterviewTypes.CompletedInterviewResult[];
       pending: InterviewTypes.PendingInterviewResult[];
     },
     { isGuest: boolean }
   >;
-  COMPANY_DEPT: QueryDataFactory<{
+  COMPANY_DEPT: QueryInfoFactory<{
     companies: InterviewTypes.Company[];
     departments: InterviewTypes.Department[];
     jobsByDepartmentId: Record<number, InterviewTypes.Job[]>;
   }>;
 };
 
-export type MyQueryKey = keyof MyQueryData;
+export type MyQueryKeys = {
+  USER: ["USER"];
+  RESULT: ["RESULT"];
+  COMPANY_DEPT: ["COMPANY_DEPT"];
+};
+export type MyQueryKeyNames = keyof MyQueryKeys;

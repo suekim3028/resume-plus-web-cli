@@ -1,5 +1,3 @@
-import AuthLayout from "./AuthLayout";
-
 import CompanyThumbnail from "./CompanyThumbnail";
 import { EventLogger } from "./EventLogger";
 import Footer from "./Footer";
@@ -9,8 +7,10 @@ import ListSelector, {
   type ListSelectorItem,
   type ListSelectorRef,
 } from "./ListSelector/ListSelector";
+import LogButton from "./LogButton";
 import Logo from "./Logo/Logo";
 import PopUp from "./Popup";
+import Spinner from "./Spinner";
 import TextInput, {
   type InputState,
   type InputValidation,
@@ -22,9 +22,9 @@ import TypingSelector, {
   type TypingSelectorRef,
 } from "./TypingSelector/TypingSelector";
 
-import Spinner from "./Spinner";
+import ClientProviderGroup from "./ClientProviderGroup";
 export {
-  AuthLayout,
+  ClientProviderGroup,
   CompanyThumbnail,
   EventLogger,
   Footer,
@@ -36,6 +36,7 @@ export {
   ListSelector,
   ListSelectorItem,
   ListSelectorRef,
+  LogButton,
   Logo,
   PopUp,
   Spinner,

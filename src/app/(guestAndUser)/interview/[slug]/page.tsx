@@ -1,12 +1,12 @@
 "use client";
 import { interviewApis } from "@apis";
 
-import { useCompanyData } from "@atoms";
-
 import { findCompanyInfo } from "@app/(user)/result/utils";
 import { EventLogger } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
-import { commonHooks, jsUtils } from "@web-core";
+import { commonHooks, jsUtils, ModalManager } from "@web-core";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import EnterWaiting from "../components/EnterWaiting";
@@ -37,7 +37,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
   const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
   const interview = useRef<InterviewTypes.InterviewInfo>();
 
-  const companyData = useCompanyData();
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
 
   const interviewData = useRef<{
     questions: RandomQuestion[];
@@ -62,7 +62,9 @@ const Interview = ({ params }: { params: { slug: number } }) => {
       return router.back();
     }
 
-    interview.current = findCompanyInfo(interviewInfoData, companyData);
+    interview.current = companyData
+      ? findCompanyInfo(interviewInfoData, companyData)
+      : undefined;
 
     const { isError, data } = await getQuestions(interviewId);
 
@@ -95,6 +97,10 @@ const Interview = ({ params }: { params: { slug: number } }) => {
         break;
     }
   }, [step]);
+
+  useEffect(() => {
+    ModalManager.close();
+  }, []);
 
   if (step === "1_QUESTION_WAITING")
     return <QuestionWaiting ref={questionWaitingRef} />;

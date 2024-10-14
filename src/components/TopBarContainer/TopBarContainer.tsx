@@ -44,7 +44,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             cursor={"pointer"}
           >
             <LogButton log={["global_navigation_bar_button", "logo"]}>
-              <Logo size={"SMALL"} />
+              <Logo size={"SMALL"} useLink />
             </LogButton>
           </GridItem>
 

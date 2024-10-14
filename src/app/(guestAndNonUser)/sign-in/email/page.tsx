@@ -1,6 +1,6 @@
 "use client";
 import { EventLogger, Logo, TextInput } from "@components";
-import { UserSession } from "@libs";
+import { useAuth } from "@hooks";
 
 import { Button, Flex, Text, TextButton } from "@uis";
 import { useRouter } from "next/navigation";
@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 
 const EmailSignIn = () => {
   const router = useRouter();
+  const { signInWithEmail } = useAuth();
 
   const [canSubmit, setCanSubmit] = useState(false);
 
@@ -32,7 +33,7 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     const { email, password } = inputValue.current;
-    const { success } = await UserSession.signInWithEmail({ email, password });
+    const { success } = await signInWithEmail({ email, password });
     if (success) router.replace("/");
   };
 

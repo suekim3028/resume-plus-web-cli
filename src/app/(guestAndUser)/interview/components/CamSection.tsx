@@ -1,6 +1,7 @@
-import { useUserValue } from "@atoms";
 import { Icon } from "@components";
 import { UI } from "@constants";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import React, { RefObject, useMemo } from "react";
@@ -21,7 +22,7 @@ const CamSection = ({
   interviewerName: string;
 }) => {
   const window = commonHooks.useWindowSize({});
-  const { user } = useUserValue();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
 
   const CAM_SIZE = useMemo(() => {
     if (!window) return 0;
@@ -99,7 +100,11 @@ const CamSection = ({
           position={"absolute"}
           color={"Primary/Normal"}
         >
-          {`지원자_${user && user.loginType !== "GUEST" ? user.name : "OO"}님`}
+          {`지원자_${
+            userData && userData.user.loginType !== "GUEST"
+              ? userData.user.name
+              : "OO"
+          }님`}
         </Text>
       </Flex>
     </Flex>

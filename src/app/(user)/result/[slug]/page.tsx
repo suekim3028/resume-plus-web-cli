@@ -2,12 +2,13 @@
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger, Icon } from "@components";
 
-import { useCompanyData, useResult } from "@atoms";
 import { Flex, GridWrapper, Text } from "@uis";
 import { useRouter } from "next/navigation";
 
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { getScoreStat } from "../utils";
+import { findCompanyInfo, getScoreStat } from "../utils";
 import FeedbackList from "./components/FeedbackList";
 import InterviewInfoCard from "./components/InterviewInfoCard";
 import ScoreCalcInfo from "./components/ScoreCalcInfo";
@@ -15,44 +16,35 @@ import ScoreCalcInfo from "./components/ScoreCalcInfo";
 const ResultDetail = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
 
-  const resultInterviews = useResult();
-  const { getJobsByDepartmentId, ...companyData } = useCompanyData();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
   const router = useRouter();
-  const interview = resultInterviews?.done.find((i) => {
-    return i.interviewId === Number(interviewId);
-  });
+  const interview = userData
+    ? userData.result.done.find((i) => {
+        return i.interviewId === Number(interviewId);
+      })
+    : null;
 
   const interviewInfo = useMemo(() => {
-    if (!interview) return null;
-    const { companyId, jobId, departmentId, createdAt } = interview;
-
-    const company = companyData?.companies.find(
-      ({ companyId: id }) => id === companyId
-    );
-    const department = companyData?.departmentGroups.find(
-      ({ departmentId: id }) => id === departmentId
-    );
-
-    const job = department
-      ? getJobsByDepartmentId(department?.departmentId).find(
-          ({ companyJobId }) => companyJobId === jobId
-        ) || null
-      : null;
+    const start = Date.now();
+    if (!interview || !companyData) return null;
+    const { createdAt } = interview;
+    const companyInfo = findCompanyInfo(interview, companyData);
     const { totalMean } = getScoreStat(interview);
-
-    return { ...interview, company, department, job, createdAt, totalMean };
-  }, [!!interview]);
+    const end = Date.now();
+    console.log("계산에 든 시간------", end - start);
+    return { ...interview, ...companyInfo, createdAt, totalMean };
+  }, [!!interview, !!companyData]);
 
   useEffect(() => {
     if (!interviewInfo) return;
     const { company, department, job, createdAt, totalMean } = interviewInfo;
 
     EventLogger.log("InterviewResultDetail", {
-      corp_name: company?.companyName || "",
-
+      corp_name: company,
       interview_datetime: createdAt,
-      job_name: job?.companyJob || "",
-      occupation_name: department?.department || "",
+      job_name: job,
+      occupation_name: department,
       score: totalMean,
     });
   }, [!!interviewInfo]);
@@ -80,9 +72,9 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
         <GridItem colSpan={2}>
           <Flex direction={"column"} w="100%" gap={24}>
             <InterviewInfoCard
-              companyName={company?.companyName || ""}
-              jobName={job?.companyJob || ""}
-              departmentName={department?.department || ""}
+              companyName={company}
+              jobName={job}
+              departmentName={department}
               meanScore={totalMean}
               createdAt={createdAt}
             />
@@ -92,9 +84,9 @@ const ResultDetail = ({ params }: { params: { slug: number } }) => {
         <GridItem colSpan={10} colStart={3}>
           <FeedbackList
             {...interview}
-            companyName={company?.companyName || ""}
-            jobName={job?.companyJob || ""}
-            departmentName={department?.department || ""}
+            companyName={company}
+            jobName={job}
+            departmentName={department}
             meanScore={totalMean}
             createdAt={createdAt}
           />

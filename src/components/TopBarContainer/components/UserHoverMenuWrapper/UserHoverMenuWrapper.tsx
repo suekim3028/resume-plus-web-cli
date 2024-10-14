@@ -1,20 +1,22 @@
 "use client";
-import { useUserValue } from "@atoms";
+
 import { GridItem } from "@chakra-ui/react";
 import { EventLogger } from "@components/EventLogger";
-
-import { UserSession } from "@libs";
+import { useAuth } from "@hooks";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex, Text } from "@uis";
 import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 import TopBarButton from "../TopBarButton";
 
 const UserHoverMenuWrapper = ({ children }: { children: ReactNode }) => {
-  const { user, isGuestUser } = useUserValue();
+  const { data: user } = useQuery(queryOptions.userQueryOptions);
   const router = useRouter();
+  const { signOut } = useAuth();
   const [userMenuVisible, setUserMenuVisible] = useState(false);
 
-  if (!user || isGuestUser)
+  if (!user || user.isGuest)
     return <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />;
 
   return (
@@ -23,14 +25,11 @@ const UserHoverMenuWrapper = ({ children }: { children: ReactNode }) => {
       alignItems={"center"}
       justifyContent={"flex-end"}
       colStart={12}
+      onMouseEnter={() => setUserMenuVisible(true)}
+      onMouseLeave={() => setUserMenuVisible(false)}
     >
       <Flex position={"relative"}>
-        <div
-          onMouseEnter={() => setUserMenuVisible(true)}
-          onMouseOut={() => setUserMenuVisible(false)}
-        >
-          {children}
-        </div>
+        {children}
 
         {userMenuVisible && (
           <Flex
@@ -67,7 +66,7 @@ const UserHoverMenuWrapper = ({ children }: { children: ReactNode }) => {
               justifyContent={"center"}
               w="100%"
               onClick={() => {
-                UserSession.signOut();
+                signOut();
                 EventLogger.log("global_navigation_bar_profile", "로그아웃");
               }}
             >

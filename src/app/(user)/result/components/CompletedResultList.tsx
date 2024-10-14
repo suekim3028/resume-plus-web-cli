@@ -1,18 +1,18 @@
 "use client";
 
-import { useCompanyData, useResult } from "@atoms";
-
 import { Spinner } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Flex, Text } from "@uis";
 import { Suspense } from "react";
 import { findCompanyInfo } from "../utils";
 import CompletedResultCard from "./CompletedResultCard";
 
 const CompletedResultListComponent = () => {
-  const { done } = useResult();
-  const companyData = useCompanyData();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
 
-  if (!done.length)
+  if (!userData || !userData.result.done.length)
     return (
       <Flex pt={24} pb={92} w={"100%"} flexDir={"column"} alignItems={"center"}>
         <Text
@@ -33,14 +33,18 @@ const CompletedResultListComponent = () => {
 
   return (
     <Flex w="100%" overflowX={"scroll"} gap={24} pb={24}>
-      {done.map((result) => (
-        <CompletedResultCard
-          result={result}
-          createdAt={result.createdAt}
-          interviewInfo={findCompanyInfo(result, companyData)}
-          key={result.interviewId}
-        />
-      ))}
+      {userData.result.done.map((result) =>
+        companyData ? (
+          <CompletedResultCard
+            result={result}
+            createdAt={result.createdAt}
+            interviewInfo={findCompanyInfo(result, companyData)}
+            key={result.interviewId}
+          />
+        ) : (
+          <></>
+        )
+      )}
     </Flex>
   );
 };

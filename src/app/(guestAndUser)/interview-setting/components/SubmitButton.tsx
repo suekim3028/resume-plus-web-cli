@@ -1,6 +1,8 @@
 import { interviewApis } from "@apis";
-import { useRefreshUser } from "@atoms";
+
 import { EventLogger, Spinner } from "@components";
+import { queryOptions } from "@queries";
+import { getQueryClient } from "@queries/queries.utils";
 import { Button } from "@uis";
 import { Form, ModalManager } from "@web-core";
 import { useRouter } from "next/navigation";
@@ -20,7 +22,6 @@ const SubmitButton: Form.FormSubmitElement<InterviewSettingValue> = ({
   isSubmittable,
   getCurrentValue,
 }) => {
-  const refreshUser = useRefreshUser();
   const router = useRouter();
 
   const getValue = useCallback(() => {
@@ -99,7 +100,7 @@ const SubmitButton: Form.FormSubmitElement<InterviewSettingValue> = ({
       resumeId: resumeData.resumeId,
     });
 
-    await refreshUser();
+    getQueryClient().invalidateQueries(queryOptions.userQueryOptions);
     ModalManager.close();
     if (!isError) router.replace(`interview/${data.interviewId}`);
   };

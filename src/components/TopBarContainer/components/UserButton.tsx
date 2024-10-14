@@ -3,15 +3,16 @@
 import { GridItem } from "@chakra-ui/react";
 import Icon from "@components/Icon/Icon";
 
-import { queryOptionGenerator } from "@queries";
+import { queryOptions } from "@queries";
 import { useQuery } from "@tanstack/react-query";
 import { Flex } from "@uis";
 import TopBarButton from "./TopBarButton";
 import UserHoverMenuWrapper from "./UserHoverMenuWrapper/UserHoverMenuWrapper";
 
 const UserButton = () => {
-  const { data: user } = useQuery(queryOptionGenerator["USER"]());
+  const { data: user } = useQuery(queryOptions.userQueryOptions);
 
+  console.log({ user });
   if (!user || user.isGuest)
     return <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />;
 

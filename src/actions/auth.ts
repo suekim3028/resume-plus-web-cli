@@ -3,7 +3,6 @@
 import { cookies } from "next/headers";
 
 import { userApis } from "@apis";
-import { UserTypes } from "@types";
 
 export const handleSignIn = async (
   value: Pick<userApis.UserResponse, "token">
@@ -19,8 +18,10 @@ export const handleSignIn = async (
   });
 };
 
-const getToken = () => {
+export const getToken = async () => {
   const token = cookies().get("token")?.value;
+
+  console.log("===HAVE TOKEN: ", !!token);
 
   return token ? JSON.parse(token) : null; // TODO: decrypt
 };
@@ -28,21 +29,15 @@ const getToken = () => {
 export const tokenLogin = async (): Promise<
   (userApis.UserResponse & { isGuest: boolean }) | null
 > => {
-  const token = getToken();
+  const token = await getToken();
   if (!token) return null;
 
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER}/users/current-user`,
-    { headers: { Authorization: `Bearer ${token.accessToken}` } }
-  );
+  const { isError, data } = await userApis.tokenLogin();
 
-  if (data.ok) {
-    const user = (await data.json()) as UserTypes.User;
+  console.log({ data, isError });
+  if (isError) return null;
 
-    return { user, token, isGuest: user?.loginType === "GUEST" };
-  }
-
-  return null;
+  return { user: data, token, isGuest: data?.loginType === "GUEST" };
 };
 
 export const handleSignOut = async () => {

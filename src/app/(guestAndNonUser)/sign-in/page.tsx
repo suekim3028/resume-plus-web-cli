@@ -1,20 +1,12 @@
 "use client";
 import { EventLogger, Logo } from "@components";
 import { UI } from "@constants";
-import { UserSession } from "@libs";
-import { useGoogleLogin } from "@react-oauth/google";
+import { useAuth } from "@hooks";
 
 import { Button, Flex, Text, TextButton } from "@uis";
 
 const SignInComponent = () => {
-  const signInWithGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      await UserSession.signInWithGoogle(tokenResponse);
-    },
-    onError: () => {
-      alert("로그인에서 오류가 발생했어요. 다시 시도해주세요.");
-    },
-  });
+  const { signInWithGoogle } = useAuth();
 
   return (
     <Flex flex={1} alignItems={"center"}>

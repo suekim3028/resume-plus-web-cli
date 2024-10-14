@@ -1,5 +1,5 @@
 import { ClientProviderGroup, Initializer } from "@components";
-import { MyHydrationBoundary } from "@queries";
+import { MyHydrationBoundary, queryOptions } from "@queries";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
 import type { Metadata } from "next";
@@ -35,7 +35,9 @@ export default function RootLayout({
               <StrictMode>
                 <ModalWrapper>
                   <ClientProviderGroup>
-                    <MyHydrationBoundary queryKey="USER">
+                    <MyHydrationBoundary
+                      queryOptions={queryOptions.userQueryOptions}
+                    >
                       {children}
                     </MyHydrationBoundary>
                   </ClientProviderGroup>

@@ -1,13 +1,13 @@
 "use client";
 
-import { useUserValue } from "@atoms";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import Row from "./Row";
 
 const UserInfoSection = () => {
-  const { user } = useUserValue();
-
-  if (!user) return <></>;
-  const { name, email, defaultResume, remainInterview } = user;
+  const { data } = useQuery(queryOptions.userQueryOptions);
+  if (!data) return <></>;
+  const { name, email, defaultResume, remainInterview } = data.user;
 
   return (
     <>

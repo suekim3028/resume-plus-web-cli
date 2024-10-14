@@ -100,6 +100,9 @@ const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
 
   const stopRecording = () => {
     recorder.current?.stop();
+    mediaStream.current?.getTracks().forEach((track) => {
+      track.stop();
+    });
   };
 
   commonHooks.useAsyncEffect(async () => {
