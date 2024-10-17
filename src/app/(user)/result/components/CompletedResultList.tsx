@@ -1,7 +1,7 @@
 "use client";
 
 import { Spinner } from "@components";
-import { queryOptions } from "@queries";
+import { queryOptions, queryUtils } from "@queries";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Flex, Text } from "@uis";
 import { Suspense } from "react";
@@ -26,7 +26,10 @@ const CompletedResultListComponent = () => {
           size="Large"
           title="면접 연습하기"
           href="/interview-setting"
-          flexProps={{ mt: 32 }}
+          flexProps={{
+            mt: 32,
+            onMouseEnter: queryUtils.prefetchInterviewSetting,
+          }}
         />
       </Flex>
     );

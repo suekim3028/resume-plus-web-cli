@@ -3,6 +3,7 @@ import {
   defaultShouldDehydrateQuery,
   isServer,
 } from "@tanstack/react-query";
+import { companyDeptOptions } from "./queries.consts";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -35,3 +36,8 @@ export function getQueryClient() {
     return browserQueryClient;
   }
 }
+
+export const prefetchInterviewSetting = async () => {
+  // The results of this query will be cached like a normal query
+  await getQueryClient().prefetchQuery(companyDeptOptions);
+};

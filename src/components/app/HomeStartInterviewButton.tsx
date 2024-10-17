@@ -1,6 +1,7 @@
 "use client";
 
 import { EventLogger } from "@components/EventLogger";
+import { queryUtils } from "@queries";
 import { Button } from "@uis";
 
 const HomeStartInterviewButton = () => {
@@ -13,7 +14,12 @@ const HomeStartInterviewButton = () => {
       onClick={() =>
         EventLogger.log("home_main_banner_card", "지금 바로 시작하기")
       }
-      flexProps={{ width: 282, height: 80, padding: 0 }}
+      flexProps={{
+        width: 282,
+        height: 80,
+        padding: 0,
+        onMouseEnter: queryUtils.prefetchInterviewSetting,
+      }}
       textProps={{ fontSize: 25.72, fontWeight: "600" }}
     />
   );

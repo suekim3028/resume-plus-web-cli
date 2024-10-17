@@ -23,6 +23,7 @@ import TypingSelector, {
 } from "./TypingSelector/TypingSelector";
 
 import ClientProviderGroup from "./ClientProviderGroup";
+import InterviewPrefetchWrapper from "./InterviewPrefetchWrapper";
 export {
   ClientProviderGroup,
   CompanyThumbnail,
@@ -33,6 +34,7 @@ export {
   Initializer,
   InputState,
   InputValidation,
+  InterviewPrefetchWrapper,
   ListSelector,
   ListSelectorItem,
   ListSelectorRef,

@@ -11,6 +11,8 @@ import {
   forwardRef,
 } from "react";
 import Logo from "../Logo/Logo";
+
+import InterviewPrefetchWrapper from "@components/InterviewPrefetchWrapper";
 import TopBarButton from "./components/TopBarButton";
 import UserButton from "./components/UserButton";
 
@@ -56,11 +58,13 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             }
             colStart={9}
           />
-          <TopBarButton
-            name={"면접 연습"}
-            href={"/interview-setting"}
-            colStart={10}
-          />
+          <InterviewPrefetchWrapper>
+            <TopBarButton
+              name={"면접 연습"}
+              href={"/interview-setting"}
+              colStart={10}
+            />
+          </InterviewPrefetchWrapper>
           <TopBarButton name={"면접 결과"} href={"/result"} colStart={11} />
 
           <Flex alignItems={"center"} justifyContent={"center"} flex={1}>

@@ -6,7 +6,9 @@ import { ModalManager, returnFetch } from "@web-core";
 const API = returnFetch({
   baseUrl: process.env.NEXT_PUBLIC_API_SERVER,
   tokenHeaderFn: async () => {
-    const token = await authActions.getToken();
+    const currentUser = await authActions.getCurrentUser();
+    if (!currentUser) return null;
+    const { token } = currentUser;
     if (!token || !token?.accessToken || !token?.refreshToken) return null;
     return { Authorization: `Bearer ${token.accessToken}` };
   },
@@ -48,7 +50,9 @@ const API = returnFetch({
   },
   onUnauthorizedError: async () => {
     try {
-      const token = await authActions.getToken();
+      const currentUser = await authActions.getCurrentUser();
+      if (!currentUser) return;
+      const { token } = currentUser;
       if (!token) return;
       const refreshToken = token?.refreshToken;
       if (!refreshToken) return;
