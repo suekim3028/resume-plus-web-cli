@@ -12,7 +12,6 @@ import UserHoverMenuWrapper from "./UserHoverMenuWrapper/UserHoverMenuWrapper";
 const UserButton = () => {
   const { data: user } = useQuery(queryOptions.userQueryOptions);
 
-  console.log({ user });
   if (!user || user.isGuest)
     return <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />;
 

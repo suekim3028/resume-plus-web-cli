@@ -2,6 +2,7 @@ import { GridItem } from "@chakra-ui/react";
 import Footer from "@components/Footer";
 
 import LogButton from "@components/LogButton";
+import { MyHydrationBoundary, queryOptions } from "@queries";
 import { Flex, GridWrapper } from "@uis";
 import {
   ForwardRefRenderFunction,
@@ -68,7 +69,9 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
                 <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />
               }
             >
-              <UserButton />
+              <MyHydrationBoundary queryOptions={queryOptions.userQueryOptions}>
+                <UserButton />
+              </MyHydrationBoundary>
             </Suspense>
           </Flex>
         </GridWrapper>
