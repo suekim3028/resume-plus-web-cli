@@ -67,7 +67,7 @@ const TypingSelectorComponent = <T extends any>(
           }}
           onChange={(e) => {
             const text = e.target.value;
-            onSelect(null);
+            onSelect(undefined);
             setValue(text);
             setShowBottomList(!!text);
           }}
@@ -147,7 +147,7 @@ export type TypingSelectorItem<T> = { label: string; value: T };
 type TypingSelectorItemProps<T> = {
   itemList: TypingSelectorItem<T>[];
   placeholder: string;
-  onSelect: (value: T | null) => void;
+  onSelect: (value: T | undefined) => void;
   onTypingSelect: (value: string) => void;
 };
 

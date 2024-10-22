@@ -16,13 +16,13 @@ const ListSelectorComponent = <T extends any>(
 ) => {
   const { itemList, placeholder, onSelect, disabled, disabledMsg } = props;
   const [showList, setShowList] = useState(false);
-  const [selected, _setSelected] = useState<ListSelectorItem<T> | null>(null);
+  const [selected, _setSelected] = useState<ListSelectorItem<T> | undefined>();
 
   const [isError, setIsError] = useState(false);
 
-  const setSelected = (value: ListSelectorItem<T> | null) => {
+  const setSelected = (value: ListSelectorItem<T> | undefined) => {
     _setSelected(value);
-    onSelect(value ? value.value : null);
+    onSelect(value ? value.value : undefined);
   };
 
   const close = () => {
@@ -32,12 +32,12 @@ const ListSelectorComponent = <T extends any>(
   useEffect(() => {
     setIsError(false);
     if (disabled) {
-      setSelected(null);
+      setSelected(undefined);
       setShowList(false);
     }
   }, [disabled]);
 
-  const select = (item: ListSelectorItem<T> | null) => {
+  const select = (item: ListSelectorItem<T> | undefined) => {
     setSelected(item);
     close();
   };
@@ -159,14 +159,14 @@ export type ListSelectorItem<T> = { label: string; value: T };
 type ListSelectorItemProps<T> = {
   itemList: ListSelectorItem<T>[];
   placeholder: string;
-  onSelect: (value: T | null) => void;
+  onSelect: (value: T | undefined) => void;
   disabled?: boolean;
   disabledMsg?: string;
 };
 
 export type ListSelectorRef<T> = {
   close: () => void;
-  select: (item: ListSelectorItem<T> | null) => void;
+  select: (item: ListSelectorItem<T> | undefined) => void;
 };
 
 export default ListSelector;
