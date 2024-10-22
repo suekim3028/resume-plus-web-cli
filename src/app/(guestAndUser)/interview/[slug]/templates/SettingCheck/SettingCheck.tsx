@@ -1,14 +1,25 @@
-import { EventLogger, Icon, Spinner } from "@components";
-import { Button, Flex, Text } from "@uis";
-import { commonHooks } from "@web-core";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { EventLogger } from "@components";
+import { Flex } from "@uis";
+import { useCallback, useRef, useState } from "react";
 import Container from "../../../components/Container";
 import IdleStatus from "./components/IdleStatus";
+import RecordedStatus from "./components/RecordedStatus";
+import RecordingStatus from "./components/RecordingStatus";
 
 type Status = "IDLE" | "RECORDING" | "RECORDED";
 const SettingCheck = ({ goNext }: { goNext: () => void }) => {
   const [settingStatus, setSettingStatus] = useState<Status>("IDLE");
   const videoUrl = useRef<string | null>(null);
+
+  const handleRecordFinish = useCallback((url: string) => {
+    videoUrl.current = url;
+    setSettingStatus("RECORDED");
+  }, []);
+
+  const retryRecording = useCallback(() => {
+    setSettingStatus("RECORDING");
+    videoUrl.current = null;
+  }, []);
 
   const render = useCallback((): JSX.Element => {
     switch (settingStatus) {
@@ -16,25 +27,18 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
         EventLogger.log("EnvironmentCheck01");
         return <IdleStatus goNext={() => setSettingStatus("RECORDING")} />;
       case "RECORDING":
-        return (
-          <Recorder
-            onRecord={(url) => {
-              videoUrl.current = url;
-              setSettingStatus("RECORDED");
-            }}
-          />
-        );
+        return <RecordingStatus onRecord={handleRecordFinish} />;
       case "RECORDED":
         EventLogger.log("EnvironmentCheck04");
         return (
-          <Recorded
+          <RecordedStatus
             url={videoUrl.current || ""}
-            goBack={() => setSettingStatus("RECORDING")}
+            goBack={retryRecording}
             goNext={goNext}
           />
         );
     }
-  }, [settingStatus]);
+  }, [settingStatus, handleRecordFinish, retryRecording]);
 
   return (
     <Container
@@ -54,240 +58,6 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
         {render()}
       </Flex>
     </Container>
-  );
-};
-
-const Recorder = ({ onRecord }: { onRecord: (url: string) => void }) => {
-  const [recordingStatus, setRecordingStatus] = useState<"READY" | "RECORDING">(
-    "READY"
-  );
-
-  const mediaStream = useRef<MediaStream>();
-  const recorder = useRef<MediaRecorder>();
-  const videoElement = useRef<HTMLVideoElement>(null);
-
-  const [showRecorder, setShowRecorder] = useState({
-    video: false,
-    mic: false,
-  });
-
-  const record = () => {
-    if (!mediaStream.current || !recorder.current) return;
-    setRecordingStatus("RECORDING");
-    recorder.current.start();
-  };
-
-  const stopRecording = () => {
-    recorder.current?.stop();
-    mediaStream.current?.getTracks().forEach((track) => {
-      track.stop();
-    });
-  };
-
-  commonHooks.useAsyncEffect(async () => {
-    mediaStream.current = await navigator.mediaDevices?.getUserMedia({
-      video: {
-        facingMode: { ideal: "user" },
-      },
-      audio: true,
-    });
-
-    setShowRecorder({
-      video: mediaStream.current.getVideoTracks().length > 0,
-      mic: mediaStream.current.getAudioTracks().length > 0,
-    });
-
-    if (videoElement.current)
-      videoElement.current.srcObject = mediaStream.current;
-
-    recorder.current = new MediaRecorder(mediaStream.current);
-    recorder.current.ondataavailable = (ev) => {
-      if (ev.data.size <= 0) return;
-      const blob = new Blob([ev.data], {
-        type: "video/webm",
-      });
-
-      const url = window.URL.createObjectURL(blob);
-      onRecord(url);
-    };
-  }, []);
-
-  useEffect(() => {
-    EventLogger.log(
-      recordingStatus === "READY" ? "EnvironmentCheck02" : "EnvironmentCheck03"
-    );
-  }, [recordingStatus]);
-
-  return (
-    <Flex
-      direction={"row"}
-      h={580}
-      alignItems={"center"}
-      justifyContent={"center"}
-      gap={72}
-    >
-      <Flex
-        alignSelf={"center"}
-        width={384}
-        height={384}
-        borderRadius={28}
-        overflow={"hidden"}
-        bgColor={showRecorder.video ? "Static/Black" : "Line/Solid/Alternative"}
-        position={"relative"}
-      >
-        <video
-          autoPlay
-          disableRemotePlayback
-          disablePictureInPicture
-          width={"100%"}
-          height={"100%"}
-          ref={videoElement}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            transform: "rotateY(180deg)",
-
-            overflow: "hidden",
-          }}
-          muted
-          controls={false}
-          playsInline
-        />
-        <Flex position={"absolute"} right={16} bottom={16}>
-          <Icon
-            name={showRecorder.mic ? "iconMicGreen" : "iconMicGreenOff"}
-            size={24}
-          />
-        </Flex>
-
-        {!showRecorder.video && (
-          <Flex
-            position={"absolute"}
-            left={0}
-            right={0}
-            top={0}
-            bottom={0}
-            alignItems={"center"}
-            justifyContent={"center"}
-            bgColor={"Line/Solid/Alternative"}
-          >
-            <Spinner size={30} />
-          </Flex>
-        )}
-      </Flex>
-      {recordingStatus === "READY" ? (
-        <Flex direction={"column"} alignItems={"center"}>
-          <Text type="Title3" fontWeight={"500"} color="Static/Black">
-            준비가 되시면 아래 버튼을 클릭해주세요
-          </Text>
-          <Text
-            type="Headline2"
-            fontWeight={"400"}
-            color="Label/Strong"
-            my={64}
-          >
-            {`화면을 응시하며 “안녕하세요, 잘 부탁드립니다" 라고 말씀해주세요`}
-          </Text>
-          <Button
-            size={"Large"}
-            disabled={!showRecorder.mic || !showRecorder.video}
-            title="환경체크 시작"
-            type="Solid_Primary"
-            onClick={record}
-          />
-        </Flex>
-      ) : (
-        <Flex direction={"column"} alignItems={"center"}>
-          <Text
-            type="Headline2"
-            fontWeight={"400"}
-            color="Label/Strong"
-            mb={64}
-          >
-            {`화면을 응시하며 “안녕하세요, 잘 부탁드립니다" 라고 말씀해주세요`}
-          </Text>
-          <Button
-            size={"Large"}
-            title="점검 완료"
-            type="Outlined_Primary"
-            onClick={stopRecording}
-          />
-        </Flex>
-      )}
-    </Flex>
-  );
-};
-
-const Recorded = ({
-  url,
-  goBack,
-  goNext,
-}: {
-  url: string;
-  goBack: () => void;
-  goNext: () => void;
-}) => {
-  useEffect(() => {
-    if (!url) goBack();
-  }, [!!url]);
-  return (
-    <Flex alignItems={"center"} h={580} w="100%" justifyContent={"center"}>
-      <Flex
-        flexGrow={0}
-        alignSelf={"center"}
-        justifyContent={"center"}
-        width={384}
-        height={384}
-        borderRadius={28}
-        bgColor={"Static/Black"}
-      >
-        <video
-          src={url}
-          autoPlay
-          disableRemotePlayback
-          disablePictureInPicture
-          width={"100%"}
-          height={"100%"}
-          style={{
-            objectFit: "contain",
-            transform: "rotateY(180deg)",
-            borderRadius: 28,
-          }}
-          controls={false}
-          loop
-          playsInline
-        />
-      </Flex>
-      <Flex direction={"column"} alignItems={"center"} ml={90}>
-        <Text type="Title3" fontWeight={"500"} color="Static/Black">
-          면접 환경 체크가 완료되었어요!
-        </Text>
-        <Text type="Headline2" fontWeight={"400"} color="Label/Strong" my={64}>
-          {`영상이 정상 녹화되었는지 확인해주세요.\n문제가 없다면 면접장으로입장해주세요!`}
-        </Text>
-        <Flex gap={16}>
-          <Button
-            size={"Large"}
-            title="다시하기"
-            type="Outlined_Primary"
-            onClick={() => {
-              goBack();
-              EventLogger.log("environment_check_button", "다시하기");
-            }}
-          />
-          <Button
-            size={"Large"}
-            title="입장하기"
-            type="Solid_Primary"
-            onClick={() => {
-              goNext();
-              EventLogger.log("environment_check_button", "입장하기");
-            }}
-          />
-        </Flex>
-      </Flex>
-    </Flex>
   );
 };
 

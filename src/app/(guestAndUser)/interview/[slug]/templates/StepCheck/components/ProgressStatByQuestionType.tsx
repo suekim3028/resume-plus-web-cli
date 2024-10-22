@@ -14,7 +14,7 @@ const QuestionProgressParts = () => {
     "behavior",
   ];
   return (
-    <Flex w="100%">
+    <Flex w="100%" flexDir={"column"} alignItems={"center"}>
       <Text type={"Title2"} fontWeight={"500"}>
         면접 순서를 확인해주세요
       </Text>

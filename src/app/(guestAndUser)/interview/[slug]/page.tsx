@@ -10,8 +10,8 @@ import { useEffect, useRef, useState } from "react";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
-import InterviewDetailSettingProvider from "../InterviewDetailSettingContext";
-import InterviewQuestionsContextProvider from "../InterviewQuestionsContext";
+import InterviewDetailSettingProvider from "./contexts/InterviewDetailSettingContext";
+import InterviewQuestionsContextProvider from "./contexts/InterviewQuestionsContext";
 import InterviewStepRenderer from "./templates/InterviewStepRenderer";
 
 const Interview = ({ params }: { params: { slug: number } }) => {
@@ -25,7 +25,7 @@ const Interview = ({ params }: { params: { slug: number } }) => {
   );
   const hasAllRequiredData = !!detailSettingQuery.data && !!questionsQuery.data;
 
-  const [showLoading, setShowLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
     if (hasAllRequiredData)
