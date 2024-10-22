@@ -1,24 +1,18 @@
 "use client";
-import { interviewApis } from "@apis";
 
-import { findCompanyInfo } from "@app/(user)/result/utils";
 import { EventLogger } from "@components";
+import { useInterviewDetailSettingQueryById } from "@hooks";
 import { queryOptions } from "@queries";
 import { useQuery } from "@tanstack/react-query";
-import { InterviewTypes } from "@types";
-import { commonHooks, jsUtils, ModalManager } from "@web-core";
+import assert from "assert";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import EnterWaiting from "../components/EnterWaiting";
-import InterviewScreen from "../components/InterviewScreen";
+import { useCallback, useEffect, useRef, useState } from "react";
+import InterviewStepRenderer from "../components/InterviewStepRenderer";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
-import SettingCheck from "../components/SettingCheck";
-import StepCheck from "../components/StepCheck";
-import InterviewInfoContextProvider from "../InterviewInfoContext";
-import { QuestionPart, RandomQuestion } from "../types";
-import { getQuestions } from "../utils";
+import InterviewDetailSettingProvider from "../InterviewDetailSettingContext";
+import {} from "../utils";
 
 const STEPS = [
   "1_QUESTION_WAITING",
@@ -33,107 +27,44 @@ type Step = (typeof STEPS)[number];
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
   const router = useRouter();
-
-  const [step, setStep] = useState<Step>("1_QUESTION_WAITING");
-  const interview = useRef<InterviewTypes.InterviewInfo>();
-
-  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
-
-  const interviewData = useRef<{
-    questions: RandomQuestion[];
-    questionParts: QuestionPart[];
-  }>();
-
-  const randomFamilyName = useRef(
-    jsUtils.getRandomArrItem(["김", "이", "박", "정"])
-  ).current;
-
   const questionWaitingRef = useRef<QuestionWaitingRef>(null);
 
-  const effected = useRef(false);
+  const detailSettingQuery = useInterviewDetailSettingQueryById(interviewId);
+  const questionsQuery = useQuery(
+    queryOptions.genInterviewQuestionsOptions(interviewId)
+  );
+  const hasAllRequiredData = !!detailSettingQuery.data && !!questionsQuery.data;
 
-  commonHooks.useAsyncEffect(async () => {
-    if (effected.current) return;
-    effected.current = true;
+  const [showLoading, setShowLoading] = useState(false);
 
-    const { isError: interviewInfoError, data: interviewInfoData } =
-      await interviewApis.getInterviewInfo({ id: interviewId });
-    if (interviewInfoError) {
-      return router.back();
-    }
-
-    interview.current = companyData
-      ? findCompanyInfo(interviewInfoData, companyData)
-      : undefined;
-
-    const { isError, data } = await getQuestions(interviewId);
-
-    if (isError) {
-      return router.back();
-    }
-
-    interviewData.current = data;
-
-    questionWaitingRef.current &&
-      (await questionWaitingRef.current.animStart());
-    setStep("2_STEP_CHECK");
+  const handleLoadingEnd = useCallback(async () => {
+    await questionWaitingRef.current?.animStart();
+    setShowLoading(false);
   }, []);
 
   useEffect(() => {
-    switch (step) {
-      case "1_QUESTION_WAITING":
-        EventLogger.log("InterviewSettingLoading");
-        break;
-      case "2_STEP_CHECK":
-        EventLogger.log("InterviewSettingConfirm");
-        break;
-      case "4_ENTER_WAITING":
-        EventLogger.log("WaitingRoom");
-        break;
-      case "5_INTERVIEW":
-        EventLogger.log("Interview");
-        break;
-      default:
-        break;
-    }
-  }, [step]);
+    if (hasAllRequiredData) handleLoadingEnd();
+  }, [hasAllRequiredData, handleLoadingEnd]);
 
   useEffect(() => {
-    ModalManager.close();
+    EventLogger.log("InterviewSettingLoading");
   }, []);
 
-  if (step === "1_QUESTION_WAITING")
-    return <QuestionWaiting ref={questionWaitingRef} />;
+  useEffect(() => {
+    if (detailSettingQuery.isError || questionsQuery.isError) {
+      router.back();
+    }
+  }, [detailSettingQuery.isError, questionsQuery.isError, router]);
 
-  if (!interview.current || !interviewData.current) return <></>;
+  if (showLoading) return <QuestionWaiting ref={questionWaitingRef} />;
+  assert(detailSettingQuery.data);
 
   return (
-    <InterviewInfoContextProvider
-      interviewInfo={interview.current}
-      interviewerName={randomFamilyName}
-      questions={interviewData.current.questions}
-      questionParts={interviewData.current.questionParts}
+    <InterviewDetailSettingProvider
+      interviewDetailSetting={detailSettingQuery.data}
     >
-      {(() => {
-        switch (step) {
-          case "2_STEP_CHECK":
-            return <StepCheck goNext={() => setStep("3_SETTING_CHECK")} />;
-
-          case "3_SETTING_CHECK":
-            return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
-          case "4_ENTER_WAITING":
-            return (
-              <EnterWaiting
-                {...interview.current}
-                interviewerName={randomFamilyName}
-                goNext={() => setStep("5_INTERVIEW")}
-              />
-            );
-          case "5_INTERVIEW":
-            return <InterviewScreen />;
-        }
-      })()}
-    </InterviewInfoContextProvider>
+      <InterviewStepRenderer />
+    </InterviewDetailSettingProvider>
   );
 };
 export default Interview;
