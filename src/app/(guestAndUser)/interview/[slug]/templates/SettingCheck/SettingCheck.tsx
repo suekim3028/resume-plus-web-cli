@@ -3,6 +3,7 @@ import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Container from "../../../components/Container";
+import IdleStatus from "./components/IdleStatus";
 
 type Status = "IDLE" | "RECORDING" | "RECORDED";
 const SettingCheck = ({ goNext }: { goNext: () => void }) => {
@@ -13,7 +14,7 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
     switch (settingStatus) {
       case "IDLE":
         EventLogger.log("EnvironmentCheck01");
-        return <Idle goNext={() => setSettingStatus("RECORDING")} />;
+        return <IdleStatus goNext={() => setSettingStatus("RECORDING")} />;
       case "RECORDING":
         return (
           <Recorder
@@ -53,28 +54,6 @@ const SettingCheck = ({ goNext }: { goNext: () => void }) => {
         {render()}
       </Flex>
     </Container>
-  );
-};
-
-const Idle = ({ goNext }: { goNext: () => void }) => {
-  return (
-    <Flex
-      direction={"column"}
-      alignItems={"center"}
-      h={580}
-      justifyContent={"center"}
-    >
-      <Text type="Title3" color="Static/Black" fontWeight={"500"} mb={64}>
-        원활한 면접을 위해 웹캠과 마이크 환경을 점검할게요
-      </Text>
-      <Button
-        type="Solid_Primary"
-        title="다음"
-        onClick={goNext}
-        size="Large"
-        flexProps={{ width: 228 }}
-      />
-    </Flex>
   );
 };
 
