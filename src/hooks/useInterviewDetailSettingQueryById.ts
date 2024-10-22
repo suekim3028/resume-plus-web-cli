@@ -2,33 +2,38 @@ import { queryOptions } from "@queries";
 import { useQueries } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
 import { interviewUtils } from "@utils";
+import { jsUtils } from "@web-core";
+import assert from "assert";
+import { useRef } from "react";
 
-export const useInterviewDetailSettingById = (
+export const useInterviewDetailSettingQueryById = (
   interviewId: number
 ): {
   isLoading: boolean;
   isError: boolean;
   data: InterviewTypes.InterviewDetailSetting | null;
 } => {
-  const [positionDBQuery, interviewSimpleSettingQuery] = useQueries({
+  const interviewerName = useRef(
+    jsUtils.getRandomArrItem(["김", "이", "박", "정"])
+  ).current;
+
+  const queries = useQueries({
     queries: [
       queryOptions.companyDeptOptions,
       queryOptions.getInterviewSimpleSettingOptions(interviewId),
     ],
   });
 
-  if (!positionDBQuery.data || !interviewSimpleSettingQuery.data) {
+  if (!queries.every((q) => !!q.data)) {
     return {
-      isLoading:
-        interviewSimpleSettingQuery.isLoading ||
-        interviewSimpleSettingQuery.isLoading,
-      isError:
-        interviewSimpleSettingQuery.isError ||
-        interviewSimpleSettingQuery.isError,
+      isLoading: queries.some((q) => q.isLoading),
+      isError: queries.some((q) => q.isError),
       data: null,
     };
   }
 
+  const [positionDBQuery, interviewSimpleSettingQuery] = queries;
+  assert(!!interviewSimpleSettingQuery.data && !!positionDBQuery.data);
   const simpleSetting = interviewSimpleSettingQuery.data;
   const positionDB = positionDBQuery.data;
 
@@ -54,6 +59,7 @@ export const useInterviewDetailSettingById = (
     isLoading: false,
     isError: false,
     data: {
+      interviewerName,
       interviewId,
       company,
       department,
