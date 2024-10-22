@@ -24,6 +24,17 @@ export type DepartmentGroup = Department & {
 
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";
 
+export type InterviewProcessStat = {
+  durationInMinutes: number;
+  numberOfQuestions: number;
+  statsByType: Record<
+    QuestionType,
+    {
+      durationInMinutes: number;
+      numberOfQuestions: number;
+    }
+  >;
+};
 export type Feedback = {
   question: string;
   questionId: number;

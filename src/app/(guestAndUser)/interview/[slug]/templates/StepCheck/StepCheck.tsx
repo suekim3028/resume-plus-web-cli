@@ -1,45 +1,17 @@
 import { EventLogger } from "@components";
 import { Button, Flex, Text } from "@uis";
 import Container from "../../../components/Container";
-import { useInterviewQuestionsContext } from "../../../InterviewQuestionsContext";
+
 import { QuestionPart } from "../../../types";
+import { useInterviewQuestionsContext } from "../../contexts/InterviewQuestionsContext";
+import TotalQuestionStat from "./components/TotalQuestionStat";
 
 const StepCheck = ({ goNext }: { goNext: () => void }) => {
   const { questions } = useInterviewQuestionsContext();
 
-  const totalDuration = questionParts.reduce((prev, current) => {
-    return prev + current.duration;
-  }, 0);
-
   return (
     <Container colSpan={8} colStart={3}>
-      <Flex>
-        <Text type={"Title2"} fontWeight={"500"} color={"Static/Black"}>
-          {`총`}
-        </Text>
-        <Text
-          type={"Title2"}
-          fontWeight={"500"}
-          color={"Primary/Normal"}
-          ml={8}
-        >
-          {`${totalQuestionCount}개`}
-        </Text>
-        <Text type={"Title2"} fontWeight={"500"} ml={8}>
-          질문으로
-        </Text>
-        <Text
-          type={"Title2"}
-          fontWeight={"500"}
-          ml={8}
-          color={"Primary/Normal"}
-        >
-          {`${totalDuration}분`}
-        </Text>
-        <Text type={"Title2"} fontWeight={"500"}>
-          간 면접이 진행될 예정이에요
-        </Text>
-      </Flex>
+      <TotalQuestionStat />
       <Text type={"Title2"} fontWeight={"500"}>
         면접 순서를 확인해주세요
       </Text>
