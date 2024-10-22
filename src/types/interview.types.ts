@@ -62,6 +62,7 @@ export type InterviewDetailSetting = {
   company: Company | string;
   department: Department;
   job: Job;
+  interviewerName: string;
 };
 
 export type Chat = {
