@@ -1,5 +1,5 @@
 import { queryOptions } from "@queries";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
 import { interviewUtils } from "@utils";
 
@@ -10,18 +10,21 @@ export const useInterviewDetailSettingById = (
   isError: boolean;
   data: InterviewTypes.InterviewDetailSetting | null;
 } => {
-  const positionDBQuery = useQuery(queryOptions.companyDeptOptions);
-  const interviewSimpleSettingQuery = useQuery(
-    queryOptions.getInterviewSimpleSettingOptions(interviewId)
-  );
-
-  const isLoading = positionDBQuery.isLoading || positionDBQuery.isLoading;
-  const isError = positionDBQuery.isError || positionDBQuery.isError;
+  const [positionDBQuery, interviewSimpleSettingQuery] = useQueries({
+    queries: [
+      queryOptions.companyDeptOptions,
+      queryOptions.getInterviewSimpleSettingOptions(interviewId),
+    ],
+  });
 
   if (!positionDBQuery.data || !interviewSimpleSettingQuery.data) {
     return {
-      isLoading,
-      isError,
+      isLoading:
+        interviewSimpleSettingQuery.isLoading ||
+        interviewSimpleSettingQuery.isLoading,
+      isError:
+        interviewSimpleSettingQuery.isError ||
+        interviewSimpleSettingQuery.isError,
       data: null,
     };
   }
