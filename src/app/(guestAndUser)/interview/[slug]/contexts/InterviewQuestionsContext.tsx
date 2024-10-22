@@ -1,10 +1,11 @@
 import { InterviewTypes } from "@types";
 import { createContext, ReactNode, useContext } from "react";
-import { genTypeAttachedQuestions } from "./utils";
+import { genInterviewProcessStats, genTypeAttachedQuestions } from "../utils";
 
 type InterviewQuestionsContextValue = {
   questions: Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>;
   questionsWithType: InterviewTypes.QuestionWithType[];
+  processStats: InterviewTypes.InterviewProcessStat;
 };
 
 const InterviewQuestionsContext =
@@ -24,9 +25,11 @@ const InterviewQuestionsContextProvider = ({
     ...genTypeAttachedQuestions(questions.behavior, "behavior"),
   ];
 
+  const processStats = genInterviewProcessStats(questions);
+
   return (
     <InterviewQuestionsContext.Provider
-      value={{ questionsWithType, questions }}
+      value={{ questionsWithType, questions, processStats }}
     >
       {children}
     </InterviewQuestionsContext.Provider>

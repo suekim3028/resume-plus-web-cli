@@ -20,7 +20,7 @@ export const PART_LABEL: Record<InterviewTypes.QuestionType, string> = {
   tech: "직무능력 검증",
 };
 
-export const PART_DURATION_PER_QUESTION: Record<
+export const QUESTION_DURATION_IN_MINUTES_BY_TYPE: Record<
   InterviewTypes.QuestionType,
   number
 > = {
