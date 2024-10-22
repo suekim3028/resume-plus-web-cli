@@ -2,7 +2,7 @@ import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useState } from "react";
-import Container from "./Container";
+import Container from "../../../components/Container";
 
 const EnterWaiting = ({
   company,

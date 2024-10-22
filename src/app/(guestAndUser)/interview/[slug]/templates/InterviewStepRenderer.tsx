@@ -1,9 +1,9 @@
 import { EventLogger } from "@components";
 import { useState } from "react";
-import EnterWaiting from "./EnterWaiting";
-import InterviewScreen from "./InterviewScreen";
-import SettingCheck from "./SettingCheck";
-import StepCheck from "./StepCheck";
+import EnterWaiting from "./EnterWaiting/EnterWaiting";
+import InterviewScreen from "./InterviewMain/InterviewScreen";
+import SettingCheck from "./SettingCheck/SettingCheck";
+import StepCheck from "./StepCheck/StepCheck";
 
 const STEPS = [
   "2_STEP_CHECK",

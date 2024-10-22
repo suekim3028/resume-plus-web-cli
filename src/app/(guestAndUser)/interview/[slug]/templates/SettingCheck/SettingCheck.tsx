@@ -2,7 +2,7 @@ import { EventLogger, Icon, Spinner } from "@components";
 import { Button, Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Container from "./Container";
+import Container from "../../../components/Container";
 
 type Status = "IDLE" | "RECORDING" | "RECORDED";
 const SettingCheck = ({ goNext }: { goNext: () => void }) => {

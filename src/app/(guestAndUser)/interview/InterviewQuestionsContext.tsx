@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext } from "react";
 import { genTypeAttachedQuestions } from "./utils";
 
 type InterviewQuestionsContextValue = {
+  questions: Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>;
   questionsWithType: InterviewTypes.QuestionWithType[];
 };
 
@@ -24,7 +25,9 @@ const InterviewQuestionsContextProvider = ({
   ];
 
   return (
-    <InterviewQuestionsContext.Provider value={{ questionsWithType }}>
+    <InterviewQuestionsContext.Provider
+      value={{ questionsWithType, questions }}
+    >
       {children}
     </InterviewQuestionsContext.Provider>
   );

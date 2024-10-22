@@ -4,20 +4,22 @@ import { Flex } from "@uis";
 import { useEffect, useRef, useState } from "react";
 
 import { EventLogger } from "@components";
-import { BOTTOM_BAR_HEIGHT } from "../constants";
+import CamSection from "../../../components/CamSection";
+import ChatSection from "../../../components/ChatSection";
+import CircleButton, {
+  CircleButtonProps,
+} from "../../../components/CircleButton";
+import EndPopup from "../../../components/EndPopup";
+import ExitPopup from "../../../components/ExitPopup";
+import ForcedEndPopup from "../../../components/ForcedEndPopup";
+import { FrontCameraRef } from "../../../components/FrontCamera";
+import HurryUpSnackBar from "../../../components/HurryUpSnackBar";
+import TopBar from "../../../components/TopBar";
+import { BOTTOM_BAR_HEIGHT } from "../../../constants";
 import InterviewContextProvider, {
   useInterviewContext,
-} from "../InterviewContext";
+} from "../../../InterviewContext";
 import { useInterviewInfoContext } from "../InterviewInfoContext";
-import CamSection from "./CamSection";
-import ChatSection from "./ChatSection";
-import CircleButton, { CircleButtonProps } from "./CircleButton";
-import EndPopup from "./EndPopup";
-import ExitPopup from "./ExitPopup";
-import ForcedEndPopup from "./ForcedEndPopup";
-import { FrontCameraRef } from "./FrontCamera";
-import HurryUpSnackBar from "./HurryUpSnackBar";
-import TopBar from "./TopBar";
 
 const InterviewScreenComponent = () => {
   const [setting, setSetting] = useState({

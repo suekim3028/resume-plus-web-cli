@@ -1,18 +1,16 @@
 import { EventLogger } from "@components";
 import { Button, Flex, Text } from "@uis";
-import { useInterviewInfoContext } from "../InterviewInfoContext";
-import { QuestionPart } from "../types";
-import Container from "./Container";
+import Container from "../../../components/Container";
+import { useInterviewQuestionsContext } from "../../../InterviewQuestionsContext";
+import { QuestionPart } from "../../../types";
 
 const StepCheck = ({ goNext }: { goNext: () => void }) => {
-  const { questionParts } = useInterviewInfoContext();
-  const totalQuestionCount = questionParts.reduce((prev, current) => {
-    return prev + current.questionCount;
-  }, 0);
+  const { questions } = useInterviewQuestionsContext();
 
   const totalDuration = questionParts.reduce((prev, current) => {
     return prev + current.duration;
   }, 0);
+
   return (
     <Container colSpan={8} colStart={3}>
       <Flex>

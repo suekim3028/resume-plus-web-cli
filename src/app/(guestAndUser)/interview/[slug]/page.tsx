@@ -7,12 +7,12 @@ import { useQuery } from "@tanstack/react-query";
 import assert from "assert";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import InterviewStepRenderer from "../components/InterviewStepRenderer";
 import QuestionWaiting, {
   QuestionWaitingRef,
 } from "../components/QuestionWaiting";
 import InterviewDetailSettingProvider from "../InterviewDetailSettingContext";
 import InterviewQuestionsContextProvider from "../InterviewQuestionsContext";
+import InterviewStepRenderer from "./templates/InterviewStepRenderer";
 
 const Interview = ({ params }: { params: { slug: number } }) => {
   const interviewId = params.slug;
