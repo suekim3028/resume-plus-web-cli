@@ -2,8 +2,9 @@
 import { InterviewTypes } from "@types";
 import { createContext, ReactNode, useContext } from "react";
 
-const InterviewDetailSetting =
-  createContext<InterviewTypes.InterviewDetailSetting | null>(null);
+const InterviewDetailSettingContext = createContext<
+  (InterviewTypes.InterviewDetailSetting & { companyName: string }) | null
+>(null);
 
 const InterviewDetailSettingProvider = ({
   interviewDetailSetting,
@@ -12,15 +13,23 @@ const InterviewDetailSettingProvider = ({
   children: ReactNode;
   interviewDetailSetting: InterviewTypes.InterviewDetailSetting;
 }) => {
+  const { company } = interviewDetailSetting;
+  const companyName =
+    typeof company === "string" ? company : company.companyName;
   return (
-    <InterviewDetailSetting.Provider value={interviewDetailSetting}>
+    <InterviewDetailSettingContext.Provider
+      value={{
+        ...interviewDetailSetting,
+        companyName,
+      }}
+    >
       {children}
-    </InterviewDetailSetting.Provider>
+    </InterviewDetailSettingContext.Provider>
   );
 };
 
 export const useInterviewDetailSetting = () => {
-  const context = useContext(InterviewDetailSetting);
+  const context = useContext(InterviewDetailSettingContext);
 
   if (!context) throw new Error();
   return context;
