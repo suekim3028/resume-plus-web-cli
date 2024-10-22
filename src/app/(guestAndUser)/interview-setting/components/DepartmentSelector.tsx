@@ -1,5 +1,6 @@
-import { useCompanyData } from "@atoms";
 import { ListSelector, ListSelectorRef } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
 import { Form } from "@web-core";
 import { useRef } from "react";
@@ -9,8 +10,7 @@ const DepartmentSelector: Form.FormItemElement<
   InterviewSettingValue,
   "department"
 > = (link) => {
-  const { departmentGroups } = useCompanyData();
-
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
   const listSelectorRef =
     useRef<ListSelectorRef<InterviewTypes.Department>>(null);
   const { valueChangeHandler } = Form.useFormItem({
@@ -18,10 +18,11 @@ const DepartmentSelector: Form.FormItemElement<
     validateFn: "boolean",
   });
 
+  const deptGroups = companyData?.departments || [];
   return (
     <ListSelector<InterviewTypes.Department>
       ref={listSelectorRef}
-      itemList={departmentGroups.map((value) => ({
+      itemList={deptGroups.map((value) => ({
         label: value.department,
         value,
       }))}

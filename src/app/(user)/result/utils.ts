@@ -55,7 +55,7 @@ export const findCompanyInfo = (
   interview: InterviewTypes.PendingInterviewResult,
   companyData: {
     companies: InterviewTypes.Company[];
-    departmentGroups: InterviewTypes.DepartmentGroup[];
+    departments: InterviewTypes.DepartmentGroup[];
   }
 ): InterviewTypes.InterviewInfo => {
   const {
@@ -70,12 +70,12 @@ export const findCompanyInfo = (
     : null;
   const companyName = _companyName || company?.companyName || "";
 
-  const department = companyData?.departmentGroups.find(
+  const department = companyData?.departments.find(
     ({ departmentId: id }) => id === departmentId
   );
 
   const job =
-    companyData.departmentGroups
+    companyData.departments
       .find(({ departmentId }) => departmentId === departmentId)
       ?.job.find(({ companyJobId }) => companyJobId === jobId) || null;
 

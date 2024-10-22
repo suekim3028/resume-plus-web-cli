@@ -1,4 +1,4 @@
-import { Initializer } from "@components";
+import { ClientProviderGroup, Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
 import type { Metadata } from "next";
@@ -32,7 +32,9 @@ export default function RootLayout({
           <Suspense>
             <Initializer>
               <StrictMode>
-                <ModalWrapper>{children}</ModalWrapper>
+                <ModalWrapper>
+                  <ClientProviderGroup>{children}</ClientProviderGroup>
+                </ModalWrapper>
               </StrictMode>
             </Initializer>
           </Suspense>

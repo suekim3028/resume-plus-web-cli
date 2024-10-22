@@ -1,17 +1,18 @@
 "use client";
 
-import { useCompanyData, useResult } from "@atoms";
 import { Spinner } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex, Text } from "@uis";
 import { Suspense } from "react";
 import { findCompanyInfo } from "../utils";
 import PendingResultCard from "./PendingResultCard";
 
 const PendingResultListComponent = () => {
-  const { pending } = useResult();
-  const companyData = useCompanyData();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
 
-  if (!pending.length)
+  if (!userData || !userData.result.pending.length)
     return (
       <Flex pt={48} w={"100%"} flexDir={"column"} alignItems={"center"}>
         <Text
@@ -27,13 +28,17 @@ const PendingResultListComponent = () => {
 
   return (
     <Flex w="100%" overflowX={"scroll"} gap={24} pb={24}>
-      {pending.map((result) => (
-        <PendingResultCard
-          result={result}
-          interviewInfo={findCompanyInfo(result, companyData)}
-          key={result.interviewId}
-        />
-      ))}
+      {userData.result.pending.map((result) =>
+        companyData ? (
+          <PendingResultCard
+            result={result}
+            interviewInfo={findCompanyInfo(result, companyData)}
+            key={result.interviewId}
+          />
+        ) : (
+          <></>
+        )
+      )}
     </Flex>
   );
 };

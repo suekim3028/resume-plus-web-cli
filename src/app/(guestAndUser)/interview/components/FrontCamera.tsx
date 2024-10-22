@@ -49,6 +49,10 @@ const FrontCameraComponent: ForwardRefRenderFunction<
     if (effected.current) return;
     effected.current = true;
     getFrontCameraStream();
+
+    return () => {
+      stop();
+    };
   }, []);
 
   return (

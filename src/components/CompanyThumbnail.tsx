@@ -23,7 +23,7 @@ const CompanyThumbnail = ({
           height: sizeN,
           borderRadius: rounded,
           objectFit: "contain",
-          backgroundColor: "rgba(0,0,0,0.05)",
+          backgroundColor: "rgba(0,0,0,0.02)",
         }}
       />
     );

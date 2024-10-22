@@ -25,7 +25,6 @@ const isSubmittableValue = (
 
 const EmailSignIn = () => {
   const router = useRouter();
-
   const { signUpWithEmail } = useAuth();
 
   const inputValue = useRef<SignUpValueState>({
@@ -55,7 +54,6 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     if (!submittableValue) return;
-    // TODO: loading
     await signUpWithEmail(submittableValue);
     router.replace("/");
   };

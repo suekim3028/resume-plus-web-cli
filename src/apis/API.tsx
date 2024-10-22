@@ -1,12 +1,14 @@
+import { authActions } from "@actions";
 import { userApis } from "@apis";
-import { TokenStorage } from "@storage";
 import { Button, Flex, Text } from "@uis";
 import { ModalManager, returnFetch } from "@web-core";
 
 const API = returnFetch({
   baseUrl: process.env.NEXT_PUBLIC_API_SERVER,
   tokenHeaderFn: async () => {
-    const token = TokenStorage.get();
+    const currentUser = await authActions.getCurrentUser();
+    if (!currentUser) return null;
+    const { token } = currentUser;
     if (!token || !token?.accessToken || !token?.refreshToken) return null;
     return { Authorization: `Bearer ${token.accessToken}` };
   },
@@ -48,7 +50,9 @@ const API = returnFetch({
   },
   onUnauthorizedError: async () => {
     try {
-      const token = TokenStorage.get();
+      const currentUser = await authActions.getCurrentUser();
+      if (!currentUser) return;
+      const { token } = currentUser;
       if (!token) return;
       const refreshToken = token?.refreshToken;
       if (!refreshToken) return;
@@ -65,12 +69,12 @@ const API = returnFetch({
 
       if (res.ok) {
         const json = (await res.json()) as userApis.UserResponse;
-        TokenStorage.set(json.token);
+        await authActions.handleSignIn(json);
       } else {
-        TokenStorage.remove();
+        await authActions.handleSignOut();
       }
     } catch (e) {
-      TokenStorage.remove();
+      await authActions.handleSignOut();
     }
   },
 });

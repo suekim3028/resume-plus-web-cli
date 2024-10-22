@@ -1,15 +1,16 @@
-import { useCompanyData } from "@atoms";
 import { ListSelector, ListSelectorRef } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
 import { Form } from "@web-core";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { InterviewSettingValue } from "../types";
 
 const JobSelector: Form.FormItemElement<InterviewSettingValue, "job"> = (
   link
 ) => {
   const [jobs, setJobs] = useState<InterviewTypes.Job[]>([]);
-  const { getJobsByDepartmentId } = useCompanyData();
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
   const { valueChangeHandler, addValueChangeListenerByKey } = Form.useFormItem({
     link,
     validateFn: "boolean",
@@ -17,13 +18,18 @@ const JobSelector: Form.FormItemElement<InterviewSettingValue, "job"> = (
 
   const listSelectorRef = useRef<ListSelectorRef<InterviewTypes.Job>>(null);
 
+  const jobsByDepartmentId = useMemo(
+    () => companyData?.jobsByDepartmentId || null,
+    [!!companyData?.jobsByDepartmentId]
+  );
+
   const handleChangeDepartment = useCallback(
     (department: InterviewTypes.Department | undefined) => {
-      if (!department) return setJobs([]);
-      setJobs(getJobsByDepartmentId(department.departmentId));
+      if (!jobsByDepartmentId || !department) return setJobs([]);
+      setJobs(jobsByDepartmentId[department.departmentId]);
       listSelectorRef.current?.select(undefined);
     },
-    [getJobsByDepartmentId]
+    [jobsByDepartmentId]
   );
 
   useEffect(() => {

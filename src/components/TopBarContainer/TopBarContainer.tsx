@@ -1,12 +1,18 @@
-"use client";
 import { GridItem } from "@chakra-ui/react";
-import { EventLogger } from "@components/EventLogger";
 import Footer from "@components/Footer";
 
+import LogButton from "@components/LogButton";
+import { MyHydrationBoundary, queryOptions } from "@queries";
 import { Flex, GridWrapper } from "@uis";
-import { useRouter } from "next/navigation";
-import { ForwardRefRenderFunction, ReactNode, forwardRef } from "react";
+import {
+  ForwardRefRenderFunction,
+  ReactNode,
+  Suspense,
+  forwardRef,
+} from "react";
 import Logo from "../Logo/Logo";
+
+import InterviewPrefetchWrapper from "@components/InterviewPrefetchWrapper";
 import TopBarButton from "./components/TopBarButton";
 import UserButton from "./components/UserButton";
 
@@ -14,7 +20,6 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
   HTMLDivElement,
   { children: ReactNode; footer?: boolean }
 > = ({ children, footer }, ref) => {
-  const router = useRouter();
   return (
     <Flex
       w="100%"
@@ -39,13 +44,11 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             colSpan={2}
             alignItems={"center"}
             display={"flex"}
-            onClick={() => {
-              router.push("/");
-              EventLogger.log("global_navigation_bar_button", "logo");
-            }}
             cursor={"pointer"}
           >
-            <Logo size={"SMALL"} />
+            <LogButton log={["global_navigation_bar_button", "logo"]}>
+              <Logo size={"SMALL"} useLink />
+            </LogButton>
           </GridItem>
 
           <TopBarButton
@@ -55,14 +58,26 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
             }
             colStart={9}
           />
-          <TopBarButton
-            name={"면접 연습"}
-            href={"/interview-setting"}
-            colStart={10}
-          />
+          <InterviewPrefetchWrapper>
+            <TopBarButton
+              name={"면접 연습"}
+              href={"/interview-setting"}
+              colStart={10}
+            />
+          </InterviewPrefetchWrapper>
           <TopBarButton name={"면접 결과"} href={"/result"} colStart={11} />
 
-          <UserButton />
+          <Flex alignItems={"center"} justifyContent={"center"} flex={1}>
+            <Suspense
+              fallback={
+                <TopBarButton name={"로그인"} href={"/sign-in"} colStart={12} />
+              }
+            >
+              <MyHydrationBoundary queryOptions={queryOptions.userQueryOptions}>
+                <UserButton />
+              </MyHydrationBoundary>
+            </Suspense>
+          </Flex>
         </GridWrapper>
       </Flex>
       <Flex

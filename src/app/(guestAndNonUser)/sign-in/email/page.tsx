@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 const EmailSignIn = () => {
-  const { loginWithEmail } = useAuth();
   const router = useRouter();
+  const { signInWithEmail } = useAuth();
 
   const [canSubmit, setCanSubmit] = useState(false);
 
@@ -33,7 +33,7 @@ const EmailSignIn = () => {
 
   const submit = async () => {
     const { email, password } = inputValue.current;
-    const { success } = await loginWithEmail({ email, password });
+    const { success } = await signInWithEmail({ email, password });
     if (success) router.replace("/");
   };
 

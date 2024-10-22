@@ -6,7 +6,7 @@ import { useAuth } from "@hooks";
 import { Button, Flex, Text, TextButton } from "@uis";
 
 const SignInComponent = () => {
-  const { loginWithGoogle } = useAuth();
+  const { signInWithGoogle } = useAuth();
 
   return (
     <Flex flex={1} alignItems={"center"}>
@@ -32,7 +32,7 @@ const SignInComponent = () => {
             leftIcon="logoGoogle"
             stretch
             onClick={() => {
-              loginWithGoogle();
+              signInWithGoogle();
               EventLogger.log("login_button", "구글 계정으로 로그인");
             }}
             textProps={{

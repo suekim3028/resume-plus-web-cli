@@ -1,4 +1,4 @@
-import { TopBarContainer } from "@components";
+import { InterviewPrefetchWrapper, TopBarContainer } from "@components";
 import HomeStartInterviewButton from "@components/app/HomeStartInterviewButton";
 import { Button, Flex, Text } from "@uis";
 import Image from "next/image";
@@ -77,14 +77,20 @@ export default function Home() {
           {`INTERVIEW+와 함께\n취업 준비의 첫걸음을 시작하세요!`}
         </Text>
 
-        <Button
-          type="Solid_Primary"
-          size="Large"
-          title={"지금 면접 시작하기"}
-          href={"/interview-setting"}
-          flexProps={{ width: 282, height: 80, padding: 0 }}
-          textProps={{ fontSize: 25.72, fontWeight: "600" }}
-        />
+        <InterviewPrefetchWrapper>
+          <Button
+            type="Solid_Primary"
+            size="Large"
+            title={"지금 면접 시작하기"}
+            href={"/interview-setting"}
+            flexProps={{
+              width: 282,
+              height: 80,
+              padding: 0,
+            }}
+            textProps={{ fontSize: 25.72, fontWeight: "600" }}
+          />
+        </InterviewPrefetchWrapper>
       </Flex>
     </TopBarContainer>
   );

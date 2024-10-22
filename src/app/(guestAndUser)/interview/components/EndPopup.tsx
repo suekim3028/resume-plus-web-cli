@@ -1,8 +1,8 @@
 import { interviewApis } from "@apis";
 import { Spinner } from "@chakra-ui/react";
 import { EventLogger, PopUp } from "@components";
-
-import { useUserValue } from "@atoms";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex } from "@uis";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect } from "react";
@@ -12,7 +12,7 @@ import PopupTemplate from "./PoupTemplate";
 const EndPopupComponent = () => {
   const router = useRouter();
 
-  const { isGuestUser } = useUserValue();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
   const { interviewInfo } = useInterviewInfoContext();
 
   const exitInterview = () => {
@@ -41,7 +41,7 @@ const EndPopupComponent = () => {
       popup_title: "수고하셨습니다! 면접이 끝났어요!",
     });
   }, []);
-  return isGuestUser ? (
+  return !userData || userData.isGuest ? (
     <PopupTemplate
       title={"수고하셨습니다! 면접이 끝났어요!"}
       body={`아쉽게도 비회원은 면접 연습 결과를 확인할 수 없어요.\n회원가입 후 맞춤형 면접 분석을 받아보세요!`}

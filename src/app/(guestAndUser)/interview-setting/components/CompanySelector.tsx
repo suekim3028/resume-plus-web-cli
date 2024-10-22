@@ -1,5 +1,6 @@
-import { useCompanyData } from "@atoms";
 import { TypingSelector, TypingSelectorRef } from "@components";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { InterviewTypes } from "@types";
 import { Form } from "@web-core";
 import { useRef } from "react";
@@ -9,13 +10,15 @@ const CompanySelector: Form.FormItemElement<
   InterviewSettingValue,
   "company"
 > = (link) => {
-  const { companies } = useCompanyData();
+  const { data: companyData } = useQuery(queryOptions.companyDeptOptions);
 
   const typingSelectorRef = useRef<TypingSelectorRef>(null);
   const { valueChangeHandler } = Form.useFormItem({
     link,
     validateFn: "boolean",
   });
+
+  const companies = companyData?.companies || [];
 
   return (
     <TypingSelector<InterviewTypes.Company>

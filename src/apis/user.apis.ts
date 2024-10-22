@@ -13,6 +13,12 @@ export const emailSignIn = async (body: UserTypes.EmailSignInUser) =>
   API.post<UserResponse>(`/users/email-login`, { body });
 
 /**
+ * 게스트 이메일 로그인
+ */
+export const guestEmailSignIn = async (body: UserTypes.EmailSignInUser) =>
+  API.post<UserResponse>(`/users/guest/email-login`, { body });
+
+/**
  * 구글 로그인 (회원가입 안돼있는 경우 자동 회원가입)
  */
 

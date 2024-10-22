@@ -1,6 +1,7 @@
 "use client";
 
-import { useUserValue } from "@atoms";
+import { queryOptions } from "@queries";
+import { useQuery } from "@tanstack/react-query";
 import { Flex, Text } from "@uis";
 import {
   forwardRef,
@@ -20,7 +21,7 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
   const [animState, setAnimState] = useState<"DEFAULT" | "WAITING" | "END">(
     "DEFAULT"
   );
-  const { user, isGuestUser } = useUserValue();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
 
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -40,13 +41,13 @@ const QuestionWaitingComponent: ForwardRefRenderFunction<QuestionWaitingRef> = (
     setAnimState("WAITING");
   }, []);
 
-  if (!user) return <></>;
+  if (!userData) return <></>;
 
   return (
     <Container colSpan={6} colStart={4}>
       <Text type="Title3" fontWeight={"500"} color={"Static/Black"} mb={24}>
-        {isGuestUser ? "면접자님의" : `${user.name}님의`} 정보를 바탕으로 맞춤형
-        질문을 만들고 있어요!
+        {userData.isGuest ? "면접자님의" : `${userData.user.name}님의`} 정보를
+        바탕으로 맞춤형 질문을 만들고 있어요!
       </Text>
       <Flex
         w="100%"

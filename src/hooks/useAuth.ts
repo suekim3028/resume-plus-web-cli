@@ -1,36 +1,39 @@
 "use client";
+import { authActions } from "@actions";
 import { userApis } from "@apis";
-import { useSetUser, useUserValue } from "@atoms";
+import { queryOptions } from "@queries";
+import { getQueryClient } from "@queries/queries.utils";
 
 import { useGoogleLogin } from "@react-oauth/google";
-import { TokenStorage } from "@storage";
+
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { useCallback } from "react";
 
 export const useAuth = () => {
-  const { user: currentUser, isGuestUser } = useUserValue();
-  const setUser = useSetUser();
+  const { data: userData } = useQuery(queryOptions.userQueryOptions);
+
   const router = useRouter();
 
-  const handleUser = useCallback((value: userApis.UserResponse) => {
-    TokenStorage.set(value.token);
-    setUser(value.user);
+  const handleUser = useCallback(async (value: userApis.UserResponse) => {
+    await authActions.handleSignIn(value);
+    getQueryClient().invalidateQueries(queryOptions.userQueryOptions);
   }, []);
 
-  const logout = useCallback(() => {
+  const signOut = useCallback(async () => {
     router.replace("/");
-    TokenStorage.remove();
-    setUser(null);
+    await authActions.handleSignOut();
+    getQueryClient().invalidateQueries(queryOptions.userQueryOptions);
   }, []);
 
-  const loginWithGoogle = useGoogleLogin({
+  const signInWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         const { token_type, access_token } = tokenResponse;
 
         const method =
-          !!currentUser && currentUser.loginType === "GUEST"
+          !!userData && userData.user.loginType === "GUEST"
             ? userApis.guestGoogleSignIn
             : userApis.googleSignIn;
 
@@ -49,9 +52,14 @@ export const useAuth = () => {
     },
   });
 
-  const loginWithEmail = useCallback(
+  const signInWithEmail = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
-      const { data, isError } = await userApis.emailSignIn({
+      const method =
+        !!userData && userData.user.loginType === "GUEST"
+          ? userApis.guestEmailSignIn
+          : userApis.emailSignIn;
+
+      const { data, isError } = await method({
         email,
         password,
       });
@@ -62,12 +70,15 @@ export const useAuth = () => {
       handleUser(data);
       return { success: true };
     },
-    [handleUser, isGuestUser]
+    [handleUser, userData]
   );
 
   const signUpWithEmail = useCallback(
     async (params: { email: string; password: string; name: string }) => {
-      const method = isGuestUser ? userApis.guestSignUp : userApis.signUp;
+      const method =
+        !!userData && userData.user.loginType === "GUEST"
+          ? userApis.guestSignUp
+          : userApis.signUp;
 
       const { data, isError } = await method(params);
 
@@ -77,7 +88,7 @@ export const useAuth = () => {
       handleUser(data);
       return { success: true };
     },
-    [handleUser, isGuestUser]
+    [handleUser, userData]
   );
 
   const guestSignIn = useCallback(async () => {
@@ -93,10 +104,10 @@ export const useAuth = () => {
   }, [handleUser]);
 
   return {
-    loginWithGoogle,
-    loginWithEmail,
+    signInWithGoogle,
+    signInWithEmail,
     signUpWithEmail,
-    logout,
+    signOut,
     guestSignIn,
   };
 };
