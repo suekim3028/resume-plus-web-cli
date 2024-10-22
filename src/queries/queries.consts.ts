@@ -68,3 +68,49 @@ export const companyDeptOptions: QueryOptionsWithKey<{
     };
   },
 };
+
+export const getInterviewSimpleSettingOptions = (
+  interviewId: number
+): QueryOptionsWithKey<InterviewTypes.InterviewSimpleSetting> => ({
+  queryKey: ["INTERVIEW_INFO", interviewId],
+  queryFn: async () => {
+    const { isError, data } = await interviewApis.getInterviewSimpleSetting({
+      id: interviewId,
+    });
+
+    if (isError) throw new Error();
+    return data;
+  },
+});
+
+export const genInterviewQuestionsOptions = (
+  interviewId: number
+): QueryOptionsWithKey<
+  Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>
+> => ({
+  queryKey: ["INTERVIEW_QUESTIONS", interviewId],
+  queryFn: async () => {
+    const [
+      { isError: techQError, data: techQData },
+      { isError: behaviorQError, data: behaviorQData },
+      { isError: personalQError, data: personalQData },
+      { isError: introduceQError, data: introduceQData },
+    ] = await Promise.all([
+      interviewApis.getTechQ(interviewId),
+      interviewApis.getBehaviorQ(interviewId),
+      interviewApis.getPersonalQ(interviewId),
+      interviewApis.getIntroduceQ(interviewId),
+    ]);
+
+    if (techQError || behaviorQError || personalQError || introduceQError) {
+      throw new Error();
+    }
+
+    return {
+      behavior: behaviorQData,
+      personal: personalQData,
+      introduce: introduceQData,
+      tech: techQData,
+    };
+  },
+});
