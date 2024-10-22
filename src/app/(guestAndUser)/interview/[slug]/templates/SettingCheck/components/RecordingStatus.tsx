@@ -1,17 +1,17 @@
 import { EventLogger, Icon, Spinner } from "@components";
 import { VideoAndAudioRecorder } from "@libs";
 import { Button, Flex, Text } from "@uis";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const RecordingStatus = ({ onRecord }: { onRecord: (url: string) => void }) => {
   const [recordingStatus, setRecordingStatus] = useState<"READY" | "RECORDING">(
     "READY"
   );
+
   const [showRecorder, setShowRecorder] = useState({
     video: false,
     mic: false,
   });
-
   const videoElement = useRef<HTMLVideoElement>(null);
 
   const onRecorderLoadEnd = useCallback((mediaStream: MediaStream) => {
@@ -22,22 +22,26 @@ const RecordingStatus = ({ onRecord }: { onRecord: (url: string) => void }) => {
     });
   }, []);
 
-  const recorder = useRef<VideoAndAudioRecorder>(
-    new VideoAndAudioRecorder(onRecorderLoadEnd, onRecord)
-  );
-
   const connectMediaStreamToVideo = useCallback((mediaStream: MediaStream) => {
     if (!videoElement.current) return;
     videoElement.current.srcObject = mediaStream;
   }, []);
 
+  // MEMO: useRef의 초기값으로 생성 막을 수 없음 https://react.dev/reference/react/useRef#avoiding-recreating-the-ref-contents
+  // 여기선 argument를 받는 생성자가 필요하기 때문에 useState 아닌 useMemo사용함
+
+  const recorder = useMemo<VideoAndAudioRecorder>(() => {
+    return new VideoAndAudioRecorder(onRecorderLoadEnd, onRecord);
+  }, [onRecorderLoadEnd, onRecord]);
+
   const record = () => {
     setRecordingStatus("RECORDING");
-    recorder.current.startRecording();
+    recorder.startRecording();
   };
 
   const stopRecording = () => {
-    recorder.current.stopRecordingAndDestroy();
+    recorder.stopRecordingAndDestroy();
+    if (videoElement.current) videoElement.current.srcObject = null;
   };
 
   useEffect(() => {
@@ -45,6 +49,10 @@ const RecordingStatus = ({ onRecord }: { onRecord: (url: string) => void }) => {
       recordingStatus === "READY" ? "EnvironmentCheck02" : "EnvironmentCheck03"
     );
   }, [recordingStatus]);
+
+  useEffect(() => {
+    return recorder.stopRecordingAndDestroy;
+  }, []);
 
   return (
     <Flex
@@ -147,4 +155,4 @@ const RecordingStatus = ({ onRecord }: { onRecord: (url: string) => void }) => {
   );
 };
 
-export default RecordingStatus;
+export default memo(RecordingStatus);

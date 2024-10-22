@@ -17,6 +17,7 @@ class VideoAndAudioRecorder {
     this.mediaStream?.getTracks().forEach((track) => {
       track.stop();
     });
+    this.recorder = null;
     this.mediaStream = null;
   };
 
