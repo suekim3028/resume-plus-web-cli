@@ -40,12 +40,7 @@ export type QuestionWithType = {
   type: QuestionType;
 } & Question;
 
-export type InterviewSimpleSetting = {
-  interviewId: number;
-  jobId: number;
-  departmentId: number;
-  createdAt: string;
-} & (
+type InterviewCompany =
   | {
       companyId: number;
       companyName?: undefined;
@@ -53,8 +48,14 @@ export type InterviewSimpleSetting = {
   | {
       companyId?: undefined;
       companyName: string;
-    }
-);
+    };
+
+export type InterviewSimpleSetting = {
+  interviewId: number;
+  jobId: number;
+  departmentId: number;
+  createdAt: string;
+} & InterviewCompany;
 
 export type InterviewDetailSetting = {
   interviewId: number;

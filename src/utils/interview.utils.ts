@@ -14,19 +14,27 @@ export const findCompanyFromListById = (
   companies: InterviewTypes.Company[],
   companyId: number
 ) => {
-  return companies.find(({ companyId: id }) => id === companyId);
+  const foundCompany = companies.find(({ companyId: id }) => id === companyId);
+  if (!foundCompany) throw new Error("company is not found by id");
+  return foundCompany;
 };
 
 export const findDepartmentFromListById = (
   departments: InterviewTypes.Department[],
   departmentId: number
 ) => {
-  return departments.find(({ departmentId: id }) => id === departmentId);
+  const foundDept = departments.find(
+    ({ departmentId: id }) => id === departmentId
+  );
+  if (!foundDept) throw new Error("department is not found by id");
+  return foundDept;
 };
 
 export const findJobFromListById = (
   jobs: InterviewTypes.Job[],
   jobId: number
 ) => {
-  return jobs.find(({ companyJobId: id }) => id === jobId);
+  const foundJob = jobs.find(({ companyJobId: id }) => id === jobId);
+  if (!foundJob) throw new Error("job is not found by id");
+  return foundJob;
 };
