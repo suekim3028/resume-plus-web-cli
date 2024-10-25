@@ -71,7 +71,14 @@ const InterviewStatusWithTimerProvider = ({
   );
 };
 
-export const useInterviewStatusWithTimer = () => {
+export const InterviewStatusConsumer = (
+  consumer: (status: InterviewMainStatus) => ReactNode
+) => {
+  const { status } = useInterviewStatusWithTimerContext();
+  return consumer(status);
+};
+
+export const useInterviewStatusWithTimerContext = () => {
   const context = useContext(InterviewStatusWithTimerContext);
 
   if (!context)
