@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { interval, Subscription, take } from "rxjs";
 import { InterviewMainStatus } from "../types";
 
 const InterviewStatusWithTimerContext =
@@ -18,6 +19,7 @@ type InterviewStatusWithTimerValue = {
   finishInterview: () => void;
   pauseInterview: () => void;
   resumeInterview: () => void;
+  addSecondTimerListener: (cb: (remainSeconds: number) => void) => Subscription;
 };
 
 const InterviewStatusWithTimerProvider = ({
@@ -26,6 +28,7 @@ const InterviewStatusWithTimerProvider = ({
   children: ReactNode;
 }) => {
   const [status, setStatus] = useState<InterviewMainStatus>("DEFAULT");
+  const [$timer] = useState(interval(1000).pipe(take(60 * 60)));
   const statusBeforePaused = useRef<InterviewMainStatus | null>(null);
 
   const finishInterview = useCallback(() => {
@@ -52,9 +55,29 @@ const InterviewStatusWithTimerProvider = ({
     setStatus("FORCED_END");
   }, []);
 
+  const addSecondTimerListener: InterviewStatusWithTimerValue["addSecondTimerListener"] =
+    useCallback(
+      (cb) => {
+        return $timer.subscribe((v) => cb(60 * 60 - v));
+      },
+      [$timer]
+    );
+
   const providerValue: InterviewStatusWithTimerValue = useMemo(
-    () => ({ status, finishInterview, pauseInterview, resumeInterview }),
-    [status, finishInterview, pauseInterview, resumeInterview]
+    () => ({
+      status,
+      finishInterview,
+      pauseInterview,
+      resumeInterview,
+      addSecondTimerListener,
+    }),
+    [
+      status,
+      finishInterview,
+      pauseInterview,
+      resumeInterview,
+      addSecondTimerListener,
+    ]
   );
 
   useEffect(() => {

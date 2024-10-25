@@ -1,30 +1,28 @@
 import { Text } from "@uis";
-import { commonHooks } from "@web-core";
 import React, { useEffect, useState } from "react";
+import { useInterviewStatusWithTimerContext } from "../[slug]/templates/InterviewMain/contexts/InterviewStatusWithTimerProvider";
 
 const TIMEOUT_MINUTES = 60;
 
-const TIMEOUT_SECONDS = TIMEOUT_MINUTES * 60;
-
-const InterviewTimer = ({ onTimeEnd }: { onTimeEnd: () => void }) => {
-  const [seconds, setSeconds] = useState(0);
-
-  commonHooks.useEverySecondEffect(() => {
-    setSeconds((p) => p + 1);
-  });
+const InterviewTimer = () => {
+  const [leftSecondsStr, setLeftSecondsStr] = useState("");
+  const { addSecondTimerListener } = useInterviewStatusWithTimerContext();
 
   useEffect(() => {
-    if (seconds === TIMEOUT_SECONDS) {
-      onTimeEnd();
-    }
-  }, [seconds === TIMEOUT_SECONDS]);
+    const sub = addSecondTimerListener((seconds) =>
+      setLeftSecondsStr(
+        `${Math.floor(seconds / 60)
+          .toString()
+          .padStart(2, "0")} : ${(seconds % 60).toString().padStart(2, "0")}`
+      )
+    );
 
-  if (seconds >= TIMEOUT_SECONDS) return <></>;
+    return () => sub.unsubscribe();
+  }, []);
+
   return (
     <Text type="Body1_Normal" color={"Label/Alternative"} fontWeight={"600"}>
-      {`${Math.floor(seconds / 60)
-        .toString()
-        .padStart(2, "0")} : ${(seconds % 60).toString().padStart(2, "0")}`}
+      {leftSecondsStr}
     </Text>
   );
 };
