@@ -12,6 +12,7 @@ import {
 import { Subject, Subscription } from "rxjs";
 import { useInterviewDetailSetting } from "../../../contexts/InterviewDetailSettingContext";
 import { useInterviewQuestionsContext } from "../../../contexts/InterviewQuestionsContext";
+import { useInterviewStatusWithTimerContext } from "./InterviewStatusWithTimerProvider";
 const InterviewContentsContext = createContext<InterviewContentsValue | null>(
   null
 );
@@ -26,9 +27,10 @@ type InterviewContentsValue = {
 const InterviewContentsProvider = ({ children }: { children: ReactNode }) => {
   const { interviewId } = useInterviewDetailSetting();
   const { sortedQuestionsWithType } = useInterviewQuestionsContext();
+  const { finishInterview } = useInterviewStatusWithTimerContext();
   assert(sortedQuestionsWithType.length > 0);
 
-  const currentQuestionIndex = useRef(0);
+  const currentQuestionIndex = useRef(-1);
 
   const [$questionObserver] = useState(new Subject<string>());
   const [$answerObserver] = useState(new Subject<string>());
@@ -59,7 +61,10 @@ const InterviewContentsProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const getAndBroadcastNextQuestion = useCallback(() => {
-    if (currentQuestionIndex.current === sortedQuestionsWithType.length) return; //TODO: status
+    if (currentQuestionIndex.current === sortedQuestionsWithType.length - 1) {
+      finishInterview();
+      return;
+    }
     currentQuestionIndex.current = currentQuestionIndex.current + 1;
     broadcastCurrentQuestion();
   }, [sortedQuestionsWithType, broadcastCurrentQuestion]);
@@ -78,7 +83,7 @@ const InterviewContentsProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const startInterview = useCallback(() => {
-    if (currentQuestionIndex.current !== 0) return;
+    if (currentQuestionIndex.current !== -1) return;
     getAndBroadcastNextQuestion();
   }, [getAndBroadcastNextQuestion]);
 

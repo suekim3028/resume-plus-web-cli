@@ -1,9 +1,14 @@
 "use client";
+import { CompanyThumbnail } from "@components";
 import { InterviewTypes } from "@types";
 import { createContext, ReactNode, useContext } from "react";
 
 const InterviewDetailSettingContext = createContext<
-  (InterviewTypes.InterviewDetailSetting & { companyName: string }) | null
+  | (InterviewTypes.InterviewDetailSetting & {
+      companyName: string;
+      renderCompanyThumbnail: (size: "small" | "large") => JSX.Element;
+    })
+  | null
 >(null);
 
 const InterviewDetailSettingProvider = ({
@@ -16,11 +21,23 @@ const InterviewDetailSettingProvider = ({
   const { company } = interviewDetailSetting;
   const companyName =
     typeof company === "string" ? company : company.companyName;
+
+  const renderCompanyThumbnail = (size: "small" | "large") => {
+    return (
+      <CompanyThumbnail
+        size={size}
+        companyName={companyName}
+        imageUrl={typeof company === "string" ? undefined : company.imageUrl}
+      />
+    );
+  };
+
   return (
     <InterviewDetailSettingContext.Provider
       value={{
         ...interviewDetailSetting,
         companyName,
+        renderCompanyThumbnail,
       }}
     >
       {children}

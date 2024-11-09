@@ -94,11 +94,16 @@ const InterviewStatusWithTimerProvider = ({
   );
 };
 
-export const InterviewStatusConsumer = (
-  consumer: (status: InterviewMainStatus) => ReactNode
-) => {
-  const { status } = useInterviewStatusWithTimerContext();
-  return consumer(status);
+export const InterviewStatusSwitch = ({
+  status,
+  children,
+}: {
+  status: InterviewMainStatus;
+  children: ReactNode;
+}) => {
+  const { status: currentStatus } = useInterviewStatusWithTimerContext();
+  if (status !== currentStatus) return <></>;
+  return children;
 };
 
 export const useInterviewStatusWithTimerContext = () => {

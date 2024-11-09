@@ -1,17 +1,11 @@
-import { CompanyThumbnail } from "@components";
 import { Flex, Text } from "@uis";
-import { useInterviewContext } from "../InterviewContext";
-import { useInterviewInfoContext } from "../InterviewInfoContext";
+import { useInterviewDetailSetting } from "../[slug]/contexts/InterviewDetailSettingContext";
 import InterviewTimer from "./InterviewTimer";
 
 const TopBar = () => {
-  const { interviewInfo } = useInterviewInfoContext();
-  const { setStatus } = useInterviewContext();
-  const { company, department, companyThumbnailUrl } = interviewInfo;
+  const { companyName, department, renderCompanyThumbnail } =
+    useInterviewDetailSetting();
 
-  const handleOnTimeEnd = () => {
-    setStatus("FORCE_END");
-  };
   return (
     <Flex
       px={15}
@@ -22,29 +16,25 @@ const TopBar = () => {
       alignItems={"center"}
     >
       <Flex alignItems={"center"} gap={48}>
-        <CompanyThumbnail
-          size={"small"}
-          companyName={company}
-          imageUrl={companyThumbnailUrl || undefined}
-        />
+        {renderCompanyThumbnail("small")}
 
         <Text
           type="Body1_Normal"
           color={"Label/Alternative"}
           fontWeight={"600"}
         >
-          {company}
+          {companyName}
         </Text>
         <Text
           type="Body1_Normal"
           color={"Label/Alternative"}
           fontWeight={"600"}
         >
-          {department}
+          {department.department}
         </Text>
       </Flex>
 
-      <InterviewTimer onTimeEnd={handleOnTimeEnd} />
+      <InterviewTimer />
     </Flex>
   );
 };

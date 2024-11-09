@@ -1,10 +1,10 @@
 import { InterviewTypes } from "@types";
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 import { genInterviewProcessStats, genTypeAttachedQuestions } from "../utils";
 
 type InterviewQuestionsContextValue = {
   questions: Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>;
-  questionsWithType: InterviewTypes.QuestionWithType[];
+  sortedQuestionsWithType: InterviewTypes.QuestionWithType[];
   processStats: InterviewTypes.InterviewProcessStat;
 };
 
@@ -18,18 +18,21 @@ const InterviewQuestionsContextProvider = ({
   children: ReactNode;
   questions: Record<InterviewTypes.QuestionType, InterviewTypes.Question[]>;
 }) => {
-  const questionsWithType: InterviewTypes.QuestionWithType[] = [
-    ...genTypeAttachedQuestions(questions.introduce, "introduce"),
-    ...genTypeAttachedQuestions(questions.personal, "personal"),
-    ...genTypeAttachedQuestions(questions.tech, "tech"),
-    ...genTypeAttachedQuestions(questions.behavior, "behavior"),
-  ];
+  const sortedQuestionsWithType: InterviewTypes.QuestionWithType[] = useMemo(
+    () => [
+      ...genTypeAttachedQuestions(questions.introduce, "introduce"),
+      ...genTypeAttachedQuestions(questions.personal, "personal"),
+      ...genTypeAttachedQuestions(questions.tech, "tech"),
+      ...genTypeAttachedQuestions(questions.behavior, "behavior"),
+    ],
+    [] // question 바뀌지 않는 것 확신
+  );
 
   const processStats = genInterviewProcessStats(questions);
 
   return (
     <InterviewQuestionsContext.Provider
-      value={{ questionsWithType, questions, processStats }}
+      value={{ sortedQuestionsWithType, questions, processStats }}
     >
       {children}
     </InterviewQuestionsContext.Provider>

@@ -1,7 +1,7 @@
 import { EventLogger } from "@components";
 import { useState } from "react";
 import EnterWaiting from "./EnterWaiting/EnterWaiting";
-import InterviewScreen from "./InterviewMain/InterviewScreen";
+import InterviewMain from "./InterviewMain/InterviewMain";
 import SettingCheck from "./SettingCheck/SettingCheck";
 import StepCheck from "./StepCheck/StepCheck";
 
@@ -41,15 +41,9 @@ const InterviewStepRenderer = (): JSX.Element => {
     case "3_SETTING_CHECK":
       return <SettingCheck goNext={() => setStep("4_ENTER_WAITING")} />;
     case "4_ENTER_WAITING":
-      return (
-        <EnterWaiting
-          {...interview.current}
-          interviewerName={randomFamilyName}
-          goNext={() => setStep("5_INTERVIEW")}
-        />
-      );
+      return <EnterWaiting goNext={() => setStep("5_INTERVIEW")} />;
     case "5_INTERVIEW":
-      return <InterviewScreen />;
+      return <InterviewMain />;
   }
 };
 

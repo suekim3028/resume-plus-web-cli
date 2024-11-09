@@ -5,24 +5,26 @@ import { useQuery } from "@tanstack/react-query";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import React, { RefObject, useMemo } from "react";
-import { BOTTOM_BAR_HEIGHT, TOP_BAR_HEIGHT } from "../constants";
-import FrontCamera, { FrontCameraRef } from "./FrontCamera";
+import FrontCamera, {
+  FrontCameraRef,
+} from "../../../../components/FrontCamera";
+import { BOTTOM_BAR_HEIGHT, TOP_BAR_HEIGHT } from "../../../constants";
+import { useInterviewDetailSetting } from "../../../contexts/InterviewDetailSettingContext";
 
 const CamSection = ({
   chatOn,
   micOn,
   cameraRef,
   talkingSide,
-  interviewerName,
 }: {
   chatOn: boolean;
   micOn: boolean;
   cameraRef: RefObject<FrontCameraRef>;
   talkingSide: "COMPANY" | "ME" | null;
-  interviewerName: string;
 }) => {
   const window = commonHooks.useWindowSize({});
   const { data: userData } = useQuery(queryOptions.userQueryOptions);
+  const { interviewerName } = useInterviewDetailSetting();
 
   const CAM_SIZE = useMemo(() => {
     if (!window) return 0;
