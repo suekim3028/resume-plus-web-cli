@@ -7,6 +7,7 @@ export type Company = {
   companyName: string;
   imageUrl?: string;
 };
+
 export type Department = {
   departmentId: number;
   department: string;
@@ -16,20 +17,24 @@ export type Job = {
   companyJobId: number;
   companyJob: string;
 };
+
 export type DepartmentGroup = Department & {
   job: Job[];
 };
 
-export type InterviewInfo = {
-  company: string;
-  department: string;
-  job: string;
-  interviewId: number;
-  companyThumbnailUrl: string | null;
-};
-
 export type QuestionType = "tech" | "behavior" | "personal" | "introduce";
 
+export type InterviewProcessStat = {
+  durationInMinutes: number;
+  numberOfQuestions: number;
+  statsByType: Record<
+    QuestionType,
+    {
+      durationInMinutes: number;
+      numberOfQuestions: number;
+    }
+  >;
+};
 export type Feedback = {
   question: string;
   questionId: number;
@@ -40,6 +45,35 @@ export type Feedback = {
 export type Question = {
   question: string;
   questionId: number;
+};
+
+export type QuestionWithType = {
+  type: QuestionType;
+} & Question;
+
+type InterviewCompany =
+  | {
+      companyId: number;
+      companyName?: undefined;
+    }
+  | {
+      companyId?: undefined;
+      companyName: string;
+    };
+
+export type InterviewSimpleSetting = {
+  interviewId: number;
+  jobId: number;
+  departmentId: number;
+  createdAt: string;
+} & InterviewCompany;
+
+export type InterviewDetailSetting = {
+  interviewId: number;
+  company: Company | string;
+  department: Department;
+  job: Job;
+  interviewerName: string;
 };
 
 export type Chat = {

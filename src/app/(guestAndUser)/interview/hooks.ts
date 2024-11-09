@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef } from "react";
+import { audioBlobToBase64 } from "./[slug]/utils";
 import { speechToText } from "./actions";
-import { audioBlobToBase64 } from "./utils";
 
 export const useRecorder = (onRecordEnd: (text: string) => void) => {
   const mediaStream = useRef<MediaStream>();

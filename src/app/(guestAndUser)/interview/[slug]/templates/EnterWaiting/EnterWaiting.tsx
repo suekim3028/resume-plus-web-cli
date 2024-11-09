@@ -1,19 +1,12 @@
-import { InterviewTypes } from "@types";
 import { Flex, Text } from "@uis";
 import { commonHooks } from "@web-core";
 import { useState } from "react";
-import Container from "./Container";
+import Container from "../../../components/Container";
+import { useInterviewDetailSetting } from "../../contexts/InterviewDetailSettingContext";
 
-const EnterWaiting = ({
-  company,
-  job,
-  department,
-  goNext,
-  interviewerName,
-}: InterviewTypes.InterviewInfo & {
-  goNext: () => void;
-  interviewerName: string;
-}) => {
+const EnterWaiting = ({ goNext }: { goNext: () => void }) => {
+  const { department, job, companyName, interviewerName } =
+    useInterviewDetailSetting();
   const [leftSeconds, setLeftSeconds] = useState(10);
 
   commonHooks.useSecondEffect(10, (second) => {
@@ -40,7 +33,7 @@ const EnterWaiting = ({
         mt={32}
         type="Title2"
         fontWeight={"500"}
-      >{`${company} ${department} 직군 ${job} 인터뷰`}</Text>
+      >{`${companyName} ${department.department} 직군 ${job.companyJob} 인터뷰`}</Text>
       {leftSeconds ? (
         <Flex>
           <Text

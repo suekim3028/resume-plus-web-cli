@@ -260,14 +260,5 @@ export const deleteInterview = ({ id }: { id: number }) =>
  * 인터뷰 정보 가져오기
  */
 
-type GetInterviewInfoResponse = {
-  interviewId: number;
-  companyId?: number;
-  companyName?: string;
-  jobId: number;
-  departmentId: number;
-  createdAt: string;
-};
-
-export const getInterviewInfo = ({ id }: { id: number }) =>
-  API.get<GetInterviewInfoResponse>(`interview/${id}`);
+export const getInterviewSimpleSetting = ({ id }: { id: number }) =>
+  API.get<InterviewTypes.InterviewSimpleSetting>(`interview/${id}`);
