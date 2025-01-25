@@ -4,7 +4,7 @@ import { useRefreshUser } from "@atoms";
 import { useRouteChangeEvent } from "@hooks";
 import { ReactNode, useEffect, useRef, useState } from "react";
 
-export default function Initializer({ children }: { children: ReactNode }) {
+const Initializer = ({ children }: { children: ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const refreshUser = useRefreshUser();
 
@@ -13,17 +13,18 @@ export default function Initializer({ children }: { children: ReactNode }) {
   useRouteChangeEvent();
   useEffect(() => {
     if (effected.current) return;
-
     effected.current = true;
     amplitude.init("fe5ab1aed382a9da2fb86c24325c6816", {
       autocapture: false,
     });
 
     (async () => {
-      await refreshUser();
+      // await refreshUser();
       setIsInitialized(true);
     })();
   }, []);
 
   return isInitialized ? children : <></>;
-}
+};
+
+export default Initializer;

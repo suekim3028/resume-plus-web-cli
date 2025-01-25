@@ -5,6 +5,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
     emotion: true,
+    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 

@@ -45,7 +45,7 @@ const CompletedResultListComponent = () => {
   );
 };
 
-export default function CompletedResultList() {
+const CompletedResultList = () => {
   return (
     <Suspense
       fallback={
@@ -57,4 +57,6 @@ export default function CompletedResultList() {
       <CompletedResultListComponent />
     </Suspense>
   );
-}
+};
+
+export default CompletedResultList;

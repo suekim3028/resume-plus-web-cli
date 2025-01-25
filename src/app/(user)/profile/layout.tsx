@@ -1,6 +1,8 @@
 import { TopBarContainer } from "@components";
 import { ReactNode } from "react";
 
-export default function Layout({ children }: { children: ReactNode }) {
-  return <TopBarContainer footer>{children}</TopBarContainer>;
-}
+  const Layout = ({ children }: { children: ReactNode }) => {
+    return <TopBarContainer footer>{children}</TopBarContainer>;
+  };
+
+  export default Layout;

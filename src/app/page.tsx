@@ -3,7 +3,7 @@ import HomeStartInterviewButton from "@components/app/HomeStartInterviewButton";
 import { Button, Flex, Text } from "@uis";
 import Image from "next/image";
 
-export default function Home() {
+const Home = () => {
   return (
     <TopBarContainer footer>
       <Flex
@@ -88,4 +88,6 @@ export default function Home() {
       </Flex>
     </TopBarContainer>
   );
-}
+};
+
+export default Home;

@@ -1,6 +1,6 @@
 import "server-only";
 
-export async function createSession(userId: string) {
+export const createSession = async (userId: string) => {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   //   const session = await encrypt({ userId, expiresAt })
 
@@ -11,4 +11,4 @@ export async function createSession(userId: string) {
   //     sameSite: "lax",
   //     path: "/",
   //   });
-}
+};

@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
+const DefaultLoading = () => {
+  return <></>;
+};
 
-export default function Loading({ children }: { children: ReactNode }) {
-  return <>{}</>;
-}
+export default DefaultLoading;

@@ -38,7 +38,7 @@ const PendingResultListComponent = () => {
   );
 };
 
-export default function PendingResultList() {
+const PendingResultList = () => {
   return (
     <Suspense
       fallback={
@@ -50,4 +50,6 @@ export default function PendingResultList() {
       <PendingResultListComponent />
     </Suspense>
   );
-}
+};
+
+export default PendingResultList;

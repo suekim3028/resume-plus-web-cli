@@ -4,7 +4,7 @@ import { useAuth } from "@hooks";
 import { UserTypes } from "@types";
 import { ReactNode, useCallback } from "react";
 
-export default function Layout({ children }: { children: ReactNode }) {
+const Layout = ({ children }: { children: ReactNode }) => {
   const { guestSignIn } = useAuth();
 
   const validate = useCallback(
@@ -17,4 +17,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       {children}
     </AuthLayout>
   );
-}
+};
+
+export default Layout;

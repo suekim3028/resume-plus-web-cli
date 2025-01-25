@@ -70,7 +70,7 @@ const EndPopupComponent = () => {
   );
 };
 
-export default function EndPopup() {
+const EndPopup = () => {
   return (
     <Suspense
       fallback={
@@ -91,4 +91,6 @@ export default function EndPopup() {
       <EndPopupComponent />
     </Suspense>
   );
-}
+};
+
+export default EndPopup;

@@ -62,7 +62,7 @@ const TopBarContainerComponent: ForwardRefRenderFunction<
           />
           <TopBarButton name={"면접 결과"} href={"/result"} colStart={11} />
 
-          <UserButton />
+          {/* <UserButton /> */}
         </GridWrapper>
       </Flex>
       <Flex

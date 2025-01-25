@@ -168,7 +168,7 @@ const HeightCalculatorComponent: ForwardRefRenderFunction<
       }}
     >
       <Text
-        onResize={(e) => console.log(e)}
+        onResize={(e: any) => console.log(e)}
         type={"Body2_Reading"}
         fontWeight={"400"}
         w="100%"

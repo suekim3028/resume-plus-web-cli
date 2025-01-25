@@ -81,7 +81,7 @@ const _UserButton = () => {
   );
 };
 
-export default function UserButton() {
+const UserButton = () => {
   return (
     <Flex alignItems={"center"} justifyContent={"center"} flex={1}>
       <Suspense
@@ -93,4 +93,6 @@ export default function UserButton() {
       </Suspense>
     </Flex>
   );
-}
+};
+
+export default UserButton;

@@ -2,14 +2,10 @@ import { Initializer } from "@components";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ModalWrapper } from "@web-core";
 import type { Metadata } from "next";
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import "./globals.css";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -28,19 +24,23 @@ export default function RootLayout({
         ></script>
       </head>
       <body id="body">
-        <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}>
-          <Initializer>
-            <StrictMode>
-              <ModalWrapper>{children}</ModalWrapper>
-            </StrictMode>
-          </Initializer>
-        </GoogleOAuthProvider>
+        {/* <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_CLIENT_KEY}> */}
+
+        <Initializer>
+          <StrictMode>
+            <ModalWrapper>{children}</ModalWrapper>
+          </StrictMode>
+        </Initializer>
+
+        {/* </GoogleOAuthProvider> */}
       </body>
     </html>
   );
-}
+};
 
 export const metadata: Metadata = {
   title: "인터뷰플러스",
   description: "혼자서도 자신 있는 면접 연습",
 };
+
+export default RootLayout;
